@@ -1,7 +1,7 @@
 package io.virtualan.contract.validator;
 
-import io.virtualan.contract.validator.FeatureFileProcessor.AvailableParam;
-import io.virtualan.contract.validator.FeatureFileProcessor.Item;
+import io.virtualan.contract.validator.IdithalanExecutor.AvailableParam;
+import io.virtualan.contract.validator.IdithalanExecutor.Item;
 import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.mapson.Mapson;
 import java.io.IOException;

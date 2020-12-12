@@ -25,10 +25,9 @@ import net.masterthought.cucumber.ReportBuilder;
 import net.masterthought.cucumber.Reportable;
 import net.masterthought.cucumber.json.support.Status;
 import net.masterthought.cucumber.presentation.PresentationMode;
-import org.apache.http.annotation.Contract;
 
 
-class FeatureFileProcessor {
+public class IdithalanExecutor {
 
   List<Item> items = FeatureFileGenerator.generateFeatureFile();
 
@@ -342,7 +341,7 @@ class FeatureFileProcessor {
     Mustache mustache = mf.compile("virtualan-contract.mustache");
     FileOutputStream outputStream = new FileOutputStream("virtualan-contract.feature");
     Writer writer = new OutputStreamWriter(outputStream);
-    mustache.execute(writer, new FeatureFileProcessor()).flush();
+    mustache.execute(writer, new IdithalanExecutor()).flush();
     writer.close();
   }
 }
