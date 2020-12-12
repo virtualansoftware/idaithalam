@@ -1,0 +1,88 @@
+[
+  {
+    "scenario": "Read a Pet Api",
+    "url": "/pets/{petId}",
+    "operationId": "getPetById",
+    "httpStatusCode": "200",
+    "resource": "pets",
+    "method": "GET",
+    "output": "{\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"id\": 101,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+    "availableParams": [
+      {
+        "key": "petId",
+        "value": "101",
+        "parameterType": "PATH_PARAM"
+      }
+    ]
+  },
+  {
+    "scenario": "Add a Pet Api",
+    "operationId": "addPet",
+    "httpStatusCode": "200",
+    "url": "/pets",
+    "type": "Response",
+    "method": "POST",
+    "input": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+    "rule": "",
+    "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+    "resource": "pets"
+  },
+  {
+    "scenario": "Read a Pet Api data not found",
+    "httpStatusCode": "500",
+    "url": "/pets/{petId}",
+    "type": "Rule",
+    "requestType": "REST",
+    "method": "GET",
+    "output": { "code": "MISSING_MOCK_DATA",  "message": "Mock response was not added for the given parameter"},
+    "availableParams": [
+      {
+        "key": "petId",
+        "value": "11110",
+        "parameterType": "PATH_PARAM"
+      }
+    ],
+    "contentType": "JSON",
+    "resource": "pets"
+  },
+  {
+    "scenario": "Update a Pet Api data",
+    "operationId": "updatePet",
+    "httpStatusCode": "200",
+    "url": "/pets/{petId}",
+    "type": "Response",
+    "requestType": "REST",
+    "method": "PUT",
+    "input": "{\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"id\": 0,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+    "output": "{\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"id\": 0,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+    "availableParams": [
+      {
+        "key": "petId",
+        "value": "200",
+        "parameterType": "PATH_PARAM"
+      }
+    ],
+    "resource": "pets"
+  },
+  {
+    "scenario": "findPetsByTags a Pet Api data",
+    "id": 17,
+    "operationId": "findPetsByTags",
+    "httpStatusCode": "200",
+    "url": "/pets/findByTags",
+    "type": "Response",
+    "requestType": "REST",
+    "usageCount": 0,
+    "priority": 0,
+    "method": "GET",
+    "output": "{\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"id\": 0,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+    "availableParams": [
+      {
+        "key": "tags",
+        "value": "dog",
+        "parameterType": "QUERY_PARAM"
+      }
+    ],
+    "resource": "pets"
+  }
+]

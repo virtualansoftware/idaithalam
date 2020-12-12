@@ -1,0 +1,44 @@
+{{#feature}}
+Feature: {{feature}} - API Contract validation status
+{{/feature}}
+{{#items}}
+    Scenario: {{scenario}} - {{method}} api call
+      Given a user perform a api action
+      {{#hasPathParams}}
+      And add request with given path params
+      {{#pathParams}}
+        | {{key}}                   | {{value}}                         |
+       {{/pathParams}}
+      {{/hasPathParams}}
+      {{#hasQueryParams}}
+      And add request with given query params
+      {{#queryParams}}
+        | {{key}}                   | {{value}}                         |
+      {{/queryParams}}
+      {{/hasQueryParams}}
+      {{#hasHeaderParams}}
+      And add request with given header params
+      {{#headerParams}}
+        | {{key}}                   | {{value}}                         |
+      {{/headerParams}}
+      {{/hasHeaderParams}}
+      {{#hasInputJsonMap}}
+      {{#isPost}}
+      And Create api with given input
+      {{/isPost}}
+      {{#isPut}}
+      And Update api with given input
+      {{/isPut}}
+      {{#inputJsonMap}}
+        | {{key}}                   |  {{value}}                        |
+      {{/inputJsonMap}}
+      {{/hasInputJsonMap}}
+      When a user {{action}} application/json in {{url}} resource on {{resource}}
+      Then Verify the status code is {{httpStatusCode}}
+      And Verify across response includes following in the response
+      {{#hasOutputJsonMap}}
+      {{#outputJsonMap}}
+      | {{key}}                 |  {{value}}                          |
+      {{/outputJsonMap}}
+      {{/hasOutputJsonMap}}
+    {{/items}}
