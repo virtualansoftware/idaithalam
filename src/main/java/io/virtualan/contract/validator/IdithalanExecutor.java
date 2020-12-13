@@ -20,6 +20,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import io.virtualan.cucumblan.props.ApplicationConfiguration;
+import javafx.application.Application;
 import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
 import net.masterthought.cucumber.Reportable;
@@ -30,6 +33,7 @@ import net.masterthought.cucumber.presentation.PresentationMode;
 public class IdithalanExecutor {
 
   List<Item> items = FeatureFileGenerator.generateFeatureFile();
+  String okta = ApplicationConfiguration.getProperty("service.api.okta");
 
   static class Item {
     String scenario;
@@ -56,7 +60,6 @@ public class IdithalanExecutor {
     boolean isDelete;
     boolean isPatch;
     String url;
-
     Item(){ }
 
 
