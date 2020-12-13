@@ -54,9 +54,14 @@ public class FeatureFileGenerator {
               virtualanObj.put("url",
                   buildEndPointURL(responseArray.optJSONObject(j).getJSONObject("originalRequest")
                       .getJSONObject("url").optJSONArray("path")));
-              virtualanObj.put("input",
-                  responseArray.optJSONObject(j).getJSONObject("originalRequest")
-                      .optJSONObject("body").optString("raw"));
+              if(responseArray.optJSONObject(j).getJSONObject("originalRequest")
+                      .optJSONObject("body") != null ) {
+                String input = responseArray.optJSONObject(j).getJSONObject("originalRequest")
+                        .optJSONObject("body").optString("raw");
+                if(!"".equalsIgnoreCase(input)) {
+                  virtualanObj.put("input", input);
+                }
+              }
               virtualanObj.put("output", responseArray.optJSONObject(j).optString("body"));
               virtualanObj.put("httpStatusCode", responseArray.optJSONObject(j).optString("code"));
               JSONArray paramsArray = new JSONArray();
@@ -109,10 +114,12 @@ public class FeatureFileGenerator {
     if (inputJsonArray != null && !inputJsonArray.isEmpty()) {
       for (int j = 0; j < inputJsonArray.length(); j++) {
         JSONObject virtualanObjParam = new JSONObject();
-        virtualanObjParam.put("key", inputJsonArray.getJSONObject(j).optString("key"));
-        virtualanObjParam.put("value", inputJsonArray.getJSONObject(j).optString("value"));
-        virtualanObjParam.put("parameterType", param);
-        outputJsonArray.put(virtualanObjParam);
+        if(!"".equalsIgnoreCase(inputJsonArray.getJSONObject(j).optString("key"))) {
+          virtualanObjParam.put("key", inputJsonArray.getJSONObject(j).optString("key"));
+          virtualanObjParam.put("value", inputJsonArray.getJSONObject(j).optString("value"));
+          virtualanObjParam.put("parameterType", param);
+          outputJsonArray.put(virtualanObjParam);
+        }
       }
     }
 
