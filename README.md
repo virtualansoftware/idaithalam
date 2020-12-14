@@ -1,13 +1,23 @@
 <h1 align="center">Cucumblan</h1>
 
-**cucumblan-api:** [![Maven Central](https://img.shields.io/maven-central/v/io.virtualan/cucumblan-api.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.virtualan%22%20AND%20a:%22cucumblan-api%22)  [![Build Status](https://travis-ci.com/virtualansoftware/cucumblan.svg?branch=master)](https://travis-ci.com/virtualansoftware/cucumblan)
+**Idaithalan:** [![Maven Central](https://img.shields.io/maven-central/v/io.virtualan/idaithalan.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.virtualan%22%20AND%20a:%22idaithalan%22)  [![Build Status](https://travis-ci.com/virtualansoftware/idaithalan.svg?branch=master)](https://travis-ci.com/virtualansoftware/idaithalan)
                           
 <div align="center">
-   Cucumblan BDD API Testing tool  
+   Idaithalan Feature file generation and BDD API Testing Software  
 </div>
 
-Cucumblan is a test automation framework that supports Behavior Driven Development (BDD), allowing users to create feature using predefined step definition with low code. It works based on the Gherkin Domain Specific Language (DSL). This simple but powerful api and ui framework while keeping it comprehensible to even non-technical(product owner, business analyst and domain experts) users.
+ 
+   Entry point to generate feature file and cucumber report and execute and generate for VIRTUALAN or POSTMAN collections
+   and utilized for API contract testing and etc.
+ 
+   Thsi can generate the feature file for VIRTUALAN collection, POSTMAN collection and EXECL(Coming soon)
+   - Used for API testing.
+   - Used for Contract testing.
+   - Used for Production Checkout.
+   - Used for Agile sprint end regression testing.
+ 
 
+ 
 
 
 ## [License](#table-of-contents)
