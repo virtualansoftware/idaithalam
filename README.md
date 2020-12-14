@@ -1,6 +1,6 @@
 <h1 align="center">Idaithalam</h1>
 
-**Idaithalan:** [![Maven Central](https://img.shields.io/maven-central/v/io.virtualan/idaithalam.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.virtualan%22%20AND%20a:%22idaithalam%22)  [![Build Status](https://travis-ci.com/virtualansoftware/idaithalam.svg?branch=master)](https://travis-ci.com/virtualansoftware/idaithalam)
+**Idaithalam:** [![Maven Central](https://img.shields.io/maven-central/v/io.virtualan/idaithalam.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.virtualan%22%20AND%20a:%22idaithalam%22)  [![Build Status](https://travis-ci.com/virtualansoftware/idaithalam.svg?branch=master)](https://travis-ci.com/virtualansoftware/idaithalam)
                           
   ## Feature file generation and BDD API Testing Product  
 
