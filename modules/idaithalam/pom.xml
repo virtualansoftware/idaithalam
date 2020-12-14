@@ -1,12 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.virtualan</groupId>
   <artifactId>idaithalam</artifactId>
   <packaging>jar</packaging>
   <name>idaithalam-contract-testing</name>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
   <properties>
     <cucumblan.version>1.0.2</cucumblan.version>
     <java.version>1.8</java.version>
@@ -28,8 +26,42 @@
     - Used for Production Checkout.
     - Used for Agile sprint end regression testing.
   </description>
+  <url>https://virtualan.io</url>
+  <scm>
+    <connection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git</developerConnection>
+    <url>https://github.com/virtualansoftware/idaithalam.git</url>
+    <tag>v1.0.0.1</tag>
+  </scm>
+  <developers>
+    <!-- original author of the project -->
+    <developer>
+      <id>elans3</id>
+      <name>Elan Thangamani</name>
+      <email>elan.thangamani@virtualan.io</email>
+      <organization>Virtualan Software</organization>
+      <organizationUrl>http://virtualan.io</organizationUrl>
+    </developer>
+  </developers>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+  <licenses>
+    <license>
+      <name>Apache License 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <build>
-    <finalName>idithalan-contract-validator</finalName>
+    <finalName>idaithalan</finalName>
     <resources>
       <resource>
         <directory>src/main/java</directory>
@@ -44,7 +76,7 @@
         <configuration>
           <archive>
             <manifest>
-		      	<mainClass>io.virtualan.idaithalam.contract.IdithalamExecutor</mainClass>
+		      	<mainClass>io.virtualan.idaithalam.contract.IdaithalamExecutor</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
@@ -61,6 +93,59 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <encoding>UTF-8</encoding>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+<!--      <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-source-plugin</artifactId>-->
+<!--        <version>3.2.0</version>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <id>attach-sources</id>-->
+<!--            <goals>-->
+<!--              <goal>jar</goal>-->
+<!--            </goals>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
+<!--      <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-javadoc-plugin</artifactId>-->
+<!--        <configuration>-->
+<!--          <source>8</source>-->
+<!--        </configuration>-->
+<!--        <version>3.2.0</version>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <id>attach-javadocs</id>-->
+<!--            <goals>-->
+<!--              <goal>jar</goal>-->
+<!--            </goals>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
+<!--      <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-gpg-plugin</artifactId>-->
+<!--        <version>1.4</version>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <id>sign-artifacts</id>-->
+<!--            <phase>verify</phase>-->
+<!--            <goals>-->
+<!--              <goal>sign</goal>-->
+<!--            </goals>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
     </plugins>
   </build>
 

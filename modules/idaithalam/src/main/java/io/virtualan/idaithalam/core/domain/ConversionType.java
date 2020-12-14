@@ -16,6 +16,20 @@
 
 package io.virtualan.idaithalam.core.domain;
 
+/**
+ * The enum Conversion type.
+ */
 public enum ConversionType {
-    VIRTUALAN, POSTMAN, EXCEL
+    /**
+     * Virtualan conversion type.
+     */
+    VIRTUALAN,
+    /**
+     * Postman conversion type.
+     */
+    POSTMAN,
+    /**
+     * Excel conversion type.
+     */
+    EXCEL
 }

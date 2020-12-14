@@ -21,174 +21,424 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * The type Item.
+ */
 public class Item {
+
+    /**
+     * The Scenario.
+     */
     String scenario;
+    /**
+     * The Http status code.
+     */
     String httpStatusCode;
+    /**
+     * The Resource.
+     */
     String resource;
+    /**
+     * The Method.
+     */
     String method;
+    /**
+     * The Action.
+     */
     String action;
+    /**
+     * The Input.
+     */
     String input;
+    /**
+     * The Output.
+     */
     String output;
+    /**
+     * The Std input.
+     */
     String stdInput;
+    /**
+     * The Std output.
+     */
     String stdOutput;
+    /**
+     * The Has input json map.
+     */
     Map<String, String> hasInputJsonMap;
+    /**
+     * The Has output json map.
+     */
     Map<String, String> hasOutputJsonMap;
+    /**
+     * The Input json map.
+     */
     Set<Map.Entry<String, String>> inputJsonMap;
+    /**
+     * The Output json map.
+     */
     Set<Map.Entry<String, String>> outputJsonMap;
+    /**
+     * The Available params.
+     */
     List<AvailableParam> availableParams;
+    /**
+     * The Path params.
+     */
     List<AvailableParam> pathParams;
+    /**
+     * The Query params.
+     */
     List<AvailableParam> queryParams;
+    /**
+     * The Header params.
+     */
     List<AvailableParam> headerParams;
+    /**
+     * The Has path params.
+     */
     boolean hasPathParams;
+    /**
+     * The Has query params.
+     */
     boolean hasQueryParams;
+    /**
+     * The Has header params.
+     */
     boolean hasHeaderParams;
+    /**
+     * The Is put.
+     */
     boolean isPut;
+    /**
+     * The Is get.
+     */
     boolean isGet;
+    /**
+     * The Is post.
+     */
     boolean isPost;
+    /**
+     * The Is delete.
+     */
     boolean isDelete;
+    /**
+     * The Is patch.
+     */
     boolean isPatch;
+    /**
+     * The Url.
+     */
     String url;
 
+    /**
+     * Instantiates a new Item.
+     */
     public Item() {
     }
 
+    /**
+     * Gets std input.
+     *
+     * @return the std input
+     */
     public String getStdInput() {
         return stdInput;
     }
 
+    /**
+     * Sets std input.
+     *
+     * @param stdInput the std input
+     */
     public void setStdInput(String stdInput) {
         this.stdInput = stdInput;
     }
 
+    /**
+     * Gets std output.
+     *
+     * @return the std output
+     */
     public String getStdOutput() {
         return stdOutput;
     }
 
+    /**
+     * Sets std output.
+     *
+     * @param stdOutput the std output
+     */
     public void setStdOutput(String stdOutput) {
         this.stdOutput = stdOutput;
     }
 
+    /**
+     * Gets scenario.
+     *
+     * @return the scenario
+     */
     public String getScenario() {
         return scenario;
     }
 
+    /**
+     * Sets scenario.
+     *
+     * @param scenario the scenario
+     */
     public void setScenario(String scenario) {
         this.scenario = scenario;
     }
 
 
+    /**
+     * Sets has path params.
+     *
+     * @param hasPathParams the has path params
+     */
     public void setHasPathParams(boolean hasPathParams) {
         this.hasPathParams = hasPathParams;
     }
 
 
+    /**
+     * Sets has query params.
+     *
+     * @param hasQueryParams the has query params
+     */
     public void setHasQueryParams(boolean hasQueryParams) {
         this.hasQueryParams = hasQueryParams;
     }
 
+    /**
+     * Sets has header params.
+     *
+     * @param hasHeaderParams the has header params
+     */
     public void setHasHeaderParams(boolean hasHeaderParams) {
         this.hasHeaderParams = hasHeaderParams;
     }
 
+    /**
+     * Gets has input json map.
+     *
+     * @return the has input json map
+     */
     public Map<String, String> getHasInputJsonMap() {
         return hasInputJsonMap;
     }
 
+    /**
+     * Sets has input json map.
+     *
+     * @param hasInputJsonMap the has input json map
+     */
     public void setHasInputJsonMap(Map<String, String> hasInputJsonMap) {
         this.hasInputJsonMap = hasInputJsonMap;
     }
 
+    /**
+     * Gets has output json map.
+     *
+     * @return the has output json map
+     */
     public Map<String, String> getHasOutputJsonMap() {
         return hasOutputJsonMap;
     }
 
+    /**
+     * Sets has output json map.
+     *
+     * @param hasOutputJsonMap the has output json map
+     */
     public void setHasOutputJsonMap(Map<String, String> hasOutputJsonMap) {
         this.hasOutputJsonMap = hasOutputJsonMap;
     }
 
+    /**
+     * Gets input json map.
+     *
+     * @return the input json map
+     */
     public Set<Map.Entry<String, String>> getInputJsonMap() {
         return inputJsonMap;
     }
 
+    /**
+     * Sets input json map.
+     *
+     * @param inputJsonMap the input json map
+     */
     public void setInputJsonMap(Map<String, String> inputJsonMap) {
         this.inputJsonMap = inputJsonMap.entrySet();
         this.hasInputJsonMap = inputJsonMap;
     }
 
+    /**
+     * Sets input json map.
+     *
+     * @param inputJsonMap the input json map
+     */
     public void setInputJsonMap(
             Set<Map.Entry<String, String>> inputJsonMap) {
         this.inputJsonMap = inputJsonMap;
     }
 
+    /**
+     * Gets output json map.
+     *
+     * @return the output json map
+     */
     public Set<Map.Entry<String, String>> getOutputJsonMap() {
         return outputJsonMap;
     }
 
+    /**
+     * Sets output json map.
+     *
+     * @param outputJsonMap the output json map
+     */
     public void setOutputJsonMap(Map<String, String> outputJsonMap) {
         this.outputJsonMap = outputJsonMap.entrySet();
         this.hasOutputJsonMap = outputJsonMap;
     }
 
+    /**
+     * Sets output json map.
+     *
+     * @param outputJsonMap the output json map
+     */
     public void setOutputJsonMap(
             Set<Map.Entry<String, String>> outputJsonMap) {
         this.outputJsonMap = outputJsonMap;
     }
 
+    /**
+     * Gets path params.
+     *
+     * @return the path params
+     */
     public List<AvailableParam> getPathParams() {
         return pathParams;
     }
 
+    /**
+     * Sets path params.
+     *
+     * @param pathParams the path params
+     */
     public void setPathParams(
             List<AvailableParam> pathParams) {
         this.pathParams = pathParams;
     }
 
+    /**
+     * Gets query params.
+     *
+     * @return the query params
+     */
     public List<AvailableParam> getQueryParams() {
         return queryParams;
     }
 
+    /**
+     * Sets query params.
+     *
+     * @param queryParams the query params
+     */
     public void setQueryParams(
             List<AvailableParam> queryParams) {
         this.queryParams = queryParams;
     }
 
+    /**
+     * Gets header params.
+     *
+     * @return the header params
+     */
     public List<AvailableParam> getHeaderParams() {
         return headerParams;
     }
 
+    /**
+     * Sets header params.
+     *
+     * @param headerParams the header params
+     */
     public void setHeaderParams(
             List<AvailableParam> headerParams) {
         this.headerParams = headerParams;
     }
 
+    /**
+     * Gets url.
+     *
+     * @return the url
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * Sets url.
+     *
+     * @param url the url
+     */
     public void setUrl(String url) {
         this.url = url;
     }
 
+    /**
+     * Gets http status code.
+     *
+     * @return the http status code
+     */
     public String getHttpStatusCode() {
         return httpStatusCode;
     }
 
+    /**
+     * Sets http status code.
+     *
+     * @param httpStatusCode the http status code
+     */
     public void setHttpStatusCode(String httpStatusCode) {
         this.httpStatusCode = httpStatusCode;
     }
 
+    /**
+     * Gets resource.
+     *
+     * @return the resource
+     */
     public String getResource() {
         return resource;
     }
 
+    /**
+     * Sets resource.
+     *
+     * @param resource the resource
+     */
     public void setResource(String resource) {
         this.resource = resource;
     }
 
+    /**
+     * Gets method.
+     *
+     * @return the method
+     */
     public String getMethod() {
         return method;
     }
 
+    /**
+     * Sets method.
+     *
+     * @param method the method
+     */
     public void setMethod(String method) {
         this.method = method;
         if ("POST".equalsIgnoreCase(method)) {
@@ -204,27 +454,57 @@ public class Item {
         }
     }
 
+    /**
+     * Gets input.
+     *
+     * @return the input
+     */
     public String getInput() {
         return input;
     }
 
+    /**
+     * Sets input.
+     *
+     * @param input the input
+     */
     public void setInput(String input) {
         this.input = input;
     }
 
+    /**
+     * Gets output.
+     *
+     * @return the output
+     */
     public String getOutput() {
         return output;
     }
 
+    /**
+     * Sets output.
+     *
+     * @param output the output
+     */
     public void setOutput(String output) {
         this.output = output;
     }
 
+    /**
+     * Gets available params.
+     *
+     * @return the available params
+     */
     public List<AvailableParam> getAvailableParams() {
         return availableParams;
     }
 
 
+    /**
+     * Sets available params.
+     *
+     * @param availableParams the available params
+     */
     public void setAvailableParams(
             List<AvailableParam> availableParams) {
         this.availableParams = availableParams;
@@ -240,10 +520,20 @@ public class Item {
         }
     }
 
+    /**
+     * Gets action.
+     *
+     * @return the action
+     */
     public String getAction() {
         return action;
     }
 
+    /**
+     * Sets action.
+     *
+     * @param action the action
+     */
     public void setAction(String action) {
         this.action = action;
     }

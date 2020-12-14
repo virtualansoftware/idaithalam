@@ -40,31 +40,35 @@ import java.util.logging.Logger;
 
 
 /**
- *
- *  Entry point to generate feature file and cucumber report and execute and generate for VIRTUALAN or POSTMAN collection
- *  and used for API contract testing capability.
- *
- *  it will generate the feature file for VIRTUALAN collection and POSTMAN collection
- *
- *  - Used for API testing.
- *  - Used for Contract testing.
- *  - Used for Production Checkout.
- *  - Used for Agile sprint end regression testing.
- *
+ * Entry point to generate feature file and cucumber report and execute and generate for VIRTUALAN
+ * or POSTMAN collection and used for API contract testing capability.
+ * <p>
+ * it will generate the feature file for VIRTUALAN collection and POSTMAN collection
+ * <p>
+ * - Used for API testing. - Used for Contract testing. - Used for Production Checkout. - Used for
+ * Agile sprint end regression testing.
  */
 public class IdaithalamExecutor {
     private final static Logger LOGGER = Logger.getLogger(IdaithalamExecutor.class.getName());
 
+    /**
+     * The Feature.
+     */
     static String feature = "Idaithalam";
+    /**
+     * The Items.
+     */
     List<Item> items = FeatureFileGenerator.generateFeatureFile();
+    /**
+     * The Okta.
+     */
     String okta = ApplicationConfiguration.getProperty("service.api.okta");
 
     /**
      * Entry point
      *
-     * @param args
+     * @param args the input arguments
      */
-
     public static void main(String[] args)  {
         if (args.length > 0) {
             feature = args[0];
@@ -72,6 +76,11 @@ public class IdaithalamExecutor {
         validateContract(feature);
     }
 
+    /**
+     * Validate contract.
+     *
+     * @param feature the feature
+     */
     public static void validateContract(String feature)  {
         try {
             generateFeatureFile(feature);
