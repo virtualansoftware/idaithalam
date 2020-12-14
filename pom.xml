@@ -6,15 +6,15 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.virtualan</groupId>
-	<artifactId>idaithalan-project</artifactId>
+	<artifactId>idaithalam-project</artifactId>
 	<packaging>pom</packaging>
-	<name>idaithalan-project</name>
+	<name>idaithalam-project</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<url>https://virtualan.io</url>
 	<scm>
-		<connection>scm:git:ssh://git@github.com/virtualansoftware/idaithalan.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/virtualansoftware/idaithalan.git</developerConnection>
-		<url>https://github.com/virtualansoftware/idaithalan.git</url>
+		<connection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git</developerConnection>
+		<url>https://github.com/virtualansoftware/idaithalam.git</url>
 		<tag>idaithalan-project-1.0.0</tag>
 	</scm>
 	<developers>
@@ -47,7 +47,7 @@
 	</licenses>
 
 	<modules>
-		<module>modules/idaithalan</module>
+		<module>modules/idaithalam</module>
 	</modules>
 	<profiles>
 		<!-- Samples -->
@@ -60,7 +60,7 @@
 				</property>
 			</activation>
 			<modules>
-				<module>samples/idaithalan-apitesting</module>
+				<module>samples/idaithalam-apitesting</module>
 			</modules>
 		</profile>
 		<profile>
