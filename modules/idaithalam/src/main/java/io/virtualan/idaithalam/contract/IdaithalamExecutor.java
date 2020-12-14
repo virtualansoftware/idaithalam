@@ -55,7 +55,7 @@ import java.util.logging.Logger;
 public class IdaithalamExecutor {
     private final static Logger LOGGER = Logger.getLogger(IdaithalamExecutor.class.getName());
 
-    static String feature = "Idithalan";
+    static String feature = "Idaithalam";
     List<Item> items = FeatureFileGenerator.generateFeatureFile();
     String okta = ApplicationConfiguration.getProperty("service.api.okta");
 
