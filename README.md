@@ -7,7 +7,7 @@
    Entry point to generate feature file and cucumber report and execute and generate for VIRTUALAN or POSTMAN collections
    and utilized for API contract testing and etc.
  
-   Can generate the feature file for VIRTUALAN collection, POSTMAN collection and EXECL(Coming soon)
+   Can generate the feature file for VIRTUALAN collection, POSTMAN collection and EXCEL(Coming soon)
    - Used for API testing.
    - Used for Contract testing.
    - Used for Production Checkout.
