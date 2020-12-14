@@ -76,7 +76,7 @@
         <configuration>
           <archive>
             <manifest>
-		      	<mainClass>io.virtualan.idaithalam.contract.IdithalamExecutor</mainClass>
+		      	<mainClass>io.virtualan.idaithalam.contract.IdaithalamExecutor</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
