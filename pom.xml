@@ -15,7 +15,7 @@
 		<connection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git</developerConnection>
 		<url>https://github.com/virtualansoftware/idaithalam.git</url>
-		<tag>idaithalan-project-1.0.0</tag>
+		<tag>v1.0.0</tag>
 	</scm>
 	<developers>
 		<developer>

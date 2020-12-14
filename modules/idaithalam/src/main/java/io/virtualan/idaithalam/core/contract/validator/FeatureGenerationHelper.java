@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONTokener;
 
+/**
+ * The type Feature generation helper.
+ */
 public class FeatureGenerationHelper {
 
     private static String getResource(JSONArray inputJsonArray) {
@@ -71,6 +74,12 @@ public class FeatureGenerationHelper {
 
     }
 
+    /**
+     * Create pos man to virtualan json array.
+     *
+     * @param object the object
+     * @return the json array
+     */
     public static JSONArray createPosManToVirtualan(JSONObject object) {
         JSONArray virtualanArry = new JSONArray();
         if (object != null) {
@@ -131,6 +140,12 @@ public class FeatureGenerationHelper {
     }
 
 
+    /**
+     * Create feature file list.
+     *
+     * @param arr the arr
+     * @return the list
+     */
     public static List<Item> createFeatureFile(JSONArray arr) {
         List<Item> result = new ArrayList<>();
         if (arr != null && arr.length() > 0) {
