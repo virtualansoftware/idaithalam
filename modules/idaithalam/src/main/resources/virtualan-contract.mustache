@@ -35,6 +35,9 @@ Feature: {{feature}} - API Contract validation status
         | {{key}}                   | {{value}}                         |
       {{/headerParams}}
       {{/hasHeaderParams}}
+      {{#stdInput}}
+      And add {{stdInput}} data with application/text given input
+      {{/stdInput}}
       {{#hasInputJsonMap}}
       {{#isPost}}
       And Create api with given input
@@ -48,6 +51,9 @@ Feature: {{feature}} - API Contract validation status
       {{/hasInputJsonMap}}
       When a user {{action}} application/json in {{url}} resource on {{resource}}
       Then Verify the status code is {{httpStatusCode}}
+      {{#stdOutput}}
+      And Verify api response with {{stdOutput}} includes in the response
+      {{/stdOutput}}
       {{#hasOutputJsonMap}}
       And Verify-all across response includes following in the response
       {{#outputJsonMap}}

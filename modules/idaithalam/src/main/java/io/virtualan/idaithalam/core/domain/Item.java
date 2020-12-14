@@ -29,6 +29,8 @@ public class Item {
     String action;
     String input;
     String output;
+    String stdInput;
+    String stdOutput;
     Map<String, String> hasInputJsonMap;
     Map<String, String> hasOutputJsonMap;
     Set<Map.Entry<String, String>> inputJsonMap;
@@ -50,6 +52,21 @@ public class Item {
     public Item() {
     }
 
+    public String getStdInput() {
+        return stdInput;
+    }
+
+    public void setStdInput(String stdInput) {
+        this.stdInput = stdInput;
+    }
+
+    public String getStdOutput() {
+        return stdOutput;
+    }
+
+    public void setStdOutput(String stdOutput) {
+        this.stdOutput = stdOutput;
+    }
 
     public String getScenario() {
         return scenario;

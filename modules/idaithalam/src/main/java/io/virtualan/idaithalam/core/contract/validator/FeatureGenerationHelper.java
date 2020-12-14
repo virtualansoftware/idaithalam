@@ -20,10 +20,12 @@ import io.virtualan.idaithalam.core.domain.AvailableParam;
 import io.virtualan.idaithalam.core.domain.Item;
 import io.virtualan.mapson.Mapson;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONTokener;
 
 public class FeatureGenerationHelper {
 
@@ -166,14 +168,27 @@ public class FeatureGenerationHelper {
     private static void extractedOutput(JSONArray arr, int i, Item item) {
         item.setOutput(arr.optJSONObject(i).optString("output"));
         if (item.getOutput() != null && !"".equalsIgnoreCase(item.getOutput())) {
-            item.setOutputJsonMap(Mapson.buildMAPsonFromJson(item.getOutput()));
+            try {
+                JSONTokener jsonTokener = new JSONTokener(item.getOutput());
+                JSONObject jsonObject = new JSONObject(jsonTokener);
+                item.setOutputJsonMap(Mapson.buildMAPsonFromJson(item.getOutput()));
+            } catch (JSONException e) {
+                item.setStdOutput(item.getOutput());
+            }
         }
     }
+
 
     private static void extractedInput(JSONArray arr, int i, Item item) {
         item.setInput(arr.optJSONObject(i).optString("input"));
         if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())) {
-            item.setInputJsonMap(Mapson.buildMAPsonFromJson(item.getInput()));
+            try {
+                JSONTokener jsonTokener = new JSONTokener(item.getInput());
+                JSONObject jsonObject = new JSONObject(jsonTokener);
+                item.setInputJsonMap(Mapson.buildMAPsonFromJson(item.getInput()));
+            } catch (JSONException e) {
+                item.setStdInput(item.getInput());
+            }
         }
     }
 

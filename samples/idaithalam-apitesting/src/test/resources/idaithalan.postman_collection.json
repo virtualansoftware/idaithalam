@@ -728,6 +728,78 @@
 					"body": "{\n    \"category\": {\n        \"id\": 100,\n        \"name\": \"german shepherd\"\n    },\n    \"id\": 101,\n    \"name\": \"Rocky\",\n    \"photoUrls\": [\n        \"string\"\n    ],\n    \"status\": \"available\",\n    \"tags\": [\n        {\n            \"id\": 101,\n            \"name\": \"brown\"\n        }\n    ]\n}"
 				}
 			]
+		},
+		{
+			"name": "risk calculations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": [
+				{
+					"name": "risk calculations",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"birthday\": \"1978-10-24\",\r\n  \"postalCode\": \"60563\"\r\n}"
+						},
+						"url": {
+							"raw": "{{hostname}}/api/riskfactor/compute",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"api",
+								"riskfactor",
+								"compute"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "2"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 14 Dec 2020 18:09:20 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "40"
+				}
+			]
 		}
 	]
 }
