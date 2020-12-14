@@ -1,6 +1,6 @@
 package io.virtualan.test;
 
-import io.virtualan.idaithalam.contract.IdaithalanExecutor;
+import io.virtualan.idaithalam.contract.IdaithalamExecutor;
 import org.junit.Assert;
 import org.openapitools.OpenAPI2SpringBoot;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class DemoApiTest {
     @Test
     public void validateContract() {
-        IdaithalanExecutor.validateContract("Pet API Production Checkout");
+        IdaithalamExecutor.validateContract("Pet API Production Checkout");
         Assert.assertTrue(true);
     }
 }
