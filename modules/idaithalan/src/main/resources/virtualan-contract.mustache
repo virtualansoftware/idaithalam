@@ -48,10 +48,10 @@ Feature: {{feature}} - API Contract validation status
       {{/hasInputJsonMap}}
       When a user {{action}} application/json in {{url}} resource on {{resource}}
       Then Verify the status code is {{httpStatusCode}}
-      And Verify across response includes following in the response
       {{#hasOutputJsonMap}}
+      And Verify-all across response includes following in the response
       {{#outputJsonMap}}
-      | {{key}}                 |  {{value}}                          |
+        | {{key}}                 |  {{value}}                          |
       {{/outputJsonMap}}
       {{/hasOutputJsonMap}}
-    {{/items}}
+     {{/items}}
