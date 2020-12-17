@@ -131,11 +131,6 @@ public class Item {
      */
     String url;
 
-    /**
-     * Instantiates a new Item.
-     */
-    public Item() {
-    }
 
     /**
      * Gets std input.

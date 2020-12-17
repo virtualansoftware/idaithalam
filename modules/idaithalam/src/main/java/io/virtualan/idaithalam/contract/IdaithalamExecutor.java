@@ -25,7 +25,6 @@ import io.virtualan.idaithalam.core.contract.validator.FeatureFileGenerator;
 import io.virtualan.idaithalam.core.domain.Item;
 import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
-import net.masterthought.cucumber.Reportable;
 import net.masterthought.cucumber.json.support.Status;
 import net.masterthought.cucumber.presentation.PresentationMode;
 
@@ -54,7 +53,7 @@ public class IdaithalamExecutor {
     /**
      * The Feature.
      */
-    static String feature = "Idaithalam";
+    private static String feature = "Idaithalam";
     /**
      * The Items.
      */
@@ -70,6 +69,7 @@ public class IdaithalamExecutor {
      * @param args the input arguments
      */
     public static void main(String[] args)  {
+        String feature = "Idaithalam";
         if (args.length > 0) {
             feature = args[0];
         }
@@ -80,14 +80,17 @@ public class IdaithalamExecutor {
      * Validate contract.
      *
      * @param feature the feature
+     * @return the int
      */
-    public static void validateContract(String feature)  {
+    public static int validateContract(String featureHeading)  {
         try {
-            generateFeatureFile(feature);
+            feature = featureHeading;
+            generateFeatureFile();
             addConfToClasspath();
             String[] argv = getCucumberOptions();
             byte exitStatus = Main.run(argv, Thread.currentThread().getContextClassLoader());
             generateReport();
+            return exitStatus;
         } catch (IOException e) {
             LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
             System.exit(-1);
@@ -120,7 +123,7 @@ public class IdaithalamExecutor {
         configuration.setQualifier("cucumber-report-1", "First report");
         configuration.setQualifier("cucumber-report-2", "Second report");
         ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, configuration);
-        Reportable result = reportBuilder.generateReports();
+        reportBuilder.generateReports();
     }
 
     /**
@@ -157,7 +160,7 @@ public class IdaithalamExecutor {
      * @throws IOException
      */
 
-    private static void generateFeatureFile(String feature) throws IOException {
+    private static void generateFeatureFile() throws IOException {
         MustacheFactory mf = new DefaultMustacheFactory();
         Mustache mustache = mf.compile("virtualan-contract.mustache");
         FileOutputStream outputStream = new FileOutputStream("conf/virtualan-contract.feature");
