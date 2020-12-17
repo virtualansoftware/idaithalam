@@ -21,6 +21,7 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import io.cucumber.core.cli.Main;
 import io.virtualan.cucumblan.props.ApplicationConfiguration;
+import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.contract.validator.FeatureFileGenerator;
 import io.virtualan.idaithalam.core.domain.Item;
 import net.masterthought.cucumber.Configuration;
@@ -53,7 +54,7 @@ public class IdaithalamExecutor {
     /**
      * The Feature.
      */
-    private static String feature = "Idaithalam";
+    static String feature = "Idaithalam";
     /**
      * The Items.
      */
@@ -63,12 +64,15 @@ public class IdaithalamExecutor {
      */
     String okta = ApplicationConfiguration.getProperty("service.api.okta");
 
+    public IdaithalamExecutor() throws UnableToProcessException {
+    }
+
     /**
      * Entry point
      *
      * @param args the input arguments
      */
-    public static void main(String[] args)  {
+    public static void main(String[] args) throws UnableToProcessException {
         String feature = "Idaithalam";
         if (args.length > 0) {
             feature = args[0];
@@ -82,7 +86,8 @@ public class IdaithalamExecutor {
      * @param featureHeading the feature heading
      * @return the int
      */
-    public static int validateContract(String featureHeading)  {
+    public static int validateContract(String featureHeading)
+        throws UnableToProcessException {
         byte exitStatus;
         try {
             feature = featureHeading;
@@ -91,9 +96,9 @@ public class IdaithalamExecutor {
             String[] argv = getCucumberOptions();
             exitStatus = Main.run(argv, Thread.currentThread().getContextClassLoader());
             generateReport();
-        } catch (IOException e) {
+        } catch (IOException | UnableToProcessException e) {
             LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
-            exitStatus = -1;
+            throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
         }
         return exitStatus;
     }
@@ -161,7 +166,7 @@ public class IdaithalamExecutor {
      * @throws IOException
      */
 
-    private static void generateFeatureFile() throws IOException {
+    private static void generateFeatureFile() throws IOException, UnableToProcessException {
         MustacheFactory mf = new DefaultMustacheFactory();
         Mustache mustache = mf.compile("virtualan-contract.mustache");
         FileOutputStream outputStream = new FileOutputStream("conf/virtualan-contract.feature");
