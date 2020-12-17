@@ -17,8 +17,10 @@
 package io.virtualan.idaithalam.core.contract.validator;
 
 import io.virtualan.cucumblan.props.ApplicationConfiguration;
+import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ConversionType;
 import io.virtualan.idaithalam.core.domain.Item;
+import java.nio.charset.StandardCharsets;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -33,28 +35,27 @@ import java.util.logging.Logger;
  */
 public class FeatureFileGenerator {
 
-    private final static Logger LOGGER = Logger.getLogger(FeatureFileGenerator.class.getName());
+    final private static Logger LOGGER = Logger.getLogger(FeatureFileGenerator.class.getName());
 
-    /**
-     * Instantiates a new Feature file generator.
-     */
-    public FeatureFileGenerator() {
+    private FeatureFileGenerator() {
+
     }
 
     /**
      * Generate feature file list.
      *
      * @return the list
+     * @throws UnableToProcessException the unable to process exception
      */
-    public static List<Item> generateFeatureFile() {
+    public static List<Item> generateFeatureFile() throws UnableToProcessException {
         String contractFileName = ApplicationConfiguration.getProperty("virtualan.data.load");
         String contractFileType = ApplicationConfiguration.getProperty("virtualan.data.type");
         JSONArray jsonArray = null;
         if (contractFileType == null) {
             LOGGER.severe("provide appropriate virtualan.data.type for the input data?");
-            System.exit(0);
+            throw new UnableToProcessException("provide appropriate virtualan.data.type for the input data?");
         } else if (ConversionType.POSTMAN.name().equalsIgnoreCase(contractFileType)) {
-            jsonArray = FeatureGenerationHelper.createPosManToVirtualan(getJSONObject(contractFileName));
+            jsonArray = FeatureGenerationHelper.createPostManToVirtualan(getJSONObject(contractFileName));
         } else {
             jsonArray = getJSONArray(contractFileName);
         }
@@ -67,8 +68,10 @@ public class FeatureFileGenerator {
      *
      * @param contractFileName the contract file name
      * @return the json object
+     * @throws UnableToProcessException the unable to process exception
      */
-    public static JSONObject getJSONObject(String contractFileName) {
+    public static JSONObject getJSONObject(String contractFileName)
+        throws UnableToProcessException {
         JSONObject jsonObject = null;
         try {
             String objectStr = readString(FeatureFileGenerator.class.getClassLoader().getResourceAsStream(contractFileName));
@@ -76,7 +79,7 @@ public class FeatureFileGenerator {
         } catch (IOException e) {
             LOGGER
                     .warning("Unable to process the input file(" + contractFileName + ")" + e.getMessage());
-            System.exit(-1);
+            throw new UnableToProcessException("Unable to process the input file(" + contractFileName + ") :" + e.getMessage());
         }
         return jsonObject;
     }
@@ -96,7 +99,7 @@ public class FeatureFileGenerator {
             into.write(buf, 0, n);
         }
         into.close();
-        return new String(into.toByteArray(), "UTF-8"); // Or whatever encoding
+        return new String(into.toByteArray(), StandardCharsets.UTF_8);
     }
 
     /**
@@ -104,8 +107,10 @@ public class FeatureFileGenerator {
      *
      * @param contractFileName the contract file name
      * @return the json array
+     * @throws UnableToProcessException the unable to process exception
      */
-    public static JSONArray getJSONArray(String contractFileName) {
+    public static JSONArray getJSONArray(String contractFileName)
+        throws UnableToProcessException {
         JSONArray jsonArray = null;
         try {
             String jsonArrayStr = readString(FeatureFileGenerator.class.getClassLoader().getResourceAsStream(contractFileName));
@@ -113,7 +118,7 @@ public class FeatureFileGenerator {
         } catch (IOException e) {
             LOGGER
                     .warning("Unable to process the input file(" + contractFileName + ")" + e.getMessage());
-            System.exit(-1);
+            throw new UnableToProcessException("Unable to process the input file(" + contractFileName + ")" + e.getMessage());
         }
         return jsonArray;
     }

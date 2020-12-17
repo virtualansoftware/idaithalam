@@ -29,22 +29,17 @@ import org.json.JSONTokener;
 
 public class FeatureGenerationHelper {
 
-    private static String getResource(JSONArray inputJsonArray) {
-        StringBuilder builder = new StringBuilder();
+    private FeatureGenerationHelper(){}
 
+    private static String getResource(JSONArray inputJsonArray) {
         if (inputJsonArray != null && inputJsonArray.length() > 0) {
-            for (int i = 0; i < inputJsonArray.length(); i++) {
-                return inputJsonArray.getString(i);
-            }
-        } else {
-            builder.append("/");
+            return inputJsonArray.getString(0);
         }
         return "default";
     }
 
     private static String buildEndPointURL(JSONArray inputJsonArray) {
         StringBuilder builder = new StringBuilder();
-
         if (inputJsonArray != null && inputJsonArray.length() > 0) {
             for (int i = 0; i < inputJsonArray.length(); i++) {
                 builder.append("/");
@@ -60,7 +55,8 @@ public class FeatureGenerationHelper {
         if (inputJsonArray != null && inputJsonArray.length() > 0) {
             for (int j = 0; j < inputJsonArray.length(); j++) {
                 JSONObject virtualanObjParam = new JSONObject();
-                if (!"".equalsIgnoreCase(inputJsonArray.getJSONObject(j).optString("key"))) {
+                if (inputJsonArray.getJSONObject(j) instanceof  JSONObject &&
+                                !"".equalsIgnoreCase(inputJsonArray.getJSONObject(j).optString("key"))) {
                     virtualanObjParam.put("key", inputJsonArray.getJSONObject(j).optString("key"));
                     virtualanObjParam.put("value", inputJsonArray.getJSONObject(j).optString("value"));
                     virtualanObjParam.put("parameterType", param);
@@ -71,27 +67,31 @@ public class FeatureGenerationHelper {
 
     }
 
-    public static JSONArray createPosManToVirtualan(JSONObject object) {
+    public static JSONArray createPostManToVirtualan(JSONObject object) {
         JSONArray virtualanArry = new JSONArray();
         if (object != null) {
             JSONArray arr = object.getJSONArray("item");
             if (arr != null && arr.length() > 0) {
                 for (int i = 0; i < arr.length(); i++) {
-                    if(arr.getJSONObject(i) instanceof  JSONObject) {
-                        JSONArray responseArray = arr.getJSONObject(i).getJSONArray("response");
-                        if (responseArray != null && responseArray.length() > 0) {
-                            for (int j = 0; j < responseArray.length(); j++) {
-                                if(responseArray.getJSONObject(j) instanceof  JSONObject) {
-                                    JSONObject virtualanObj = buildVirtualanObject(responseArray, j);
-                                    virtualanArry.put(virtualanObj);
-                                }
-                            }
-                        }
-                    }
+                    buildVirtualanFromPostMan(virtualanArry, arr, i);
                 }
             }
         }
         return virtualanArry;
+    }
+
+    private static void buildVirtualanFromPostMan(JSONArray virtualanArry, JSONArray arr, int i) {
+        if(arr.getJSONObject(i) instanceof JSONObject) {
+            JSONArray responseArray = arr.getJSONObject(i).getJSONArray("response");
+            if (responseArray != null && responseArray.length() > 0) {
+                for (int j = 0; j < responseArray.length(); j++) {
+                    if(responseArray.getJSONObject(j) instanceof  JSONObject) {
+                        JSONObject virtualanObj = buildVirtualanObject(responseArray, j);
+                        virtualanArry.put(virtualanObj);
+                    }
+                }
+            }
+        }
     }
 
     private static JSONObject buildVirtualanObject(JSONArray responseArray, int j) {
@@ -174,7 +174,7 @@ public class FeatureGenerationHelper {
         if (item.getOutput() != null && !"".equalsIgnoreCase(item.getOutput())) {
             try {
                 JSONTokener jsonTokener = new JSONTokener(item.getOutput());
-                JSONObject jsonObject = new JSONObject(jsonTokener);
+                new JSONObject(jsonTokener);
                 item.setOutputJsonMap(Mapson.buildMAPsonFromJson(item.getOutput()));
             } catch (JSONException e) {
                 item.setStdOutput(item.getOutput());
@@ -188,7 +188,7 @@ public class FeatureGenerationHelper {
         if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())) {
             try {
                 JSONTokener jsonTokener = new JSONTokener(item.getInput());
-                JSONObject jsonObject = new JSONObject(jsonTokener);
+                new JSONObject(jsonTokener);
                 item.setInputJsonMap(Mapson.buildMAPsonFromJson(item.getInput()));
             } catch (JSONException e) {
                 item.setStdInput(item.getInput());
