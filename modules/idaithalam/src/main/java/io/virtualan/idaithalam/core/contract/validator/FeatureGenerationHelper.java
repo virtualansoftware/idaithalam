@@ -77,11 +77,15 @@ public class FeatureGenerationHelper {
             JSONArray arr = object.getJSONArray("item");
             if (arr != null && arr.length() > 0) {
                 for (int i = 0; i < arr.length(); i++) {
-                    JSONArray responseArray = arr.getJSONObject(i).getJSONArray("response");
-                    if (responseArray != null && responseArray.length()>0) {
-                        for (int j = 0; j < responseArray.length(); j++) {
-                            JSONObject virtualanObj = buildVirtualanObject(responseArray, j);
-                            virtualanArry.put(virtualanObj);
+                    if(arr.getJSONObject(i) instanceof  JSONObject) {
+                        JSONArray responseArray = arr.getJSONObject(i).getJSONArray("response");
+                        if (responseArray != null && responseArray.length() > 0) {
+                            for (int j = 0; j < responseArray.length(); j++) {
+                                if(responseArray.getJSONObject(j) instanceof  JSONObject) {
+                                    JSONObject virtualanObj = buildVirtualanObject(responseArray, j);
+                                    virtualanArry.put(virtualanObj);
+                                }
+                            }
                         }
                     }
                 }

@@ -27,6 +27,30 @@
 				}
 			},
 			"response": [
+					]
+		},
+		{
+			"name": "read pet api",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{hostname}}/api/pets/10000",
+					"host": [
+						"{{hostname}}"
+					],
+					"path": [
+						"api",
+						"pets",
+						"10000"
+					]
+				}
+			},
+			"response": [
 				{
 					"name": "read pet2 api",
 					"originalRequest": {
