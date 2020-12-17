@@ -45,6 +45,7 @@ public class FeatureFileGenerator {
      * Generate feature file list.
      *
      * @return the list
+     * @throws UnableToProcessException the unable to process exception
      */
     public static List<Item> generateFeatureFile() throws UnableToProcessException {
         String contractFileName = ApplicationConfiguration.getProperty("virtualan.data.load");
@@ -67,6 +68,7 @@ public class FeatureFileGenerator {
      *
      * @param contractFileName the contract file name
      * @return the json object
+     * @throws UnableToProcessException the unable to process exception
      */
     public static JSONObject getJSONObject(String contractFileName)
         throws UnableToProcessException {
@@ -105,6 +107,7 @@ public class FeatureFileGenerator {
      *
      * @param contractFileName the contract file name
      * @return the json array
+     * @throws UnableToProcessException the unable to process exception
      */
     public static JSONArray getJSONArray(String contractFileName)
         throws UnableToProcessException {

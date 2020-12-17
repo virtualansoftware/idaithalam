@@ -64,6 +64,11 @@ public class IdaithalamExecutor {
      */
     String okta = ApplicationConfiguration.getProperty("service.api.okta");
 
+    /**
+     * Instantiates a new Idaithalam executor.
+     *
+     * @throws UnableToProcessException the unable to process exception
+     */
     public IdaithalamExecutor() throws UnableToProcessException {
     }
 
@@ -71,6 +76,7 @@ public class IdaithalamExecutor {
      * Entry point
      *
      * @param args the input arguments
+     * @throws UnableToProcessException the unable to process exception
      */
     public static void main(String[] args) throws UnableToProcessException {
         String feature = "Idaithalam";
@@ -85,6 +91,7 @@ public class IdaithalamExecutor {
      *
      * @param featureHeading the feature heading
      * @return the int
+     * @throws UnableToProcessException the unable to process exception
      */
     public static int validateContract(String featureHeading)
         throws UnableToProcessException {
