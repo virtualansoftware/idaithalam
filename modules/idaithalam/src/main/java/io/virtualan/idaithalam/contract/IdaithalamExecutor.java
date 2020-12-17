@@ -79,22 +79,23 @@ public class IdaithalamExecutor {
     /**
      * Validate contract.
      *
-     * @param feature the feature
+     * @param featureHeading the feature heading
      * @return the int
      */
     public static int validateContract(String featureHeading)  {
+        byte exitStatus;
         try {
             feature = featureHeading;
             generateFeatureFile();
             addConfToClasspath();
             String[] argv = getCucumberOptions();
-            byte exitStatus = Main.run(argv, Thread.currentThread().getContextClassLoader());
+            exitStatus = Main.run(argv, Thread.currentThread().getContextClassLoader());
             generateReport();
-            return exitStatus;
         } catch (IOException e) {
             LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
-            System.exit(-1);
+            exitStatus = -1;
         }
+        return exitStatus;
     }
 
     /**

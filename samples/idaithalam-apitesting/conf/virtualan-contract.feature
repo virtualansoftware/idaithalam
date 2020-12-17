@@ -1,4 +1,3 @@
-Feature: Idaithalam - API Contract validation status
     Scenario: Load initial set of data
       Given Provided all the feature level parameters from file
     Scenario: read pet2 api - GET api call
