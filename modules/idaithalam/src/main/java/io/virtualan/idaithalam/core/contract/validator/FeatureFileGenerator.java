@@ -29,18 +29,23 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- *
- *   Cucumber feature file generator
- *
+ * Cucumber feature file generator
  */
-
 public class FeatureFileGenerator {
 
     private final static Logger LOGGER = Logger.getLogger(FeatureFileGenerator.class.getName());
 
+    /**
+     * Instantiates a new Feature file generator.
+     */
     public FeatureFileGenerator() {
     }
 
+    /**
+     * Generate feature file list.
+     *
+     * @return the list
+     */
     public static List<Item> generateFeatureFile() {
         String contractFileName = ApplicationConfiguration.getProperty("virtualan.data.load");
         String contractFileType = ApplicationConfiguration.getProperty("virtualan.data.type");
@@ -57,6 +62,12 @@ public class FeatureFileGenerator {
         return result;
     }
 
+    /**
+     * Gets json object.
+     *
+     * @param contractFileName the contract file name
+     * @return the json object
+     */
     public static JSONObject getJSONObject(String contractFileName) {
         JSONObject jsonObject = null;
         try {
@@ -70,6 +81,13 @@ public class FeatureFileGenerator {
         return jsonObject;
     }
 
+    /**
+     * Read string string.
+     *
+     * @param inputStream the input stream
+     * @return the string
+     * @throws IOException the io exception
+     */
     public static String readString(InputStream inputStream) throws IOException {
 
         ByteArrayOutputStream into = new ByteArrayOutputStream();
@@ -81,6 +99,12 @@ public class FeatureFileGenerator {
         return new String(into.toByteArray(), "UTF-8"); // Or whatever encoding
     }
 
+    /**
+     * Gets json array.
+     *
+     * @param contractFileName the contract file name
+     * @return the json array
+     */
     public static JSONArray getJSONArray(String contractFileName) {
         JSONArray jsonArray = null;
         try {
