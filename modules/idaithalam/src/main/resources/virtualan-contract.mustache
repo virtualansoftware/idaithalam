@@ -18,19 +18,19 @@ Feature: {{feature}} - API Contract validation status
       {{#hasPathParams}}
       And add request with given path params
       {{#pathParams}}
-        | {{key}}                   | {{value}}                         |
+        | {{{key}}}                   | {{{value}}}                         |
        {{/pathParams}}
       {{/hasPathParams}}
       {{#hasQueryParams}}
       And add request with given query params
       {{#queryParams}}
-        | {{key}}                   | {{value}}                         |
+        | {{{key}}}                   | {{{value}}}                         |
       {{/queryParams}}
       {{/hasQueryParams}}
       {{#hasHeaderParams}}
       And add request with given header params
       {{#headerParams}}
-        | {{key}}                   | {{value}}                         |
+        | {{{key}}}                   | {{{value}}}                         |
       {{/headerParams}}
       {{/hasHeaderParams}}
       {{#stdInput}}
@@ -44,7 +44,7 @@ Feature: {{feature}} - API Contract validation status
       And Update api with given input
       {{/isPut}}
       {{#inputJsonMap}}
-        | {{key}}                   |  {{value}}                        |
+        | {{{key}}}                   |  {{{value}}}                        |
       {{/inputJsonMap}}
       {{/hasInputJsonMap}}
       When a user {{action}} application/json in {{url}} resource on {{resource}}
@@ -55,7 +55,7 @@ Feature: {{feature}} - API Contract validation status
       {{#hasOutputJsonMap}}
       And Verify-all across response includes following in the response
       {{#outputJsonMap}}
-        | {{key}}                 |  {{value}}                          |
+        | {{{key}}}                 |  {{{value}}}                          |
       {{/outputJsonMap}}
       {{/hasOutputJsonMap}}
      {{/items}}
