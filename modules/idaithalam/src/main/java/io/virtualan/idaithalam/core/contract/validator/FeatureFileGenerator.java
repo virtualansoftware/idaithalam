@@ -74,8 +74,13 @@ public class FeatureFileGenerator {
         throws UnableToProcessException {
         JSONObject jsonObject = null;
         try {
-            String objectStr = readString(FeatureFileGenerator.class.getClassLoader().getResourceAsStream(contractFileName));
-            jsonObject = new JSONObject(objectStr);
+            if(FeatureFileGenerator.class.getClassLoader().getResourceAsStream(contractFileName) != null) {
+                String objectStr = readString(FeatureFileGenerator.class.getClassLoader()
+                    .getResourceAsStream(contractFileName));
+                jsonObject = new JSONObject(objectStr);
+            } else {
+                throw new UnableToProcessException("Unable to find/process the input file(" + contractFileName + ") :" );
+            }
         } catch (IOException e) {
             LOGGER
                     .warning("Unable to process the input file(" + contractFileName + ")" + e.getMessage());

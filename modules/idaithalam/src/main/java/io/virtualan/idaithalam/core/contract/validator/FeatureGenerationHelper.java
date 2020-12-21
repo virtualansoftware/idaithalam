@@ -81,13 +81,15 @@ public class FeatureGenerationHelper {
     }
 
     private static void buildVirtualanFromPostMan(JSONArray virtualanArry, JSONArray arr, int i) {
-        if(arr.getJSONObject(i) instanceof JSONObject) {
-            JSONArray responseArray = arr.getJSONObject(i).getJSONArray("response");
-            if (responseArray != null && responseArray.length() > 0) {
-                for (int j = 0; j < responseArray.length(); j++) {
-                    if(responseArray.getJSONObject(j) instanceof  JSONObject) {
-                        JSONObject virtualanObj = buildVirtualanObject(responseArray, j);
-                        virtualanArry.put(virtualanObj);
+        if(arr.optJSONObject(i) instanceof JSONObject) {
+            if(arr.optJSONObject(i).optJSONArray("response") instanceof  JSONArray) {
+                JSONArray responseArray = arr.getJSONObject(i).getJSONArray("response");
+                if (responseArray != null && responseArray.length() > 0) {
+                    for (int j = 0; j < responseArray.length(); j++) {
+                        if (responseArray.optJSONObject(j) instanceof JSONObject) {
+                            JSONObject virtualanObj = buildVirtualanObject(responseArray, j);
+                            virtualanArry.put(virtualanObj);
+                        }
                     }
                 }
             }
@@ -98,11 +100,11 @@ public class FeatureGenerationHelper {
         JSONObject virtualanObj = new JSONObject();
         virtualanObj.put("scenario", responseArray.optJSONObject(j).optString("name"));
         virtualanObj.put("method",
-                responseArray.optJSONObject(j).getJSONObject("originalRequest")
+                responseArray.optJSONObject(j).optJSONObject("originalRequest")
                         .optString("method"));
         virtualanObj.put("url",
-                buildEndPointURL(responseArray.optJSONObject(j).getJSONObject("originalRequest")
-                        .getJSONObject("url").optJSONArray("path")));
+                buildEndPointURL(responseArray.optJSONObject(j).optJSONObject("originalRequest")
+                        .optJSONObject("url").optJSONArray("path")));
         extracted(responseArray, j, virtualanObj);
         virtualanObj.put("output", responseArray.optJSONObject(j).optString("body"));
         virtualanObj.put("httpStatusCode", responseArray.optJSONObject(j).optString("code"));
@@ -112,21 +114,21 @@ public class FeatureGenerationHelper {
     }
 
     private static void extractedParams(JSONArray responseArray, int j, JSONObject virtualanObj, JSONArray paramsArray) {
-        addParams(responseArray.optJSONObject(j).getJSONObject("originalRequest")
+        addParams(responseArray.optJSONObject(j).optJSONObject("originalRequest")
                 .optJSONArray("header"), paramsArray, "HEADER_PARAM");
-        addParams(responseArray.optJSONObject(j).getJSONObject("originalRequest")
+        addParams(responseArray.optJSONObject(j).optJSONObject("originalRequest")
                 .optJSONObject("url").optJSONArray("query"), paramsArray, "QUERY_PARAM");
-        virtualanObj.put("resource", getResource(responseArray.optJSONObject(j).getJSONObject("originalRequest")
-                .getJSONObject("url").optJSONArray("path")));
+        virtualanObj.put("resource", getResource(responseArray.optJSONObject(j).optJSONObject("originalRequest")
+                .optJSONObject("url").optJSONArray("path")));
         if (paramsArray.length() > 0) {
             virtualanObj.put("availableParams", paramsArray);
         }
     }
 
     private static void extracted(JSONArray responseArray, int j, JSONObject virtualanObj) {
-        if (responseArray.optJSONObject(j).getJSONObject("originalRequest")
+        if (responseArray.optJSONObject(j).optJSONObject("originalRequest")
                 .optJSONObject("body") != null) {
-            String input = responseArray.optJSONObject(j).getJSONObject("originalRequest")
+            String input = responseArray.optJSONObject(j).optJSONObject("originalRequest")
                     .optJSONObject("body").optString("raw");
             if (!"".equalsIgnoreCase(input)) {
                 virtualanObj.put("input", input);
