@@ -16,6 +16,7 @@
 
 package io.virtualan.idaithalam.core.contract.validator;
 
+import io.virtualan.cucumblan.props.ExcludeConfiguration;
 import io.virtualan.idaithalam.core.domain.AvailableParam;
 import io.virtualan.idaithalam.core.domain.Item;
 import io.virtualan.mapson.Mapson;
@@ -151,11 +152,11 @@ public class FeatureGenerationHelper {
     private static Item getItem(JSONArray arr, int i) {
         Item item = new Item();
         extractedInput(arr, i, item);
-        extractedOutput(arr, i, item);
+        item.setUrl(arr.optJSONObject(i).optString("url"));
+        extractedOutput(item.getUrl(), arr, i, item);
         item.setHttpStatusCode(arr.optJSONObject(i).optString("httpStatusCode"));
         item.setMethod(arr.optJSONObject(i).optString("method"));
         item.setAction(arr.optJSONObject(i).optString("method").toLowerCase());
-        item.setUrl(arr.optJSONObject(i).optString("url"));
         item.setResource(arr.optJSONObject(i).optString("resource"));
         extractedScenario(arr, i, item);
         List<AvailableParam> availableParams = getAvailableParamList(arr, i);
@@ -171,13 +172,16 @@ public class FeatureGenerationHelper {
         }
     }
 
-    private static void extractedOutput(JSONArray arr, int i, Item item) {
+    private static void extractedOutput(String url, JSONArray arr, int i, Item item) {
         item.setOutput(arr.optJSONObject(i).optString("output"));
         if (item.getOutput() != null && !"".equalsIgnoreCase(item.getOutput())) {
             try {
                 JSONTokener jsonTokener = new JSONTokener(item.getOutput());
                 new JSONObject(jsonTokener);
                 item.setOutputJsonMap(Mapson.buildMAPsonFromJson(item.getOutput()));
+                if(!ExcludeConfiguration.shouldSkip(url, null)) {
+                    item.setHasOutputJsonMap(true);
+                }
             } catch (JSONException e) {
                 item.setStdOutput(item.getOutput());
             }
@@ -192,6 +196,7 @@ public class FeatureGenerationHelper {
                 JSONTokener jsonTokener = new JSONTokener(item.getInput());
                 new JSONObject(jsonTokener);
                 item.setInputJsonMap(Mapson.buildMAPsonFromJson(item.getInput()));
+                item.setHasInputJsonMap(true);
             } catch (JSONException e) {
                 item.setStdInput(item.getInput());
             }
