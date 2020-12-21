@@ -139,7 +139,7 @@
 		<dependency>
 			<groupId>io.virtualan</groupId>
 			<artifactId>idaithalam</artifactId>
-			<version>1.0.2-SNAPSHOT</version>
+			<version>1.0.3-SNAPSHOT</version>
 		</dependency>
 
 		<!-- START Virtual Service API support -->
