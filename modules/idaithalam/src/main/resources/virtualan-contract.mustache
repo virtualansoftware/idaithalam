@@ -53,7 +53,7 @@ Feature: {{feature}} - API Contract validation status
       And Verify api response with {{stdOutput}} includes in the response
       {{/stdOutput}}
       {{#hasOutputJsonMap}}
-      And Verify-all across response includes following in the response
+      And Verify-all {{url}} api includes following in the response
       {{#outputJsonMap}}
         | {{{key}}}                 |  {{{value}}}                          |
       {{/outputJsonMap}}
