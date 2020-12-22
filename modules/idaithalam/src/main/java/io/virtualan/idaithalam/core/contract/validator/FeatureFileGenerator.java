@@ -56,6 +56,8 @@ public class FeatureFileGenerator {
             throw new UnableToProcessException("provide appropriate virtualan.data.type for the input data?");
         } else if (ConversionType.POSTMAN.name().equalsIgnoreCase(contractFileType)) {
             jsonArray = FeatureGenerationHelper.createPostManToVirtualan(getJSONObject(contractFileName));
+        } else if (ConversionType.OPENAPI.name().equalsIgnoreCase(contractFileType)) {
+            jsonArray = OpenApiFeatureFileGenerator.generateOpenApiContractForVirtualan(contractFileName);
         } else {
             jsonArray = getJSONArray(contractFileName);
         }
