@@ -173,21 +173,29 @@
     <artifactId>swagger-inflector</artifactId>
     <version>2.0.3</version>
     <exclusions>
-	<exclusion>
-	    <groupId>org.apache.commons</groupId>
-	    <artifactId>commons-lang</artifactId>
+       <exclusion>
+	  <groupId>org.apache.commons</groupId>
+	  <artifactId>commons-lang</artifactId>
 	</exclusion>
 	<exclusion>
-	    <groupId>commons-lang</groupId>
-	    <artifactId>commons-lang</artifactId>
+	  <groupId>commons-lang</groupId>
+	  <artifactId>commons-lang</artifactId>
 	</exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.8.1</version>
-        </dependency>
+	<exclusion>
+	   <groupId>ch.qos.logback</groupId>
+	   <artifactId>logback-core</artifactId>
+	</exclusion>
+	<exclusion>
+	   <groupId>ch.qos.logback</groupId>
+	   <artifactId>logback-classic</artifactId>
+	</exclusion>
+   </exclusions>
+   </dependency>
+    <dependency>
+       <groupId>org.apache.commons</groupId>
+       <artifactId>commons-lang3</artifactId>
+       <version>3.8.1</version>
+    </dependency>
     <dependency>
       <groupId>net.masterthought</groupId>
       <artifactId>cucumber-reporting</artifactId>
