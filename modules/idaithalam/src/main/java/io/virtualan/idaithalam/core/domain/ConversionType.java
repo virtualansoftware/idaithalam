@@ -31,5 +31,10 @@ public enum ConversionType {
     /**
      * Excel conversion type.
      */
-    EXCEL
+    EXCEL,
+    /**
+     * OPENAPI conversion type.
+     */
+    OPENAPI
+
 }
