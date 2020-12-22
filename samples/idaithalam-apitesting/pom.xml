@@ -9,6 +9,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<properties>
 		<cucumblan.version>1.0.2</cucumblan.version>
+    <idaithalam.version>1.0.5-SNAPSHOT</idaithalam.version>
 		<java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
@@ -139,7 +140,7 @@
 		<dependency>
 			<groupId>io.virtualan</groupId>
 			<artifactId>idaithalam</artifactId>
-			<version>1.0.4-SNAPSHOT</version>
+			<version>${idaithalam.version}</version>
 		</dependency>
 
 		<!-- START Virtual Service API support -->

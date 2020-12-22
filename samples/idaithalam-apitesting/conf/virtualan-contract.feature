@@ -7,7 +7,7 @@ Feature: Pet API Production Checkout - API Contract validation status
     Given a user perform a api action
     When a user get application/json in /api/pets/200 resource on api
     Then Verify the status code is 200
-    And Verify-all across response includes following in the response
+    And Verify-all /api/pets/200 api includes following in the response
       | photoUrls[0]  | string    |
       | name          | Butch     |
       | id            | i~201     |
@@ -21,7 +21,7 @@ Feature: Pet API Production Checkout - API Contract validation status
     Given a user perform a api action
     When a user get application/json in /api/pets/100 resource on api
     Then Verify the status code is 200
-    And Verify-all across response includes following in the response
+    And Verify-all /api/pets/100 api includes following in the response
       | photoUrls[0]  | string          |
       | name          | Rocky           |
       | id            | i~101           |
@@ -46,7 +46,7 @@ Feature: Pet API Production Checkout - API Contract validation status
       | tags[0].id    | i~101           |
     When a user put application/json in /api/pets/100 resource on api
     Then Verify the status code is 200
-    And Verify-all across response includes following in the response
+    And Verify-all /api/pets/100 api includes following in the response
       | photoUrls[0]  | string          |
       | name          | Rocky           |
       | id            | i~101           |
@@ -71,7 +71,7 @@ Feature: Pet API Production Checkout - API Contract validation status
       | tags[0].id    | i~201      |
     When a user put application/json in /api/pets/200 resource on api
     Then Verify the status code is 200
-    And Verify-all across response includes following in the response
+    And Verify-all /api/pets/200 api includes following in the response
       | photoUrls[0]  | string     |
       | name          | Butch      |
       | id            | i~201      |
@@ -96,7 +96,7 @@ Feature: Pet API Production Checkout - API Contract validation status
       | tags[0].id    | i~101           |
     When a user post application/json in /api/pets resource on api
     Then Verify the status code is 201
-    And Verify-all across response includes following in the response
+    And Verify-all /api/pets api includes following in the response
       | photoUrls[0]  | string          |
       | name          | Rocky           |
       | id            | i~101           |
@@ -121,7 +121,7 @@ Feature: Pet API Production Checkout - API Contract validation status
       | tags[0].id    | i~201     |
     When a user post application/json in /api/pets resource on api
     Then Verify the status code is 201
-    And Verify-all across response includes following in the response
+    And Verify-all /api/pets api includes following in the response
       | photoUrls[0]  | string    |
       | name          | Butch     |
       | id            | i~201     |
@@ -147,7 +147,7 @@ Feature: Pet API Production Checkout - API Contract validation status
       | tags | grey |
     When a user get application/json in /api/pets/findByTags resource on api
     Then Verify the status code is 200
-    And Verify-all across response includes following in the response
+    And Verify-all /api/pets/findByTags api includes following in the response
       | photoUrls[0]  | string    |
       | name          | Butch     |
       | id            | i~201     |
@@ -163,7 +163,7 @@ Feature: Pet API Production Checkout - API Contract validation status
       | tags | brown |
     When a user get application/json in /api/pets/findByTags resource on api
     Then Verify the status code is 200
-    And Verify-all across response includes following in the response
+    And Verify-all /api/pets/findByTags api includes following in the response
       | photoUrls[0]  | string          |
       | name          | Rocky           |
       | id            | i~101           |
@@ -179,7 +179,7 @@ Feature: Pet API Production Checkout - API Contract validation status
       | status | available |
     When a user get application/json in /api/pets/findByStatus resource on api
     Then Verify the status code is 200
-    And Verify-all across response includes following in the response
+    And Verify-all /api/pets/findByStatus api includes following in the response
       | photoUrls[0]  | string          |
       | name          | Rocky           |
       | id            | i~101           |
