@@ -65,11 +65,11 @@ public class Item {
     /**
      * The Has input json map.
      */
-    Map<String, String> hasInputJsonMap;
+    boolean hasInputJsonMap;
     /**
      * The Has output json map.
      */
-    Map<String, String> hasOutputJsonMap;
+    boolean hasOutputJsonMap;
     /**
      * The Input json map.
      */
@@ -220,7 +220,7 @@ public class Item {
      *
      * @return the has input json map
      */
-    public Map<String, String> getHasInputJsonMap() {
+    public boolean getHasInputJsonMap() {
         return hasInputJsonMap;
     }
 
@@ -229,7 +229,7 @@ public class Item {
      *
      * @param hasInputJsonMap the has input json map
      */
-    public void setHasInputJsonMap(Map<String, String> hasInputJsonMap) {
+    public void setHasInputJsonMap(boolean hasInputJsonMap) {
         this.hasInputJsonMap = hasInputJsonMap;
     }
 
@@ -238,7 +238,7 @@ public class Item {
      *
      * @return the has output json map
      */
-    public Map<String, String> getHasOutputJsonMap() {
+    public boolean getHasOutputJsonMap() {
         return hasOutputJsonMap;
     }
 
@@ -247,7 +247,7 @@ public class Item {
      *
      * @param hasOutputJsonMap the has output json map
      */
-    public void setHasOutputJsonMap(Map<String, String> hasOutputJsonMap) {
+    public void setHasOutputJsonMap(boolean hasOutputJsonMap) {
         this.hasOutputJsonMap = hasOutputJsonMap;
     }
 
@@ -267,7 +267,6 @@ public class Item {
      */
     public void setInputJsonMap(Map<String, String> inputJsonMap) {
         this.inputJsonMap = inputJsonMap.entrySet();
-        this.hasInputJsonMap = inputJsonMap;
     }
 
     /**
@@ -296,7 +295,6 @@ public class Item {
      */
     public void setOutputJsonMap(Map<String, String> outputJsonMap) {
         this.outputJsonMap = outputJsonMap.entrySet();
-        this.hasOutputJsonMap = outputJsonMap;
     }
 
     /**
