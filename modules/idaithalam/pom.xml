@@ -6,7 +6,7 @@
   <name>idaithalam-contract-testing</name>
   <version>1.0.3-SNAPSHOT</version>
   <properties>
-    <cucumblan.version>1.0.2</cucumblan.version>
+    <cucumblan.version>1.0.3</cucumblan.version>
     <java.version>1.8</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -18,13 +18,12 @@
     <groovy.version>2.4.7</groovy.version>
   </properties>
   <description>
-    Generate feature file and cucumber report and execute and generate for VIRTUALAN or POSTMAN collection
-    and used for API contract testing capability.
-
-    - Used for API testing.
-    - Used for Contract testing.
-    - Used for Production Checkout.
-    - Used for Agile sprint end regression testing.
+    API testing can be automated using VIRTUALAN or POSTMAN collection
+    and can be utilized for API contract testing.
+    - Utilized for API testing.
+    - Utilized Contract testing.
+    - Utilized Production Checkout.
+    - Agile Testing - Progressive Regression can be done for each sprint. Reduce lot of manual effects.
   </description>
   <url>https://virtualan.io</url>
   <scm>
