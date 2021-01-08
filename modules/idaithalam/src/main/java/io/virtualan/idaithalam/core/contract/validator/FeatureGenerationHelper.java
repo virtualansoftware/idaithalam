@@ -16,11 +16,9 @@
 
 package io.virtualan.idaithalam.core.contract.validator;
 
-import io.swagger.v3.oas.models.parameters.Parameter;
 import io.virtualan.cucumblan.props.ExcludeConfiguration;
 import io.virtualan.idaithalam.core.domain.AvailableParam;
 import io.virtualan.idaithalam.core.domain.Item;
-import io.virtualan.idaithalam.core.domain.OperationBuilder;
 import io.virtualan.mapson.Mapson;
 import org.json.JSONArray;
 import org.json.JSONException;
