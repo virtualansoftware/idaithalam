@@ -30,6 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONTokener;
 
+/**
+ * The type Feature generation helper.
+ */
 public class FeatureGenerationHelper {
 
     private FeatureGenerationHelper(){}
@@ -70,6 +73,12 @@ public class FeatureGenerationHelper {
 
     }
 
+    /**
+     * Create post man to virtualan json array.
+     *
+     * @param object the object
+     * @return the json array
+     */
     public static JSONArray createPostManToVirtualan(JSONObject object) {
         JSONArray virtualanArry = new JSONArray();
         if (object != null) {
@@ -140,6 +149,12 @@ public class FeatureGenerationHelper {
     }
 
 
+    /**
+     * Create feature file list.
+     *
+     * @param arr the arr
+     * @return the list
+     */
     public static List<Item> createFeatureFile(JSONArray arr) {
         List<Item> result = new ArrayList<>();
         if (arr != null && arr.length() > 0) {
@@ -162,7 +177,7 @@ public class FeatureGenerationHelper {
         extractedScenario(arr, i, item);
         List<AvailableParam> availableParams = getAvailableParamList(arr, i);
         item.setAvailableParams(availableParams);
-        item.setUrl(object.optString("url"));//, object.optJSONArray("availableParams")));
+        item.setUrl(object.optString("url"));
         extractedOutput(item.getUrl(), arr, i, item);
         return item;
     }

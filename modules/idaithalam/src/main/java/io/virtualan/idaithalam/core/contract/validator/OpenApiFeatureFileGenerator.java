@@ -28,9 +28,18 @@ import io.virtualan.idaithalam.core.domain.OperationBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+/**
+ * The type Open api feature file generator.
+ */
 public class OpenApiFeatureFileGenerator {
     private final static Logger LOGGER = Logger.getLogger(OpenApiFeatureFileGenerator.class.getName());
 
+    /**
+     * Generate open api contract for virtualan json array.
+     *
+     * @param contractFileName the contract file name
+     * @return the json array
+     */
     public static JSONArray generateOpenApiContractForVirtualan(String contractFileName) {
         JSONArray openApiContractArray = new JSONArray();
         OpenAPI swagger = new OpenAPIV3Parser().read(contractFileName);
@@ -83,10 +92,22 @@ public class OpenApiFeatureFileGenerator {
     }
 
 
+    /**
+     * Gets operation put.
+     *
+     * @param operationBuilder the operation builder
+     * @return the operation put
+     */
     static JSONObject getOperationPut(OperationBuilder operationBuilder) {
         return getOperationChange(operationBuilder, "PUT", "200");
     }
 
+    /**
+     * Gets operation patch.
+     *
+     * @param operationBuilder the operation builder
+     * @return the operation patch
+     */
     static JSONObject getOperationPatch(OperationBuilder operationBuilder) {
         return getOperationChange(operationBuilder, "PATCH", "200");
     }
@@ -99,10 +120,24 @@ public class OpenApiFeatureFileGenerator {
         }
     }
 
+    /**
+     * Gets operation post.
+     *
+     * @param operationBuilder the operation builder
+     * @return the operation post
+     */
     static JSONObject getOperationPost(OperationBuilder operationBuilder) {
         return getOperationChange(operationBuilder, "POST", "201");
     }
 
+    /**
+     * Gets operation change.
+     *
+     * @param operationBuilder the operation builder
+     * @param action           the action
+     * @param statusCode       the status code
+     * @return the operation change
+     */
     static JSONObject getOperationChange(OperationBuilder operationBuilder, String action, String statusCode) {
         JSONObject virtualanObj = new JSONObject();
         virtualanObj.put("scenario", operationBuilder.getOperation().getDescription());
@@ -135,10 +170,22 @@ public class OpenApiFeatureFileGenerator {
         return null;
     }
 
+    /**
+     * Gets operation delete.
+     *
+     * @param operationBuilder the operation builder
+     * @return the operation delete
+     */
     static JSONObject getOperationDelete(OperationBuilder operationBuilder) {
         return getOperation(operationBuilder, "DELETE");
     }
 
+    /**
+     * Gets operation get.
+     *
+     * @param operationBuilder the operation builder
+     * @return the operation get
+     */
     static JSONObject getOperationGet(OperationBuilder operationBuilder) {
         return getOperation(operationBuilder, "GET");
     }
@@ -150,6 +197,13 @@ public class OpenApiFeatureFileGenerator {
         return "default";
     }
 
+    /**
+     * Gets operation.
+     *
+     * @param operationBuilder the operation builder
+     * @param action           the action
+     * @return the operation
+     */
     static JSONObject getOperation(OperationBuilder operationBuilder, String action) {
         JSONObject virtualanObj = new JSONObject();
         virtualanObj.put("scenario", operationBuilder.getOperation().getDescription());
