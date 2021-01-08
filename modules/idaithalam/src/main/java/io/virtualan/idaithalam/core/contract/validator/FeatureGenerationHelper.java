@@ -16,9 +16,11 @@
 
 package io.virtualan.idaithalam.core.contract.validator;
 
+import io.swagger.v3.oas.models.parameters.Parameter;
 import io.virtualan.cucumblan.props.ExcludeConfiguration;
 import io.virtualan.idaithalam.core.domain.AvailableParam;
 import io.virtualan.idaithalam.core.domain.Item;
+import io.virtualan.idaithalam.core.domain.OperationBuilder;
 import io.virtualan.mapson.Mapson;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -151,17 +153,33 @@ public class FeatureGenerationHelper {
 
     private static Item getItem(JSONArray arr, int i) {
         Item item = new Item();
+        JSONObject object = arr.optJSONObject(i);
         extractedInput(arr, i, item);
-        item.setUrl(arr.optJSONObject(i).optString("url"));
-        extractedOutput(item.getUrl(), arr, i, item);
-        item.setHttpStatusCode(arr.optJSONObject(i).optString("httpStatusCode"));
-        item.setMethod(arr.optJSONObject(i).optString("method"));
-        item.setAction(arr.optJSONObject(i).optString("method").toLowerCase());
-        item.setResource(arr.optJSONObject(i).optString("resource"));
+        item.setHttpStatusCode(object.optString("httpStatusCode"));
+        item.setMethod(object.optString("method"));
+        item.setAction(object.optString("method").toLowerCase());
+        item.setResource(object.optString("resource"));
         extractedScenario(arr, i, item);
         List<AvailableParam> availableParams = getAvailableParamList(arr, i);
         item.setAvailableParams(availableParams);
+        item.setUrl(object.optString("url"));//, object.optJSONArray("availableParams")));
+        extractedOutput(item.getUrl(), arr, i, item);
         return item;
+    }
+
+
+    private static String getUrl(String url, JSONArray array) {
+        if(array != null && array.length() > 0) {
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject object = array.getJSONObject(i);
+                String type = object.getString("parameterType");
+                if ("PATH_PARAM".equalsIgnoreCase(type)) {
+                    url = url.replace(object.getString("key"), object.getString("value"));
+                }
+            }
+            url = url.replaceAll("\\{", "").replaceAll("}", "");
+        }
+        return url;
     }
 
     private static void extractedScenario(JSONArray arr, int i, Item item) {

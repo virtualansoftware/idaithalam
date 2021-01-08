@@ -107,6 +107,7 @@ public class OpenApiFeatureFileGenerator {
         JSONObject virtualanObj = new JSONObject();
         virtualanObj.put("scenario", operationBuilder.getOperation().getDescription());
         virtualanObj.put("method", action);
+        virtualanObj.put("type", "Response");
         virtualanObj.put("httpStatusCode", statusCode);
         String url = operationBuilder.getUrl();
         if (operationBuilder.getOperation().getParameters() != null) {
@@ -116,6 +117,9 @@ public class OpenApiFeatureFileGenerator {
         virtualanObj.put("resource", getResource(url));
         buildRequest(operationBuilder, virtualanObj);
         getSuccessResponse(operationBuilder, virtualanObj, "201");
+        JSONArray paramsArray = new JSONArray();
+        extractedParams(operationBuilder, paramsArray);
+        virtualanObj.put("availableParams",paramsArray);
         return virtualanObj;
     }
 
@@ -135,7 +139,6 @@ public class OpenApiFeatureFileGenerator {
         return getOperation(operationBuilder, "DELETE");
     }
 
-
     static JSONObject getOperationGet(OperationBuilder operationBuilder) {
         return getOperation(operationBuilder, "GET");
     }
@@ -151,6 +154,7 @@ public class OpenApiFeatureFileGenerator {
         JSONObject virtualanObj = new JSONObject();
         virtualanObj.put("scenario", operationBuilder.getOperation().getDescription());
         virtualanObj.put("method", action);
+        virtualanObj.put("type", "Response");
         virtualanObj.put("httpStatusCode", "200");
         String url = operationBuilder.getUrl();
         if (operationBuilder.getOperation().getParameters() != null) {
@@ -160,8 +164,35 @@ public class OpenApiFeatureFileGenerator {
         virtualanObj.put("resource", getResource(url));
         getSuccessResponse(operationBuilder, virtualanObj, "200");
         JSONArray paramsArray = new JSONArray();
-        //TODO extractedParams(responseArray, j, virtualanObj, paramsArray);
+        extractedParams(operationBuilder, paramsArray);
+        virtualanObj.put("availableParams",paramsArray);
         return virtualanObj;
+    }
+
+    private static void extractedParams(OperationBuilder operationBuilder,  JSONArray paramsArray) {
+        if(operationBuilder.getOperation().getParameters() != null) {
+            for (Parameter parameter : operationBuilder.getOperation().getParameters()) {
+                if (parameter.getExample() != null && parameter.getName() != null) {
+                    JSONObject virtualanParamObj = new JSONObject();
+                    virtualanParamObj.put("key", parameter.getName());
+                    virtualanParamObj.put("value", parameter.getExample().toString());
+                    virtualanParamObj.put("parameterType", getType(parameter.getIn()));
+                    paramsArray.put(virtualanParamObj);
+                }
+            }
+        }
+        LOGGER.info("Elan :::" + paramsArray.toString(2));
+    }
+
+    private static String getType(String type) {
+        if ("path".equalsIgnoreCase(type)) {
+            return "PATH_PARAM";
+        } else if ("query".equalsIgnoreCase(type)) {
+            return "QUERY_PARAM";
+        }else if ("header".equalsIgnoreCase(type)){
+            return "HEADER_PARAM";
+        }
+        return null;
     }
 
     private static void getSuccessResponse(OperationBuilder operationBuilder, JSONObject virtualanObj, String statusCode) {
@@ -189,12 +220,11 @@ public class OpenApiFeatureFileGenerator {
     private static String getUrl(OperationBuilder operationBuilder) {
         String url = operationBuilder.getUrl();
         for (Parameter parameter : operationBuilder.getOperation().getParameters()) {
-            System.out.println(parameter.getIn());
-            System.out.println(parameter.getName());
-            System.out.println(parameter.getExample());
-            url = operationBuilder.getUrl().replaceAll(parameter.getName(), parameter.getExample().toString());
+            if(parameter.getExample() != null) {
+                url = operationBuilder.getUrl()
+                    .replaceAll(parameter.getName(), parameter.getExample().toString());
+            }
         }
-        url = url.replaceAll("\\{", "").replaceAll("}", "");
         return url;
     }
 

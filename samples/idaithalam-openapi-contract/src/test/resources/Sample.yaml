@@ -1,0 +1,135 @@
+
+openapi: 3.0.3
+info:
+  contact:
+    email: info@inss.ch
+    name: Oliver Glas
+    url: http://api.example.com
+  description: Sample API
+  license:
+    name: No license
+  title: INSS Sample specification
+  version: 0.0.2
+servers:
+- url: http://example.com/v1
+paths:
+  /sample:
+    post:
+      description: Create a new sample object.
+      operationId: createSample
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Sample'
+      responses:
+        "201":
+         description: Sample created
+        "400":
+          description: Sample exists already. Choose another name.
+        "405":
+          description: Invalid input.
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: Create a sample
+      tags:
+      - sample
+      x-contentType: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: sample
+  /sample/validate/{sampleId}:
+    get:
+      description: Sample path
+      operationId: validateById
+      parameters:
+      - description: The id of the sample
+        explode: false
+        in: path
+        example: sampleId
+        name: sampleId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Validation'
+          description: Validation result
+        "400":
+          description: Invalid ID
+        "404":
+          description: Sample not found
+        default:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: unexpected error
+      summary: The GET sample
+      tags:
+      - sample
+      x-accepts: application/json
+      x-tags:
+      - tag: sample
+components:
+  schemas:
+    Sample:
+      example:
+        filename: Sample.yaml
+        name: Sample
+        version: 0.0.1
+      properties:
+        name:
+          example: Sample
+          type: string
+        filename:
+          example: Sample.yaml
+          type: string
+        version:
+          example: 0.0.1
+          type: string
+      required:
+      - name
+    Validation:
+      example:
+        sample1: one
+        id: 1
+        sample3: three
+        sample2: two
+      properties:
+        id:
+          example: 1
+          format: int64
+          type: integer
+        sample1:
+          description: Sample one
+          example: one
+          type: string
+        sample2:
+          description: Sample two
+          example: two
+          type: string
+        sample3:
+          description: Sample three
+          example: three
+          type: string
+    Error:
+      properties:
+        code:
+          example: 404
+          format: int32
+          type: integer
+        message:
+          example: Unexpected error.
+          type: string
+      required:
+      - code
+      - message
