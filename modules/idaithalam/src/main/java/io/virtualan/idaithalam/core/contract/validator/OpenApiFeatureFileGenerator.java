@@ -235,7 +235,6 @@ public class OpenApiFeatureFileGenerator {
                 }
             }
         }
-        LOGGER.info("Elan :::" + paramsArray.toString(2));
     }
 
     private static String getType(String type) {
