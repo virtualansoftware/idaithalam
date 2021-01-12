@@ -80,7 +80,7 @@ public class FeatureGenerationHelper {
     public static JSONArray createPostManToVirtualan(JSONObject object) {
         JSONArray virtualanArry = new JSONArray();
         if (object != null) {
-            JSONArray arr = object.getJSONArray("item");
+            JSONArray arr = checkIfItemsOfItem(object.getJSONArray("item"));
             if (arr != null && arr.length() > 0) {
                 for (int i = 0; i < arr.length(); i++) {
                     buildVirtualanFromPostMan(virtualanArry, arr, i);
@@ -89,6 +89,17 @@ public class FeatureGenerationHelper {
         }
         return virtualanArry;
     }
+
+    public static JSONArray checkIfItemsOfItem(JSONArray arr) {
+        if (arr != null && arr.length() > 0) {
+            JSONArray array = arr.getJSONObject(0).optJSONArray("item");
+            if (array != null && array.length() > 0) {
+                return array;
+            }
+        }
+        return arr;
+    }
+
 
     private static void buildVirtualanFromPostMan(JSONArray virtualanArry, JSONArray arr, int i) {
         if(arr.optJSONObject(i) instanceof JSONObject) {
