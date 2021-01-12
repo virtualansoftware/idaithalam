@@ -21,6 +21,7 @@ import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ConversionType;
 import io.virtualan.idaithalam.core.domain.Item;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -47,22 +48,31 @@ public class FeatureFileGenerator {
      * @return the list
      * @throws UnableToProcessException the unable to process exception
      */
-    public static List<Item> generateFeatureFile() throws UnableToProcessException {
+    public static List<List<Item>> generateFeatureFile() throws UnableToProcessException {
+        List<List<Item>> items = new ArrayList<>();
         String contractFileName = ApplicationConfiguration.getProperty("virtualan.data.load");
         String contractFileType = ApplicationConfiguration.getProperty("virtualan.data.type");
         JSONArray jsonArray = null;
         if (contractFileType == null) {
             LOGGER.severe("provide appropriate virtualan.data.type for the input data?");
             throw new UnableToProcessException("provide appropriate virtualan.data.type for the input data?");
-        } else if (ConversionType.POSTMAN.name().equalsIgnoreCase(contractFileType)) {
-            jsonArray = FeatureGenerationHelper.createPostManToVirtualan(getJSONObject(contractFileName));
-        } else if (ConversionType.OPENAPI.name().equalsIgnoreCase(contractFileType)) {
-            jsonArray = OpenApiFeatureFileGenerator.generateOpenApiContractForVirtualan(contractFileName);
-        } else {
-            jsonArray = getJSONArray(contractFileName);
         }
-        List<Item> result = FeatureGenerationHelper.createFeatureFile(jsonArray);
-        return result;
+        String[] fileNames = contractFileName.split(";");
+
+        for(int i=0; i < fileNames.length; i++) {
+          if (ConversionType.POSTMAN.name().equalsIgnoreCase(contractFileType)) {
+            jsonArray = FeatureGenerationHelper
+                .createPostManToVirtualan(getJSONObject(fileNames[i]));
+          } else if (ConversionType.OPENAPI.name().equalsIgnoreCase(contractFileType)) {
+            jsonArray = OpenApiFeatureFileGenerator
+                .generateOpenApiContractForVirtualan(fileNames[i]);
+          } else {
+            jsonArray = getJSONArray(fileNames[i]);
+          }
+          List<Item> result = FeatureGenerationHelper.createFeatureFile(jsonArray);
+          items.add(result);
+        }
+        return items;
     }
 
     /**

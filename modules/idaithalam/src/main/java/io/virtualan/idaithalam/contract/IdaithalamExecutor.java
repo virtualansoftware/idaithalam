@@ -55,14 +55,6 @@ public class IdaithalamExecutor {
      * The Feature.
      */
     static String feature = "Idaithalam";
-    /**
-     * The Items.
-     */
-    List<Item> items = FeatureFileGenerator.generateFeatureFile();
-    /**
-     * The Okta.
-     */
-    String okta = ApplicationConfiguration.getProperty("service.api.okta");
 
     /**
      * Instantiates a new Idaithalam executor.
@@ -70,6 +62,7 @@ public class IdaithalamExecutor {
      * @throws UnableToProcessException the unable to process exception
      */
     public IdaithalamExecutor() throws UnableToProcessException {
+
     }
 
     /**
@@ -149,7 +142,7 @@ public class IdaithalamExecutor {
         return new String[]{
                 "-p", "json:target/cucumber.json",
                 "-p", "html:target/cucumber-html-report.html",
-                "--glue", "io.virtualan.cucumblan.core", "", "conf/virtualan-contract.feature",
+                "--glue", "io.virtualan.cucumblan.core", "", "conf/feature/",
         };
     }
 
@@ -169,16 +162,34 @@ public class IdaithalamExecutor {
     /**
      * Generate the feature file for the provided collection
      *
-     * @param feature
      * @throws IOException
      */
 
     private static void generateFeatureFile() throws IOException, UnableToProcessException {
-        MustacheFactory mf = new DefaultMustacheFactory();
-        Mustache mustache = mf.compile("virtualan-contract.mustache");
-        FileOutputStream outputStream = new FileOutputStream("conf/virtualan-contract.feature");
-        Writer writer = new OutputStreamWriter(outputStream);
-        mustache.execute(writer, new IdaithalamExecutor()).flush();
-        writer.close();
+        List<List<Item>> items = FeatureFileGenerator.generateFeatureFile();
+        String okta = ApplicationConfiguration.getProperty("service.api.okta");
+        String featureTitle = ApplicationConfiguration.getProperty("virtualan.data.heading");
+        for(int i=0; i< items.size(); i++){
+            MustacheFactory mf = new DefaultMustacheFactory();
+            Mustache mustache = mf.compile("virtualan-contract.mustache");
+            if(!new File("conf").exists()){
+                new File("conf").mkdir();
+            }
+            if( !new File("conf/feature").exists()){
+                new File("conf/feature").mkdir();
+            }
+            FileOutputStream outputStream = new FileOutputStream("conf/feature/virtualan-contract."+i+".feature");
+            Writer writer = new OutputStreamWriter(outputStream);
+            mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle != null ? featureTitle.split(";") : feature.split(":"), i, feature), items.get(i),okta)).flush();
+            writer.close();
+        }
+    }
+
+    private static String getTitle(String[] arrayTitle, int index , String defaultString){
+        try{
+            return arrayTitle[index];
+        }catch (Exception e){
+            return defaultString + "_"+index;
+        }
     }
 }

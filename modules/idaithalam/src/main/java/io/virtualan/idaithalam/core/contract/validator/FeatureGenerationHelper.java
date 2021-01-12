@@ -20,6 +20,7 @@ import io.virtualan.cucumblan.props.ExcludeConfiguration;
 import io.virtualan.idaithalam.core.domain.AvailableParam;
 import io.virtualan.idaithalam.core.domain.Item;
 import io.virtualan.mapson.Mapson;
+import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +33,9 @@ import org.json.JSONTokener;
  * The type Feature generation helper.
  */
 public class FeatureGenerationHelper {
+
+
+    final private static Logger LOGGER = Logger.getLogger(FeatureGenerationHelper.class.getName());
 
     private FeatureGenerationHelper(){}
 
@@ -85,8 +89,10 @@ public class FeatureGenerationHelper {
                 for (int i = 0; i < arr.length(); i++) {
                     buildVirtualanFromPostMan(virtualanArry, arr, i);
                 }
+                return  virtualanArry;
             }
         }
+        LOGGER.warning("Not a valid POSTMAN Collection? check the file");
         return virtualanArry;
     }
 
