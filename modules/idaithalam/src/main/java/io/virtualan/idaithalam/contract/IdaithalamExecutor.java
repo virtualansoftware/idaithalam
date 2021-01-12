@@ -169,6 +169,7 @@ public class IdaithalamExecutor {
         List<List<Item>> items = FeatureFileGenerator.generateFeatureFile();
         String okta = ApplicationConfiguration.getProperty("service.api.okta");
         String featureTitle = ApplicationConfiguration.getProperty("virtualan.data.heading");
+
         for(int i=0; i< items.size(); i++){
             MustacheFactory mf = new DefaultMustacheFactory();
             Mustache mustache = mf.compile("virtualan-contract.mustache");
@@ -180,16 +181,17 @@ public class IdaithalamExecutor {
             }
             FileOutputStream outputStream = new FileOutputStream("conf/feature/virtualan-contract."+i+".feature");
             Writer writer = new OutputStreamWriter(outputStream);
-            mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle != null ? featureTitle.split(";") : feature.split(":"), i, feature), items.get(i),okta)).flush();
+            mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i),okta)).flush();
             writer.close();
         }
     }
 
-    private static String getTitle(String[] arrayTitle, int index , String defaultString){
+    private static String getTitle(String arrayTitle, int index , String defaultString){
         try{
-            return arrayTitle[index];
+            return arrayTitle.split(";")[index];
         }catch (Exception e){
-            return defaultString + "_"+index;
+            String featureTitle = ApplicationConfiguration.getProperty("virtualan.data.load");
+            return featureTitle.split(";")[index];
         }
     }
 }
