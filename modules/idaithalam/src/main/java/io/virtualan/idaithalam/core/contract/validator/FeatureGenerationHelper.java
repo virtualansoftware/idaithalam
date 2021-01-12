@@ -90,7 +90,7 @@ public class FeatureGenerationHelper {
         return virtualanArry;
     }
 
-    public static JSONArray checkIfItemsOfItem(JSONArray arr) {
+    private static JSONArray checkIfItemsOfItem(JSONArray arr) {
         if (arr != null && arr.length() > 0) {
             JSONArray array = arr.getJSONObject(0).optJSONArray("item");
             if (array != null && array.length() > 0) {
