@@ -88,14 +88,26 @@ public class IdaithalamExecutor {
      */
     public static int validateContract(String featureHeading)
         throws UnableToProcessException {
+        return validateContract(featureHeading, null);
+    }
+
+    /**
+     * Validate contract.
+     *
+     * @param featureHeading the feature heading
+     * @return the int
+     * @throws UnableToProcessException the unable to process exception
+     */
+    public static int validateContract(String featureHeading, String path)
+        throws UnableToProcessException {
         byte exitStatus;
         try {
             feature = featureHeading;
-            generateFeatureFile();
-            addConfToClasspath();
-            String[] argv = getCucumberOptions();
+            generateFeatureFile(path);
+            addConfToClasspath(path);
+            String[] argv = getCucumberOptions(path);
             exitStatus = Main.run(argv, Thread.currentThread().getContextClassLoader());
-            generateReport();
+            generateReport(path);
         } catch (IOException | UnableToProcessException e) {
             LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
             throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
@@ -107,13 +119,13 @@ public class IdaithalamExecutor {
      *  generate cucumber report
      */
 
-    private static void generateReport() {
-        File reportOutputDirectory = new File("target");
+    private static void generateReport(String path) {
+        path = path == null ? "target" : path;
+        File reportOutputDirectory = new File(path);
         List<String> jsonFiles = new ArrayList<>();
-        jsonFiles.add("target/cucumber.json");
+        jsonFiles.add(path+"/cucumber.json");
         String buildNumber = "1";
         String projectName = feature + " - API Contract Testing";
-
         Configuration configuration = new Configuration(reportOutputDirectory, projectName);
         // optional configuration - check javadoc for details
         configuration.addPresentationModes(PresentationMode.RUN_WITH_JENKINS);
@@ -138,11 +150,11 @@ public class IdaithalamExecutor {
      * @return
      */
 
-    private static String[] getCucumberOptions() {
+    private static String[] getCucumberOptions(String path) {
         return new String[]{
-                "-p", "json:target/cucumber.json",
-                "-p", "html:target/cucumber-html-report.html",
-                "--glue", "io.virtualan.cucumblan.core", "", "conf/feature/",
+            "-p", path == null ? "json:target/cucumber.json" : "json:"+path+"/cucumber.json",
+            "-p", path == null ? "html:target/cucumber-html-report.html" : "html:"+path+"/cucumber-html-report.html",
+            "--glue", "io.virtualan.cucumblan.core", "", path == null ? "conf/feature/" : path+"/feature/",
         };
     }
 
@@ -152,10 +164,11 @@ public class IdaithalamExecutor {
      * @throws MalformedURLException
      */
 
-    private static void addConfToClasspath() throws MalformedURLException {
+    private static void addConfToClasspath(String path) throws MalformedURLException {
         ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
+        path = path == null ? "conf" : path;
         ClassLoader urlCl = URLClassLoader
-                .newInstance(new URL[]{new File("conf").toURI().toURL()}, prevCl);
+            .newInstance(new URL[]{new File(path).toURI().toURL()}, prevCl);
         Thread.currentThread().setContextClassLoader(urlCl);
     }
 
@@ -165,7 +178,7 @@ public class IdaithalamExecutor {
      * @throws IOException
      */
 
-    private static void generateFeatureFile() throws IOException, UnableToProcessException {
+    private static void generateFeatureFile(String path) throws IOException, UnableToProcessException {
         List<List<Item>> items = FeatureFileGenerator.generateFeatureFile();
         String okta = ApplicationConfiguration.getProperty("service.api.okta");
         String featureTitle = ApplicationConfiguration.getProperty("virtualan.data.heading");
@@ -173,13 +186,16 @@ public class IdaithalamExecutor {
         for(int i=0; i< items.size(); i++){
             MustacheFactory mf = new DefaultMustacheFactory();
             Mustache mustache = mf.compile("virtualan-contract.mustache");
-            if(!new File("conf").exists()){
-                new File("conf").mkdir();
+            if(path == null || !new File(path).exists()) {
+                if (!new File("conf").exists()) {
+                    new File("conf").mkdir();
+                }
+                path = "conf";
             }
-            if( !new File("conf/feature").exists()){
-                new File("conf/feature").mkdir();
+            if (!new File(path+"/feature").exists()) {
+                new File(path+"/feature").mkdir();
             }
-            FileOutputStream outputStream = new FileOutputStream("conf/feature/virtualan-contract."+i+".feature");
+            FileOutputStream outputStream = new FileOutputStream(path+"/feature/virtualan-contract."+i+".feature");
             Writer writer = new OutputStreamWriter(outputStream);
             mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i),okta)).flush();
             writer.close();
