@@ -162,7 +162,7 @@ public class OpenApiFeatureFileGenerator {
         Map.Entry<String, MediaType> entryMediaDefault = null;
         for (Map.Entry<String, MediaType> entryMedia : content.entrySet()) {
             System.out.println("Key = " + entryMedia.getKey() +
-                    ", Value = " + entryMedia.getValue().getSchema().get$ref());
+                ", Value = " + entryMedia.getValue().getSchema().get$ref());
             String schema = entryMedia.getValue().getSchema().get$ref();
             schema = schema.substring(schema.lastIndexOf("/") + 1);
             return buildJson(operationBuilder.getDefinitions(), schema);
@@ -281,13 +281,13 @@ public class OpenApiFeatureFileGenerator {
         return url;
     }
 
-   
+
 
     private static String buildJson(Map<String, Schema> definitions, String schema) {
         Schema model = definitions.get(schema);
         Example example = ExampleBuilder.fromSchema(model, definitions);
         SimpleModule simpleModule = new SimpleModule().addSerializer(
-                new JsonNodeExampleSerializer());
+            new JsonNodeExampleSerializer());
         Json.mapper().registerModule(simpleModule);
         String jsonExample = Json.pretty(example);
         System.out.println(jsonExample);
