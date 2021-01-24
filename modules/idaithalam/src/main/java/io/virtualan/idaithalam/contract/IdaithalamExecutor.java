@@ -116,6 +116,31 @@ public class IdaithalamExecutor {
     }
 
     /**
+     * Validate contract.
+     *
+     * @param featureHeading the feature heading
+     * @return the int
+     * @throws UnableToProcessException the unable to process exception
+     */
+    public static int validateContract(String featureHeading, String path, int runId)
+        throws UnableToProcessException {
+        byte exitStatus;
+        try {
+            feature = featureHeading;
+            generateFeatureFile(path + File.separator + runId);
+            addConfToClasspath(path);
+            addConfToClasspath(path + File.separator + runId);
+            String[] argv = getCucumberOptions(path + File.separator + runId);
+            exitStatus = Main.run(argv, Thread.currentThread().getContextClassLoader());
+            generateReport(path + File.separator + runId);
+        } catch (IOException | UnableToProcessException e) {
+            LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
+            throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
+        }
+        return exitStatus;
+    }
+
+    /**
      *  generate cucumber report
      */
 
