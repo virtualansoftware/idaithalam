@@ -24,12 +24,11 @@ import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.contract.validator.FeatureFileGenerator;
 import io.virtualan.idaithalam.core.domain.Item;
-import net.masterthought.cucumber.Configuration;
-import net.masterthought.cucumber.ReportBuilder;
-import net.masterthought.cucumber.json.support.Status;
-import net.masterthought.cucumber.presentation.PresentationMode;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -37,6 +36,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
+import net.masterthought.cucumber.Configuration;
+import net.masterthought.cucumber.ReportBuilder;
+import net.masterthought.cucumber.json.support.Status;
+import net.masterthought.cucumber.presentation.PresentationMode;
 
 
 /**
@@ -49,190 +52,202 @@ import java.util.logging.Logger;
  * Agile sprint end regression testing.
  */
 public class IdaithalamExecutor {
-    private final static Logger LOGGER = Logger.getLogger(IdaithalamExecutor.class.getName());
 
-    /**
-     * The Feature.
-     */
-    static String feature = "Idaithalam";
+  private final static Logger LOGGER = Logger.getLogger(IdaithalamExecutor.class.getName());
+  private static final Class[] parameters = new Class[]{URL.class};
+  /**
+   * The Feature.
+   */
+  static String feature = "Idaithalam";
 
-    /**
-     * Instantiates a new Idaithalam executor.
-     *
-     * @throws UnableToProcessException the unable to process exception
-     */
-    public IdaithalamExecutor() throws UnableToProcessException {
+  /**
+   * Instantiates a new Idaithalam executor.
+   *
+   * @throws UnableToProcessException the unable to process exception
+   */
+  public IdaithalamExecutor() throws UnableToProcessException {
 
+  }
+
+  /**
+   * Entry point
+   *
+   * @param args the input arguments
+   * @throws UnableToProcessException the unable to process exception
+   */
+  public static void main(String[] args) throws UnableToProcessException {
+    String feature = "Idaithalam";
+    if (args.length > 0) {
+      feature = args[0];
     }
+    validateContract(feature);
+  }
 
-    /**
-     * Entry point
-     *
-     * @param args the input arguments
-     * @throws UnableToProcessException the unable to process exception
-     */
-    public static void main(String[] args) throws UnableToProcessException {
-        String feature = "Idaithalam";
-        if (args.length > 0) {
-            feature = args[0];
+  /**
+   * Validate contract.
+   *
+   * @param featureHeading the feature heading
+   * @return the int
+   * @throws UnableToProcessException the unable to process exception
+   */
+  public static int validateContract(String featureHeading)
+      throws UnableToProcessException {
+    return validateContract(featureHeading, null);
+  }
+
+  /**
+   * Validate contract.
+   *
+   * @param featureHeading the feature heading
+   * @return the int
+   * @throws UnableToProcessException the unable to process exception
+   */
+  public static int validateContract(String featureHeading, String path)
+      throws UnableToProcessException {
+    byte exitStatus;
+    try {
+      feature = featureHeading;
+      File f = new File(path);
+      ClassLoader currentThreadClassLoader
+          = Thread.currentThread().getContextClassLoader();
+      URLClassLoader urlClassLoader
+          = new URLClassLoader(new URL[]{f.toURI().toURL()},
+          currentThreadClassLoader);
+      Thread.currentThread().setContextClassLoader(urlClassLoader);
+      generateFeatureFile(path);
+      String[] argv = getCucumberOptions(path);
+      exitStatus = Main.run(argv, Thread.currentThread().getContextClassLoader());
+      generateReport(path);
+    } catch (IOException | UnableToProcessException e) {
+      LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
+      throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
+    }
+    return exitStatus;
+  }
+
+  /**
+   * Validate contract.
+   *
+   * @param featureHeading the feature heading
+   * @return the int
+   * @throws UnableToProcessException the unable to process exception
+   */
+  public static int validateContract(String featureHeading, String path, int runId)
+      throws UnableToProcessException {
+    byte exitStatus;
+    try {
+      feature = featureHeading;
+      File f = new File(path);
+      ClassLoader currentThreadClassLoader
+          = Thread.currentThread().getContextClassLoader();
+      URLClassLoader urlClassLoader
+          = new URLClassLoader(new URL[]{f.toURI().toURL()},
+          currentThreadClassLoader);
+      Thread.currentThread().setContextClassLoader(urlClassLoader);
+      generateFeatureFile(path + File.separator + runId);
+      String[] argv = getCucumberOptions(path + File.separator + runId);
+      exitStatus = Main.run(argv, Thread.currentThread().getContextClassLoader());
+      generateReport(path + File.separator + runId);
+    } catch (IOException | UnableToProcessException e) {
+      LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
+      throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
+    } catch (Exception e) {
+      throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
+    }
+    return exitStatus;
+  }
+
+  /**
+   * generate cucumber report
+   */
+
+  private static void generateReport(String path) {
+    path = path == null ? "target" : path;
+    File reportOutputDirectory = new File(path);
+    List<String> jsonFiles = new ArrayList<>();
+    jsonFiles.add(path + "/cucumber.json");
+    String buildNumber = "1";
+    String projectName = feature + " - API Contract Testing";
+    Configuration configuration = new Configuration(reportOutputDirectory, projectName);
+    // optional configuration - check javadoc for details
+    configuration.addPresentationModes(PresentationMode.RUN_WITH_JENKINS);
+    // do not make scenario failed when step has status SKIPPED
+    configuration.setNotFailingStatuses(Collections.singleton(Status.SKIPPED));
+    configuration.setBuildNumber(buildNumber);
+    // additional metadata presented on main page
+    configuration.addClassifications("Platform", "Windows");
+    configuration.addClassifications("Browser", "Firefox");
+    configuration.addClassifications("Branch", "release/1.0");
+    // optionally specify qualifiers for each of the report json files
+    configuration.addPresentationModes(PresentationMode.PARALLEL_TESTING);
+    configuration.setQualifier("cucumber-report-1", "First report");
+    configuration.setQualifier("cucumber-report-2", "Second report");
+    ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, configuration);
+    reportBuilder.generateReports();
+  }
+
+  /**
+   * cucumber options
+   *
+   * @return
+   */
+
+  private static String[] getCucumberOptions(String path) {
+    return new String[]{
+        "-p", path == null ? "json:target/cucumber.json" : "json:" + path + "/cucumber.json",
+        "-p", path == null ? "html:target/cucumber-html-report.html"
+        : "html:" + path + "/cucumber-html-report.html",
+        "--glue", "io.virtualan.cucumblan.core", "",
+        path == null ? "conf/feature/" : path + "/feature/",
+    };
+  }
+
+  /**
+   * add conf to classpath
+   *
+   * @throws MalformedURLException
+   */
+
+
+  /**
+   * Generate the feature file for the provided collection
+   *
+   * @throws IOException
+   */
+
+  private static void generateFeatureFile(String path)
+      throws IOException, UnableToProcessException {
+    List<List<Item>> items = FeatureFileGenerator.generateFeatureFile();
+    String okta = ApplicationConfiguration.getProperty("service.api.okta");
+    String featureTitle = ApplicationConfiguration.getProperty("virtualan.data.heading");
+
+    for (int i = 0; i < items.size(); i++) {
+      MustacheFactory mf = new DefaultMustacheFactory();
+      Mustache mustache = mf.compile("virtualan-contract.mustache");
+      if (path == null || !new File(path).exists()) {
+        if (!new File("conf").exists()) {
+          new File("conf").mkdir();
         }
-        validateContract(feature);
+        path = "conf";
+      }
+      if (!new File(path + "/feature").exists()) {
+        new File(path + "/feature").mkdir();
+      }
+      FileOutputStream outputStream = new FileOutputStream(
+          path + "/feature/virtualan-contract." + i + ".feature");
+      Writer writer = new OutputStreamWriter(outputStream);
+      mustache.execute(writer,
+          new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i), okta)).flush();
+      writer.close();
     }
+  }
 
-    /**
-     * Validate contract.
-     *
-     * @param featureHeading the feature heading
-     * @return the int
-     * @throws UnableToProcessException the unable to process exception
-     */
-    public static int validateContract(String featureHeading)
-        throws UnableToProcessException {
-        return validateContract(featureHeading, null);
+  private static String getTitle(String arrayTitle, int index, String defaultString) {
+    try {
+      return arrayTitle.split(";")[index];
+    } catch (Exception e) {
+      String featureTitle = ApplicationConfiguration.getProperty("virtualan.data.load");
+      return featureTitle.split(";")[index];
     }
-
-    /**
-     * Validate contract.
-     *
-     * @param featureHeading the feature heading
-     * @return the int
-     * @throws UnableToProcessException the unable to process exception
-     */
-    public static int validateContract(String featureHeading, String path)
-        throws UnableToProcessException {
-        byte exitStatus;
-        try {
-            feature = featureHeading;
-            generateFeatureFile(path);
-            addConfToClasspath(path);
-            String[] argv = getCucumberOptions(path);
-            exitStatus = Main.run(argv, Thread.currentThread().getContextClassLoader());
-            generateReport(path);
-        } catch (IOException | UnableToProcessException e) {
-            LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
-            throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
-        }
-        return exitStatus;
-    }
-
-    /**
-     * Validate contract.
-     *
-     * @param featureHeading the feature heading
-     * @return the int
-     * @throws UnableToProcessException the unable to process exception
-     */
-    public static int validateContract(String featureHeading, String path, int runId)
-        throws UnableToProcessException {
-        byte exitStatus;
-        try {
-            feature = featureHeading;
-            generateFeatureFile(path + File.separator + runId);
-            addConfToClasspath(path);
-            addConfToClasspath(path + File.separator + runId);
-            String[] argv = getCucumberOptions(path + File.separator + runId);
-            exitStatus = Main.run(argv, Thread.currentThread().getContextClassLoader());
-            generateReport(path + File.separator + runId);
-        } catch (IOException | UnableToProcessException e) {
-            LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
-            throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
-        }
-        return exitStatus;
-    }
-
-    /**
-     *  generate cucumber report
-     */
-
-    private static void generateReport(String path) {
-        path = path == null ? "target" : path;
-        File reportOutputDirectory = new File(path);
-        List<String> jsonFiles = new ArrayList<>();
-        jsonFiles.add(path+"/cucumber.json");
-        String buildNumber = "1";
-        String projectName = feature + " - API Contract Testing";
-        Configuration configuration = new Configuration(reportOutputDirectory, projectName);
-        // optional configuration - check javadoc for details
-        configuration.addPresentationModes(PresentationMode.RUN_WITH_JENKINS);
-        // do not make scenario failed when step has status SKIPPED
-        configuration.setNotFailingStatuses(Collections.singleton(Status.SKIPPED));
-        configuration.setBuildNumber(buildNumber);
-        // additional metadata presented on main page
-        configuration.addClassifications("Platform", "Windows");
-        configuration.addClassifications("Browser", "Firefox");
-        configuration.addClassifications("Branch", "release/1.0");
-        // optionally specify qualifiers for each of the report json files
-        configuration.addPresentationModes(PresentationMode.PARALLEL_TESTING);
-        configuration.setQualifier("cucumber-report-1", "First report");
-        configuration.setQualifier("cucumber-report-2", "Second report");
-        ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, configuration);
-        reportBuilder.generateReports();
-    }
-
-    /**
-     * cucumber options
-     *
-     * @return
-     */
-
-    private static String[] getCucumberOptions(String path) {
-        return new String[]{
-            "-p", path == null ? "json:target/cucumber.json" : "json:"+path+"/cucumber.json",
-            "-p", path == null ? "html:target/cucumber-html-report.html" : "html:"+path+"/cucumber-html-report.html",
-            "--glue", "io.virtualan.cucumblan.core", "", path == null ? "conf/feature/" : path+"/feature/",
-        };
-    }
-
-    /**
-     * add conf to classpath
-     *
-     * @throws MalformedURLException
-     */
-
-    private static void addConfToClasspath(String path) throws MalformedURLException {
-        ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
-        path = path == null ? "conf" : path;
-        ClassLoader urlCl = URLClassLoader
-            .newInstance(new URL[]{new File(path).toURI().toURL()}, prevCl);
-        Thread.currentThread().setContextClassLoader(urlCl);
-    }
-
-    /**
-     * Generate the feature file for the provided collection
-     *
-     * @throws IOException
-     */
-
-    private static void generateFeatureFile(String path) throws IOException, UnableToProcessException {
-        List<List<Item>> items = FeatureFileGenerator.generateFeatureFile();
-        String okta = ApplicationConfiguration.getProperty("service.api.okta");
-        String featureTitle = ApplicationConfiguration.getProperty("virtualan.data.heading");
-
-        for(int i=0; i< items.size(); i++){
-            MustacheFactory mf = new DefaultMustacheFactory();
-            Mustache mustache = mf.compile("virtualan-contract.mustache");
-            if(path == null || !new File(path).exists()) {
-                if (!new File("conf").exists()) {
-                    new File("conf").mkdir();
-                }
-                path = "conf";
-            }
-            if (!new File(path+"/feature").exists()) {
-                new File(path+"/feature").mkdir();
-            }
-            FileOutputStream outputStream = new FileOutputStream(path+"/feature/virtualan-contract."+i+".feature");
-            Writer writer = new OutputStreamWriter(outputStream);
-            mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i),okta)).flush();
-            writer.close();
-        }
-    }
-
-    private static String getTitle(String arrayTitle, int index , String defaultString){
-        try{
-            return arrayTitle.split(";")[index];
-        }catch (Exception e){
-            String featureTitle = ApplicationConfiguration.getProperty("virtualan.data.load");
-            return featureTitle.split(";")[index];
-        }
-    }
+  }
 }

@@ -50,6 +50,7 @@ public class FeatureFileGenerator {
      */
     public static List<List<Item>> generateFeatureFile() throws UnableToProcessException {
         List<List<Item>> items = new ArrayList<>();
+        ApplicationConfiguration.reload();
         String contractFileName = ApplicationConfiguration.getProperty("virtualan.data.load");
         String contractFileType = ApplicationConfiguration.getProperty("virtualan.data.type");
         JSONArray jsonArray = null;
@@ -86,9 +87,12 @@ public class FeatureFileGenerator {
         throws UnableToProcessException {
         JSONObject jsonObject = null;
         try {
-            if(FeatureFileGenerator.class.getClassLoader().getResourceAsStream(contractFileName) != null) {
-                String objectStr = readString(FeatureFileGenerator.class.getClassLoader()
-                    .getResourceAsStream(contractFileName));
+            InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(contractFileName);
+            if(stream  == null) {
+             stream = FeatureFileGenerator.class.getClassLoader().getResourceAsStream(contractFileName);
+            }
+            if(stream != null) {
+                String objectStr = readString(stream);
                 jsonObject = new JSONObject(objectStr);
             } else {
                 throw new UnableToProcessException("Unable to find/process the input file(" + contractFileName + ") :" );
