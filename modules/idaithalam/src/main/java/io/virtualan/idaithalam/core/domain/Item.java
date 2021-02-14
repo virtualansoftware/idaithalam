@@ -29,6 +29,10 @@ public class Item {
     /**
      * The Scenario.
      */
+    String contentType = "application/json";
+    /**
+     * The Scenario.
+     */
     String scenario;
     /**
      * The Http status code.
@@ -131,6 +135,70 @@ public class Item {
      */
     String url;
 
+    /**
+     * The Output inline xml.
+     */
+    List<String> outputInline;
+
+    /**
+     * The Output inline xml.
+     */
+    String hasOutputInline;
+
+
+    /**
+     * The Output file xml.
+     */
+    String outputFile;
+
+    /**
+     * The Input inline xml.
+     */
+    List<String> inputInline;
+
+    /**
+     * The Input inline xml.
+     */
+    String  hasInputInline;
+
+    /**
+     * The Input file xml.
+     */
+    String inputFile;
+
+    public String getHasOutputInline() {
+        return hasOutputInline;
+    }
+
+    public void setHasOutputInline(String hasOutputInline) {
+        this.hasOutputInline = hasOutputInline;
+    }
+
+    public String getHasInputInline() {
+        return hasInputInline;
+    }
+
+    public void setHasInputInline(String hasInputInline) {
+        this.hasInputInline = hasInputInline;
+    }
+
+    /**
+     * Gets content type.
+     *
+     * @return the content type
+     */
+    public String getContentType() {
+        return contentType;
+    }
+
+    /**
+     * Sets content type.
+     *
+     * @param contentType the content type
+     */
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
 
     /**
      * Gets std input.
@@ -445,6 +513,78 @@ public class Item {
         } else if ("PATCH".equalsIgnoreCase(method)) {
             isPatch = true;
         }
+    }
+
+    /**
+     * Gets output inline xml.
+     *
+     * @return the output inline xml
+     */
+    public List<String> getOutputInline() {
+        return outputInline;
+    }
+
+    /**
+     * Sets output inline xml.
+     *
+     * @param outputInline the output inline xml
+     */
+    public void setOutputInline(List<String> outputInline) {
+        this.outputInline = outputInline;
+    }
+
+    /**
+     * Gets output file xml.
+     *
+     * @return the output file xml
+     */
+    public String getOutputFile() {
+        return outputFile;
+    }
+
+    /**
+     * Sets output file xml.
+     *
+     * @param outputFile the output file xml
+     */
+    public void setOutputFile(String outputFile) {
+        this.outputFile = outputFile;
+    }
+
+    /**
+     * Gets input inline xml.
+     *
+     * @return the input inline xml
+     */
+    public List<String> getInputInline() {
+        return inputInline;
+    }
+
+    /**
+     * Sets input inline xml.
+     *
+     * @param inputInline the input inline xml
+     */
+    public void setInputInline(List<String> inputInline) {
+        this.inputInline = inputInline;
+    }
+
+    /**
+     * Gets input file xml.
+     *
+     * @return the input file xml
+     */
+    public String getInputFile() {
+        return inputFile;
+    }
+
+    /**
+     * Sets input file xml.
+     *
+     * @param inputFile the input file xml
+     */
+    public void setInputFile(String inputFile) {
+        this.inputFile = inputFile;
     }
 
     /**
