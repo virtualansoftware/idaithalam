@@ -20,6 +20,10 @@ import io.virtualan.cucumblan.props.ExcludeConfiguration;
 import io.virtualan.idaithalam.core.domain.AvailableParam;
 import io.virtualan.idaithalam.core.domain.Item;
 import io.virtualan.mapson.Mapson;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -191,30 +195,29 @@ public class FeatureGenerationHelper {
    * @param arr the arr
    * @return the list
    */
-  public static List<Item> createFeatureFile(JSONArray arr) {
+  public static List<Item> createFeatureFile(JSONArray arr, String path) throws IOException {
     List<Item> result = new ArrayList<>();
     if (arr != null && arr.length() > 0) {
       for (int i = 0; i < arr.length(); i++) {
-        Item item = getItem(arr, i);
+        Item item = getItem(arr.optJSONObject(i), path);
         result.add(item);
       }
     }
     return result;
   }
 
-  private static Item getItem(JSONArray arr, int i) {
+  private static Item getItem(JSONObject object, String path) throws IOException {
     Item item = new Item();
-    JSONObject object = arr.optJSONObject(i);
-    extractedInput(arr, i, item);
+    extractedInput(object, item, path);
     item.setHttpStatusCode(object.optString("httpStatusCode"));
     item.setMethod(object.optString("method"));
     item.setAction(object.optString("method").toLowerCase());
     item.setResource(object.optString("resource"));
-    extractedScenario(arr, i, item);
-    List<AvailableParam> availableParams = getAvailableParamList(arr, i);
+    extractedScenario(object, item);
+    List<AvailableParam> availableParams = getAvailableParamList(object);
     item.setAvailableParams(availableParams);
     item.setUrl(object.optString("url"));
-    extractedOutput(item.getUrl(), arr, i, item);
+    extractedOutput(object, item, path);
     return item;
   }
 
@@ -233,26 +236,33 @@ public class FeatureGenerationHelper {
     return url;
   }
 
-  private static void extractedScenario(JSONArray arr, int i, Item item) {
-    if ("".equalsIgnoreCase(arr.optJSONObject(i).optString("scenario"))) {
-      item.setScenario(arr.optJSONObject(i).optString("operationId"));
+  private static void extractedScenario(JSONObject object, Item item) {
+    if ("".equalsIgnoreCase(object.optString("scenario"))) {
+      item.setScenario(object.optString("operationId"));
     } else {
-      item.setScenario(arr.optJSONObject(i).optString("scenario"));
+      item.setScenario(object.optString("scenario"));
     }
   }
 
-  private static void extractedOutput(String url, JSONArray arr, int i, Item item) {
-    item.setOutput(arr.optJSONObject(i).optString("output"));
+  private static void extractedOutput( JSONObject object, Item item, String path)
+      throws IOException {
+    item.setOutput(object.optString("output"));
     if (item.getOutput() != null && !"".equalsIgnoreCase(item.getOutput())
-        && "XML".equalsIgnoreCase(arr.optJSONObject(i).optString("contentType"))) {
-      item.setOutputInline(getStringAsList(item.getOutput()));
-      item.setHasOutputInline(item.getOutput());
+        && "XML".equalsIgnoreCase(object.optString("contentType"))) {
+      if(item.getInput().length() > 700){
+        String fileName = object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]",  "-")+"_response.xml";
+        createFile(item.getOutput(), path + "/"+ fileName);
+        item.setOutputFile(fileName);
+      } else {
+        item.setOutputInline(getStringAsList(item.getOutput()));
+        item.setHasOutputInline(item.getOutput());
+      }
     } else if (item.getOutput() != null && !"".equalsIgnoreCase(item.getOutput())) {
       try {
         JSONTokener jsonTokener = new JSONTokener(item.getOutput());
         new JSONObject(jsonTokener);
         item.setOutputJsonMap(Mapson.buildMAPsonFromJson(item.getOutput()));
-        if (!ExcludeConfiguration.shouldSkip(url, null)) {
+        if (!ExcludeConfiguration.shouldSkip(item.getUrl(), null)) {
           item.setHasOutputJsonMap(true);
         }
       } catch (JSONException e) {
@@ -261,14 +271,23 @@ public class FeatureGenerationHelper {
     }
   }
 
+  private static void createFile(String content, String path) throws IOException {
+    Files.write(Paths.get(path), content.getBytes());
+  }
 
-  private static void extractedInput(JSONArray arr, int i, Item item) {
-    item.setInput(arr.optJSONObject(i).optString("input"));
+  private static void extractedInput(JSONObject object, Item item, String path) throws IOException {
+    item.setInput(object.optString("input"));
     if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())
-      && "XML".equalsIgnoreCase(arr.optJSONObject(i).optString("contentType"))) {
-      item.setInputInline(getStringAsList(item.getInput()));
+      && "XML".equalsIgnoreCase(object.optString("contentType"))) {
+      if(item.getInput().length() > 700){
+        String fileName =  object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]",  "-")+"_request.xml";
+         createFile(item.getInput(), path + "/"+ fileName);
+        item.setInputFile(fileName);
+      } else {
+        item.setInputInline(getStringAsList(item.getInput()));
+        item.setHasInputInline(item.getInput());
+      }
       item.setContentType("text/xml");
-      item.setHasInputInline(item.getInput());
     } else if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())) {
       try {
         JSONTokener jsonTokener = new JSONTokener(item.getInput());
@@ -291,9 +310,9 @@ public class FeatureGenerationHelper {
   }
 
 
-  private static List<AvailableParam> getAvailableParamList(JSONArray arr, int i) {
+  private static List<AvailableParam> getAvailableParamList(JSONObject object) {
     List<AvailableParam> availableParams = new ArrayList<>();
-    JSONArray params = arr.optJSONObject(i).optJSONArray("availableParams");
+    JSONArray params = object.optJSONArray("availableParams");
     if (params != null && params.length() > 0) {
       for (int j = 0; j < params.length(); j++) {
         availableParams.add(new AvailableParam(params.optJSONObject(j).optString("key"),

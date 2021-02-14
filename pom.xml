@@ -62,6 +62,7 @@
   </build>
   <modules>
     <module>modules/idaithalam</module>
+    <module>samples/idaithalam-apitesting</module>
   </modules>
   <profiles>
     <!-- Samples -->

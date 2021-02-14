@@ -33,11 +33,14 @@ Feature: {{feature}} - API Contract validation status
         | {{{key}}}                   | {{{value}}}                         |
       {{/headerParams}}
       {{/hasHeaderParams}}
+      {{#inputFile}}
+       And add {{{inputFile}}} data file with {{contentType}} given input
+      {{/inputFile}}
       {{#hasInputInline}}
-        And add request data inline with {{contentType}} given input
-        {{#inputInline}}
-         | {{{.}}} |
-        {{/inputInline}}
+       And add request data inline with {{contentType}} given input
+      {{#inputInline}}
+        | {{{.}}} |
+      {{/inputInline}}
       {{/hasInputInline}}
       {{#stdInput}}
       And add {{stdInput}} data with {{contentType}} given input
@@ -53,8 +56,11 @@ Feature: {{feature}} - API Contract validation status
         | {{{key}}}                   |  {{{value}}}                        |
       {{/inputJsonMap}}
       {{/hasInputJsonMap}}
-      When a user {{action}} application/json in {{url}} resource on {{resource}}
+      When a user {{action}} {{contentType}} in {{url}} resource on {{resource}}
       Then Verify the status code is {{httpStatusCode}}
+      {{#outputFile}}
+      And Verify api response XML File {{{outputFile}}} includes in the response
+      {{/outputFile}}
       {{#hasOutputInline}}
       And Verify api response inline includes in the response
       {{#outputInline}}
