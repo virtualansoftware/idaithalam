@@ -76,7 +76,6 @@
       </activation>
       <modules>
         <module>samples/idaithalam-apitesting</module>
-        <module>samples/idaithalam-openapi-contract</module>
       </modules>
     </profile>
     <profile>
