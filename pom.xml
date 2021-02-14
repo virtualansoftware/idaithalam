@@ -62,7 +62,6 @@
   </build>
   <modules>
     <module>modules/idaithalam</module>
-    <module>samples/idaithalam-apitesting</module>
   </modules>
   <profiles>
     <!-- Samples -->
@@ -76,6 +75,7 @@
       </activation>
       <modules>
         <module>samples/idaithalam-apitesting</module>
+        <module>samples/idaithalam-openapi-contract</module>
       </modules>
     </profile>
     <profile>
