@@ -204,22 +204,22 @@ public class IdaithalamExecutor {
      */
 
     private static void generateFeatureFile(String path) throws IOException, UnableToProcessException {
-        List<List<Item>> items = FeatureFileGenerator.generateFeatureFile();
+        if(path == null || !new File(path).exists()) {
+            if (!new File("conf").exists()) {
+                new File("conf").mkdir();
+            }
+            path = "conf";
+        }
+        if (!new File(path+"/feature").exists()) {
+            new File(path+"/feature").mkdir();
+        }
+        List<List<Item>> items = FeatureFileGenerator.generateFeatureFile(path);
         String okta = ApplicationConfiguration.getProperty("service.api.okta");
         String featureTitle = ApplicationConfiguration.getProperty("virtualan.data.heading");
 
         for(int i=0; i< items.size(); i++){
             MustacheFactory mf = new DefaultMustacheFactory();
             Mustache mustache = mf.compile("virtualan-contract.mustache");
-            if(path == null || !new File(path).exists()) {
-                if (!new File("conf").exists()) {
-                    new File("conf").mkdir();
-                }
-                path = "conf";
-            }
-            if (!new File(path+"/feature").exists()) {
-                new File(path+"/feature").mkdir();
-            }
             FileOutputStream outputStream = new FileOutputStream(path+"/feature/virtualan-contract."+i+".feature");
             Writer writer = new OutputStreamWriter(outputStream);
             mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i),okta)).flush();

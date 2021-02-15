@@ -6,7 +6,7 @@
   <name>idaithalam-contract-testing</name>
   <version>1.0.9-SNAPSHOT</version>
   <properties>
-    <cucumblan.version>1.0.3</cucumblan.version>
+    <cucumblan.version>1.0.5</cucumblan.version>
     <java.version>1.8</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>

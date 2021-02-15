@@ -1,0 +1,179 @@
+{
+	"info": {
+		"_postman_id": "5f774dc3-fb63-4b0b-8d7f-c2dd1e144647",
+		"name": "Virtualan-Idithalam-collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST_PERSON_CREATE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"url\": \"/persons/{username}\",\n    \"type\": \"Response\",\n    \"output\": \"{\\n  \\\"firstName\\\" : \\\"eeee\\\",\\n  \\\"lastName\\\" : \\\"Thangamani\\\",\\n  \\\"username\\\" : \\\"elanmathi\\\",\\n  \\\"dateOfBirth\\\" : \\\"1978-01-08\\\"\\n \\n}\",\n    \"httpStatusCode\": \"200\",\n    \"method\": \"GET\",\n\t\"availableParams\": [\n        {\n            \"key\": \"username\",\n            \"value\": \"elan\",\n            \"parameterType\": \"PATH_PARAM\"\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "{{hostname}}/virtualservices",
+					"host": [
+						"{{hostname}}"
+					],
+					"path": [
+						"virtualservices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get persons",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8800/persons/elan",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8800",
+					"path": [
+						"persons",
+						"elan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "temp",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "text/xml",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n  <soap:Body>\r\n    <CelsiusToFahrenheit xmlns=\"https://www.w3schools.com/xml/\">\r\n      <Celsius>100</Celsius>\r\n    </CelsiusToFahrenheit>\r\n  </soap:Body>\r\n</soap:Envelope>"
+				},
+				"url": {
+					"raw": "https://www.w3schools.com/xml/tempconvert.asmx",
+					"protocol": "https",
+					"host": [
+						"www",
+						"w3schools",
+						"com"
+					],
+					"path": [
+						"xml",
+						"tempconvert.asmx"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "temp",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "text/xml",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n  <soap:Body>\r\n    <CelsiusToFahrenheit xmlns=\"https://www.w3schools.com/xml/\">\r\n      <Celsius>100</Celsius>\r\n    </CelsiusToFahrenheit>\r\n  </soap:Body>\r\n</soap:Envelope>"
+						},
+						"url": {
+							"raw": "https://www.w3schools.com/xml/tempconvert.asmx",
+							"protocol": "https",
+							"host": [
+								"www",
+								"w3schools",
+								"com"
+							],
+							"path": [
+								"xml",
+								"tempconvert.asmx"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "xml",
+					"header": [
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "private, max-age=0,public"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/xml; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 14 Feb 2021 12:04:07 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Microsoft-IIS/7.5"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "X-AspNet-Version",
+							"value": "4.0.30319"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Content-Length",
+							"value": "321"
+						}
+					],
+					"cookie": [],
+					"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n    <soap:Body>\n        <CelsiusToFahrenheitResponse xmlns=\"https://www.w3schools.com/xml/\">\n            <CelsiusToFahrenheitResult>212</CelsiusToFahrenheitResult>\n        </CelsiusToFahrenheitResponse>\n    </soap:Body>\n</soap:Envelope>"
+				}
+			]
+		}
+	]
+}

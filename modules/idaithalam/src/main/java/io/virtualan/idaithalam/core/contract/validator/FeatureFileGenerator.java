@@ -48,7 +48,8 @@ public class FeatureFileGenerator {
      * @return the list
      * @throws UnableToProcessException the unable to process exception
      */
-    public static List<List<Item>> generateFeatureFile() throws UnableToProcessException {
+    public static List<List<Item>> generateFeatureFile(String path)
+        throws UnableToProcessException, IOException {
         List<List<Item>> items = new ArrayList<>();
         String contractFileName = ApplicationConfiguration.getProperty("virtualan.data.load");
         String contractFileType = ApplicationConfiguration.getProperty("virtualan.data.type");
@@ -69,7 +70,7 @@ public class FeatureFileGenerator {
           } else {
             jsonArray = getJSONArray(fileNames[i]);
           }
-          List<Item> result = FeatureGenerationHelper.createFeatureFile(jsonArray);
+          List<Item> result = FeatureGenerationHelper.createFeatureFile(jsonArray, path);
           items.add(result);
         }
         return items;
