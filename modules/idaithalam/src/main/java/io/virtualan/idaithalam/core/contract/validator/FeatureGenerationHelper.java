@@ -130,7 +130,7 @@ public class FeatureGenerationHelper {
 
   private static ContentType getContentType(JSONObject jsonObject) {
     JSONArray arrayObject = jsonObject.optJSONArray("header");
-    if (arrayObject != null && !arrayObject.isEmpty()) {
+    if (arrayObject != null) {
       for (int i = 0; i < arrayObject.length(); i++) {
         JSONObject object = arrayObject.optJSONObject(i);
         if ("Content-Type".equalsIgnoreCase(object.optString("name")) &&
