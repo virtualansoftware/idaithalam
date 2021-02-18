@@ -27,6 +27,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +36,7 @@ import org.json.JSONTokener;
 /**
  * The type Feature generation helper.
  */
+@Slf4j
 public class FeatureGenerationHelper {
 
 
@@ -102,9 +104,9 @@ public class FeatureGenerationHelper {
 
   private static JSONArray checkIfItemsOfItem(JSONArray arr) {
     if (arr != null && arr.length() > 0) {
-      JSONArray array = arr.getJSONObject(0).optJSONArray("item");
+      JSONArray array = arr.optJSONObject(0).optJSONArray("item");
       if (array != null && array.length() > 0) {
-        return array;
+        return checkIfItemsOfItem(array);
       }
     }
     return arr;
@@ -130,7 +132,7 @@ public class FeatureGenerationHelper {
 
   private static ContentType getContentType(JSONObject jsonObject) {
     JSONArray arrayObject = jsonObject.optJSONArray("header");
-    if (arrayObject != null && !arrayObject.isEmpty()) {
+    if (arrayObject != null) {
       for (int i = 0; i < arrayObject.length(); i++) {
         JSONObject object = arrayObject.optJSONObject(i);
         if ("Content-Type".equalsIgnoreCase(object.optString("name")) &&
@@ -192,8 +194,10 @@ public class FeatureGenerationHelper {
   /**
    * Create feature file list.
    *
-   * @param arr the arr
+   * @param arr  the arr
+   * @param path the path
    * @return the list
+   * @throws IOException the io exception
    */
   public static List<Item> createFeatureFile(JSONArray arr, String path) throws IOException {
     List<Item> result = new ArrayList<>();
@@ -259,15 +263,25 @@ public class FeatureGenerationHelper {
       }
     } else if (item.getOutput() != null && !"".equalsIgnoreCase(item.getOutput())) {
       try {
-        JSONTokener jsonTokener = new JSONTokener(item.getOutput());
-        new JSONObject(jsonTokener);
-        item.setOutputJsonMap(Mapson.buildMAPsonFromJson(item.getOutput()));
-        if (!ExcludeConfiguration.shouldSkip(item.getUrl(), null)) {
-          item.setHasOutputJsonMap(true);
+        Object jsonObject = getJSON(item.getOutput());
+        if(jsonObject instanceof  JSONArray || jsonObject instanceof  JSONObject) {
+          item.setInputJsonMap(Mapson.buildMAPsonFromJson(item.getInput()));
+          item.setHasInputJsonMap(true);
+          item.setOutputJsonMap(Mapson.buildMAPsonFromJson(item.getOutput()));
+          if (!ExcludeConfiguration.shouldSkip(item.getUrl(), null)) {
+            item.setHasOutputJsonMap(true);
+          }
+        } else {
+          item.setStdOutput(item.getOutput());
         }
       } catch (JSONException e) {
-        item.setStdOutput(item.getOutput());
+        if(item.getOutput().contains("{") && item.getOutput().contains("}")) {
+          log.warn(" Check Invalid JSON >> " + item.getOutput());
+        } else {
+          item.setStdOutput(item.getOutput());
+        }
       }
+
     }
   }
 
@@ -291,11 +305,31 @@ public class FeatureGenerationHelper {
     } else if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())) {
       try {
         JSONTokener jsonTokener = new JSONTokener(item.getInput());
-        new JSONObject(jsonTokener);
-        item.setInputJsonMap(Mapson.buildMAPsonFromJson(item.getInput()));
-        item.setHasInputJsonMap(true);
+        Object jsonObject = getJSON(item.getInput());
+        if(jsonObject instanceof  JSONArray || jsonObject instanceof  JSONObject) {
+          item.setInputJsonMap(Mapson.buildMAPsonFromJson(item.getInput()));
+          item.setHasInputJsonMap(true);
+        } else {
+          item.setStdInput(item.getInput());
+        }
       } catch (JSONException e) {
-        item.setStdInput(item.getInput());
+        if(item.getInput().contains("{") && item.getInput().contains("}")) {
+          log.warn(" Check Invalid JSON >> " + item.getInput());
+        } else {
+          item.setStdInput(item.getInput());
+        }
+      }
+    }
+  }
+
+  private static Object getJSON(String json){
+    try {
+      return new JSONObject(json);
+    }catch (JSONException err){
+      try{
+        return new JSONArray(json);
+      }catch (Exception e){
+        return json;
       }
     }
   }

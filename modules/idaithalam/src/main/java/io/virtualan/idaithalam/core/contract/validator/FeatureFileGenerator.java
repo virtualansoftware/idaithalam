@@ -20,6 +20,10 @@ import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ConversionType;
 import io.virtualan.idaithalam.core.domain.Item;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import org.json.JSONArray;
@@ -45,8 +49,10 @@ public class FeatureFileGenerator {
     /**
      * Generate feature file list.
      *
+     * @param path the path
      * @return the list
      * @throws UnableToProcessException the unable to process exception
+     * @throws IOException              the io exception
      */
     public static List<List<Item>> generateFeatureFile(String path)
         throws UnableToProcessException, IOException {
@@ -131,7 +137,7 @@ public class FeatureFileGenerator {
         throws UnableToProcessException {
         JSONArray jsonArray = null;
         try {
-            String jsonArrayStr = readString(FeatureFileGenerator.class.getClassLoader().getResourceAsStream(contractFileName));
+            String jsonArrayStr = getFileAsString(contractFileName);
             jsonArray = new JSONArray(jsonArrayStr);
         } catch (IOException e) {
             LOGGER
@@ -140,4 +146,43 @@ public class FeatureFileGenerator {
         }
         return jsonArray;
     }
+
+    private static String getFileAsString(String filePath)
+        throws IOException {
+        InputStream stream  = null;
+        File file = new File(filePath);
+        if(file.exists()){
+            stream = new FileInputStream(file);
+        }
+        if (stream == null) {
+            stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath);
+        }
+        if (stream == null) {
+            stream = ExcelToCollectionGenerator.class.getClassLoader().getResourceAsStream(filePath);
+        }
+        return convertStreamToString(stream);
+    }
+
+    private static String convertStreamToString(InputStream is) throws IOException {
+        if (is != null) {
+            StringBuilder sb = new StringBuilder();
+
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+
+                String line;
+                while((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+            } finally {
+                is.close();
+            }
+
+            return sb.toString();
+        } else {
+            return null;
+        }
+    }
+
+
 }

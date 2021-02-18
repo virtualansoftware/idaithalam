@@ -25,12 +25,14 @@ import java.util.logging.Logger;
 
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.virtualan.idaithalam.core.domain.OperationBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
  * The type Open api feature file generator.
  */
+@Slf4j
 public class OpenApiFeatureFileGenerator {
     private final static Logger LOGGER = Logger.getLogger(OpenApiFeatureFileGenerator.class.getName());
 
@@ -290,7 +292,7 @@ public class OpenApiFeatureFileGenerator {
             new JsonNodeExampleSerializer());
         Json.mapper().registerModule(simpleModule);
         String jsonExample = Json.pretty(example);
-        System.out.println(jsonExample);
+       log.info(jsonExample);
         return jsonExample;
     }
 }

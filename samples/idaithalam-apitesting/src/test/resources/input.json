@@ -1,0 +1,18 @@
+{
+  "category": {
+    "id": 100,
+    "name": "German Shepherd"
+  },
+  "id": 101,
+  "name": "Rocky",
+  "photoUrls": [
+    "string"
+  ],
+  "status": "available",
+  "tags": [
+    {
+      "id": 101,
+      "name": "brown"
+    }
+  ]
+}

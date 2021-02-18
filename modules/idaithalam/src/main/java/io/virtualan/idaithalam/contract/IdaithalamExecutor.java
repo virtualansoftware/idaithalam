@@ -80,7 +80,7 @@ public class IdaithalamExecutor {
     }
 
     /**
-     * Validate contract.
+     * Validate contract int.
      *
      * @param featureHeading the feature heading
      * @return the int
@@ -92,9 +92,10 @@ public class IdaithalamExecutor {
     }
 
     /**
-     * Validate contract.
+     * Validate contract int.
      *
      * @param featureHeading the feature heading
+     * @param path           the path
      * @return the int
      * @throws UnableToProcessException the unable to process exception
      */
@@ -103,8 +104,8 @@ public class IdaithalamExecutor {
         byte exitStatus;
         try {
             feature = featureHeading;
-            generateFeatureFile(path);
             addConfToClasspath(path);
+            generateFeatureFile(path);
             String[] argv = getCucumberOptions(path);
             exitStatus = Main.run(argv, Thread.currentThread().getContextClassLoader());
             generateReport(path);
@@ -116,9 +117,11 @@ public class IdaithalamExecutor {
     }
 
     /**
-     * Validate contract.
+     * Validate contract int.
      *
      * @param featureHeading the feature heading
+     * @param path           the path
+     * @param runId          the run id
      * @return the int
      * @throws UnableToProcessException the unable to process exception
      */
@@ -127,9 +130,9 @@ public class IdaithalamExecutor {
         byte exitStatus;
         try {
             feature = featureHeading;
-            generateFeatureFile(path + File.separator + runId);
             addConfToClasspath(path);
             addConfToClasspath(path + File.separator + runId);
+            generateFeatureFile(path + File.separator + runId);
             String[] argv = getCucumberOptions(path + File.separator + runId);
             exitStatus = Main.run(argv, Thread.currentThread().getContextClassLoader());
             generateReport(path + File.separator + runId);

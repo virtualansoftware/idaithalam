@@ -1,6 +1,9 @@
 package io.virtualan.test;
 
 import io.virtualan.idaithalam.contract.IdaithalamExecutor;
+import io.virtualan.idaithalam.core.contract.validator.ExcelToCollectionGenerator;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Assert;
 import org.openapitools.OpenAPI2SpringBoot;
 import org.junit.Test;
@@ -17,7 +20,10 @@ public class DemoApiTest {
     public void validateContract()  {
         int status =0 ;
         try {
-            status = IdaithalamExecutor.validateContract("Pet API Production Checkout");
+            List<String> list = new ArrayList<>();
+            list.add("PetPost");
+            //ExcelToCollectionGenerator.createCollection(list, "virtualan_collection_pet.xlsx", "D:\\Elan\\virtualan-software-ws\\idaithalam\\excel-idaithalam\\idaithalam\\samples\\idaithalam-apitesting");
+            status = IdaithalamExecutor.validateContract("Pet API Production Checkout");//, "D:\\Elan\\virtualan-software-ws\\idaithalam\\excel-idaithalam\\idaithalam\\samples\\idaithalam-apitesting");
             System.out.println(status);
             if(status != 0) {
                 Assert.assertTrue(false);

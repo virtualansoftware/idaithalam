@@ -9,7 +9,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<properties>
 		<cucumblan.version>1.0.4-SNAPSHOT</cucumblan.version>
-    <idaithalam.version>1.0.9-SNAPSHOT</idaithalam.version>
+    <idaithalam.version>1.0.14-SNAPSHOT</idaithalam.version>
 		<java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
