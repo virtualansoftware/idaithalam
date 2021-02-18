@@ -80,7 +80,7 @@ public class IdaithalamExecutor {
     }
 
     /**
-     * Validate contract.
+     * Validate contract int.
      *
      * @param featureHeading the feature heading
      * @return the int
@@ -92,9 +92,10 @@ public class IdaithalamExecutor {
     }
 
     /**
-     * Validate contract.
+     * Validate contract int.
      *
      * @param featureHeading the feature heading
+     * @param path           the path
      * @return the int
      * @throws UnableToProcessException the unable to process exception
      */
@@ -116,9 +117,11 @@ public class IdaithalamExecutor {
     }
 
     /**
-     * Validate contract.
+     * Validate contract int.
      *
      * @param featureHeading the feature heading
+     * @param path           the path
+     * @param runId          the run id
      * @return the int
      * @throws UnableToProcessException the unable to process exception
      */

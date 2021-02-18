@@ -194,8 +194,10 @@ public class FeatureGenerationHelper {
   /**
    * Create feature file list.
    *
-   * @param arr the arr
+   * @param arr  the arr
+   * @param path the path
    * @return the list
+   * @throws IOException the io exception
    */
   public static List<Item> createFeatureFile(JSONArray arr, String path) throws IOException {
     List<Item> result = new ArrayList<>();

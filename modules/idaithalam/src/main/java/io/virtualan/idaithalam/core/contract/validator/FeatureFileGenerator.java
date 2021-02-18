@@ -49,8 +49,10 @@ public class FeatureFileGenerator {
     /**
      * Generate feature file list.
      *
+     * @param path the path
      * @return the list
      * @throws UnableToProcessException the unable to process exception
+     * @throws IOException              the io exception
      */
     public static List<List<Item>> generateFeatureFile(String path)
         throws UnableToProcessException, IOException {
