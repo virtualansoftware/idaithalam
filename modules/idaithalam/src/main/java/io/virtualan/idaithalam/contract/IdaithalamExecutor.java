@@ -103,8 +103,8 @@ public class IdaithalamExecutor {
         byte exitStatus;
         try {
             feature = featureHeading;
-            generateFeatureFile(path);
             addConfToClasspath(path);
+            generateFeatureFile(path);
             String[] argv = getCucumberOptions(path);
             exitStatus = Main.run(argv, Thread.currentThread().getContextClassLoader());
             generateReport(path);
@@ -127,9 +127,9 @@ public class IdaithalamExecutor {
         byte exitStatus;
         try {
             feature = featureHeading;
-            generateFeatureFile(path + File.separator + runId);
             addConfToClasspath(path);
             addConfToClasspath(path + File.separator + runId);
+            generateFeatureFile(path + File.separator + runId);
             String[] argv = getCucumberOptions(path + File.separator + runId);
             exitStatus = Main.run(argv, Thread.currentThread().getContextClassLoader());
             generateReport(path + File.separator + runId);

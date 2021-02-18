@@ -27,6 +27,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +36,7 @@ import org.json.JSONTokener;
 /**
  * The type Feature generation helper.
  */
+@Slf4j
 public class FeatureGenerationHelper {
 
 
@@ -102,9 +104,9 @@ public class FeatureGenerationHelper {
 
   private static JSONArray checkIfItemsOfItem(JSONArray arr) {
     if (arr != null && arr.length() > 0) {
-      JSONArray array = arr.getJSONObject(0).optJSONArray("item");
+      JSONArray array = arr.optJSONObject(0).optJSONArray("item");
       if (array != null && array.length() > 0) {
-        return array;
+        return checkIfItemsOfItem(array);
       }
     }
     return arr;
@@ -295,7 +297,11 @@ public class FeatureGenerationHelper {
         item.setInputJsonMap(Mapson.buildMAPsonFromJson(item.getInput()));
         item.setHasInputJsonMap(true);
       } catch (JSONException e) {
-        item.setStdInput(item.getInput());
+        if(item.getInput().contains("{") && item.getInput().contains("}")) {
+          log.warn(" Check Invalid JSON >> " + item.getInput());
+        } else {
+          item.setStdInput(item.getInput());
+        }
       }
     }
   }

@@ -1,13 +1,14 @@
 package io.virtualan.idaithalam.core.contract.validator;
 
-import io.cucumber.java.pt.E;
-import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.cucumblan.props.util.HelperUtil;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.MalformedURLException;
@@ -37,6 +38,28 @@ public class ExcelToCollectionGenerator {
   }
 
 
+  private static String convertStreamToString(InputStream is) throws IOException {
+    if (is != null) {
+      StringBuilder sb = new StringBuilder();
+
+      try {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+
+        String line;
+        while((line = reader.readLine()) != null) {
+          sb.append(line);
+        }
+      } finally {
+        is.close();
+      }
+
+      return sb.toString();
+    } else {
+      return null;
+    }
+  }
+
+
   /**
    * Create collection.
    *
@@ -49,10 +72,7 @@ public class ExcelToCollectionGenerator {
       String excelFilePath,
       String generatedPath)
       throws IOException {
-    InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(excelFilePath);
-    if (stream == null) {
-      stream = ExcelToCollectionGenerator.class.getClassLoader().getResourceAsStream(excelFilePath);
-    }
+    InputStream stream =  getInputStream(excelFilePath);
     try {
       if (stream != null) {
         Workbook workbook = new XSSFWorkbook(stream);
@@ -103,6 +123,39 @@ public class ExcelToCollectionGenerator {
     }
   }
 
+  private static InputStream getInputStream(String filePath)
+      throws FileNotFoundException {
+    InputStream stream  = null;
+    File file = new File(filePath);
+    if(file.exists()){
+      stream = new FileInputStream(file);
+    }
+    if (stream == null) {
+      stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath);
+    }
+    if (stream == null) {
+      stream = ExcelToCollectionGenerator.class.getClassLoader().getResourceAsStream(filePath);
+    }
+    return stream;
+  }
+
+  private static String getFileAsString(String filePath)
+      throws IOException {
+    InputStream stream  = null;
+    File file = new File(filePath);
+    if(file.exists()){
+      stream = new FileInputStream(file);
+    }
+    if (stream == null) {
+      stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath);
+    }
+    if (stream == null) {
+      stream = ExcelToCollectionGenerator.class.getClassLoader().getResourceAsStream(filePath);
+    }
+    return convertStreamToString(stream);
+  }
+
+
   private static Map<String, String> getCucumblan() {
     Map<String, String> cucumblanMap = new HashMap<>();
     cucumblanMap.put("virtualan.data.load", "");
@@ -132,8 +185,8 @@ public class ExcelToCollectionGenerator {
     } else {
       log.error("URL IS MANDATORY!!! " + dataMap.get("TestCaseNameDesc"));
     }
-    buildRequest(dataMap, virtualanObj, "RequestFile", "input");
-    buildRequest(dataMap, virtualanObj, "ResponseFile", "output");
+    buildObject(dataMap, virtualanObj, "RequestFile", "input");
+    buildObject(dataMap, virtualanObj, "ResponseFile", "output");
     builHttpStausCode(dataMap, virtualanObj);
     if (paramsArray.length() > 0) {
       virtualanObj.put("availableParams", paramsArray);
@@ -153,15 +206,20 @@ public class ExcelToCollectionGenerator {
     }
   }
 
-  private static void buildRequest(Map<String, String> dataMap, JSONObject virtualanObj,
+  private static void buildObject(Map<String, String> dataMap, JSONObject virtualanObj,
       String requestFile, String input) {
-    if (dataMap.get(requestFile) != null) {
-      String body = HelperUtil.readFileAsString(dataMap.get(requestFile));
+    try {
+      if (dataMap.get(requestFile) != null) {
+      String body = null;
+        body = getFileAsString(dataMap.get(requestFile));
       if (body != null) {
         virtualanObj.put(input, body);
       } else {
         log.warn("Unable to load "+requestFile+" file > " + dataMap.get(requestFile));
       }
+    }
+    } catch (IOException e) {
+      log.warn("Unable to load "+requestFile+" file > " + dataMap.get(requestFile));
     }
   }
 

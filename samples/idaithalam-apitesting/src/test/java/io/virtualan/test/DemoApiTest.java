@@ -20,10 +20,10 @@ public class DemoApiTest {
     public void validateContract()  {
         int status =0 ;
         try {
-//            List<String> list = new ArrayList<>();
-//            list.add("PetPost");
-//            ExcelToCollectionGenerator.createCollection(list, "virtualan_collection_pet.xlsx", "D:\\Elan\\virtualan-software-ws\\idaithalam\\excel-idaithalam\\idaithalam\\samples\\idaithalam-apitesting\\target\\classes");
-            status = IdaithalamExecutor.validateContract("Pet API Production Checkout");
+            List<String> list = new ArrayList<>();
+            list.add("PetPost");
+            //ExcelToCollectionGenerator.createCollection(list, "virtualan_collection_pet.xlsx", "D:\\Elan\\virtualan-software-ws\\idaithalam\\excel-idaithalam\\idaithalam\\samples\\idaithalam-apitesting");
+            status = IdaithalamExecutor.validateContract("Pet API Production Checkout");//, "D:\\Elan\\virtualan-software-ws\\idaithalam\\excel-idaithalam\\idaithalam\\samples\\idaithalam-apitesting");
             System.out.println(status);
             if(status != 0) {
                 Assert.assertTrue(false);
