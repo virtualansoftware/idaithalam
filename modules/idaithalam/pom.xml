@@ -4,7 +4,7 @@
   <artifactId>idaithalam</artifactId>
   <packaging>jar</packaging>
   <name>idaithalam-contract-testing</name>
-  <version>1.0.13</version>
+  <version>1.0.14-SNAPSHOT</version>
   <properties>
     <cucumblan.version>1.0.5</cucumblan.version>
     <java.version>1.8</java.version>
@@ -24,7 +24,7 @@
     <connection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git</developerConnection>
     <url>https://github.com/virtualansoftware/idaithalam.git</url>
-    <tag>v1.0.13.2</tag>
+    <tag>V1.0.13.1</tag>
   </scm>
   <developers>
     <!-- original author of the project -->
