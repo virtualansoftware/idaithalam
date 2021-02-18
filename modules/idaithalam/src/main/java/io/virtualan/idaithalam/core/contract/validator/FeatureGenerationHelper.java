@@ -261,15 +261,25 @@ public class FeatureGenerationHelper {
       }
     } else if (item.getOutput() != null && !"".equalsIgnoreCase(item.getOutput())) {
       try {
-        JSONTokener jsonTokener = new JSONTokener(item.getOutput());
-        new JSONObject(jsonTokener);
-        item.setOutputJsonMap(Mapson.buildMAPsonFromJson(item.getOutput()));
-        if (!ExcludeConfiguration.shouldSkip(item.getUrl(), null)) {
-          item.setHasOutputJsonMap(true);
+        Object jsonObject = getJSON(item.getOutput());
+        if(jsonObject instanceof  JSONArray || jsonObject instanceof  JSONObject) {
+          item.setInputJsonMap(Mapson.buildMAPsonFromJson(item.getInput()));
+          item.setHasInputJsonMap(true);
+          item.setOutputJsonMap(Mapson.buildMAPsonFromJson(item.getOutput()));
+          if (!ExcludeConfiguration.shouldSkip(item.getUrl(), null)) {
+            item.setHasOutputJsonMap(true);
+          }
+        } else {
+          item.setStdOutput(item.getOutput());
         }
       } catch (JSONException e) {
-        item.setStdOutput(item.getOutput());
+        if(item.getOutput().contains("{") && item.getOutput().contains("}")) {
+          log.warn(" Check Invalid JSON >> " + item.getOutput());
+        } else {
+          item.setStdOutput(item.getOutput());
+        }
       }
+
     }
   }
 
@@ -293,15 +303,31 @@ public class FeatureGenerationHelper {
     } else if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())) {
       try {
         JSONTokener jsonTokener = new JSONTokener(item.getInput());
-        new JSONObject(jsonTokener);
-        item.setInputJsonMap(Mapson.buildMAPsonFromJson(item.getInput()));
-        item.setHasInputJsonMap(true);
+        Object jsonObject = getJSON(item.getInput());
+        if(jsonObject instanceof  JSONArray || jsonObject instanceof  JSONObject) {
+          item.setInputJsonMap(Mapson.buildMAPsonFromJson(item.getInput()));
+          item.setHasInputJsonMap(true);
+        } else {
+          item.setStdInput(item.getInput());
+        }
       } catch (JSONException e) {
         if(item.getInput().contains("{") && item.getInput().contains("}")) {
           log.warn(" Check Invalid JSON >> " + item.getInput());
         } else {
           item.setStdInput(item.getInput());
         }
+      }
+    }
+  }
+
+  private static Object getJSON(String json){
+    try {
+      return new JSONObject(json);
+    }catch (JSONException err){
+      try{
+        return new JSONArray(json);
+      }catch (Exception e){
+        return json;
       }
     }
   }
