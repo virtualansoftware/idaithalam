@@ -1,9 +1,11 @@
 package io.virtualan.test;
 
+import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.idaithalam.contract.IdaithalamExecutor;
 import io.virtualan.idaithalam.core.contract.validator.ExcelToCollectionGenerator;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.application.Application;
 import org.junit.Assert;
 import org.openapitools.OpenAPI2SpringBoot;
 import org.junit.Test;
@@ -23,6 +25,7 @@ public class DemoApiTest {
             List<String> list = new ArrayList<>();
             list.add("PetPost");
             ExcelToCollectionGenerator.createCollection(list, "virtualan_collection_pet.xlsx", System.getProperty("user.dir") +"/target/classes/");
+            ApplicationConfiguration.setProperty("data-inline", "false");
             status = IdaithalamExecutor.validateContract("Pet API EXCEL based api testing", System.getProperty("user.dir") +"/target/classes/");
             System.out.println(status);
             if(status != 0) {
