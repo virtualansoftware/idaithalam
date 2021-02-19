@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.virtualan</groupId>
-	<artifactId>idaithalam-apitesting</artifactId>
+	<artifactId>idaithalam-postmancoll-apitesting</artifactId>
 	<packaging>jar</packaging>
-	<name>idaithalam-apitesting</name>
+	<name>idaithalam-postmancoll-apitesting</name>
 	<version>1.0.1-SNAPSHOT</version>
 	<properties>
 		<cucumblan.version>1.0.5</cucumblan.version>
