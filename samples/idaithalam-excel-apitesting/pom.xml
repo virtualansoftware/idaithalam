@@ -6,8 +6,8 @@
 	<name>idaithalam-excel-apitesting</name>
 	<version>1.0.1-SNAPSHOT</version>
 	<properties>
-		<cucumblan.version>1.0.5</cucumblan.version>
-    <idaithalam.version>1.0.14-SNAPSHOT</idaithalam.version>
+		<cucumblan.version>1.0.7-SNAPSHOT</cucumblan.version>
+    <idaithalam.version>1.0.15-SNAPSHOT</idaithalam.version>
 		<java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>

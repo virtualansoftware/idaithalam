@@ -59,6 +59,10 @@ public class Item {
      */
     String output;
     /**
+     * The Std type.
+     */
+    String stdType;
+    /**
      * The Std input.
      */
     String stdInput;
@@ -166,21 +170,61 @@ public class Item {
      */
     String inputFile;
 
+    /**
+     * Gets has output inline.
+     *
+     * @return the has output inline
+     */
     public String getHasOutputInline() {
         return hasOutputInline;
     }
 
+    /**
+     * Sets has output inline.
+     *
+     * @param hasOutputInline the has output inline
+     */
     public void setHasOutputInline(String hasOutputInline) {
         this.hasOutputInline = hasOutputInline;
     }
 
+    /**
+     * Gets has input inline.
+     *
+     * @return the has input inline
+     */
     public String getHasInputInline() {
         return hasInputInline;
     }
 
+    /**
+     * Sets has input inline.
+     *
+     * @param hasInputInline the has input inline
+     */
     public void setHasInputInline(String hasInputInline) {
         this.hasInputInline = hasInputInline;
     }
+
+
+    /**
+     * Gets std type.
+     *
+     * @return the std type
+     */
+    public String getStdType() {
+        return stdType;
+    }
+
+    /**
+     * Sets std type.
+     *
+     * @param stdType the std type
+     */
+    public void setStdType(String stdType) {
+        this.stdType = stdType;
+    }
+
 
     /**
      * Gets content type.

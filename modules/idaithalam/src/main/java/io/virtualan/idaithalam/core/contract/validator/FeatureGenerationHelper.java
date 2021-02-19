@@ -16,6 +16,7 @@
 
 package io.virtualan.idaithalam.core.contract.validator;
 
+import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.cucumblan.props.ExcludeConfiguration;
 import io.virtualan.idaithalam.core.domain.AvailableParam;
 import io.virtualan.idaithalam.core.domain.Item;
@@ -26,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -222,7 +224,14 @@ public class FeatureGenerationHelper {
     item.setAvailableParams(availableParams);
     item.setUrl(object.optString("url"));
     extractedOutput(object, item, path);
+    item.setStdType(getStandardType(availableParams));
     return item;
+  }
+
+  private static String getStandardType(List<AvailableParam> availableParams) {
+    Optional<AvailableParam> availableParam = availableParams.stream().filter( x -> "VirtualanStdType".equalsIgnoreCase(x.getKey())).findAny();
+    if(availableParam.isPresent()) return availableParam.get().getValue();
+    return null;
   }
 
 
@@ -253,7 +262,7 @@ public class FeatureGenerationHelper {
     item.setOutput(object.optString("output"));
     if (item.getOutput() != null && !"".equalsIgnoreCase(item.getOutput())
         && "XML".equalsIgnoreCase(object.optString("contentType"))) {
-      if(item.getInput().length() > 700){
+      if( !ApplicationConfiguration.getInline() && item.getInput().length() > 700){
         String fileName = object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]",  "-")+"_response.xml";
         createFile(item.getOutput(), path + "/"+ fileName);
         item.setOutputFile(fileName);
@@ -293,7 +302,7 @@ public class FeatureGenerationHelper {
     item.setInput(object.optString("input"));
     if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())
       && "XML".equalsIgnoreCase(object.optString("contentType"))) {
-      if(item.getInput().length() > 700){
+      if(!ApplicationConfiguration.getInline() && item.getInput().length() > 700){
         String fileName =  object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]",  "-")+"_request.xml";
          createFile(item.getInput(), path + "/"+ fileName);
         item.setInputFile(fileName);

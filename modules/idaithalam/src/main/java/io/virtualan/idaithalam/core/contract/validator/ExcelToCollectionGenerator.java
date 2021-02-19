@@ -47,7 +47,9 @@ public class ExcelToCollectionGenerator {
 
         String line;
         while((line = reader.readLine()) != null) {
-          sb.append(line);
+          if(!line.trim().equalsIgnoreCase("")) {
+            sb.append(line).append("\n");
+          }
         }
       } finally {
         is.close();
@@ -123,7 +125,7 @@ public class ExcelToCollectionGenerator {
     }
   }
 
-  private static InputStream getInputStream(String filePath)
+  public static InputStream getInputStream(String filePath)
       throws FileNotFoundException {
     InputStream stream  = null;
     File file = new File(filePath);
@@ -139,7 +141,7 @@ public class ExcelToCollectionGenerator {
     return stream;
   }
 
-  private static String getFileAsString(String filePath)
+  public static String getFileAsString(String filePath)
       throws IOException {
     InputStream stream  = null;
     File file = new File(filePath);

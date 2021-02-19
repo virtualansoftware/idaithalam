@@ -172,7 +172,9 @@ public class FeatureFileGenerator {
 
                 String line;
                 while((line = reader.readLine()) != null) {
-                    sb.append(line);
+                    if(!line.trim().equalsIgnoreCase("")) {
+                        sb.append(line).append("\n");
+                    }
                 }
             } finally {
                 is.close();

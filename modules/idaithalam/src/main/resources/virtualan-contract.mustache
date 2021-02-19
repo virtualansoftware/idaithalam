@@ -58,6 +58,18 @@ Feature: {{feature}} - API Contract validation status
       {{/hasInputJsonMap}}
       When a user {{action}} {{contentType}} in {{url}} resource on {{resource}}
       Then Verify the status code is {{httpStatusCode}}
+      {{#stdType}}
+      {{#outputFile}}
+      And Verify-standard {{stdType}} all {{{outputFile}}} file {{url}} api includes following in the response
+      {{/outputFile}}
+      {{#hasOutputInline}}
+      And Verify-standard {{stdType}} all inline {{url}} api includes following in the response
+      {{#outputInline}}
+        | {{{.}}} |
+      {{/outputInline}}
+      {{/hasOutputInline}}
+      {{/stdType}}
+      {{^stdType}}
       {{#outputFile}}
       And Verify api response XML File {{{outputFile}}} includes in the response
       {{/outputFile}}
@@ -67,7 +79,7 @@ Feature: {{feature}} - API Contract validation status
         | {{{.}}} |
       {{/outputInline}}
       {{/hasOutputInline}}
-        {{#stdOutput}}
+      {{#stdOutput}}
       And Verify api response with {{stdOutput}} includes in the response
       {{/stdOutput}}
       {{#hasOutputJsonMap}}
@@ -76,4 +88,5 @@ Feature: {{feature}} - API Contract validation status
         | {{{key}}}                 |  {{{value}}}                          |
       {{/outputJsonMap}}
       {{/hasOutputJsonMap}}
-     {{/items}}
+      {{/stdType}}
+{{/items}}
