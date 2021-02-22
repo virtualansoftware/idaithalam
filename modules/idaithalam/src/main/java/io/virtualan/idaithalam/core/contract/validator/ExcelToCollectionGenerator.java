@@ -146,7 +146,7 @@ public class ExcelToCollectionGenerator {
     }
   }
 
-  private static InputStream getInputStream(String basePath, String fileNameWithSubCategory)
+  public static InputStream getInputStream(String basePath, String fileNameWithSubCategory)
       throws FileNotFoundException {
     InputStream stream = null;
     String filePath = basePath + File.separator + fileNameWithSubCategory;
@@ -174,7 +174,7 @@ public class ExcelToCollectionGenerator {
     return stream;
   }
 
-  private static String getFileAsString(String basePath, String fileNameWithSubCategory)
+  public static String getFileAsString(String basePath, String fileNameWithSubCategory)
       throws IOException {
     InputStream stream = null;
     String filePath = basePath + File.separator + fileNameWithSubCategory;

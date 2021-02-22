@@ -19,9 +19,7 @@
 
 package io.virtualan.cucumblan.standard;
 
-import io.virtualan.cucumblan.props.util.HelperUtil;
 import io.virtualan.idaithalam.core.contract.validator.ExcelToCollectionGenerator;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Arrays;
@@ -143,7 +141,7 @@ public class EDI270And271Parser implements StandardProcessing {
 
   public static void main(String[] args) throws IOException {
 
-    new EDI270And271Parser().getXMLValue(ExcelToCollectionGenerator.getFileAsString("D:\\Elan\\virtualan-software-ws\\idaithalam\\excel-idaithalam\\idaithalam\\samples\\idaithalam-excel-apitesting\\src\\test\\resources\\output.xml"));
+    new EDI270And271Parser().getXMLValue(ExcelToCollectionGenerator.getFileAsString("\"D:\\\\Elan\\\\virtualan-software-ws\\\\idaithalam\\\\excel-idaithalam\\\\idaithalam\\\\samples\\\\idaithalam-excel-apitesting\\\\src\\\\test\\\\resources","output.xml"));
   }
     private String getXMLValue(String xml) {
       String response =  null;
