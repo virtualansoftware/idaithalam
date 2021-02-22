@@ -1,6 +1,5 @@
 package io.virtualan.idaithalam.core.contract.validator;
 
-import io.virtualan.cucumblan.props.util.HelperUtil;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,8 +45,8 @@ public class ExcelToCollectionGenerator {
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 
         String line;
-        while((line = reader.readLine()) != null) {
-          if(!line.trim().equalsIgnoreCase("")) {
+        while ((line = reader.readLine()) != null) {
+          if (!line.trim().equalsIgnoreCase("")) {
             sb.append(line).append("\n");
           }
         }
@@ -61,7 +60,6 @@ public class ExcelToCollectionGenerator {
     }
   }
 
-
   /**
    * Create collection.
    *
@@ -74,7 +72,26 @@ public class ExcelToCollectionGenerator {
       String excelFilePath,
       String generatedPath)
       throws IOException {
-    InputStream stream =  getInputStream(excelFilePath);
+    createCollection(null, generatedTestCaseList,
+        excelFilePath,
+        generatedPath);
+
+  }
+
+  /**
+   * Create collection.
+   *
+   * @param basePath              the base path
+   * @param generatedTestCaseList the generated test case list
+   * @param excelFilePath         the excel file path
+   * @param generatedPath         the generated path
+   * @throws IOException the io exception
+   */
+  public static void createCollection(String basePath, List<String> generatedTestCaseList,
+      String excelFilePath,
+      String generatedPath)
+      throws IOException {
+    InputStream stream = getInputStream(basePath, excelFilePath);
     try {
       if (stream != null) {
         Workbook workbook = new XSSFWorkbook(stream);
@@ -105,7 +122,8 @@ public class ExcelToCollectionGenerator {
           }
           if (rowCount > 0 && (generatedTestCaseList == null || generatedTestCaseList
               .contains(dataMap.get("TestCaseName")))) {
-            buildVirtualanCollection(generatedPath, rowCount, cucumblanMap, excludeResponseMap,
+            buildVirtualanCollection(basePath, generatedPath, rowCount, cucumblanMap,
+                excludeResponseMap,
                 virtualanArray,
                 dataMap);
           }
@@ -117,42 +135,69 @@ public class ExcelToCollectionGenerator {
         }
         workbook.close();
         stream.close();
-      }else {
-        log.error("Unable to create collection for the given excel file " +excelFilePath +" <<< ");
+      } else {
+        log.error(
+            "Unable to create collection for the given excel file " + excelFilePath + " <<< ");
       }
-    }catch (Exception e){
-      log.error("Unable to create collection for the given excel file " +excelFilePath +" >>> "+e.getMessage());
+    } catch (Exception e) {
+      log.error(
+          "Unable to create collection for the given excel file " + excelFilePath + " >>> " + e
+              .getMessage());
     }
   }
 
-  public static InputStream getInputStream(String filePath)
+  private static InputStream getInputStream(String basePath, String fileNameWithSubCategory)
       throws FileNotFoundException {
-    InputStream stream  = null;
+    InputStream stream = null;
+    String filePath = basePath + File.separator + fileNameWithSubCategory;
     File file = new File(filePath);
-    if(file.exists()){
+    File fileSub = new File(fileNameWithSubCategory);
+    if (file.exists()) {
       stream = new FileInputStream(file);
+    } else if (fileSub.exists()) {
+      stream = new FileInputStream(fileSub);
     }
     if (stream == null) {
       stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath);
+      if (stream == null) {
+        stream = Thread.currentThread().getContextClassLoader()
+            .getResourceAsStream(fileNameWithSubCategory);
+      }
     }
     if (stream == null) {
       stream = ExcelToCollectionGenerator.class.getClassLoader().getResourceAsStream(filePath);
+      if (stream == null) {
+        stream = ExcelToCollectionGenerator.class.getClassLoader()
+            .getResourceAsStream(fileNameWithSubCategory);
+      }
     }
     return stream;
   }
 
-  public static String getFileAsString(String filePath)
+  private static String getFileAsString(String basePath, String fileNameWithSubCategory)
       throws IOException {
-    InputStream stream  = null;
+    InputStream stream = null;
+    String filePath = basePath + File.separator + fileNameWithSubCategory;
     File file = new File(filePath);
-    if(file.exists()){
+    File fileSub = new File(fileNameWithSubCategory);
+    if (file.exists()) {
       stream = new FileInputStream(file);
+    } else if (fileSub.exists()) {
+      stream = new FileInputStream(fileSub);
     }
     if (stream == null) {
       stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath);
+      if (stream == null) {
+        stream = Thread.currentThread().getContextClassLoader()
+            .getResourceAsStream(fileNameWithSubCategory);
+      }
     }
     if (stream == null) {
       stream = ExcelToCollectionGenerator.class.getClassLoader().getResourceAsStream(filePath);
+      if (stream == null) {
+        stream = ExcelToCollectionGenerator.class.getClassLoader()
+            .getResourceAsStream(fileNameWithSubCategory);
+      }
     }
     return convertStreamToString(stream);
   }
@@ -166,7 +211,7 @@ public class ExcelToCollectionGenerator {
     return cucumblanMap;
   }
 
-  private static void buildVirtualanCollection(String generatedPath, int rowCount,
+  private static void buildVirtualanCollection(String basePath, String generatedPath, int rowCount,
       Map<String, String> cucumblanMap, Map<String, String> excludeResponseMap,
       JSONArray virtualanArray, Map<String, String> dataMap) throws MalformedURLException {
     JSONObject virtualanObj = new JSONObject();
@@ -187,8 +232,8 @@ public class ExcelToCollectionGenerator {
     } else {
       log.error("URL IS MANDATORY!!! " + dataMap.get("TestCaseNameDesc"));
     }
-    buildObject(dataMap, virtualanObj, "RequestFile", "input");
-    buildObject(dataMap, virtualanObj, "ResponseFile", "output");
+    buildObject(basePath, dataMap, virtualanObj, "RequestFile", "input");
+    buildObject(basePath, dataMap, virtualanObj, "ResponseFile", "output");
     builHttpStausCode(dataMap, virtualanObj);
     if (paramsArray.length() > 0) {
       virtualanObj.put("availableParams", paramsArray);
@@ -208,20 +253,21 @@ public class ExcelToCollectionGenerator {
     }
   }
 
-  private static void buildObject(Map<String, String> dataMap, JSONObject virtualanObj,
+  private static void buildObject(String basePath, Map<String, String> dataMap,
+      JSONObject virtualanObj,
       String requestFile, String input) {
     try {
       if (dataMap.get(requestFile) != null) {
-      String body = null;
-        body = getFileAsString(dataMap.get(requestFile));
-      if (body != null) {
-        virtualanObj.put(input, body);
-      } else {
-        log.warn("Unable to load "+requestFile+" file > " + dataMap.get(requestFile));
+        String body = null;
+        body = getFileAsString(basePath, dataMap.get(requestFile));
+        if (body != null) {
+          virtualanObj.put(input, body);
+        } else {
+          log.warn("Unable to load " + requestFile + " file > " + dataMap.get(requestFile));
+        }
       }
-    }
     } catch (IOException e) {
-      log.warn("Unable to load "+requestFile+" file > " + dataMap.get(requestFile));
+      log.warn("Unable to load " + requestFile + " file > " + dataMap.get(requestFile));
     }
   }
 
@@ -281,10 +327,10 @@ public class ExcelToCollectionGenerator {
       FileOutputStream outputStrem = new FileOutputStream(
           path + File.separator + fileName);
       //Storing the properties file
-      props.store(outputStrem, "This is a "+fileName+" properties file");
-      log.info(fileName+" Properties file created......");
+      props.store(outputStrem, "This is a " + fileName + " properties file");
+      log.info(fileName + " Properties file created......");
     } catch (IOException e) {
-      log.warn(" Unable to generate "+fileName+" properties  " + e.getMessage());
+      log.warn(" Unable to generate " + fileName + " properties  " + e.getMessage());
     }
   }
 
