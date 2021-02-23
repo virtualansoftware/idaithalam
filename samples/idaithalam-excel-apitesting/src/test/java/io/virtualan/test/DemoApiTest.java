@@ -25,6 +25,7 @@ public class DemoApiTest {
             List<String> list = new ArrayList<>();
             list.add("PetPost");
             ExcelToCollectionGenerator.createCollection(list, "virtualan_collection_pet.xlsx", System.getProperty("user.dir") +"/target/classes/");
+            ApplicationConfiguration.setProperty("standard-package", "io.virtualan");
             ApplicationConfiguration.setProperty("data-inline", "false");
             status = IdaithalamExecutor.validateContract("Pet API EXCEL based api testing", System.getProperty("user.dir") +"/target/classes/");
             System.out.println(status);
