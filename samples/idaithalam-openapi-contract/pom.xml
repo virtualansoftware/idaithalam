@@ -8,8 +8,8 @@
 	<name>idaithalam-opeapi-contract</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<properties>
-		<cucumblan.version>1.0.5</cucumblan.version>
-                <idaithalam.version>1.0.15-SNAPSHOT</idaithalam.version>
+		<cucumblan.version>1.0.8</cucumblan.version>
+		<idaithalam.version>1.0.15</idaithalam.version>
 		<java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>

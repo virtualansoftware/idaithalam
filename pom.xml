@@ -9,7 +9,7 @@
   <artifactId>idaithalam-project</artifactId>
   <packaging>pom</packaging>
   <name>idaithalam-project</name>
-  <version>1.0.15-SNAPSHOT</version>
+  <version>1.0.16-SNAPSHOT</version>
   <url>https://virtualan.io</url>
   <scm>
     <connection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git</connection>
