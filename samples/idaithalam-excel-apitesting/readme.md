@@ -13,3 +13,6 @@
 
 ## Example Project.
 [idaithalam-excel-apitesting](https://github.com/virtualansoftware/idaithalam/tree/master/samples/idaithalam-excel-apitesting)
+
+## Example Genrated reports:
+
