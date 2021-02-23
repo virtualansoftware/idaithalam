@@ -1,4 +1,6 @@
+# Idaithalam Excel support
 
+#### Create the Excel in the following format
 
 |TestCaseName|TestCaseNameDesc|URL|ContentType|RequestFile|RequestProcessingType|ResponseFile|ResponseProcessingType|HTTPAction|ExcludeField|HttpStatusCode|
 | -----------|:--------------:|-----:| -----:| -----:| -----:| -----:| -----:| -----:| -----:| -----:|
