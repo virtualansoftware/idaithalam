@@ -204,7 +204,17 @@ public class IdaithalamExecutor {
         Thread.currentThread().setContextClassLoader(cl);
     }
 
+    /**
+     * The type Execution classloader.
+     */
     static class ExecutionClassloader extends URLClassLoader {
+
+        /**
+         * Instantiates a new Execution classloader.
+         *
+         * @param urls        the urls
+         * @param classLoader the class loader
+         */
         ExecutionClassloader(URL[] urls, ClassLoader classLoader) {
             super(urls, classLoader);
         }
