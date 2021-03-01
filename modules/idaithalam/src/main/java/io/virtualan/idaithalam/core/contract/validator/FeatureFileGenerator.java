@@ -57,6 +57,7 @@ public class FeatureFileGenerator {
     public static List<List<Item>> generateFeatureFile(String path)
         throws UnableToProcessException, IOException {
         List<List<Item>> items = new ArrayList<>();
+        ApplicationConfiguration.reload();
         String contractFileName = ApplicationConfiguration.getProperty("virtualan.data.load");
         String contractFileType = ApplicationConfiguration.getProperty("virtualan.data.type");
         JSONArray jsonArray = null;
