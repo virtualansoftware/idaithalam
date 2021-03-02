@@ -6,22 +6,21 @@ import io.virtualan.idaithalam.core.contract.validator.ExcelToCollectionGenerato
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
+import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 public class APITestWithExcelAsRunManager {
 
     @BeforeClass
-    public static  void testBeforeClass(){
+    public void testBeforeClass(){
         System.out.println("----------------------------------------");
         System.out.println("--- Start Test -------");
         System.out.println("------------------------------------------");
     }
 
     @AfterClass
-    public static  void testAfterClass(){
+    public  void testAfterClass(){
         System.out.println("------------------------------------------");
         System.out.println("---- END Test : ------");
         System.out.println("-------------------------------------------");
@@ -29,7 +28,7 @@ public class APITestWithExcelAsRunManager {
 
 
     @Test
-    public void executeTest(){
+    public void executeTestClass(){
         int status =0 ;
         try {
             int count =0;
@@ -50,6 +49,10 @@ public class APITestWithExcelAsRunManager {
             status = IdaithalamExecutor
                 .validateContract("Pet  1 API EXCEL based api testing", System.getProperty("user.dir") +"/target/"+count);
             System.out.println(status);
+            if(status != 0) {
+                Assert.assertTrue(false);
+            }
+            Assert.assertTrue   (true);
             list.clear();
             count++;
             f  = new File(System.getProperty("user.dir") +"/target/"+count);
