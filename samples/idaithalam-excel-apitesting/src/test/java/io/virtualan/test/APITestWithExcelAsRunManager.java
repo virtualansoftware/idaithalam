@@ -1,16 +1,35 @@
 package io.virtualan.test;
 
-import io.virtualan.cucumblan.props.ApplicationConfiguration;
+
 import io.virtualan.idaithalam.contract.IdaithalamExecutor;
 import io.virtualan.idaithalam.core.contract.validator.ExcelToCollectionGenerator;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;;
-import org.junit.Assert;;
+import java.util.List;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
-public class DemoApiTest {
+
+public class APITestWithExcelAsRunManager {
+
+    @BeforeClass
+    public static  void testBeforeClass(){
+        System.out.println("----------------------------------------");
+        System.out.println("--- Start Test -------");
+        System.out.println("------------------------------------------");
+    }
+
+    @AfterClass
+    public static  void testAfterClass(){
+        System.out.println("------------------------------------------");
+        System.out.println("---- END Test : ------");
+        System.out.println("-------------------------------------------");
+    }
+
+
     @Test
-    public void validateContract()  {
+    public void executeTest(){
         int status =0 ;
         try {
             int count =0;
@@ -22,12 +41,14 @@ public class DemoApiTest {
             count++;
             File f  = new File(System.getProperty("user.dir") +"/target/"+count);
             if(!f.exists())
-               f.mkdir();
+                f.mkdir();
             //pass the spreadsheet that you want to pass to the user
-            ExcelToCollectionGenerator.createCollection(list, "virtualan_collection_pet.xlsx", System.getProperty("user.dir") +"/target/"+count);
+            ExcelToCollectionGenerator
+                .createCollection(list, "virtualan_collection_pet.xlsx", System.getProperty("user.dir") +"/target/"+count);
 
             //Generate feature and summary page html report for the selected testcase from the excel
-            status = IdaithalamExecutor.validateContract("Pet  1 API EXCEL based api testing", System.getProperty("user.dir") +"/target/"+count);
+            status = IdaithalamExecutor
+                .validateContract("Pet  1 API EXCEL based api testing", System.getProperty("user.dir") +"/target/"+count);
             System.out.println(status);
             list.clear();
             count++;
@@ -51,4 +72,6 @@ public class DemoApiTest {
         }
 
     }
+
+
 }
