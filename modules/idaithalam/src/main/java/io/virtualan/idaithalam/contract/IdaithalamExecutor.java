@@ -159,18 +159,10 @@ public class IdaithalamExecutor {
         List<String> jsonFiles = new ArrayList<>();
         jsonFiles.add(path+"/cucumber.json");
         String buildNumber = index;
-        String projectName = feature + " - API Contract Testing";
+        String projectName = feature + " - Testing";
         Configuration configuration = new Configuration(reportOutputDirectory, projectName);
-        // optional configuration - check javadoc for details
-        //configuration.addPresentationModes(PresentationMode.RUN_WITH_JENKINS);
-        // do not make scenario failed when step has status SKIPPED
         configuration.setNotFailingStatuses(Collections.singleton(Status.SKIPPED));
         configuration.setBuildNumber(buildNumber);
-        // additional metadata presented on main page
-//        configuration.addClassifications("Platform", "Windows");
-//        configuration.addClassifications("Browser", "Firefox");
-//        configuration.addClassifications("Branch", "release/1.0");
-        // optionally specify qualifiers for each of the report json files
         configuration.addPresentationModes(PresentationMode.PARALLEL_TESTING);
         configuration.setQualifier("cucumber-report-1", "First report");
         configuration.setQualifier("cucumber-report-2", "Second report");
