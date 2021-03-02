@@ -3,17 +3,17 @@
   <groupId>io.virtualan</groupId>
   <artifactId>idaithalam</artifactId>
   <packaging>jar</packaging>
-  <name>idaithalam-contract-testing</name>
+  <name>idaithalam-platform-testing</name>
   <version>1.1.2-SNAPSHOT</version>
   <properties>
-    <cucumblan.version>1.0.9</cucumblan.version>
+    <cucumblan.version>1.1.0</cucumblan.version>
     <java.version>1.8</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
   </properties>
   <description>
-    API testing can be automated using VIRTUALAN or POSTMAN collection
-    and can be utilized for API contract testing.
+    API testing can be automated using Excel,  POSTMAN collection and VIRTUALAN
+     can be utilized for API NoCode testing.
     - Utilized for API testing.
     - Utilized Contract testing.
     - Utilized Production Checkout.
