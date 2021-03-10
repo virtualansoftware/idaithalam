@@ -94,6 +94,17 @@ public class Item {
      * The Path params.
      */
     List<AvailableParam> pathParams;
+
+    /**
+     * The Path params.
+     */
+    List<AvailableParam> createParams;
+
+    /**
+     * The Path params.
+     */
+    List<AvailableParam> storageParams;
+
     /**
      * The Query params.
      */
@@ -114,6 +125,14 @@ public class Item {
      * The Has header params.
      */
     boolean hasHeaderParams;
+    /**
+     * The Has header params.
+     */
+    boolean hasStorageParams;
+    /**
+     * The Has header params.
+     */
+    boolean hasCreateParams;
     /**
      * The Is put.
      */
@@ -694,6 +713,10 @@ public class Item {
             hasQueryParams = queryParams != null && !queryParams.isEmpty();
             headerParams = stringListMap.get("HEADER_PARAM");
             hasHeaderParams = headerParams != null && !headerParams.isEmpty();
+            storageParams  = stringListMap.get("STORAGE_PARAM");
+            hasStorageParams = storageParams != null && !storageParams.isEmpty();
+            createParams  = stringListMap.get("ADDIFY_PARAM");
+            hasCreateParams = createParams != null && !createParams.isEmpty();
         }
     }
 

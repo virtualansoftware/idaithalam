@@ -1,5 +1,6 @@
 package io.virtualan.idaithalam.core.contract.validator;
 
+import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -101,8 +102,8 @@ public class ExcelToCollectionGenerator {
         int rowCount = 0;
         Map<String, String> excludeResponseMap = new HashMap<>();
         Map<String, String> cucumblanMap = getCucumblan();
+        JSONArray virtualanArray = new JSONArray();
         while (iterator.hasNext()) {
-          JSONArray virtualanArray = new JSONArray();
           int count = 0;
           Row nextRow = iterator.next();
           Iterator<Cell> cellIterator = nextRow.cellIterator();
@@ -120,15 +121,21 @@ public class ExcelToCollectionGenerator {
               }
             }
           }
-          if (rowCount > 0 && (generatedTestCaseList == null || generatedTestCaseList
+          if (rowCount > 0 && (generatedTestCaseList == null || generatedTestCaseList.isEmpty() || generatedTestCaseList
               .contains(dataMap.get("TestCaseName")))) {
-            buildVirtualanCollection(basePath, generatedPath, rowCount, cucumblanMap,
+            JSONObject object = buildVirtualanCollection(basePath, generatedPath, rowCount, cucumblanMap,
                 excludeResponseMap,
-                virtualanArray,
                 dataMap);
+            virtualanArray.put(object);
           }
           rowCount++;
         }
+        if (IdaithalamConfiguration.isWorkFlow()) {
+          createIdaithalamProcessingFile(generatedPath, rowCount, cucumblanMap, virtualanArray,
+              "WORKFLOW",
+              "WORKFLOW");
+        }
+        log.info(virtualanArray.toString());
         createPrpos(generatedPath, cucumblanMap, "cucumblan.properties");
         if (!excludeResponseMap.isEmpty()) {
           createPrpos(generatedPath, excludeResponseMap, "exclude-response.properties");
@@ -227,16 +234,19 @@ public class ExcelToCollectionGenerator {
     return cucumblanMap;
   }
 
-  private static void buildVirtualanCollection(String basePath, String generatedPath, int rowCount,
+  private static JSONObject buildVirtualanCollection(String basePath, String generatedPath,
+      int rowCount,
       Map<String, String> cucumblanMap, Map<String, String> excludeResponseMap,
-      JSONArray virtualanArray, Map<String, String> dataMap) throws MalformedURLException {
+      Map<String, String> dataMap) throws MalformedURLException {
     JSONObject virtualanObj = new JSONObject();
     JSONArray paramsArray = new JSONArray();
     virtualanObj.put("contentType", getContentType(dataMap.get("ContentType")));
-    buildHeaderParam("contentType", dataMap.get("ContentType"), paramsArray);
-    createProcessingType(dataMap, paramsArray, "RequestProcessingType");
-    createProcessingType(dataMap, paramsArray, "ResponseProcessingType");
+    buildParam("contentType", dataMap.get("ContentType"), paramsArray, "HEADER_PARAM");
+    createProcessingType(dataMap, paramsArray, "RequestProcessingType", "HEADER_PARAM");
+    createProcessingType(dataMap, paramsArray, "ResponseProcessingType", "HEADER_PARAM");
     virtualanObj.put("scenario", dataMap.get("TestCaseNameDesc"));
+    createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
+    createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
     if (dataMap.get("HTTPAction") != null) {
       virtualanObj.put("method",
           dataMap.get("HTTPAction").toUpperCase());
@@ -255,10 +265,15 @@ public class ExcelToCollectionGenerator {
       virtualanObj.put("availableParams", paramsArray);
     }
 
-    virtualanArray.put(virtualanObj);
-    createIdaithalamProcessingFile(generatedPath, rowCount, cucumblanMap, virtualanArray, dataMap,
-        virtualanObj);
-    log.info(virtualanArray.toString());
+    if (!IdaithalamConfiguration.isWorkFlow()) {
+      JSONArray virtualanArray = new JSONArray();
+      virtualanArray.put(virtualanObj);
+      createIdaithalamProcessingFile(generatedPath, rowCount, cucumblanMap, virtualanArray, dataMap.get("TestCaseName"),
+          virtualanObj.get("scenario") != null ? virtualanObj.get("scenario").toString()
+              : "Not defined");
+      log.info(virtualanArray.toString());
+    }
+    return virtualanObj;
   }
 
   private static void builHttpStausCode(Map<String, String> dataMap, JSONObject virtualanObj) {
@@ -288,26 +303,43 @@ public class ExcelToCollectionGenerator {
   }
 
   private static void createProcessingType(Map<String, String> dataMap,
-      JSONArray paramsArray, String requestProcessingType) {
+      JSONArray paramsArray, String requestProcessingType, String param) {
     if (dataMap.get(requestProcessingType) != null) {
-      String[] processType = dataMap.get(requestProcessingType).split("=");
-      if (processType.length == 2) {
-        buildHeaderParam(processType[0], processType[1], paramsArray);
+      String[] processTypes = dataMap.get(requestProcessingType).split(";");
+      for(String keyValue : processTypes) {
+        String[] processType = keyValue.split("=");
+        if (processType.length == 2) {
+          buildParam(processType[0], processType[1], paramsArray, param);
+        }
       }
     }
   }
 
+  private static JSONObject createStoreProcessingType(Map<String, String> dataMap,
+      JSONArray paramsArray, String requestProcessingType) {
+    JSONObject virtualanObjParam = new JSONObject();
+    if (dataMap.get(requestProcessingType) != null) {
+      String[] processType = dataMap.get(requestProcessingType).split(";");
+      for( String store : processType) {
+        virtualanObjParam.put(store.split("=")[0], store.split("=")[1]);
+      }
+      return  virtualanObjParam;
+    }
+    return null;
+  }
+
+
   private static void createIdaithalamProcessingFile(String generatedPath, int rowCount,
-      Map<String, String> cucumblanMap, JSONArray virtualanArray, Map<String, String> dataMap,
-      JSONObject virtualanObj) {
+      Map<String, String> cucumblanMap, JSONArray virtualanArray, String  testcaseName,
+      String scenario) {
     String fileCreated = generateExcelJson(generatedPath, virtualanArray,
-        "Virtualan_" + dataMap.get("TestCaseName") + "_" + rowCount);
+        "Virtualan_" + testcaseName + "_" + rowCount);
     if (fileCreated != null) {
       String filesCreated = cucumblanMap.get("virtualan.data.load");
       cucumblanMap.put("virtualan.data.load", filesCreated + fileCreated + ";");
       String headings = cucumblanMap.get("virtualan.data.heading");
       cucumblanMap
-          .put("virtualan.data.heading", headings + virtualanObj.get("scenario") + ";");
+          .put("virtualan.data.heading", headings + scenario + ";");
     }
   }
 
@@ -366,11 +398,11 @@ public class ExcelToCollectionGenerator {
     return fileCreated;
   }
 
-  private static void buildHeaderParam(String key, String value, JSONArray paramsArray) {
+  private static void buildParam(String key, String value, JSONArray paramsArray, String param) {
     JSONObject virtualanObjParam = new JSONObject();
     virtualanObjParam.put("key", key);
     virtualanObjParam.put("value", value);
-    virtualanObjParam.put("parameterType", "HEADER_PARAM");
+    virtualanObjParam.put("parameterType", param);
     paramsArray.put(virtualanObjParam);
   }
 
