@@ -14,3 +14,5 @@
 # Maven
 log/
 target/
+/samples/idaithalam-excel-apitesting/conf/feature/virtualan-contract.0.feature
+/samples/idaithalam-excel-apitesting/conf/feature/virtualan-contract.1.feature

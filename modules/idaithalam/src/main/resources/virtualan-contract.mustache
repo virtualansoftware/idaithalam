@@ -15,6 +15,11 @@ Feature: {{feature}} - API Contract validation status
       {{#okta}}
       And Bearer auth with [AccessToken] token
       {{/okta}}
+      {{#hasCreateParams}}
+      {{#createParams}}
+      And Add the {{{value}}} value of the key as {{{key}}}
+      {{/createParams}}
+      {{/hasCreateParams}}
       {{#hasPathParams}}
       And add request with given path params
       {{#pathParams}}
@@ -89,4 +94,9 @@ Feature: {{feature}} - API Contract validation status
       {{/outputJsonMap}}
       {{/hasOutputJsonMap}}
       {{/stdType}}
+      {{#hasStorageParams}}
+      {{#storageParams}}
+      And Store the {{{value}}} value of the key as {{{key}}}
+      {{/storageParams}}
+      {{/hasStorageParams}}
 {{/items}}

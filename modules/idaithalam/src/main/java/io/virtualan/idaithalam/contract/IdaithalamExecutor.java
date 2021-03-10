@@ -24,6 +24,7 @@ import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.contract.validator.FeatureFileGenerator;
 import io.virtualan.idaithalam.core.domain.Item;
+import java.util.UUID;
 import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
 import net.masterthought.cucumber.json.support.Status;
@@ -37,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
+import org.apache.poi.ss.formula.functions.T;
 
 
 /**
@@ -103,12 +105,14 @@ public class IdaithalamExecutor {
         throws UnableToProcessException {
         byte exitStatus;
         try {
+            String fileIndex = UUID.randomUUID().toString();
+            VirtualanClassLoader classLoader = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
             feature = featureHeading;
-            addConfToClasspath(path);
+            addConfToClasspath(classLoader, path);
             generateFeatureFile(path);
             String[] argv = getCucumberOptions(path);
-            exitStatus = Main.run(argv, Thread.currentThread().getContextClassLoader());
-            generateReport(path);
+            exitStatus = Main.run(argv, classLoader);
+            generateReport(path, fileIndex);
         } catch (IOException | UnableToProcessException e) {
             LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
             throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
@@ -129,13 +133,15 @@ public class IdaithalamExecutor {
         throws UnableToProcessException {
         byte exitStatus;
         try {
+            String fileIndex = UUID.randomUUID().toString();
+            VirtualanClassLoader classLoader = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
             feature = featureHeading;
-            addConfToClasspath(path);
-            addConfToClasspath(path + File.separator + runId);
+            addConfToClasspath(classLoader, path);
+            addConfToClasspath( classLoader, path + File.separator + runId);
             generateFeatureFile(path + File.separator + runId);
             String[] argv = getCucumberOptions(path + File.separator + runId);
-            exitStatus = Main.run(argv, Thread.currentThread().getContextClassLoader());
-            generateReport(path + File.separator + runId);
+            exitStatus = Main.run(argv, classLoader);
+            generateReport(path + File.separator + runId, fileIndex);
         } catch (IOException | UnableToProcessException e) {
             LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
             throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
@@ -147,24 +153,16 @@ public class IdaithalamExecutor {
      *  generate cucumber report
      */
 
-    private static void generateReport(String path) {
+    private static void generateReport(String path, String index) {
         path = path == null ? "target" : path;
         File reportOutputDirectory = new File(path);
         List<String> jsonFiles = new ArrayList<>();
         jsonFiles.add(path+"/cucumber.json");
-        String buildNumber = "1";
-        String projectName = feature + " - API Contract Testing";
+        String buildNumber = index;
+        String projectName = feature + " - Testing";
         Configuration configuration = new Configuration(reportOutputDirectory, projectName);
-        // optional configuration - check javadoc for details
-        configuration.addPresentationModes(PresentationMode.RUN_WITH_JENKINS);
-        // do not make scenario failed when step has status SKIPPED
         configuration.setNotFailingStatuses(Collections.singleton(Status.SKIPPED));
         configuration.setBuildNumber(buildNumber);
-        // additional metadata presented on main page
-        configuration.addClassifications("Platform", "Windows");
-        configuration.addClassifications("Browser", "Firefox");
-        configuration.addClassifications("Branch", "release/1.0");
-        // optionally specify qualifiers for each of the report json files
         configuration.addPresentationModes(PresentationMode.PARALLEL_TESTING);
         configuration.setQualifier("cucumber-report-1", "First report");
         configuration.setQualifier("cucumber-report-2", "Second report");
@@ -192,14 +190,37 @@ public class IdaithalamExecutor {
      * @throws MalformedURLException
      */
 
-    private static void addConfToClasspath(String path) throws MalformedURLException {
-        ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
+    private static void addConfToClasspath(VirtualanClassLoader classLoader, String path) throws MalformedURLException {
         path = path == null ? "conf" : path;
-        ClassLoader urlCl = URLClassLoader
-            .newInstance(new URL[]{new File(path).toURI().toURL()}, prevCl);
-        Thread.currentThread().setContextClassLoader(urlCl);
+        ExecutionClassloader cl = new ExecutionClassloader(new URL[] {new File(path).toURI().toURL()}, classLoader);
+        Thread.currentThread().setContextClassLoader(cl);
     }
 
+    /**
+     * The type Execution classloader.
+     */
+    static class ExecutionClassloader extends URLClassLoader {
+
+        /**
+         * Instantiates a new Execution classloader.
+         *
+         * @param urls        the urls
+         * @param classLoader the class loader
+         */
+        ExecutionClassloader(URL[] urls, ClassLoader classLoader) {
+            super(urls, classLoader);
+        }
+
+        @Override
+        public Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
+            return super.loadClass(name, resolve);
+        }
+
+        @Override
+        protected Class<?> findClass(String name) throws ClassNotFoundException {
+            return super.findClass(name);
+        }
+    }
     /**
      * Generate the feature file for the provided collection
      *

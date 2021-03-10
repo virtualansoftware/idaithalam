@@ -6,8 +6,9 @@
 	<name>idaithalam-excel-apitesting</name>
 	<version>1.0.1-SNAPSHOT</version>
 	<properties>
-		<idaithalam.version>1.0.15</idaithalam.version>
-		<java.version>1.8</java.version>
+		<idaithalam.version>1.1.3</idaithalam.version>
+    <testng.ver>7.4.0</testng.ver>
+    <java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
   </properties>
@@ -18,6 +19,11 @@
 			<artifactId>idaithalam</artifactId>
 			<version>${idaithalam.version}</version>
 		</dependency>
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>${testng.ver}</version>
+    </dependency>
 	</dependencies>
 
 </project>

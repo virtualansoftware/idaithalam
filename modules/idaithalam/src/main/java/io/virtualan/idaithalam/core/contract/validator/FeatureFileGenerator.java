@@ -17,6 +17,7 @@
 package io.virtualan.idaithalam.core.contract.validator;
 
 import io.virtualan.cucumblan.props.ApplicationConfiguration;
+import io.virtualan.cucumblan.props.ExcludeConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ConversionType;
 import io.virtualan.idaithalam.core.domain.Item;
@@ -57,6 +58,8 @@ public class FeatureFileGenerator {
     public static List<List<Item>> generateFeatureFile(String path)
         throws UnableToProcessException, IOException {
         List<List<Item>> items = new ArrayList<>();
+        ApplicationConfiguration.reload();
+        ExcludeConfiguration.reload();
         String contractFileName = ApplicationConfiguration.getProperty("virtualan.data.load");
         String contractFileType = ApplicationConfiguration.getProperty("virtualan.data.type");
         JSONArray jsonArray = null;
