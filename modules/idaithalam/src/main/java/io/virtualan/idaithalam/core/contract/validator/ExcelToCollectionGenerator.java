@@ -186,6 +186,10 @@ public class ExcelToCollectionGenerator {
             .getResourceAsStream(fileNameWithSubCategory);
       }
     }
+    if(stream == null) {
+      log.error(" File is missing("+basePath+") : " + fileNameWithSubCategory);
+      System.exit(-1);
+    }
     return stream;
   }
 
@@ -221,6 +225,10 @@ public class ExcelToCollectionGenerator {
         stream = ExcelToCollectionGenerator.class.getClassLoader()
             .getResourceAsStream(fileNameWithSubCategory);
       }
+    }
+    if(stream == null) {
+      log.error(" File is missing("+basePath+") : " + fileNameWithSubCategory);
+      System.exit(-1);
     }
     return convertStreamToString(stream);
   }
