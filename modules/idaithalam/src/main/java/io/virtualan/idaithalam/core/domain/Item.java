@@ -69,6 +69,10 @@ public class Item {
     /**
      * The Std type.
      */
+    String tags;
+    /**
+     * The Std type.
+     */
     String stdType;
     /**
      * The Std input.
@@ -780,5 +784,13 @@ public class Item {
      */
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 }

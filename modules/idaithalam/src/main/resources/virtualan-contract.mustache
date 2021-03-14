@@ -12,6 +12,9 @@ Feature: {{feature}} - API Contract validation status
   {{/okta}}
 {{/items}}
 {{#items}}
+    {{#tags}}
+    {{{tags}}}
+    {{/tags}}
     Scenario: {{scenario}} - {{method}} api call
       Given a user perform a api action
       {{#okta}}

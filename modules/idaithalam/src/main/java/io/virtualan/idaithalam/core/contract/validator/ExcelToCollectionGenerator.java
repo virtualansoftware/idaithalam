@@ -259,9 +259,8 @@ public class ExcelToCollectionGenerator {
     virtualanObj.put("scenario", dataMap.get("TestCaseNameDesc"));
     createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
     createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
-    if(dataMap.get("security") != null) {
-      virtualanObj.put("security", dataMap.get("security"));
-    }
+    getValue("tags", dataMap, virtualanObj);
+    getValue("security", dataMap, virtualanObj);
     if (dataMap.get("HTTPAction") != null) {
       virtualanObj.put("method",
           dataMap.get("HTTPAction").toUpperCase());
@@ -289,6 +288,12 @@ public class ExcelToCollectionGenerator {
       log.info(virtualanArray.toString());
     }
     return virtualanObj;
+  }
+
+  private static void getValue(String key, Map<String, String> dataMap, JSONObject virtualanObj) {
+    if(dataMap.get(key) != null) {
+      virtualanObj.put(key, dataMap.get(key));
+    }
   }
 
   private static void builHttpStausCode(Map<String, String> dataMap, JSONObject virtualanObj) {

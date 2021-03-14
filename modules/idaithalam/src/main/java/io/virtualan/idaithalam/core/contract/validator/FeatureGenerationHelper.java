@@ -215,6 +215,7 @@ public class FeatureGenerationHelper {
   private static Item getItem(JSONObject object, String path) throws IOException {
     Item item = new Item();
     extractedInput(object, item, path);
+    item.setTags(object.optString("tags"));
     item.setHttpStatusCode(object.optString("httpStatusCode"));
     item.setMethod(object.optString("method"));
     item.setAction(object.optString("method").toLowerCase());
