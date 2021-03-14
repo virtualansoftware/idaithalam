@@ -3,7 +3,7 @@ Feature: {{feature}} - API Contract validation status
       Given Provided all the feature level parameters from file
 {{#items}}
   {{#okta}}
-    Scenario: Read the API token
+    Scenario: Read the API token for {{{resource}}}
       Given a user perform a api action
       And basic authentication with [okta_user_id.{{{resource}}}] and [okta_user_password.{{{resource}}}]
       When a user post application/json in api_token resource on okta_token.{{{resource}}}

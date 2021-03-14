@@ -95,61 +95,66 @@ public class ExcelToCollectionGenerator {
     InputStream stream = getInputStream(basePath, excelFilePath);
     try {
       if (stream != null) {
-        Workbook workbook = new XSSFWorkbook(stream);
-        Sheet firstSheet = workbook.getSheetAt(0);
-        JSONArray virtualanArray = new JSONArray();
-        Map<Integer, String> headerMap = new HashMap<>();
-        int rowCount = 0;
         Map<String, String> excludeResponseMap = new HashMap<>();
         Map<String, String> cucumblanMap = getCucumblan();
-        for(Iterator<Row> iterator = firstSheet.iterator(); iterator.hasNext();) {
-          int count = 0;
-          Row nextRow = iterator.next();
-          Iterator<Cell> cellIterator = nextRow.cellIterator();
-          Map<String, String> dataMap = new HashMap<>();
-          while (cellIterator.hasNext()) {
-            Cell cell = cellIterator.next();
-            if (rowCount == 0) {
-              headerMap.put(count++, cell.getStringCellValue());
-            } else {
-              String key = headerMap.get(cell.getColumnIndex());
-              if ("HttpStatusCode".equalsIgnoreCase(key)) {
-                dataMap.put(key, String.valueOf((int) cell.getNumericCellValue()));
+        Workbook workbook = new XSSFWorkbook(stream);
+        for (int sheet =0; sheet < workbook.getNumberOfSheets(); sheet++) {
+          Sheet firstSheet = workbook.getSheetAt(sheet);
+          JSONArray virtualanArray = new JSONArray();
+          Map<Integer, String> headerMap = new HashMap<>();
+          int rowCount = 0;
+          for (Iterator<Row> iterator = firstSheet.iterator(); iterator.hasNext(); ) {
+            int count = 0;
+            Row nextRow = iterator.next();
+            Iterator<Cell> cellIterator = nextRow.cellIterator();
+            Map<String, String> dataMap = new HashMap<>();
+            while (cellIterator.hasNext()) {
+              Cell cell = cellIterator.next();
+              if (rowCount == 0) {
+                headerMap.put(count++, cell.getStringCellValue());
               } else {
-                dataMap.put(key, cell.getStringCellValue());
+                String key = headerMap.get(cell.getColumnIndex());
+                if ("HttpStatusCode".equalsIgnoreCase(key)) {
+                  dataMap.put(key, String.valueOf((int) cell.getNumericCellValue()));
+                } else {
+                  dataMap.put(key, cell.getStringCellValue());
+                }
               }
             }
+            if (rowCount > 0 && (generatedTestCaseList == null || generatedTestCaseList.isEmpty()
+                || generatedTestCaseList
+                .contains(dataMap.get("TestCaseName")))) {
+              JSONObject object = buildVirtualanCollection(basePath, generatedPath, rowCount,
+                  cucumblanMap,
+                  excludeResponseMap,
+                  dataMap);
+              virtualanArray.put(object);
+            }
+            rowCount++;
           }
-          if (rowCount > 0 && (generatedTestCaseList == null || generatedTestCaseList.isEmpty() || generatedTestCaseList
-              .contains(dataMap.get("TestCaseName")))) {
-            JSONObject object = buildVirtualanCollection(basePath, generatedPath, rowCount, cucumblanMap,
-                excludeResponseMap,
-                dataMap);
-            virtualanArray.put(object);
+          if (IdaithalamConfiguration.isWorkFlow()) {
+            createIdaithalamProcessingFile(generatedPath, rowCount, cucumblanMap, virtualanArray,
+                firstSheet.getSheetName() + "_WORKFLOW",
+                "WORKFLOW:" + firstSheet.getSheetName());
           }
-          rowCount++;
+          log.info(virtualanArray.toString());
         }
-        if (IdaithalamConfiguration.isWorkFlow()) {
-          createIdaithalamProcessingFile(generatedPath, rowCount, cucumblanMap, virtualanArray,
-              firstSheet.getSheetName() + "_WORKFLOW",
-              "WORKFLOW:" );
+          createPrpos(generatedPath, cucumblanMap, "cucumblan.properties");
+          if (!excludeResponseMap.isEmpty()) {
+            createPrpos(generatedPath, excludeResponseMap, "exclude-response.properties");
+          }
+          workbook.close();
+          stream.close();
+        } else{
+          log.error(
+              "Unable to create collection for the given excel file " + excelFilePath + " <<< ");
         }
-        log.info(virtualanArray.toString());
-        createPrpos(generatedPath, cucumblanMap, "cucumblan.properties");
-        if (!excludeResponseMap.isEmpty()) {
-          createPrpos(generatedPath, excludeResponseMap, "exclude-response.properties");
-        }
-        workbook.close();
-        stream.close();
-      } else {
-        log.error(
-            "Unable to create collection for the given excel file " + excelFilePath + " <<< ");
-      }
     } catch (Exception e) {
       log.error(
           "Unable to create collection for the given excel file " + excelFilePath + " >>> " + e
               .getMessage());
     }
+
   }
 
   /**
