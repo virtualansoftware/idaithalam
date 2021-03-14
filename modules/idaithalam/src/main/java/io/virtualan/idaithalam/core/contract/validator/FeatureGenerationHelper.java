@@ -219,6 +219,15 @@ public class FeatureGenerationHelper {
     item.setMethod(object.optString("method"));
     item.setAction(object.optString("method").toLowerCase());
     item.setResource(object.optString("resource"));
+    if(object.optString("security") != null && !object.optString("security").isEmpty()){
+      if("okta".equalsIgnoreCase(object.optString("security"))) {
+        item.setOkta(object.optString("security"));
+      }else if("basicAuth".equalsIgnoreCase(object.optString("security"))) {
+        item.setBasicAuth(object.optString("security"));
+      }else {
+        log.warn("Unknown security setup");
+      }
+    }
     extractedScenario(object, item);
     List<AvailableParam> availableParams = getAvailableParamList(object);
     item.setAvailableParams(availableParams);

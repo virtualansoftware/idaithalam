@@ -43,6 +43,14 @@ public class Item {
      */
     String resource;
     /**
+     * The Resource.
+     */
+    String okta;
+    /**
+     * The Resource.
+     */
+    String basicAuth;
+    /**
      * The Method.
      */
     String method;
@@ -188,6 +196,42 @@ public class Item {
      * The Input file xml.
      */
     String inputFile;
+
+    /**
+     * Gets okta.
+     *
+     * @return the okta
+     */
+    public String getOkta() {
+        return okta;
+    }
+
+    /**
+     * Sets okta.
+     *
+     * @param okta the okta
+     */
+    public void setOkta(String okta) {
+        this.okta = okta;
+    }
+
+    /**
+     * Gets basic auth.
+     *
+     * @return the basic auth
+     */
+    public String getBasicAuth() {
+        return basicAuth;
+    }
+
+    /**
+     * Sets basic auth.
+     *
+     * @param basicAuth the basic auth
+     */
+    public void setBasicAuth(String basicAuth) {
+        this.basicAuth = basicAuth;
+    }
 
     /**
      * Gets has output inline.

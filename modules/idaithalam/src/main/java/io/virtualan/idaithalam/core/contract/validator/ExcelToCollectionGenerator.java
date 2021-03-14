@@ -97,13 +97,12 @@ public class ExcelToCollectionGenerator {
       if (stream != null) {
         Workbook workbook = new XSSFWorkbook(stream);
         Sheet firstSheet = workbook.getSheetAt(0);
+        JSONArray virtualanArray = new JSONArray();
         Map<Integer, String> headerMap = new HashMap<>();
-        Iterator<Row> iterator = firstSheet.iterator();
         int rowCount = 0;
         Map<String, String> excludeResponseMap = new HashMap<>();
         Map<String, String> cucumblanMap = getCucumblan();
-        JSONArray virtualanArray = new JSONArray();
-        while (iterator.hasNext()) {
+        for(Iterator<Row> iterator = firstSheet.iterator(); iterator.hasNext();) {
           int count = 0;
           Row nextRow = iterator.next();
           Iterator<Cell> cellIterator = nextRow.cellIterator();
@@ -132,8 +131,8 @@ public class ExcelToCollectionGenerator {
         }
         if (IdaithalamConfiguration.isWorkFlow()) {
           createIdaithalamProcessingFile(generatedPath, rowCount, cucumblanMap, virtualanArray,
-              "WORKFLOW",
-              "WORKFLOW");
+              firstSheet.getSheetName() + "_WORKFLOW",
+              "WORKFLOW:" );
         }
         log.info(virtualanArray.toString());
         createPrpos(generatedPath, cucumblanMap, "cucumblan.properties");
@@ -255,6 +254,9 @@ public class ExcelToCollectionGenerator {
     virtualanObj.put("scenario", dataMap.get("TestCaseNameDesc"));
     createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
     createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
+    if(dataMap.get("security") != null) {
+      virtualanObj.put("security", dataMap.get("security"));
+    }
     if (dataMap.get("HTTPAction") != null) {
       virtualanObj.put("method",
           dataMap.get("HTTPAction").toUpperCase());
@@ -360,6 +362,11 @@ public class ExcelToCollectionGenerator {
     virtualanObj.put("url", aURL.getPath());
     cucumblanMap.put("service.api." + resource,
         aURL.getProtocol() + "://" + aURL.getAuthority());
+    String okta = virtualanObj.optString("security");
+    if (okta != null && !okta.isEmpty() && okta.split("=").length ==2) {
+      cucumblanMap.put("service.api.okta_token." + resource, okta.split("=")[1]);
+      virtualanObj.put("security", "okta");
+    }
     createQueryParam(aURL.getQuery(), paramsArray);
     virtualanObj.put("resource", resource);
     if (dataMap.get("ExcludeField") != null) {
