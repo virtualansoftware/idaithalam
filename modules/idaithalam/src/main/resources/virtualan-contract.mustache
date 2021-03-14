@@ -3,6 +3,7 @@ Feature: {{feature}} - API Contract validation status
       Given Provided all the feature level parameters from file
 {{#items}}
   {{#okta}}
+    @{{{resource}}}
     Scenario: Read the API token for {{{resource}}}
       Given a user perform a api action
       And basic authentication with [okta_user_id.{{{resource}}}] and [okta_user_password.{{{resource}}}]
@@ -13,7 +14,10 @@ Feature: {{feature}} - API Contract validation status
 {{/items}}
 {{#items}}
     {{#tags}}
-    {{{tags}}}
+    {{{tags}}} @{{{resource}}}
+    {{/tags}}
+    {{^tags}}
+    @{{{resource}}}
     {{/tags}}
     Scenario: {{scenario}} - {{method}} api call
       Given a user perform a api action
