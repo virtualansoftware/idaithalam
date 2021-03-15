@@ -1,5 +1,6 @@
 package io.virtualan.idaithalam.core.contract.validator;
 
+import io.cucumber.java.sl.In;
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -95,48 +97,57 @@ public class ExcelToCollectionGenerator {
     InputStream stream = getInputStream(basePath, excelFilePath);
     try {
       if (stream != null) {
-        Workbook workbook = new XSSFWorkbook(stream);
-        Sheet firstSheet = workbook.getSheetAt(0);
-        Map<Integer, String> headerMap = new HashMap<>();
-        Iterator<Row> iterator = firstSheet.iterator();
-        int rowCount = 0;
         Map<String, String> excludeResponseMap = new HashMap<>();
+        Map<String, String> cucumblanEnv = new HashMap<>();
         Map<String, String> cucumblanMap = getCucumblan();
-        JSONArray virtualanArray = new JSONArray();
-        while (iterator.hasNext()) {
-          int count = 0;
-          Row nextRow = iterator.next();
-          Iterator<Cell> cellIterator = nextRow.cellIterator();
-          Map<String, String> dataMap = new HashMap<>();
-          while (cellIterator.hasNext()) {
-            Cell cell = cellIterator.next();
-            if (rowCount == 0) {
-              headerMap.put(count++, cell.getStringCellValue());
-            } else {
-              String key = headerMap.get(cell.getColumnIndex());
-              if ("HttpStatusCode".equalsIgnoreCase(key)) {
-                dataMap.put(key, String.valueOf((int) cell.getNumericCellValue()));
+        Workbook workbook = new XSSFWorkbook(stream);
+        for (int sheet = 0; sheet < workbook.getNumberOfSheets(); sheet++) {
+          Sheet firstSheet = workbook.getSheetAt(sheet);
+          JSONArray virtualanArray = new JSONArray();
+          Map<Integer, String> headerMap = new HashMap<>();
+          int rowCount = 0;
+          for (Iterator<Row> iterator = firstSheet.iterator(); iterator.hasNext(); ) {
+            int count = 0;
+            Row nextRow = iterator.next();
+            Iterator<Cell> cellIterator = nextRow.cellIterator();
+            Map<String, String> dataMap = new HashMap<>();
+            while (cellIterator.hasNext()) {
+              Cell cell = cellIterator.next();
+              if (rowCount == 0) {
+                headerMap.put(count++, cell.getStringCellValue());
               } else {
-                dataMap.put(key, cell.getStringCellValue());
+                String key = headerMap.get(cell.getColumnIndex());
+                if ("HttpStatusCode".equalsIgnoreCase(key)) {
+                  dataMap.put(key, String.valueOf((int) cell.getNumericCellValue()));
+                } else {
+                  dataMap.put(key, cell.getStringCellValue());
+                }
               }
             }
+            if (rowCount > 0 && (generatedTestCaseList == null || generatedTestCaseList.isEmpty()
+                || generatedTestCaseList
+                .contains(dataMap.get("TestCaseName")))) {
+              JSONObject object = buildVirtualanCollection(basePath, generatedPath, rowCount,
+                  cucumblanMap,
+                  excludeResponseMap,
+                  dataMap);
+              virtualanArray.put(object);
+            }
+            rowCount++;
           }
-          if (rowCount > 0 && (generatedTestCaseList == null || generatedTestCaseList.isEmpty() || generatedTestCaseList
-              .contains(dataMap.get("TestCaseName")))) {
-            JSONObject object = buildVirtualanCollection(basePath, generatedPath, rowCount, cucumblanMap,
-                excludeResponseMap,
-                dataMap);
-            virtualanArray.put(object);
+          if (IdaithalamConfiguration.isWorkFlow()) {
+            createIdaithalamProcessingFile(generatedPath, rowCount, cucumblanMap, virtualanArray,
+                firstSheet.getSheetName() + "_WORKFLOW",
+                "WORKFLOW:" + firstSheet.getSheetName());
           }
-          rowCount++;
+          log.info(virtualanArray.toString());
         }
-        if (IdaithalamConfiguration.isWorkFlow()) {
-          createIdaithalamProcessingFile(generatedPath, rowCount, cucumblanMap, virtualanArray,
-              "WORKFLOW",
-              "WORKFLOW");
-        }
-        log.info(virtualanArray.toString());
         createPrpos(generatedPath, cucumblanMap, "cucumblan.properties");
+        InputStream streamEnv = Thread.currentThread().getContextClassLoader()
+            .getResourceAsStream("cucumblan-env.properties");
+        if (streamEnv != null) {
+          createPrpos(generatedPath, streamEnv, "cucumblan-env.properties");
+        }
         if (!excludeResponseMap.isEmpty()) {
           createPrpos(generatedPath, excludeResponseMap, "exclude-response.properties");
         }
@@ -151,6 +162,7 @@ public class ExcelToCollectionGenerator {
           "Unable to create collection for the given excel file " + excelFilePath + " >>> " + e
               .getMessage());
     }
+
   }
 
   /**
@@ -185,6 +197,10 @@ public class ExcelToCollectionGenerator {
         stream = ExcelToCollectionGenerator.class.getClassLoader()
             .getResourceAsStream(fileNameWithSubCategory);
       }
+    }
+    if (stream == null) {
+      log.error(" File is missing(" + basePath + ") : " + fileNameWithSubCategory);
+      System.exit(-1);
     }
     return stream;
   }
@@ -222,6 +238,10 @@ public class ExcelToCollectionGenerator {
             .getResourceAsStream(fileNameWithSubCategory);
       }
     }
+    if (stream == null) {
+      log.error(" File is missing(" + basePath + ") : " + fileNameWithSubCategory);
+      System.exit(-1);
+    }
     return convertStreamToString(stream);
   }
 
@@ -247,6 +267,8 @@ public class ExcelToCollectionGenerator {
     virtualanObj.put("scenario", dataMap.get("TestCaseNameDesc"));
     createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
     createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
+    getValue("tags", dataMap, virtualanObj);
+    getValue("security", dataMap, virtualanObj);
     if (dataMap.get("HTTPAction") != null) {
       virtualanObj.put("method",
           dataMap.get("HTTPAction").toUpperCase());
@@ -268,12 +290,19 @@ public class ExcelToCollectionGenerator {
     if (!IdaithalamConfiguration.isWorkFlow()) {
       JSONArray virtualanArray = new JSONArray();
       virtualanArray.put(virtualanObj);
-      createIdaithalamProcessingFile(generatedPath, rowCount, cucumblanMap, virtualanArray, dataMap.get("TestCaseName"),
+      createIdaithalamProcessingFile(generatedPath, rowCount, cucumblanMap, virtualanArray,
+          dataMap.get("TestCaseName"),
           virtualanObj.get("scenario") != null ? virtualanObj.get("scenario").toString()
               : "Not defined");
       log.info(virtualanArray.toString());
     }
     return virtualanObj;
+  }
+
+  private static void getValue(String key, Map<String, String> dataMap, JSONObject virtualanObj) {
+    if (dataMap.get(key) != null) {
+      virtualanObj.put(key, dataMap.get(key));
+    }
   }
 
   private static void builHttpStausCode(Map<String, String> dataMap, JSONObject virtualanObj) {
@@ -306,7 +335,7 @@ public class ExcelToCollectionGenerator {
       JSONArray paramsArray, String requestProcessingType, String param) {
     if (dataMap.get(requestProcessingType) != null) {
       String[] processTypes = dataMap.get(requestProcessingType).split(";");
-      for(String keyValue : processTypes) {
+      for (String keyValue : processTypes) {
         String[] processType = keyValue.split("=");
         if (processType.length == 2) {
           buildParam(processType[0], processType[1], paramsArray, param);
@@ -320,17 +349,17 @@ public class ExcelToCollectionGenerator {
     JSONObject virtualanObjParam = new JSONObject();
     if (dataMap.get(requestProcessingType) != null) {
       String[] processType = dataMap.get(requestProcessingType).split(";");
-      for( String store : processType) {
+      for (String store : processType) {
         virtualanObjParam.put(store.split("=")[0], store.split("=")[1]);
       }
-      return  virtualanObjParam;
+      return virtualanObjParam;
     }
     return null;
   }
 
 
   private static void createIdaithalamProcessingFile(String generatedPath, int rowCount,
-      Map<String, String> cucumblanMap, JSONArray virtualanArray, String  testcaseName,
+      Map<String, String> cucumblanMap, JSONArray virtualanArray, String testcaseName,
       String scenario) {
     String fileCreated = generateExcelJson(generatedPath, virtualanArray,
         "Virtualan_" + testcaseName + "_" + rowCount);
@@ -352,6 +381,11 @@ public class ExcelToCollectionGenerator {
     virtualanObj.put("url", aURL.getPath());
     cucumblanMap.put("service.api." + resource,
         aURL.getProtocol() + "://" + aURL.getAuthority());
+    String okta = virtualanObj.optString("security");
+    if (okta != null && !okta.isEmpty() && okta.split("=").length == 2) {
+      cucumblanMap.put("service.api.okta_token." + resource, okta.split("=")[1]);
+      virtualanObj.put("security", "okta");
+    }
     createQueryParam(aURL.getQuery(), paramsArray);
     virtualanObj.put("resource", resource);
     if (dataMap.get("ExcludeField") != null) {
@@ -364,6 +398,22 @@ public class ExcelToCollectionGenerator {
       return resource.split("/")[1];
     }
     return "default";
+  }
+
+  private static void createPrpos(String path, InputStream stream, String fileName) {
+    try {
+      Properties props = new Properties();
+      //Populating the properties file
+      props.load(stream);
+      //Instantiating the FileInputStream for output file
+      FileOutputStream outputStrem = new FileOutputStream(
+          path + File.separator + fileName);
+      //Storing the properties file
+      props.store(outputStrem, "This is a " + fileName + " properties file");
+      log.info(fileName + " Properties file created......");
+    } catch (IOException e) {
+      log.warn(" Unable to generate " + fileName + " properties  " + e.getMessage());
+    }
   }
 
   private static void createPrpos(String path, Map<String, String> propsMap, String fileName) {

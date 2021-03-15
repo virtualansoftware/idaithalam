@@ -5,10 +5,9 @@ import java.util.List;
 
 public class FeatureFileMapping {
   public FeatureFileMapping(String feature,
-      List<Item> items, String okta) {
+      List<Item> items) {
     this.feature = feature;
     this.items = items;
-    this.okta = okta;
   }
 
   /**
@@ -19,9 +18,5 @@ public class FeatureFileMapping {
    * The Items.
    */
   List<Item> items;
-  /**
-   * The Okta.
-   */
-  String okta;
 
 }

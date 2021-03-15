@@ -24,21 +24,23 @@ import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.contract.validator.FeatureFileGenerator;
 import io.virtualan.idaithalam.core.domain.Item;
-import java.util.UUID;
-import net.masterthought.cucumber.Configuration;
-import net.masterthought.cucumber.ReportBuilder;
-import net.masterthought.cucumber.json.support.Status;
-import net.masterthought.cucumber.presentation.PresentationMode;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
-import org.apache.poi.ss.formula.functions.T;
+import net.masterthought.cucumber.Configuration;
+import net.masterthought.cucumber.ReportBuilder;
+import net.masterthought.cucumber.json.support.Status;
+import net.masterthought.cucumber.presentation.PresentationMode;
 
 
 /**
@@ -246,7 +248,7 @@ public class IdaithalamExecutor {
             Mustache mustache = mf.compile("virtualan-contract.mustache");
             FileOutputStream outputStream = new FileOutputStream(path+"/feature/virtualan-contract."+i+".feature");
             Writer writer = new OutputStreamWriter(outputStream);
-            mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i),okta)).flush();
+            mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i))).flush();
             writer.close();
         }
     }

@@ -21,7 +21,6 @@ import io.virtualan.cucumblan.props.ExcludeConfiguration;
 import io.virtualan.idaithalam.core.domain.AvailableParam;
 import io.virtualan.idaithalam.core.domain.Item;
 import io.virtualan.mapson.Mapson;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -215,10 +214,20 @@ public class FeatureGenerationHelper {
   private static Item getItem(JSONObject object, String path) throws IOException {
     Item item = new Item();
     extractedInput(object, item, path);
+    item.setTags(object.optString("tags"));
     item.setHttpStatusCode(object.optString("httpStatusCode"));
     item.setMethod(object.optString("method"));
     item.setAction(object.optString("method").toLowerCase());
     item.setResource(object.optString("resource"));
+    if(object.optString("security") != null && !object.optString("security").isEmpty()){
+      if("okta".equalsIgnoreCase(object.optString("security"))) {
+        item.setOkta(object.optString("security"));
+      }else if("basicAuth".equalsIgnoreCase(object.optString("security"))) {
+        item.setBasicAuth(object.optString("security"));
+      }else {
+        log.warn("Unknown security setup");
+      }
+    }
     extractedScenario(object, item);
     List<AvailableParam> availableParams = getAvailableParamList(object);
     item.setAvailableParams(availableParams);

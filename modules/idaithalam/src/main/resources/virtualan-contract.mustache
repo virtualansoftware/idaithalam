@@ -1,20 +1,32 @@
 Feature: {{feature}} - API Contract validation status
     Scenario: Load initial set of data
       Given Provided all the feature level parameters from file
-    {{#okta}}
-    Scenario: Read the API token
-      Given a user perform a api action
-      And basic authentication with [okta_user_id] and [okta_user_password]
-      When a user post application/json in api_token resource on okta_token
-      Then Verify the status code is 200
-      And Store the access_token value of the key as AccessToken
-    {{/okta}}
 {{#items}}
+  {{#okta}}
+    @{{{resource}}}
+    Scenario: Read the API token for {{{resource}}}
+      Given a user perform a api action
+      And basic authentication with [okta_user_id.{{{resource}}}] and [okta_user_password.{{{resource}}}]
+      When a user post application/json in api_token resource on okta_token.{{{resource}}}
+      Then Verify the status code is 200
+      And Store the access_token value of the key as AccessToken.{{{resource}}}
+  {{/okta}}
+{{/items}}
+{{#items}}
+    {{#tags}}
+    {{{tags}}} @{{{resource}}}
+    {{/tags}}
+    {{^tags}}
+    @{{{resource}}}
+    {{/tags}}
     Scenario: {{scenario}} - {{method}} api call
       Given a user perform a api action
       {{#okta}}
-      And Bearer auth with [AccessToken] token
+      And Bearer auth with [AccessToken.{{{resource}}}] token
       {{/okta}}
+      {{#basicAuth}}
+      And basic authentication with [basic_auth_user_id.{{{resource}}}] and [basic_auth_password.{{{resource}}}]
+      {{/basicAuth}}
       {{#hasCreateParams}}
       {{#createParams}}
       And Add the {{{value}}} value of the key as {{{key}}}
