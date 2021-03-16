@@ -37,7 +37,6 @@ import javax.xml.xpath.XPathFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
@@ -62,23 +61,26 @@ public class EDI270And271Parser implements StandardProcessing {
     JSONObject newObject = new JSONObject();
     initialize();
     String code = elementMap.get(contents[0]);
-    if (code == null && contents.length > 1 ) {
+    if (code == null && contents.length > 1) {
       code = elementMap.get(contents[0] + "*" + contents[1]);
     }
-    if (code == null) {
-      newObject.put(contents[0], content.trim());
-    } else {
-      String[] codes = code.split("\\*");
-      JSONObject childObject = new JSONObject();
+    if (contents[0] != null && !contents[0].isEmpty()) {
+      if (code == null) {
+        newObject.put(contents[0], content.trim());
+      } else {
+        String[] codes = code.split("\\*");
+        JSONObject childObject = new JSONObject();
 
-      List<JSONObject> lists = IntStream
-          .range(0, contents.length)
-          .mapToObj(i -> {
-            //System.out.println(codes[i] + " : " + contents[i]);
-            childObject.put(codes[i], contents[i]);
-            return childObject;
-          }).collect(Collectors.toList());
-      newObject.put(contents[0] + "::" + index, childObject);
+        List<JSONObject> lists = IntStream
+            .range(0, contents.length)
+            .filter(i -> !codes[i].isEmpty())
+            .mapToObj(i -> {
+              //System.out.println(codes[i] + " : " + contents[i]);
+              childObject.put(codes[i], contents[i]);
+              return childObject;
+            }).collect(Collectors.toList());
+        newObject.put(contents[0] + "::" + index, childObject);
+      }
     }
     //System.out.println(newObject);
     return newObject;
@@ -123,6 +125,13 @@ public class EDI270And271Parser implements StandardProcessing {
     providerMap.put("UC", "Urgent Care");
   }
 
+  public static void main(String[] args) throws IOException {
+
+    new EDI270And271Parser().getXMLValue(ExcelToCollectionGenerator.getFileAsString(
+        "\"D:\\\\Elan\\\\virtualan-software-ws\\\\idaithalam\\\\excel-idaithalam\\\\idaithalam\\\\samples\\\\idaithalam-excel-apitesting\\\\src\\\\test\\\\resources",
+        "output.xml"));
+  }
+
   @Override
   public String getType() {
     return "EDI-271";
@@ -139,26 +148,23 @@ public class EDI270And271Parser implements StandardProcessing {
     //return getEDI271AsJson(s);
   }
 
-  public static void main(String[] args) throws IOException {
-
-    new EDI270And271Parser().getXMLValue(ExcelToCollectionGenerator.getFileAsString("\"D:\\\\Elan\\\\virtualan-software-ws\\\\idaithalam\\\\excel-idaithalam\\\\idaithalam\\\\samples\\\\idaithalam-excel-apitesting\\\\src\\\\test\\\\resources","output.xml"));
-  }
-    private String getXMLValue(String xml) {
-      String response =  null;
-      DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-      try {
-        InputSource ips = new InputSource(new StringReader(xml));
-        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = builderFactory.newDocumentBuilder();
-        Document xmlDocument = builder.parse(ips);
-        XPath xPath = XPathFactory.newInstance().newXPath();
-        String expression = "//request/text()";
-        NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(xmlDocument, XPathConstants.NODESET);
-        response = nodeList.item(0).getNodeValue();
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-      return  response;
+  private String getXMLValue(String xml) {
+    String response = null;
+    DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+    try {
+      InputSource ips = new InputSource(new StringReader(xml));
+      DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+      DocumentBuilder builder = builderFactory.newDocumentBuilder();
+      Document xmlDocument = builder.parse(ips);
+      XPath xPath = XPathFactory.newInstance().newXPath();
+      String expression = "//request/text()";
+      NodeList nodeList = (NodeList) xPath.compile(expression)
+          .evaluate(xmlDocument, XPathConstants.NODESET);
+      response = nodeList.item(0).getNodeValue();
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+    return response;
+  }
 
 }

@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Body>
+<soap:envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:body>
     <request>
       ISA*00*Authorizat*00*Security I*ZZ*Interchange Sen*ZZ*Interchange Rec*141001*1037*^*00501*000031033*0*T*:~
 
@@ -8,7 +7,7 @@
 
       ST*270*1234*005010X279A1~
 
-      BHT*0022*13*10001234*20161001*1319~
+      BHT*0022*13*10001234*20141001*1319~
 
       HL*1**20*1~
 
@@ -36,5 +35,5 @@
 
       IEA*1*000031033~
     </request>
-  </soap:Body>
-</soap:Envelope>
+  </soap:body>
+</soap:envelope>
