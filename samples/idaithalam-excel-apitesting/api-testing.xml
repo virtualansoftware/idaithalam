@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="End-2-End API automation Suite">
+    <test name="End-2-End API automation Suite">
+        <classes>
+            <class name="io.virtualan.test.APITestWithExcelAsRunManager">
+                <methods>
+                    <include name="executeApiTests_1"/>
+                    <include name="executeApiTests_2"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
