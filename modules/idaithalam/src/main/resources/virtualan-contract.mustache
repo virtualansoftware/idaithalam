@@ -87,6 +87,12 @@ Feature: {{feature}} - API Contract validation status
       {{/hasOutputInline}}
       {{/stdType}}
       {{^stdType}}
+      {{#hasResponseByField}}
+      And Verify across response includes following in the response
+      {{#responseByField}}
+       | {{{key}}}                 |  {{{value}}}                          |
+      {{/responseByField}}
+      {{/hasResponseByField}}
       {{#outputFile}}
       And Verify api response XML File {{{outputFile}}} includes in the response
       {{/outputFile}}

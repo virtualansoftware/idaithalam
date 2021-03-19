@@ -281,7 +281,11 @@ public class ExcelToCollectionGenerator {
       log.error("URL IS MANDATORY!!! " + dataMap.get("TestCaseNameDesc"));
     }
     buildObject(basePath, dataMap, virtualanObj, "RequestFile", "input");
-    buildObject(basePath, dataMap, virtualanObj, "ResponseFile", "output");
+    if(dataMap.get("ResponseByField") !=  null) {
+      virtualanObj.put("outputFields", dataMap.get("ResponseByField"));
+    } else {
+      buildObject(basePath, dataMap, virtualanObj, "ResponseFile", "output");
+    }
     builHttpStausCode(dataMap, virtualanObj);
     if (paramsArray.length() > 0) {
       virtualanObj.put("availableParams", paramsArray);

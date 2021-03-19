@@ -18,6 +18,7 @@ package io.virtualan.idaithalam.core.domain;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -86,6 +87,16 @@ public class Item {
      * The Has input json map.
      */
     boolean hasInputJsonMap;
+
+    /**
+     * The Response by field.
+     */
+    Set<Map.Entry<String, String>> responseByField;
+
+    /**
+     * The Has response by field.
+     */
+    boolean hasResponseByField;
     /**
      * The Has output json map.
      */
@@ -194,7 +205,7 @@ public class Item {
     /**
      * The Input inline xml.
      */
-    String  hasInputInline;
+    String hasInputInline;
 
     /**
      * The Input file xml.
@@ -207,8 +218,8 @@ public class Item {
      * @return the okta
      */
     public String getOkta() {
-        return okta;
-    }
+    return okta;
+  }
 
     /**
      * Sets okta.
@@ -216,8 +227,8 @@ public class Item {
      * @param okta the okta
      */
     public void setOkta(String okta) {
-        this.okta = okta;
-    }
+    this.okta = okta;
+  }
 
     /**
      * Gets basic auth.
@@ -225,8 +236,8 @@ public class Item {
      * @return the basic auth
      */
     public String getBasicAuth() {
-        return basicAuth;
-    }
+    return basicAuth;
+  }
 
     /**
      * Sets basic auth.
@@ -234,8 +245,56 @@ public class Item {
      * @param basicAuth the basic auth
      */
     public void setBasicAuth(String basicAuth) {
-        this.basicAuth = basicAuth;
-    }
+    this.basicAuth = basicAuth;
+  }
+
+    /**
+     * Gets response by field.
+     *
+     * @return the response by field
+     */
+    public Set<Entry<String, String>> getResponseByField() {
+    return responseByField;
+  }
+
+    /**
+     * Sets response by field.
+     *
+     * @param responseByField the response by field
+     */
+    public void setResponseByField(
+      Map<String, String> responseByField) {
+    this.responseByField = responseByField.entrySet();
+  }
+
+    /**
+     * Sets response by field.
+     *
+     * @param responseByField the response by field
+     */
+    public void setResponseByField(
+      Set<Entry<String, String>> responseByField) {
+    this.responseByField = responseByField;
+  }
+
+    /**
+     * Is has response by field boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isHasResponseByField() {
+    return hasResponseByField;
+  }
+
+    /**
+     * Sets has response by field.
+     *
+     * @param hasResponseByField the has response by field
+     */
+    public void setHasResponseByField(boolean hasResponseByField) {
+    this.hasResponseByField = hasResponseByField;
+  }
+
 
     /**
      * Gets has output inline.
@@ -243,8 +302,8 @@ public class Item {
      * @return the has output inline
      */
     public String getHasOutputInline() {
-        return hasOutputInline;
-    }
+    return hasOutputInline;
+  }
 
     /**
      * Sets has output inline.
@@ -252,8 +311,8 @@ public class Item {
      * @param hasOutputInline the has output inline
      */
     public void setHasOutputInline(String hasOutputInline) {
-        this.hasOutputInline = hasOutputInline;
-    }
+    this.hasOutputInline = hasOutputInline;
+  }
 
     /**
      * Gets has input inline.
@@ -261,8 +320,8 @@ public class Item {
      * @return the has input inline
      */
     public String getHasInputInline() {
-        return hasInputInline;
-    }
+    return hasInputInline;
+  }
 
     /**
      * Sets has input inline.
@@ -270,8 +329,8 @@ public class Item {
      * @param hasInputInline the has input inline
      */
     public void setHasInputInline(String hasInputInline) {
-        this.hasInputInline = hasInputInline;
-    }
+    this.hasInputInline = hasInputInline;
+  }
 
 
     /**
@@ -280,8 +339,8 @@ public class Item {
      * @return the std type
      */
     public String getStdType() {
-        return stdType;
-    }
+    return stdType;
+  }
 
     /**
      * Sets std type.
@@ -289,8 +348,8 @@ public class Item {
      * @param stdType the std type
      */
     public void setStdType(String stdType) {
-        this.stdType = stdType;
-    }
+    this.stdType = stdType;
+  }
 
 
     /**
@@ -299,8 +358,8 @@ public class Item {
      * @return the content type
      */
     public String getContentType() {
-        return contentType;
-    }
+    return contentType;
+  }
 
     /**
      * Sets content type.
@@ -308,8 +367,8 @@ public class Item {
      * @param contentType the content type
      */
     public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
+    this.contentType = contentType;
+  }
 
     /**
      * Gets std input.
@@ -317,8 +376,8 @@ public class Item {
      * @return the std input
      */
     public String getStdInput() {
-        return stdInput;
-    }
+    return stdInput;
+  }
 
     /**
      * Sets std input.
@@ -326,8 +385,8 @@ public class Item {
      * @param stdInput the std input
      */
     public void setStdInput(String stdInput) {
-        this.stdInput = stdInput;
-    }
+    this.stdInput = stdInput;
+  }
 
     /**
      * Gets std output.
@@ -335,8 +394,8 @@ public class Item {
      * @return the std output
      */
     public String getStdOutput() {
-        return stdOutput;
-    }
+    return stdOutput;
+  }
 
     /**
      * Sets std output.
@@ -344,8 +403,8 @@ public class Item {
      * @param stdOutput the std output
      */
     public void setStdOutput(String stdOutput) {
-        this.stdOutput = stdOutput;
-    }
+    this.stdOutput = stdOutput;
+  }
 
     /**
      * Gets scenario.
@@ -353,8 +412,8 @@ public class Item {
      * @return the scenario
      */
     public String getScenario() {
-        return scenario;
-    }
+    return scenario;
+  }
 
     /**
      * Sets scenario.
@@ -362,8 +421,8 @@ public class Item {
      * @param scenario the scenario
      */
     public void setScenario(String scenario) {
-        this.scenario = scenario;
-    }
+    this.scenario = scenario;
+  }
 
 
     /**
@@ -372,8 +431,8 @@ public class Item {
      * @param hasPathParams the has path params
      */
     public void setHasPathParams(boolean hasPathParams) {
-        this.hasPathParams = hasPathParams;
-    }
+    this.hasPathParams = hasPathParams;
+  }
 
 
     /**
@@ -382,8 +441,8 @@ public class Item {
      * @param hasQueryParams the has query params
      */
     public void setHasQueryParams(boolean hasQueryParams) {
-        this.hasQueryParams = hasQueryParams;
-    }
+    this.hasQueryParams = hasQueryParams;
+  }
 
     /**
      * Sets has header params.
@@ -391,8 +450,8 @@ public class Item {
      * @param hasHeaderParams the has header params
      */
     public void setHasHeaderParams(boolean hasHeaderParams) {
-        this.hasHeaderParams = hasHeaderParams;
-    }
+    this.hasHeaderParams = hasHeaderParams;
+  }
 
     /**
      * Gets has input json map.
@@ -400,8 +459,8 @@ public class Item {
      * @return the has input json map
      */
     public boolean getHasInputJsonMap() {
-        return hasInputJsonMap;
-    }
+    return hasInputJsonMap;
+  }
 
     /**
      * Sets has input json map.
@@ -409,8 +468,8 @@ public class Item {
      * @param hasInputJsonMap the has input json map
      */
     public void setHasInputJsonMap(boolean hasInputJsonMap) {
-        this.hasInputJsonMap = hasInputJsonMap;
-    }
+    this.hasInputJsonMap = hasInputJsonMap;
+  }
 
     /**
      * Gets has output json map.
@@ -418,8 +477,8 @@ public class Item {
      * @return the has output json map
      */
     public boolean getHasOutputJsonMap() {
-        return hasOutputJsonMap;
-    }
+    return hasOutputJsonMap;
+  }
 
     /**
      * Sets has output json map.
@@ -427,8 +486,8 @@ public class Item {
      * @param hasOutputJsonMap the has output json map
      */
     public void setHasOutputJsonMap(boolean hasOutputJsonMap) {
-        this.hasOutputJsonMap = hasOutputJsonMap;
-    }
+    this.hasOutputJsonMap = hasOutputJsonMap;
+  }
 
     /**
      * Gets input json map.
@@ -436,8 +495,8 @@ public class Item {
      * @return the input json map
      */
     public Set<Map.Entry<String, String>> getInputJsonMap() {
-        return inputJsonMap;
-    }
+    return inputJsonMap;
+  }
 
     /**
      * Sets input json map.
@@ -445,8 +504,8 @@ public class Item {
      * @param inputJsonMap the input json map
      */
     public void setInputJsonMap(Map<String, String> inputJsonMap) {
-        this.inputJsonMap = inputJsonMap.entrySet();
-    }
+    this.inputJsonMap = inputJsonMap.entrySet();
+  }
 
     /**
      * Sets input json map.
@@ -454,9 +513,9 @@ public class Item {
      * @param inputJsonMap the input json map
      */
     public void setInputJsonMap(
-            Set<Map.Entry<String, String>> inputJsonMap) {
-        this.inputJsonMap = inputJsonMap;
-    }
+      Set<Map.Entry<String, String>> inputJsonMap) {
+    this.inputJsonMap = inputJsonMap;
+  }
 
     /**
      * Gets output json map.
@@ -464,8 +523,8 @@ public class Item {
      * @return the output json map
      */
     public Set<Map.Entry<String, String>> getOutputJsonMap() {
-        return outputJsonMap;
-    }
+    return outputJsonMap;
+  }
 
     /**
      * Sets output json map.
@@ -473,8 +532,8 @@ public class Item {
      * @param outputJsonMap the output json map
      */
     public void setOutputJsonMap(Map<String, String> outputJsonMap) {
-        this.outputJsonMap = outputJsonMap.entrySet();
-    }
+    this.outputJsonMap = outputJsonMap.entrySet();
+  }
 
     /**
      * Sets output json map.
@@ -482,9 +541,9 @@ public class Item {
      * @param outputJsonMap the output json map
      */
     public void setOutputJsonMap(
-            Set<Map.Entry<String, String>> outputJsonMap) {
-        this.outputJsonMap = outputJsonMap;
-    }
+      Set<Map.Entry<String, String>> outputJsonMap) {
+    this.outputJsonMap = outputJsonMap;
+  }
 
     /**
      * Gets path params.
@@ -492,8 +551,8 @@ public class Item {
      * @return the path params
      */
     public List<AvailableParam> getPathParams() {
-        return pathParams;
-    }
+    return pathParams;
+  }
 
     /**
      * Sets path params.
@@ -501,9 +560,9 @@ public class Item {
      * @param pathParams the path params
      */
     public void setPathParams(
-            List<AvailableParam> pathParams) {
-        this.pathParams = pathParams;
-    }
+      List<AvailableParam> pathParams) {
+    this.pathParams = pathParams;
+  }
 
     /**
      * Gets query params.
@@ -511,8 +570,8 @@ public class Item {
      * @return the query params
      */
     public List<AvailableParam> getQueryParams() {
-        return queryParams;
-    }
+    return queryParams;
+  }
 
     /**
      * Sets query params.
@@ -520,9 +579,9 @@ public class Item {
      * @param queryParams the query params
      */
     public void setQueryParams(
-            List<AvailableParam> queryParams) {
-        this.queryParams = queryParams;
-    }
+      List<AvailableParam> queryParams) {
+    this.queryParams = queryParams;
+  }
 
     /**
      * Gets header params.
@@ -530,8 +589,8 @@ public class Item {
      * @return the header params
      */
     public List<AvailableParam> getHeaderParams() {
-        return headerParams;
-    }
+    return headerParams;
+  }
 
     /**
      * Sets header params.
@@ -539,9 +598,9 @@ public class Item {
      * @param headerParams the header params
      */
     public void setHeaderParams(
-            List<AvailableParam> headerParams) {
-        this.headerParams = headerParams;
-    }
+      List<AvailableParam> headerParams) {
+    this.headerParams = headerParams;
+  }
 
     /**
      * Gets url.
@@ -549,8 +608,8 @@ public class Item {
      * @return the url
      */
     public String getUrl() {
-        return url;
-    }
+    return url;
+  }
 
     /**
      * Sets url.
@@ -558,8 +617,8 @@ public class Item {
      * @param url the url
      */
     public void setUrl(String url) {
-        this.url = url;
-    }
+    this.url = url;
+  }
 
     /**
      * Gets http status code.
@@ -567,8 +626,8 @@ public class Item {
      * @return the http status code
      */
     public String getHttpStatusCode() {
-        return httpStatusCode;
-    }
+    return httpStatusCode;
+  }
 
     /**
      * Sets http status code.
@@ -576,8 +635,8 @@ public class Item {
      * @param httpStatusCode the http status code
      */
     public void setHttpStatusCode(String httpStatusCode) {
-        this.httpStatusCode = httpStatusCode;
-    }
+    this.httpStatusCode = httpStatusCode;
+  }
 
     /**
      * Gets resource.
@@ -585,8 +644,8 @@ public class Item {
      * @return the resource
      */
     public String getResource() {
-        return resource;
-    }
+    return resource;
+  }
 
     /**
      * Sets resource.
@@ -594,8 +653,8 @@ public class Item {
      * @param resource the resource
      */
     public void setResource(String resource) {
-        this.resource = resource;
-    }
+    this.resource = resource;
+  }
 
     /**
      * Gets method.
@@ -603,8 +662,8 @@ public class Item {
      * @return the method
      */
     public String getMethod() {
-        return method;
-    }
+    return method;
+  }
 
     /**
      * Sets method.
@@ -612,19 +671,19 @@ public class Item {
      * @param method the method
      */
     public void setMethod(String method) {
-        this.method = method;
-        if ("POST".equalsIgnoreCase(method)) {
-            isPost = true;
-        } else if ("GET".equalsIgnoreCase(method)) {
-            isGet = true;
-        } else if ("DELETE".equalsIgnoreCase(method)) {
-            isDelete = true;
-        } else if ("PUT".equalsIgnoreCase(method)) {
-            isPut = true;
-        } else if ("PATCH".equalsIgnoreCase(method)) {
-            isPatch = true;
-        }
+    this.method = method;
+    if ("POST".equalsIgnoreCase(method)) {
+      isPost = true;
+    } else if ("GET".equalsIgnoreCase(method)) {
+      isGet = true;
+    } else if ("DELETE".equalsIgnoreCase(method)) {
+      isDelete = true;
+    } else if ("PUT".equalsIgnoreCase(method)) {
+      isPut = true;
+    } else if ("PATCH".equalsIgnoreCase(method)) {
+      isPatch = true;
     }
+  }
 
     /**
      * Gets output inline xml.
@@ -632,8 +691,8 @@ public class Item {
      * @return the output inline xml
      */
     public List<String> getOutputInline() {
-        return outputInline;
-    }
+    return outputInline;
+  }
 
     /**
      * Sets output inline xml.
@@ -641,8 +700,8 @@ public class Item {
      * @param outputInline the output inline xml
      */
     public void setOutputInline(List<String> outputInline) {
-        this.outputInline = outputInline;
-    }
+    this.outputInline = outputInline;
+  }
 
     /**
      * Gets output file xml.
@@ -650,8 +709,8 @@ public class Item {
      * @return the output file xml
      */
     public String getOutputFile() {
-        return outputFile;
-    }
+    return outputFile;
+  }
 
     /**
      * Sets output file xml.
@@ -659,8 +718,8 @@ public class Item {
      * @param outputFile the output file xml
      */
     public void setOutputFile(String outputFile) {
-        this.outputFile = outputFile;
-    }
+    this.outputFile = outputFile;
+  }
 
     /**
      * Gets input inline xml.
@@ -668,8 +727,8 @@ public class Item {
      * @return the input inline xml
      */
     public List<String> getInputInline() {
-        return inputInline;
-    }
+    return inputInline;
+  }
 
     /**
      * Sets input inline xml.
@@ -677,8 +736,8 @@ public class Item {
      * @param inputInline the input inline xml
      */
     public void setInputInline(List<String> inputInline) {
-        this.inputInline = inputInline;
-    }
+    this.inputInline = inputInline;
+  }
 
     /**
      * Gets input file xml.
@@ -686,8 +745,8 @@ public class Item {
      * @return the input file xml
      */
     public String getInputFile() {
-        return inputFile;
-    }
+    return inputFile;
+  }
 
     /**
      * Sets input file xml.
@@ -695,8 +754,8 @@ public class Item {
      * @param inputFile the input file xml
      */
     public void setInputFile(String inputFile) {
-        this.inputFile = inputFile;
-    }
+    this.inputFile = inputFile;
+  }
 
     /**
      * Gets input.
@@ -704,8 +763,8 @@ public class Item {
      * @return the input
      */
     public String getInput() {
-        return input;
-    }
+    return input;
+  }
 
     /**
      * Sets input.
@@ -713,8 +772,8 @@ public class Item {
      * @param input the input
      */
     public void setInput(String input) {
-        this.input = input;
-    }
+    this.input = input;
+  }
 
     /**
      * Gets output.
@@ -722,8 +781,8 @@ public class Item {
      * @return the output
      */
     public String getOutput() {
-        return output;
-    }
+    return output;
+  }
 
     /**
      * Sets output.
@@ -731,8 +790,8 @@ public class Item {
      * @param output the output
      */
     public void setOutput(String output) {
-        this.output = output;
-    }
+    this.output = output;
+  }
 
     /**
      * Gets available params.
@@ -740,8 +799,8 @@ public class Item {
      * @return the available params
      */
     public List<AvailableParam> getAvailableParams() {
-        return availableParams;
-    }
+    return availableParams;
+  }
 
 
     /**
@@ -750,23 +809,23 @@ public class Item {
      * @param availableParams the available params
      */
     public void setAvailableParams(
-            List<AvailableParam> availableParams) {
-        this.availableParams = availableParams;
-        Map<String, List<AvailableParam>> stringListMap = availableParams.stream()
-                .collect(Collectors.groupingBy(AvailableParam::getParameterType));
-        if (!stringListMap.isEmpty()) {
-            pathParams = stringListMap.get("PATH_PARAM");
-            hasPathParams = pathParams != null && !pathParams.isEmpty();
-            queryParams = stringListMap.get("QUERY_PARAM");
-            hasQueryParams = queryParams != null && !queryParams.isEmpty();
-            headerParams = stringListMap.get("HEADER_PARAM");
-            hasHeaderParams = headerParams != null && !headerParams.isEmpty();
-            storageParams  = stringListMap.get("STORAGE_PARAM");
-            hasStorageParams = storageParams != null && !storageParams.isEmpty();
-            createParams  = stringListMap.get("ADDIFY_PARAM");
-            hasCreateParams = createParams != null && !createParams.isEmpty();
-        }
+      List<AvailableParam> availableParams) {
+    this.availableParams = availableParams;
+    Map<String, List<AvailableParam>> stringListMap = availableParams.stream()
+        .collect(Collectors.groupingBy(AvailableParam::getParameterType));
+    if (!stringListMap.isEmpty()) {
+      pathParams = stringListMap.get("PATH_PARAM");
+      hasPathParams = pathParams != null && !pathParams.isEmpty();
+      queryParams = stringListMap.get("QUERY_PARAM");
+      hasQueryParams = queryParams != null && !queryParams.isEmpty();
+      headerParams = stringListMap.get("HEADER_PARAM");
+      hasHeaderParams = headerParams != null && !headerParams.isEmpty();
+      storageParams = stringListMap.get("STORAGE_PARAM");
+      hasStorageParams = storageParams != null && !storageParams.isEmpty();
+      createParams = stringListMap.get("ADDIFY_PARAM");
+      hasCreateParams = createParams != null && !createParams.isEmpty();
     }
+  }
 
     /**
      * Gets action.
@@ -774,8 +833,8 @@ public class Item {
      * @return the action
      */
     public String getAction() {
-        return action;
-    }
+    return action;
+  }
 
     /**
      * Sets action.
@@ -783,14 +842,24 @@ public class Item {
      * @param action the action
      */
     public void setAction(String action) {
-        this.action = action;
-    }
+    this.action = action;
+  }
 
+    /**
+     * Gets tags.
+     *
+     * @return the tags
+     */
     public String getTags() {
-        return tags;
-    }
+    return tags;
+  }
 
+    /**
+     * Sets tags.
+     *
+     * @param tags the tags
+     */
     public void setTags(String tags) {
-        this.tags = tags;
-    }
+    this.tags = tags;
+  }
 }
