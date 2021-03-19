@@ -31,23 +31,22 @@ public class APITestWithExcelAsRunManager {
     public void executeApiTests_1(){
         int status =0 ;
         try {
-            int count =0;
+            int testcase =1;
             List<String> list = new ArrayList<>();
             //Add the testcaseName that List of testcases to be executed from the excel
             //for the test selected execution
             //list.add("PetPost");
             //list.add("PetGet");  // uncomment and test again see the summary report
-            count++;
-            File f  = new File(System.getProperty("user.dir") +"/target/"+count);
+            File f  = new File(System.getProperty("user.dir") +"/target/"+testcase);
             if(!f.exists())
                 f.mkdir();
             //pass the spreadsheet that you want to pass to the user
             ExcelToCollectionGenerator
-                .createCollection(list, "virtualan_collection_testcase_4.xlsx", System.getProperty("user.dir") +"/target/"+count);
+                .createCollection(list, "virtualan_collection_testcase_4.xlsx", System.getProperty("user.dir") +"/target/"+testcase);
 
             //Generate feature and summary page html report for the selected testcase from the excel
             status = IdaithalamExecutor
-                .validateContract("Pet  1 API EXCEL based api testing", System.getProperty("user.dir") +"/target/"+count);
+                .validateContract("Pet  1 API EXCEL based api testing", System.getProperty("user.dir") +"/target/"+testcase);
             System.out.println(status);
             if(status != 0) {
                 //actual it will fail but it made as pass
@@ -67,22 +66,20 @@ public class APITestWithExcelAsRunManager {
     public void executeApiTests_2(){
         int status =0 ;
         try {
-            int count =0;
+            int testcase = 2;
             List<String> list = new ArrayList<>();
             //Add the testcaseName that List of testcases to be executed from the excel
             //for the test selected execution
             //list.add("PetPost");
             //list.add("PetGet");  // uncomment and test again see the summary report
-            count++;
-            count++;
-            File f  = new File(System.getProperty("user.dir") +"/target/"+count);
+            File f  = new File(System.getProperty("user.dir") +"/target/"+testcase);
             if(!f.exists())
                 f.mkdir();
             list.add("PetGet");  // uncomment and test again see the summary report
             //pass the spreadsheet that you want to pass to the user
-            ExcelToCollectionGenerator.createCollection(list, "virtualan_collection_testcase_0.xlsx", System.getProperty("user.dir") +"/target/"+count);
+            ExcelToCollectionGenerator.createCollection(list, "virtualan_collection_testcase_0.xlsx", System.getProperty("user.dir") +"/target/"+testcase);
             //Generate feature and summary page html report for the selected testcase from the excel
-            status = IdaithalamExecutor.validateContract("Pet 2 API EXCEL based api testing", System.getProperty("user.dir") +"/target/"+count);
+            status = IdaithalamExecutor.validateContract("Pet 2 API EXCEL based api testing", System.getProperty("user.dir") +"/target/"+testcase);
             System.out.println(status);
             if(status != 0) {
                 Assert.assertTrue(false);
@@ -94,6 +91,31 @@ public class APITestWithExcelAsRunManager {
         }
 
     }
+
+
+  @Test
+  public void executeApiTests_3(){
+    int status =0 ;
+    try {
+      int testcase =3;
+      File f  = new File(System.getProperty("user.dir") +"/target/"+testcase);
+      if(!f.exists())
+        f.mkdir();
+      //pass the spreadsheet that you want to pass to the user
+      ExcelToCollectionGenerator.createCollection(null, "virtualan_collection_testcase_5.xlsx", System.getProperty("user.dir") +"/target/"+testcase);
+      //Generate feature and summary page html report for the selected testcase from the excel
+      status = IdaithalamExecutor.validateContract("Scriptlet testcase execution version 5", System.getProperty("user.dir") +"/target/"+testcase);
+      System.out.println(status);
+      if(status != 0) {
+        Assert.assertTrue(false);
+      }
+      Assert.assertTrue   (true);
+    }catch (Exception e){
+      System.out.println(e.getMessage());
+      Assert.assertTrue(false);
+    }
+
+  }
 
 
 }

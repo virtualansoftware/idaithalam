@@ -4,7 +4,7 @@
   <artifactId>idaithalam</artifactId>
   <packaging>jar</packaging>
   <name>idaithalam-platform-testing</name>
-  <version>1.1.5-SNAPSHOT</version>
+  <version>1.1.7-SNAPSHOT</version>
   <properties>
     <cucumblan.version>1.1.2</cucumblan.version>
     <java.version>1.8</java.version>
@@ -161,29 +161,6 @@
     <groupId>com.fasterxml.jackson.core</groupId>
     <artifactId>jackson-databind</artifactId>
     <version>2.11.4</version>
-   </dependency>
-   <dependency>
-    <groupId>io.swagger</groupId>
-    <artifactId>swagger-inflector</artifactId>
-    <version>2.0.3</version>
-    <exclusions>
-       <exclusion>
-	  <groupId>org.apache.commons</groupId>
-	  <artifactId>commons-lang</artifactId>
-	</exclusion>
-	<exclusion>
-	  <groupId>commons-lang</groupId>
-	  <artifactId>commons-lang</artifactId>
-	</exclusion>
-	<exclusion>
-	   <groupId>ch.qos.logback</groupId>
-	   <artifactId>logback-core</artifactId>
-	</exclusion>
-	<exclusion>
-	   <groupId>ch.qos.logback</groupId>
-	   <artifactId>logback-classic</artifactId>
-	</exclusion>
-   </exclusions>
    </dependency>
     <dependency>
        <groupId>org.apache.commons</groupId>

@@ -25,7 +25,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
 import lombok.extern.slf4j.Slf4j;
@@ -219,12 +221,12 @@ public class FeatureGenerationHelper {
     item.setMethod(object.optString("method"));
     item.setAction(object.optString("method").toLowerCase());
     item.setResource(object.optString("resource"));
-    if(object.optString("security") != null && !object.optString("security").isEmpty()){
-      if("okta".equalsIgnoreCase(object.optString("security"))) {
+    if (object.optString("security") != null && !object.optString("security").isEmpty()) {
+      if ("okta".equalsIgnoreCase(object.optString("security"))) {
         item.setOkta(object.optString("security"));
-      }else if("basicAuth".equalsIgnoreCase(object.optString("security"))) {
+      } else if ("basicAuth".equalsIgnoreCase(object.optString("security"))) {
         item.setBasicAuth(object.optString("security"));
-      }else {
+      } else {
         log.warn("Unknown security setup");
       }
     }
@@ -238,8 +240,11 @@ public class FeatureGenerationHelper {
   }
 
   private static String getStandardType(List<AvailableParam> availableParams) {
-    Optional<AvailableParam> availableParam = availableParams.stream().filter( x -> "VirtualanStdType".equalsIgnoreCase(x.getKey())).findAny();
-    if(availableParam.isPresent()) return availableParam.get().getValue();
+    Optional<AvailableParam> availableParam = availableParams.stream()
+        .filter(x -> "VirtualanStdType".equalsIgnoreCase(x.getKey())).findAny();
+    if (availableParam.isPresent()) {
+      return availableParam.get().getValue();
+    }
     return null;
   }
 
@@ -266,40 +271,57 @@ public class FeatureGenerationHelper {
     }
   }
 
-  private static void extractedOutput( JSONObject object, Item item, String path)
+  private static void extractedOutput(JSONObject object, Item item, String path)
       throws IOException {
-    item.setOutput(object.optString("output"));
-    if (item.getOutput() != null && !"".equalsIgnoreCase(item.getOutput())
-        && "XML".equalsIgnoreCase(object.optString("contentType"))) {
-      if( !ApplicationConfiguration.getInline() && item.getInput().length() > 700){
-        String fileName = object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]",  "-")+"_response.xml";
-        createFile(item.getOutput(), path + "/"+ fileName);
-        item.setOutputFile(fileName);
+    if (object.optString("outputFields") != null
+          && !object.optString("outputFields").isEmpty()) {
+      item.setHasResponseByField(true);
+      String[] outputFields =  object.optString("outputFields").split(";");
+      Map<String,String> outputFieldMap =  new HashMap<>();
+      for(String outputJson :  outputFields){
+        if(outputJson.split("=").length ==2) {
+          outputFieldMap.put(outputJson.split("=")[0],outputJson.split("=")[1]);
+        }
+      }
+      if(outputFieldMap.isEmpty()){
+        log.warn("Unable to populate the ResponseByField" + object.optString("outputFields"));
       } else {
-        item.setOutputInline(getStringAsList(item.getOutput()));
-        item.setHasOutputInline(item.getOutput());
+        item.setResponseByField(outputFieldMap);
       }
-    } else if (item.getOutput() != null && !"".equalsIgnoreCase(item.getOutput())) {
-      try {
-        Object jsonObject = getJSON(item.getOutput());
-        if(jsonObject instanceof  JSONArray || jsonObject instanceof  JSONObject) {
-          item.setInputJsonMap(Mapson.buildMAPsonFromJson(item.getInput()));
-          item.setHasInputJsonMap(true);
-          item.setOutputJsonMap(Mapson.buildMAPsonFromJson(item.getOutput()));
-          if (!ExcludeConfiguration.shouldSkip(item.getUrl(), null)) {
-            item.setHasOutputJsonMap(true);
+    } else {
+      item.setOutput(object.optString("output"));
+      if (item.getOutput() != null && object.optString("output").isEmpty()
+          && "XML".equalsIgnoreCase(object.optString("contentType"))) {
+        if (!ApplicationConfiguration.getInline() && item.getInput().length() > 700) {
+          String fileName =
+              object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]", "-") + "_response.xml";
+          createFile(item.getOutput(), path + "/" + fileName);
+          item.setOutputFile(fileName);
+        } else {
+          item.setOutputInline(getStringAsList(item.getOutput()));
+          item.setHasOutputInline(item.getOutput());
+        }
+      } else if (item.getOutput() != null && !"".equalsIgnoreCase(item.getOutput())) {
+        try {
+          Object jsonObject = getJSON(item.getOutput());
+          if (jsonObject instanceof JSONArray || jsonObject instanceof JSONObject) {
+            item.setInputJsonMap(Mapson.buildMAPsonFromJson(item.getInput()));
+            item.setHasInputJsonMap(true);
+            item.setOutputJsonMap(Mapson.buildMAPsonFromJson(item.getOutput()));
+            if (!ExcludeConfiguration.shouldSkip(item.getUrl(), null)) {
+              item.setHasOutputJsonMap(true);
+            }
+          } else {
+            item.setStdOutput(item.getOutput());
           }
-        } else {
-          item.setStdOutput(item.getOutput());
-        }
-      } catch (JSONException e) {
-        if(item.getOutput().contains("{") && item.getOutput().contains("}")) {
-          log.warn(" Check Invalid JSON >> " + item.getOutput());
-        } else {
-          item.setStdOutput(item.getOutput());
+        } catch (JSONException e) {
+          if (item.getOutput().contains("{") && item.getOutput().contains("}")) {
+            log.warn(" Check Invalid JSON >> " + item.getOutput());
+          } else {
+            item.setStdOutput(item.getOutput());
+          }
         }
       }
-
     }
   }
 
@@ -310,10 +332,11 @@ public class FeatureGenerationHelper {
   private static void extractedInput(JSONObject object, Item item, String path) throws IOException {
     item.setInput(object.optString("input"));
     if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())
-      && "XML".equalsIgnoreCase(object.optString("contentType"))) {
-      if(!ApplicationConfiguration.getInline() && item.getInput().length() > 700){
-        String fileName =  object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]",  "-")+"_request.xml";
-         createFile(item.getInput(), path + "/"+ fileName);
+        && "XML".equalsIgnoreCase(object.optString("contentType"))) {
+      if (!ApplicationConfiguration.getInline() && item.getInput().length() > 700) {
+        String fileName =
+            object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]", "-") + "_request.xml";
+        createFile(item.getInput(), path + "/" + fileName);
         item.setInputFile(fileName);
       } else {
         item.setInputInline(getStringAsList(item.getInput()));
@@ -324,14 +347,14 @@ public class FeatureGenerationHelper {
       try {
         JSONTokener jsonTokener = new JSONTokener(item.getInput());
         Object jsonObject = getJSON(item.getInput());
-        if(jsonObject instanceof  JSONArray || jsonObject instanceof  JSONObject) {
+        if (jsonObject instanceof JSONArray || jsonObject instanceof JSONObject) {
           item.setInputJsonMap(Mapson.buildMAPsonFromJson(item.getInput()));
           item.setHasInputJsonMap(true);
         } else {
           item.setStdInput(item.getInput());
         }
       } catch (JSONException e) {
-        if(item.getInput().contains("{") && item.getInput().contains("}")) {
+        if (item.getInput().contains("{") && item.getInput().contains("}")) {
           log.warn(" Check Invalid JSON >> " + item.getInput());
         } else {
           item.setStdInput(item.getInput());
@@ -340,13 +363,13 @@ public class FeatureGenerationHelper {
     }
   }
 
-  private static Object getJSON(String json){
+  private static Object getJSON(String json) {
     try {
       return new JSONObject(json);
-    }catch (JSONException err){
-      try{
+    } catch (JSONException err) {
+      try {
         return new JSONArray(json);
-      }catch (Exception e){
+      } catch (Exception e) {
         return json;
       }
     }
@@ -354,8 +377,8 @@ public class FeatureGenerationHelper {
 
   private static List<String> getStringAsList(String item) {
     String lines[] = item.split("\\n");
-    List<String> lists =  new ArrayList<>();
-    for(String line: lines) {
+    List<String> lists = new ArrayList<>();
+    for (String line : lines) {
       lists.add(line.trim());
     }
     return lists;

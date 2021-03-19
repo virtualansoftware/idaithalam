@@ -1,9 +1,6 @@
 package io.virtualan.idaithalam.core.contract.validator;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import io.swagger.oas.inflector.examples.ExampleBuilder;
-import io.swagger.oas.inflector.examples.models.Example;
-import io.swagger.oas.inflector.processors.JsonNodeExampleSerializer;
 import io.swagger.util.Json;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
@@ -286,13 +283,13 @@ public class OpenApiFeatureFileGenerator {
 
 
     private static String buildJson(Map<String, Schema> definitions, String schema) {
-        Schema model = definitions.get(schema);
-        Example example = ExampleBuilder.fromSchema(model, definitions);
-        SimpleModule simpleModule = new SimpleModule().addSerializer(
-            new JsonNodeExampleSerializer());
-        Json.mapper().registerModule(simpleModule);
-        String jsonExample = Json.pretty(example);
-       log.info(jsonExample);
-        return jsonExample;
+//        Schema model = definitions.get(schema);
+//        Example example = ExampleBuilder.fromSchema(model, definitions);
+//        SimpleModule simpleModule = new SimpleModule().addSerializer(
+//            new JsonNodeExampleSerializer());
+//        Json.mapper().registerModule(simpleModule);
+//        String jsonExample = Json.pretty(example);
+//       log.info(jsonExample);
+        return "";
     }
 }
