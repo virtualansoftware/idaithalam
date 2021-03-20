@@ -14,7 +14,6 @@ import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -82,8 +81,7 @@ public class ExcelToCollectionGenerator {
   private static Map<Integer, String> getHeader(Row nextRow) {
     Map<Integer, String> headers = new HashMap<>();
     int headerIndex = 0;
-    for (Iterator<Cell> iterator = nextRow.iterator(); iterator.hasNext(); ) {
-      Cell cell = iterator.next();
+    for (Cell cell : nextRow) {
       headers.put(headerIndex++, cell.getStringCellValue());
     }
     return headers;
@@ -91,9 +89,7 @@ public class ExcelToCollectionGenerator {
 
   private static Map<String, String> getRow(Row nextRow, Map<Integer, String> headers) {
     Map<String, String> dataMap = new HashMap<>();
-    int headerIndex = 0;
-    for (Iterator<Cell> iterator = nextRow.iterator(); iterator.hasNext(); ) {
-      Cell cell = iterator.next();
+    for (Cell cell : nextRow) {
       String key = headers.get(cell.getColumnIndex());
       if ("HttpStatusCode".equalsIgnoreCase(key)) {
         dataMap.put(key, String.valueOf((int) cell.getNumericCellValue()));
@@ -171,8 +167,7 @@ public class ExcelToCollectionGenerator {
     Map<String, String> row;
     Map<Integer, String> headers = new HashMap<>();
     JSONArray virtualanArray = new JSONArray();
-    for (Iterator<Row> iterator = sheetObject.getFirstSheet().iterator(); iterator.hasNext(); ) {
-      Row nextRow = iterator.next();
+    for (Row nextRow : sheetObject.getFirstSheet()) {
       if (headers.isEmpty()) {
         headers = getHeader(nextRow);
       } else {
@@ -512,7 +507,7 @@ public class ExcelToCollectionGenerator {
     private  Map<String, String> excludeResponseMap;
     private  Map<String, String> cucumblanMap;
 
-    public BuildCollections(String basePath, List<String> generatedTestCaseList,
+    BuildCollections(String basePath, List<String> generatedTestCaseList,
         String generatedPath,
         InputStream stream) {
       this.basePath = basePath;
@@ -521,20 +516,19 @@ public class ExcelToCollectionGenerator {
       this.stream = stream;
     }
 
-    public Map<String, String> getExcludeResponseMap() {
+    Map<String, String> getExcludeResponseMap() {
       return excludeResponseMap;
     }
 
-    public Map<String, String> getCucumblanMap() {
+    Map<String, String> getCucumblanMap() {
       return cucumblanMap;
     }
 
 
-    public BuildCollections createCollection() throws IOException {
+    BuildCollections createCollection() throws IOException {
       excludeResponseMap = new HashMap<>();
       cucumblanMap = getCucumblan();
-      Workbook workbook = new XSSFWorkbook(stream);
-      try {
+      try (Workbook workbook = new XSSFWorkbook(stream)) {
         for (int sheet = 0; sheet < workbook.getNumberOfSheets(); sheet++) {
           Sheet firstSheet = workbook.getSheetAt(sheet);
           SheetObject sheetObject = new SheetObject();
@@ -544,8 +538,6 @@ public class ExcelToCollectionGenerator {
           sheetObject.setFirstSheet(firstSheet);
           createCollections(sheet, firstSheet, sheetObject);
         }
-      }finally {
-        workbook.close();
       }
       return this;
     }
