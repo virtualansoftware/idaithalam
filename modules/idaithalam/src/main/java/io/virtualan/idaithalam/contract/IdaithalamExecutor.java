@@ -22,7 +22,7 @@ import com.github.mustachejava.MustacheFactory;
 import io.cucumber.core.cli.Main;
 import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
-import io.virtualan.idaithalam.core.contract.validator.FeatureFileGenerator;
+import io.virtualan.idaithalam.core.generator.FeatureFileGenerator;
 import io.virtualan.idaithalam.core.domain.Item;
 import java.io.File;
 import java.io.FileOutputStream;

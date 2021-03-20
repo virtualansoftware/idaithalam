@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * The type Application configuration.
+ * The type IdaithalamConfiguration configuration.
  *
  * @author Elan Thangamani
  */

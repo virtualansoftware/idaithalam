@@ -19,7 +19,7 @@
 
 package io.virtualan.cucumblan.standard;
 
-import io.virtualan.idaithalam.core.contract.validator.ExcelToCollectionGenerator;
+import io.virtualan.idaithalam.core.generator.ExcelToCollectionGenerator;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Arrays;
