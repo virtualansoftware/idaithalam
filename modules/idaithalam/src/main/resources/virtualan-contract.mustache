@@ -32,6 +32,12 @@ Feature: {{feature}} - API Contract validation status
       And Add the {{{value}}} value of the key as {{{key}}}
       {{/createParams}}
       {{/hasCreateParams}}
+      {{#hasFormParams}}
+      And add request with {{contentType}} given form params
+      {{#formParams}}
+        | {{{key}}}                   | {{{value}}}                         |
+      {{/formParams}}
+      {{/hasFormParams}}
       {{#hasPathParams}}
       And add request with given path params
       {{#pathParams}}

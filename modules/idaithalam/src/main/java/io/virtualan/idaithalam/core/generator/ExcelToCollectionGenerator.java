@@ -1,6 +1,9 @@
 package io.virtualan.idaithalam.core.generator;
 
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
+import io.virtualan.idaithalam.core.domain.ContentType;
+import io.virtualan.idaithalam.core.domain.CreateFileInfo;
+import io.virtualan.idaithalam.core.domain.SheetObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -263,7 +266,8 @@ public class ExcelToCollectionGenerator {
     return convertStreamToString(stream);
   }
 
-  private static InputStream getInputStream(String fileNameWithSubCategory, InputStream stream,
+  private static InputStream getInputStream(String fileNameWithSubCategory,
+      InputStream stream,
       String filePath) {
     if (stream == null) {
       stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath);
@@ -288,8 +292,9 @@ public class ExcelToCollectionGenerator {
       Map<String, String> dataMap) throws MalformedURLException {
     JSONObject virtualanObj = new JSONObject();
     JSONArray paramsArray = new JSONArray();
-    virtualanObj.put("contentType", getContentType(dataMap.get("ContentType")));
+    virtualanObj.put("contentType", dataMap.get("ContentType"));
     buildParam("contentType", dataMap.get("ContentType"), paramsArray, "HEADER_PARAM");
+    createProcessingType(dataMap, paramsArray, "RequestParams", "FORM_PARAM");
     createProcessingType(dataMap, paramsArray, "RequestProcessingType", "HEADER_PARAM");
     createProcessingType(dataMap, paramsArray, "ResponseProcessingType", "HEADER_PARAM");
     virtualanObj.put("scenarioId", dataMap.get("TestCaseName"));
@@ -475,12 +480,6 @@ public class ExcelToCollectionGenerator {
     }
   }
 
-  private static ContentType getContentType(String contentType) {
-    if (contentType.contains("xml")) {
-      return ContentType.XML;
-    }
-    return ContentType.JSON;
-  }
 
   private static void populateConfigMaps(
       Map<String, String> dataMap, Map<String, String> cucumblanMap,
