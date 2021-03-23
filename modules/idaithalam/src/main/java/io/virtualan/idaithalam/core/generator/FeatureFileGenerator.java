@@ -14,7 +14,7 @@
  *
  */
 
-package io.virtualan.idaithalam.core.contract.validator;
+package io.virtualan.idaithalam.core.generator;
 
 import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.cucumblan.props.ExcludeConfiguration;

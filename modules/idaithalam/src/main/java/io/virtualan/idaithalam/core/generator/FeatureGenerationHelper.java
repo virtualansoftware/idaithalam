@@ -14,11 +14,12 @@
  *
  */
 
-package io.virtualan.idaithalam.core.contract.validator;
+package io.virtualan.idaithalam.core.generator;
 
 import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.cucumblan.props.ExcludeConfiguration;
 import io.virtualan.idaithalam.core.domain.AvailableParam;
+import io.virtualan.idaithalam.core.domain.ContentType;
 import io.virtualan.idaithalam.core.domain.Item;
 import io.virtualan.mapson.Mapson;
 import java.io.IOException;
@@ -330,6 +331,7 @@ public class FeatureGenerationHelper {
   }
 
   private static void extractedInput(JSONObject object, Item item, String path) throws IOException {
+    item.setContentType(object.optString("contentType"));
     item.setInput(object.optString("input"));
     if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())
         && "XML".equalsIgnoreCase(object.optString("contentType"))) {

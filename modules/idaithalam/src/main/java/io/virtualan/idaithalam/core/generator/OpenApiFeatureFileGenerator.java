@@ -1,7 +1,5 @@
-package io.virtualan.idaithalam.core.contract.validator;
+package io.virtualan.idaithalam.core.generator;
 
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import io.swagger.util.Json;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
