@@ -1,7 +1,6 @@
 package io.virtualan.idaithalam.core.generator;
 
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
-import io.virtualan.idaithalam.core.domain.ContentType;
 import io.virtualan.idaithalam.core.domain.CreateFileInfo;
 import io.virtualan.idaithalam.core.domain.SheetObject;
 import java.io.BufferedReader;
@@ -21,7 +20,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.formula.eval.ErrorEval;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -81,28 +84,27 @@ public class ExcelToCollectionGenerator {
 
   }
 
-  private static Map<Integer, String> getHeader(Row nextRow) {
+  private static Map<Integer, String> getHeader(Row nextRow, CellStyle cellStyle) {
     Map<Integer, String> headers = new HashMap<>();
     int headerIndex = 0;
     for (Cell cell : nextRow) {
+      cell.setCellStyle(cellStyle);
       headers.put(headerIndex++, cell.getStringCellValue());
+
     }
     return headers;
   }
 
-  private static Map<String, String> getRow(Row nextRow, Map<Integer, String> headers) {
+  private static Map<String, String> getRow(Row nextRow, Map<Integer, String> headers,
+      CellStyle cellStyle) {
     Map<String, String> dataMap = new HashMap<>();
     for (Cell cell : nextRow) {
+      cell.setCellStyle(cellStyle);
       String key = headers.get(cell.getColumnIndex());
-      if ("HttpStatusCode".equalsIgnoreCase(key)) {
-        dataMap.put(key, String.valueOf((int) cell.getNumericCellValue()));
-      } else {
-        dataMap.put(key, cell.getStringCellValue());
-      }
+      dataMap.put(key, getCellValue(cell));
     }
     return dataMap;
   }
-
 
   /**
    * Create collection.
@@ -148,7 +150,7 @@ public class ExcelToCollectionGenerator {
 
   private static void getAsSingleFile(List<String> generatedTestCaseList, String generatedPath,
       Map<String, String> cucumblanMap, JSONArray virtualanArray) {
-    for (int rowIndex =0 ; rowIndex < virtualanArray.length(); rowIndex++){
+    for (int rowIndex = 0; rowIndex < virtualanArray.length(); rowIndex++) {
       JSONObject object = virtualanArray.getJSONObject(rowIndex);
       if (byEachTestCase(generatedTestCaseList, object)) {
         JSONArray virtualanSingle = new JSONArray();
@@ -157,7 +159,8 @@ public class ExcelToCollectionGenerator {
         createFileInfo.setGeneratedPath(generatedPath);
         createFileInfo.setCucumblanMap(cucumblanMap);
         createFileInfo.setVirtualanArray(virtualanSingle);
-        createFileInfo.setTestcaseName( "Virtualan_" + object.optString("TestCaseName") + "_" + rowIndex);
+        createFileInfo
+            .setTestcaseName("Virtualan_" + object.optString("TestCaseName") + "_" + rowIndex);
         createFileInfo.setScenario(object.optString("scenario"));
         createIdaithalamProcessingFile(createFileInfo);
       }
@@ -170,11 +173,16 @@ public class ExcelToCollectionGenerator {
     Map<String, String> row;
     Map<Integer, String> headers = new HashMap<>();
     JSONArray virtualanArray = new JSONArray();
+    DataFormat fmt = sheetObject.getFirstSheet().getWorkbook().createDataFormat();
+    CellStyle cellStyle = sheetObject.getFirstSheet().getWorkbook().createCellStyle();
+    cellStyle.setDataFormat(
+        fmt.getFormat("@"));
+
     for (Row nextRow : sheetObject.getFirstSheet()) {
       if (headers.isEmpty()) {
-        headers = getHeader(nextRow);
+        headers = getHeader(nextRow, cellStyle);
       } else {
-        row = getRow(nextRow, headers);
+        row = getRow(nextRow, headers, cellStyle);
         JSONObject object = buildVirtualanCollection(sheetObject.getBasePath(),
             row);
         populateConfigMaps(row, sheetObject.getCucumblanMap(), sheetObject.getExcludeResponseMap());
@@ -278,7 +286,6 @@ public class ExcelToCollectionGenerator {
     }
     return stream;
   }
-
 
   private static Map<String, String> getCucumblan() {
     Map<String, String> cucumblanMap = new HashMap<>();
@@ -480,7 +487,6 @@ public class ExcelToCollectionGenerator {
     }
   }
 
-
   private static void populateConfigMaps(
       Map<String, String> dataMap, Map<String, String> cucumblanMap,
       Map<String, String> excludeResponseMap) throws MalformedURLException {
@@ -497,14 +503,29 @@ public class ExcelToCollectionGenerator {
     }
   }
 
+  private static String getCellValue(Cell cell) {
+    if (cell.getCellTypeEnum() != CellType.FORMULA) {
+      switch (cell.getCellTypeEnum()) {
+        case STRING:
+          return cell.getStringCellValue().trim();
+        case BOOLEAN:
+          return String.valueOf(cell.getBooleanCellValue());
+        case NUMERIC:
+          return String.valueOf((int)cell.getNumericCellValue());
+        default:
+          return null;
+      }
+    }
+    return  null;
+  }
   private static class BuildCollections {
 
     private final String basePath;
     private final List<String> generatedTestCaseList;
     private final String generatedPath;
     private final InputStream stream;
-    private  Map<String, String> excludeResponseMap;
-    private  Map<String, String> cucumblanMap;
+    private Map<String, String> excludeResponseMap;
+    private Map<String, String> cucumblanMap;
 
     BuildCollections(String basePath, List<String> generatedTestCaseList,
         String generatedPath,

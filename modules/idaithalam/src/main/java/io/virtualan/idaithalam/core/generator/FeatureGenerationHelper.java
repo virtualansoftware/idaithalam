@@ -134,26 +134,24 @@ public class FeatureGenerationHelper {
   }
 
 
-  private static ContentType getContentType(JSONObject jsonObject) {
+  private static String getContentType(JSONObject jsonObject) {
     JSONArray arrayObject = jsonObject.optJSONArray("header");
     if (arrayObject != null) {
       for (int i = 0; i < arrayObject.length(); i++) {
         JSONObject object = arrayObject.optJSONObject(i);
-        if ("Content-Type".equalsIgnoreCase(object.optString("name")) &&
-            "text/xml".equalsIgnoreCase(object.optString("value"))
-            || (object.optString("value").contains("xml"))) {
-          return ContentType.XML;
+        if ("Content-Type".equalsIgnoreCase(object.optString("name"))) {
+          return object.optString("value");
         }
       }
     }
-    return ContentType.JSON;
+    return "application/json";
   }
 
   private static JSONObject buildVirtualanObject(JSONArray responseArray, int j) {
     JSONObject virtualanObj = new JSONObject();
-    ContentType contentType = getContentType(
+    String contentType = getContentType(
         responseArray.optJSONObject(j).optJSONObject("originalRequest"));
-    virtualanObj.put("contentType", contentType.name());
+    virtualanObj.put("contentType", contentType);
     virtualanObj.put("scenario", responseArray.optJSONObject(j).optString("name"));
     virtualanObj.put("method",
         responseArray.optJSONObject(j).optJSONObject("originalRequest")
@@ -291,9 +289,9 @@ public class FeatureGenerationHelper {
       }
     } else {
       item.setOutput(object.optString("output"));
-      if (item.getOutput() != null && object.optString("output").isEmpty()
-          && "XML".equalsIgnoreCase(object.optString("contentType"))) {
-        if (!ApplicationConfiguration.getInline() && item.getInput().length() > 700) {
+      if (item.getOutput() != null && !object.optString("output").isEmpty()
+          && object.optString("contentType").toLowerCase().contains("xml")) {
+        if (!ApplicationConfiguration.getInline() && item.getOutput().length() > 700) {
           String fileName =
               object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]", "-") + "_response.xml";
           createFile(item.getOutput(), path + "/" + fileName);
@@ -302,7 +300,7 @@ public class FeatureGenerationHelper {
           item.setOutputInline(getStringAsList(item.getOutput()));
           item.setHasOutputInline(item.getOutput());
         }
-      } else if (item.getOutput() != null && !"".equalsIgnoreCase(item.getOutput())) {
+      } else if (item.getOutput() != null && !object.optString("output").isEmpty()) {
         try {
           Object jsonObject = getJSON(item.getOutput());
           if (jsonObject instanceof JSONArray || jsonObject instanceof JSONObject) {
@@ -334,7 +332,7 @@ public class FeatureGenerationHelper {
     item.setContentType(object.optString("contentType"));
     item.setInput(object.optString("input"));
     if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())
-        && "XML".equalsIgnoreCase(object.optString("contentType"))) {
+        && object.optString("contentType").toLowerCase().contains("xml")) {
       if (!ApplicationConfiguration.getInline() && item.getInput().length() > 700) {
         String fileName =
             object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]", "-") + "_request.xml";
