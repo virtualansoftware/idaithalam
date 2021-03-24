@@ -41,6 +41,8 @@ public class APITestWithExcelAsRunManager {
             File f  = new File(System.getProperty("user.dir") +"/target/"+testcase);
             if(!f.exists())
                 f.mkdir();
+          IdaithalamConfiguration.setProperty("workflow","Disabled");
+
             //pass the spreadsheet that you want to pass to the user
             ExcelToCollectionGenerator
                 .createCollection(list, "virtualan_collection_testcase_4.xlsx", System.getProperty("user.dir") +"/target/"+testcase);
@@ -72,7 +74,7 @@ public class APITestWithExcelAsRunManager {
             //Add the testcaseName that List of testcases to be executed from the excel
             //for the test selected execution
             //list.add("PetPost");
-            //list.add("PetGet");  // uncomment and test again see the summary report
+            list.add("PetGet");  // uncomment and test again see the summary report
             IdaithalamConfiguration.setProperty("workflow","Disabled");
             File f  = new File(System.getProperty("user.dir") +"/target/"+testcase);
             if(!f.exists())
@@ -96,30 +98,56 @@ public class APITestWithExcelAsRunManager {
 
 
   @Test
-  public void executeApiTests_3(){
-    int status =0 ;
+  public void executeApiTests_3() {
+    int status = 0;
     try {
-      int testcase =3;
-      File f  = new File(System.getProperty("user.dir") +"/target/"+testcase);
-      if(!f.exists())
+      int testcase = 3;
+      File f = new File(System.getProperty("user.dir") + "/target/" + testcase);
+      if (!f.exists())
         f.mkdir();
       //pass the spreadsheet that you want to pass to the user
-      IdaithalamConfiguration.setProperty("workflow","Enabled");
-      ExcelToCollectionGenerator.createCollection(null, "virtualan_collection_testcase_5.xlsx", System.getProperty("user.dir") +"/target/"+testcase);
+      IdaithalamConfiguration.setProperty("workflow", "Enabled");
+      ExcelToCollectionGenerator.createCollection(null, "virtualan_collection_testcase_5.xlsx",
+          System.getProperty("user.dir") + "/target/" + testcase);
       //Generate feature and summary page html report for the selected testcase from the excel
-      status = IdaithalamExecutor.validateContract("Scriptlet testcase execution version 5", System.getProperty("user.dir") +"/target/"+testcase);
+      status = IdaithalamExecutor.validateContract("Scriptlet testcase execution version 5",
+          System.getProperty("user.dir") + "/target/" + testcase);
       System.out.println(status);
-      if(status != 0) {
+      if (status != 0) {
         Assert.assertTrue(false);
       }
-      Assert.assertTrue   (true);
-    }catch (Exception e){
+      Assert.assertTrue(true);
+    } catch (Exception e) {
       System.out.println(e.getMessage());
       Assert.assertTrue(false);
     }
-
   }
+    @Test
+    public void executeApiTests_7() {
+      int status = 0;
+      try {
+        int testcase = 7;
+        File f = new File(System.getProperty("user.dir") + "/target/" + testcase);
+        if (!f.exists())
+          f.mkdir();
+        //pass the spreadsheet that you want to pass to the user
+        IdaithalamConfiguration.setProperty("workflow", "Disabled");
+        ExcelToCollectionGenerator.createCollection(null, "virtualan_collection_testcase_7.xlsx",
+            System.getProperty("user.dir") + "/target/" + testcase);
+        //Generate feature and summary page html report for the selected testcase from the excel
+        status = IdaithalamExecutor.validateContract("Scriptlet testcase execution version 7",
+            System.getProperty("user.dir") + "/target/" + testcase);
+        System.out.println(status);
+        if (status != 0) {
+          Assert.assertTrue(false);
+        }
+        Assert.assertTrue(true);
+      } catch (Exception e) {
+        System.out.println(e.getMessage());
+        Assert.assertTrue(false);
+      }
 
+    }
 //
 //  @Test
 //  public void executeApiTests_4(){
