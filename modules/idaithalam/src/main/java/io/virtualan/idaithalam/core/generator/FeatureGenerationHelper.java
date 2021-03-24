@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -288,8 +289,15 @@ public class FeatureGenerationHelper {
         item.setResponseByField(outputFieldMap);
       }
     } else {
+      item.setHasOutputFileByPath(!object.optString("outputPaths").isEmpty());
       item.setOutput(object.optString("output"));
-      if (item.getOutput() != null && !object.optString("output").isEmpty()
+      if(item.isHasOutputFileByPath()) {
+        item.setOutputFileByPath(Arrays.asList(object.optString("outputPaths").split(";")));
+        String fileName =
+            object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]", "-") + "_response.txt";
+        createFile(item.getOutput(), path + "/" + fileName);
+        item.setOutputFile(fileName);
+      } else if (item.getOutput() != null && !object.optString("output").isEmpty()
           && object.optString("contentType").toLowerCase().contains("xml")) {
         if (!ApplicationConfiguration.getInline() && item.getOutput().length() > 700) {
           String fileName =

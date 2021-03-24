@@ -20,11 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.formula.eval.ErrorEval;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -84,22 +81,19 @@ public class ExcelToCollectionGenerator {
 
   }
 
-  private static Map<Integer, String> getHeader(Row nextRow, CellStyle cellStyle) {
+  private static Map<Integer, String> getHeader(Row nextRow) {
     Map<Integer, String> headers = new HashMap<>();
     int headerIndex = 0;
     for (Cell cell : nextRow) {
-      cell.setCellStyle(cellStyle);
-      headers.put(headerIndex++, cell.getStringCellValue());
+      headers.put(headerIndex++, getCellValue(cell));
 
     }
     return headers;
   }
 
-  private static Map<String, String> getRow(Row nextRow, Map<Integer, String> headers,
-      CellStyle cellStyle) {
+  private static Map<String, String> getRow(Row nextRow, Map<Integer, String> headers) {
     Map<String, String> dataMap = new HashMap<>();
     for (Cell cell : nextRow) {
-      cell.setCellStyle(cellStyle);
       String key = headers.get(cell.getColumnIndex());
       dataMap.put(key, getCellValue(cell));
     }
@@ -148,7 +142,7 @@ public class ExcelToCollectionGenerator {
 
   }
 
-  private static void getAsSingleFile(List<String> generatedTestCaseList, String generatedPath,
+  private static void getAsSingleFile(int sheet, List<String> generatedTestCaseList, String generatedPath,
       Map<String, String> cucumblanMap, JSONArray virtualanArray) {
     for (int rowIndex = 0; rowIndex < virtualanArray.length(); rowIndex++) {
       JSONObject object = virtualanArray.getJSONObject(rowIndex);
@@ -160,7 +154,7 @@ public class ExcelToCollectionGenerator {
         createFileInfo.setCucumblanMap(cucumblanMap);
         createFileInfo.setVirtualanArray(virtualanSingle);
         createFileInfo
-            .setTestcaseName("Virtualan_" + object.optString("TestCaseName") + "_" + rowIndex);
+            .setTestcaseName("Virtualan_" +sheet+"_"+ object.optString("scenarioId") + "_" + rowIndex);
         createFileInfo.setScenario(object.optString("scenario"));
         createIdaithalamProcessingFile(createFileInfo);
       }
@@ -173,16 +167,11 @@ public class ExcelToCollectionGenerator {
     Map<String, String> row;
     Map<Integer, String> headers = new HashMap<>();
     JSONArray virtualanArray = new JSONArray();
-    DataFormat fmt = sheetObject.getFirstSheet().getWorkbook().createDataFormat();
-    CellStyle cellStyle = sheetObject.getFirstSheet().getWorkbook().createCellStyle();
-    cellStyle.setDataFormat(
-        fmt.getFormat("@"));
-
     for (Row nextRow : sheetObject.getFirstSheet()) {
       if (headers.isEmpty()) {
-        headers = getHeader(nextRow, cellStyle);
+        headers = getHeader(nextRow);
       } else {
-        row = getRow(nextRow, headers, cellStyle);
+        row = getRow(nextRow, headers);
         JSONObject object = buildVirtualanCollection(sheetObject.getBasePath(),
             row);
         populateConfigMaps(row, sheetObject.getCucumblanMap(), sheetObject.getExcludeResponseMap());
@@ -331,6 +320,9 @@ public class ExcelToCollectionGenerator {
     if (dataMap.get("ResponseByField") != null) {
       virtualanObj.put("outputFields", dataMap.get("ResponseByField"));
     } else {
+      if (dataMap.get("IncludesbyPath") != null) {
+        virtualanObj.put("outputPaths", dataMap.get("IncludesbyPath"));
+      }
       virtualanObj.put("output", buildObject(basePath, dataMap.get("ResponseFile")));
     }
     builHttpStausCode(dataMap, virtualanObj);
@@ -571,11 +563,12 @@ public class ExcelToCollectionGenerator {
         createFileInfo.setGeneratedPath(generatedPath);
         createFileInfo.setCucumblanMap(cucumblanMap);
         createFileInfo.setVirtualanArray(virtualanArray);
-        createFileInfo.setTestcaseName(firstSheet.getSheetName() + "_WORKFLOW_" + sheet);
+        createFileInfo.setTestcaseName("Virtualan_"+sheet+"_"+firstSheet.getSheetName().replaceAll(" ","_")
+              + "_WORKFLOW_" + sheet);
         createFileInfo.setScenario("WORKFLOW:" + firstSheet.getSheetName());
         createIdaithalamProcessingFile(createFileInfo);
       } else {
-        getAsSingleFile(generatedTestCaseList, generatedPath, cucumblanMap, virtualanArray);
+        getAsSingleFile(sheet, generatedTestCaseList, generatedPath, cucumblanMap, virtualanArray);
       }
     }
   }

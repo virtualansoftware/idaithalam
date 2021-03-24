@@ -99,9 +99,17 @@ Feature: {{feature}} - API Contract validation status
        | {{{key}}}                 |  {{{value}}}                          |
       {{/responseByField}}
       {{/hasResponseByField}}
+      {{#hasOutputFileByPath}}
+      And Verify {{resource}} response {{contentType}} include byPath {{{outputFile}}} includes in the response
+      {{#outputFileByPath}}
+        | {{{.}}} |
+      {{/outputFileByPath}}
+      {{/hasOutputFileByPath}}
+      {{^hasOutputFileByPath}}
       {{#outputFile}}
       And Verify api response XML File {{{outputFile}}} includes in the response
       {{/outputFile}}
+      {{/hasOutputFileByPath}}
       {{#hasOutputInline}}
       And Verify api response inline includes in the response
       {{#outputInline}}

@@ -89,6 +89,15 @@ public class Item {
   boolean hasInputJsonMap;
 
   /**
+   * The Has output file by path.
+   */
+  boolean hasOutputFileByPath;
+
+  /**
+   * The Output file by path.
+   */
+  List<String> outputFileByPath;
+  /**
    * The Response by field.
    */
   Set<Map.Entry<String, String>> responseByField;
@@ -304,6 +313,42 @@ public class Item {
     this.hasResponseByField = hasResponseByField;
   }
 
+
+  /**
+   * Is has output file by path boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isHasOutputFileByPath() {
+    return hasOutputFileByPath;
+  }
+
+  /**
+   * Sets has output file by path.
+   *
+   * @param hasOutputFileByPath the has output file by path
+   */
+  public void setHasOutputFileByPath(boolean hasOutputFileByPath) {
+    this.hasOutputFileByPath = hasOutputFileByPath;
+  }
+
+  /**
+   * Gets output file by path.
+   *
+   * @return the output file by path
+   */
+  public List<String> getOutputFileByPath() {
+    return outputFileByPath;
+  }
+
+  /**
+   * Sets output file by path.
+   *
+   * @param outputFileByPath the output file by path
+   */
+  public void setOutputFileByPath(List<String> outputFileByPath) {
+    this.outputFileByPath = outputFileByPath;
+  }
 
   /**
    * Gets has output inline.
