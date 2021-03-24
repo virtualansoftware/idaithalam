@@ -56,6 +56,12 @@ Feature: {{feature}} - API Contract validation status
         | {{{key}}}                   | {{{value}}}                         |
       {{/headerParams}}
       {{/hasHeaderParams}}
+      {{#hasCookieParams}}
+      And add request  with given cookie params
+      {{#cookieParams}}
+        | {{{key}}}                   | {{{value}}}                         |
+      {{/cookieParams}}
+      {{/hasCookieParams}}
       {{#inputFile}}
        And add {{{inputFile}}} data file with {{contentType}} given input
       {{/inputFile}}
