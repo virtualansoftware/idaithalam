@@ -161,7 +161,7 @@ public class ExcelToCollectionGenerator {
     }
   }
 
-  private static JSONArray getObjectSheet(
+  private static JSONArray getObjectSheet(List<String> generatedTestCaseList,
       SheetObject sheetObject)
       throws MalformedURLException {
     Map<String, String> row;
@@ -172,10 +172,14 @@ public class ExcelToCollectionGenerator {
         headers = getHeader(nextRow);
       } else {
         row = getRow(nextRow, headers);
-        JSONObject object = buildVirtualanCollection(sheetObject.getBasePath(),
-            row);
-        populateConfigMaps(row, sheetObject.getCucumblanMap(), sheetObject.getExcludeResponseMap());
-        virtualanArray.put(object);
+        if(generatedTestCaseList== null || generatedTestCaseList.isEmpty() ||
+            generatedTestCaseList.contains(row.get("TestCaseName"))) {
+          JSONObject object = buildVirtualanCollection(sheetObject.getBasePath(),
+              row);
+          populateConfigMaps(row, sheetObject.getCucumblanMap(),
+              sheetObject.getExcludeResponseMap());
+          virtualanArray.put(object);
+        }
       }
     }
     return virtualanArray;
@@ -297,6 +301,7 @@ public class ExcelToCollectionGenerator {
     virtualanObj.put("scenario", dataMap.get("TestCaseNameDesc"));
     createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
     createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
+    createProcessingType(dataMap, paramsArray, "CookieVariables", "COOKIE_PARAM");
     getValue("tags", dataMap, virtualanObj);
     getSecurityValue(dataMap, virtualanObj);
     if (dataMap.get("HTTPAction") != null) {
@@ -319,11 +324,11 @@ public class ExcelToCollectionGenerator {
     }
     if (dataMap.get("ResponseByField") != null) {
       virtualanObj.put("outputFields", dataMap.get("ResponseByField"));
-    } else {
-      if (dataMap.get("IncludesbyPath") != null) {
-        virtualanObj.put("outputPaths", dataMap.get("IncludesbyPath"));
-      }
-      virtualanObj.put("output", buildObject(basePath, dataMap.get("ResponseFile")));
+    } else if (dataMap.get("ResponseFile") != null) {
+        if(dataMap.get("IncludesbyPath") != null) {
+          virtualanObj.put("outputPaths", dataMap.get("IncludesbyPath"));
+        }
+        virtualanObj.put("output", buildObject(basePath, dataMap.get("ResponseFile")));
     }
     builHttpStausCode(dataMap, virtualanObj);
     if (paramsArray.length() > 0) {
@@ -548,15 +553,15 @@ public class ExcelToCollectionGenerator {
           sheetObject.setExcludeResponseMap(excludeResponseMap);
           sheetObject.setCucumblanMap(cucumblanMap);
           sheetObject.setFirstSheet(firstSheet);
-          createCollections(sheet, firstSheet, sheetObject);
+          createCollections(generatedTestCaseList, sheet, firstSheet, sheetObject);
         }
       }
       return this;
     }
 
-    private void createCollections(int sheet, Sheet firstSheet, SheetObject sheetObject)
+    private void createCollections(List<String> generatedTestCaseList, int sheet, Sheet firstSheet, SheetObject sheetObject)
         throws MalformedURLException {
-      JSONArray virtualanArray = getObjectSheet(sheetObject);
+      JSONArray virtualanArray = getObjectSheet(generatedTestCaseList, sheetObject);
       log.info(virtualanArray.toString());
       if (IdaithalamConfiguration.isWorkFlow()) {
         CreateFileInfo createFileInfo = new CreateFileInfo();

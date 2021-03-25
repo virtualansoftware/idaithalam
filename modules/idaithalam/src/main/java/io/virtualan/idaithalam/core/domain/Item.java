@@ -143,6 +143,16 @@ public class Item {
   List<AvailableParam> storageParams;
 
   /**
+   * The Cookie params.
+   */
+  List<AvailableParam> cookieParams;
+
+  /**
+   * The Has cookie params.
+   */
+  boolean hasCookieParams;
+
+  /**
    * The Query params.
    */
   List<AvailableParam> queryParams;
@@ -366,6 +376,44 @@ public class Item {
    */
   public void setHasOutputInline(String hasOutputInline) {
     this.hasOutputInline = hasOutputInline;
+  }
+
+
+  /**
+   * Gets create params.
+   *
+   * @return the create params
+   */
+  public List<AvailableParam> getCreateParams() {
+    return createParams;
+  }
+
+  /**
+   * Sets create params.
+   *
+   * @param createParams the create params
+   */
+  public void setCreateParams(
+      List<AvailableParam> createParams) {
+    this.createParams = createParams;
+  }
+
+  /**
+   * Is has cookie params boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isHasCookieParams() {
+    return hasCookieParams;
+  }
+
+  /**
+   * Sets has cookie params.
+   *
+   * @param hasCookieParams the has cookie params
+   */
+  public void setHasCookieParams(boolean hasCookieParams) {
+    this.hasCookieParams = hasCookieParams;
   }
 
   /**
@@ -915,6 +963,8 @@ public class Item {
       hasStorageParams = storageParams != null && !storageParams.isEmpty();
       createParams = stringListMap.get("ADDIFY_PARAM");
       hasCreateParams = createParams != null && !createParams.isEmpty();
+      cookieParams = stringListMap.get("COOKIE_PARAM");
+      hasCookieParams = cookieParams != null && !cookieParams.isEmpty();
     }
   }
 

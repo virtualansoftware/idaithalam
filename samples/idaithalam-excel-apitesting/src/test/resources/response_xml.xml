@@ -2,7 +2,7 @@
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <soap:Body>
     <CelsiusToFahrenheitResponse xmlns="https://www.w3schools.com/xml/">
-      <CelsiusToFahrenheitResult>214</CelsiusToFahrenheitResult>
+      <CelsiusToFahrenheitResult>212</CelsiusToFahrenheitResult>
     </CelsiusToFahrenheitResponse>
   </soap:Body>
 </soap:Envelope>
