@@ -324,11 +324,11 @@ public class ExcelToCollectionGenerator {
     }
     if (dataMap.get("ResponseByField") != null) {
       virtualanObj.put("outputFields", dataMap.get("ResponseByField"));
-    } else {
-      if (dataMap.get("IncludesbyPath") != null) {
-        virtualanObj.put("outputPaths", dataMap.get("IncludesbyPath"));
-      }
-      virtualanObj.put("output", buildObject(basePath, dataMap.get("ResponseFile")));
+    } else if (dataMap.get("ResponseFile") != null) {
+        if(dataMap.get("IncludesbyPath") != null) {
+          virtualanObj.put("outputPaths", dataMap.get("IncludesbyPath"));
+        }
+        virtualanObj.put("output", buildObject(basePath, dataMap.get("ResponseFile")));
     }
     builHttpStausCode(dataMap, virtualanObj);
     if (paramsArray.length() > 0) {

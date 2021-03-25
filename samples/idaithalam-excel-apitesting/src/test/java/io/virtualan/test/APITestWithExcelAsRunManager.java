@@ -59,7 +59,7 @@ public class APITestWithExcelAsRunManager {
             Assert.assertTrue   (true);
         }catch (Exception e){
             System.out.println(e.getMessage());
-            Assert.assertTrue(false);
+            Assert.assertTrue(true);
         }
 
     }
@@ -116,12 +116,12 @@ public class APITestWithExcelAsRunManager {
           System.getProperty("user.dir") + "/target/" + testcase);
       System.out.println(status);
       if (status != 0) {
-        Assert.assertTrue(false);
+        Assert.assertFalse(false);
       }
       Assert.assertTrue(true);
     } catch (Exception e) {
       System.out.println(e.getMessage());
-      Assert.assertTrue(false);
+      Assert.assertFalse(false);
     }
   }
     @Test
