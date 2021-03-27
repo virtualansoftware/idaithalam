@@ -174,11 +174,13 @@ public class ExcelToCollectionGenerator {
         row = getRow(nextRow, headers);
         if(generatedTestCaseList== null || generatedTestCaseList.isEmpty() ||
             generatedTestCaseList.contains(row.get("TestCaseName"))) {
-          JSONObject object = buildVirtualanCollection(sheetObject.getBasePath(),
-              row);
-          populateConfigMaps(row, sheetObject.getCucumblanMap(),
-              sheetObject.getExcludeResponseMap());
-          virtualanArray.put(object);
+          if(row.get("Type") == null || "REST".equalsIgnoreCase(row.get("Type"))) {
+            JSONObject object = buildRESTVirtualanCollection(sheetObject.getBasePath(),
+                row);
+            populateConfigMaps(row, sheetObject.getCucumblanMap(),
+                sheetObject.getExcludeResponseMap());
+            virtualanArray.put(object);
+          }
         }
       }
     }
@@ -288,25 +290,25 @@ public class ExcelToCollectionGenerator {
     return cucumblanMap;
   }
 
-  private static JSONObject buildVirtualanCollection(String basePath,
+  private static JSONObject buildRESTVirtualanCollection(String basePath,
       Map<String, String> dataMap) throws MalformedURLException {
     JSONObject virtualanObj = new JSONObject();
     JSONArray paramsArray = new JSONArray();
     virtualanObj.put("contentType", dataMap.get("ContentType"));
     buildParam("contentType", dataMap.get("ContentType"), paramsArray, "HEADER_PARAM");
-    createProcessingType(dataMap, paramsArray, "RequestParams", "FORM_PARAM");
-    createProcessingType(dataMap, paramsArray, "RequestProcessingType", "HEADER_PARAM");
+    createProcessingType(dataMap, paramsArray, "FormParams", "FORM_PARAM");
+    createProcessingType(dataMap, paramsArray, "RequestHeaders", "HEADER_PARAM");
     createProcessingType(dataMap, paramsArray, "ResponseProcessingType", "HEADER_PARAM");
     virtualanObj.put("scenarioId", dataMap.get("TestCaseName"));
     virtualanObj.put("scenario", dataMap.get("TestCaseNameDesc"));
     createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
     createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
     createProcessingType(dataMap, paramsArray, "CookieVariables", "COOKIE_PARAM");
-    getValue("tags", dataMap, virtualanObj);
+    getValue("Tags", dataMap, virtualanObj);
     getSecurityValue(dataMap, virtualanObj);
-    if (dataMap.get("HTTPAction") != null) {
+    if (dataMap.get("Action") != null) {
       virtualanObj.put("method",
-          dataMap.get("HTTPAction").toUpperCase());
+          dataMap.get("Action").toUpperCase());
     } else {
       log.error("HTTP ACTION IS MANDATORY!!! " + dataMap.get("TestCaseNameDesc"));
     }
@@ -322,11 +324,11 @@ public class ExcelToCollectionGenerator {
     if (dataMap.get("RequestFile") != null) {
       virtualanObj.put("input", buildObject(basePath, dataMap.get("RequestFile")));
     }
-    if (dataMap.get("ResponseByField") != null) {
-      virtualanObj.put("outputFields", dataMap.get("ResponseByField"));
+    if (dataMap.get("ResponseByFields") != null) {
+      virtualanObj.put("outputFields", dataMap.get("ResponseByFields"));
     } else if (dataMap.get("ResponseFile") != null) {
-        if(dataMap.get("IncludesbyPath") != null) {
-          virtualanObj.put("outputPaths", dataMap.get("IncludesbyPath"));
+        if(dataMap.get("IncludesByPath") != null) {
+          virtualanObj.put("outputPaths", dataMap.get("IncludesByPath"));
         }
         virtualanObj.put("output", buildObject(basePath, dataMap.get("ResponseFile")));
     }
@@ -338,10 +340,10 @@ public class ExcelToCollectionGenerator {
   }
 
   private static void getSecurityValue(Map<String, String> dataMap, JSONObject virtualanObj) {
-    String security = dataMap.get("security");
+    String security = dataMap.get("Security");
     if (security != null && !security.isEmpty() && security.split("=").length == 2) {
       virtualanObj.put("security", "okta");
-    } else if (dataMap.get("security") != null) {
+    } else if (dataMap.get("Security") != null) {
       virtualanObj.put("security", security);
     }
 
@@ -354,8 +356,8 @@ public class ExcelToCollectionGenerator {
   }
 
   private static void builHttpStausCode(Map<String, String> dataMap, JSONObject virtualanObj) {
-    if (dataMap.get("HttpStatusCode") != null) {
-      virtualanObj.put("httpStatusCode", dataMap.get("HttpStatusCode"));
+    if (dataMap.get("StatusCode") != null) {
+      virtualanObj.put("httpStatusCode", dataMap.get("StatusCode"));
     } else {
       log.error("HTTP STATUS CODE IS MANDATORY!!! " + dataMap.get("TestCaseNameDesc"));
     }
@@ -491,12 +493,12 @@ public class ExcelToCollectionGenerator {
     String resource = getResource(aURL.getPath());
     cucumblanMap.put("service.api." + resource,
         aURL.getProtocol() + "://" + aURL.getAuthority());
-    String okta = dataMap.get("security");
+    String okta = dataMap.get("Security");
     if (okta != null && !okta.isEmpty() && okta.split("=").length == 2) {
       cucumblanMap.put("service.api.okta_token." + resource, okta.split("=")[1]);
     }
-    if (dataMap.get("ExcludeField") != null) {
-      excludeResponseMap.put(aURL.getPath(), dataMap.get("ExcludeField"));
+    if (dataMap.get("ExcludeFields") != null) {
+      excludeResponseMap.put(aURL.getPath(), dataMap.get("ExcludeFields"));
     }
   }
 
