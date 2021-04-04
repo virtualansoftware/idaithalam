@@ -83,6 +83,22 @@ public class Item {
    * The Std output.
    */
   String stdOutput;
+
+  /**
+   * The Std output.
+   */
+  String skipScenario;
+
+  /**
+   * The Output file by path.
+   */
+  List<String> multiRun;
+
+  /**
+   * is Multi run enabled.
+   */
+  boolean hasMultiRun;
+
   /**
    * The Has input json map.
    */
@@ -151,6 +167,24 @@ public class Item {
    * The Has cookie params.
    */
   boolean hasCookieParams;
+
+  /**
+   * Gets multi run.
+   *
+   * @return the multi run
+   */
+  public List<String> getMultiRun() {
+    return multiRun;
+  }
+
+  /**
+   * Sets multi run.
+   *
+   * @param multiRun the multi run
+   */
+  public void setMultiRun(List<String> multiRun) {
+    this.multiRun = multiRun;
+  }
 
   /**
    * The Query params.
@@ -239,6 +273,24 @@ public class Item {
    * The Input file xml.
    */
   String inputFile;
+
+  /**
+   * Is has multi run boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isHasMultiRun() {
+    return hasMultiRun;
+  }
+
+  /**
+   * Sets has multi run.
+   *
+   * @param hasMultiRun the has multi run
+   */
+  public void setHasMultiRun(boolean hasMultiRun) {
+    this.hasMultiRun = hasMultiRun;
+  }
 
   /**
    * Gets okta.
@@ -497,6 +549,24 @@ public class Item {
    */
   public String getStdOutput() {
     return stdOutput;
+  }
+
+  /**
+   * Gets skip scenario.
+   *
+   * @return the skip scenario
+   */
+  public String getSkipScenario() {
+    return skipScenario;
+  }
+
+  /**
+   * Sets skip scenario.
+   *
+   * @param skipScenario the skip scenario
+   */
+  public void setSkipScenario(String skipScenario) {
+    this.skipScenario = skipScenario;
   }
 
   /**

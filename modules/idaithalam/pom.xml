@@ -4,9 +4,9 @@
   <artifactId>idaithalam</artifactId>
   <packaging>jar</packaging>
   <name>idaithalam-platform-testing</name>
-  <version>1.2.0-SNAPSHOT</version>
+  <version>1.2.2-SNAPSHOT</version>
   <properties>
-    <cucumblan.version>1.1.6</cucumblan.version>
+    <cucumblan-api.version>1.1.8</cucumblan-api.version>
     <java.version>1.8</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -155,12 +155,12 @@
     <dependency>
       <groupId>io.virtualan</groupId>
       <artifactId>cucumblan-api</artifactId>
-      <version>${cucumblan.version}</version>
+      <version>${cucumblan-api.version}</version>
     </dependency>
    <dependency>
     <groupId>com.fasterxml.jackson.core</groupId>
     <artifactId>jackson-databind</artifactId>
-    <version>2.11.4</version>
+    <version>2.12.2</version>
    </dependency>
     <dependency>
        <groupId>org.apache.commons</groupId>
@@ -170,7 +170,7 @@
     <dependency>
       <groupId>net.masterthought</groupId>
       <artifactId>cucumber-reporting</artifactId>
-      <version>5.3.1</version>
+      <version>5.5.2</version>
     </dependency>
     <dependency>
       <groupId>com.github.spullara.mustache.java</groupId>
