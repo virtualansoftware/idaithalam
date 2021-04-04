@@ -294,6 +294,7 @@ public class ExcelToCollectionGenerator {
       Map<String, String> dataMap) throws MalformedURLException {
     JSONObject virtualanObj = new JSONObject();
     JSONArray paramsArray = new JSONArray();
+    getMultiRunValue( dataMap, virtualanObj, paramsArray);
     virtualanObj.put("contentType", dataMap.get("ContentType"));
     buildParam("contentType", dataMap.get("ContentType"), paramsArray, "HEADER_PARAM");
     createProcessingType(dataMap, paramsArray, "FormParams", "FORM_PARAM");
@@ -305,6 +306,7 @@ public class ExcelToCollectionGenerator {
     createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
     createProcessingType(dataMap, paramsArray, "CookieVariables", "COOKIE_PARAM");
     getValue("Tags", dataMap, virtualanObj);
+    getValue("SkipScenario", dataMap, virtualanObj);
     getSecurityValue(dataMap, virtualanObj);
     if (dataMap.get("Action") != null) {
       virtualanObj.put("method",
@@ -354,6 +356,17 @@ public class ExcelToCollectionGenerator {
       virtualanObj.put(key, dataMap.get(key));
     }
   }
+
+  private static void getMultiRunValue( Map<String, String> dataMap, JSONObject virtualanObj, JSONArray paramsArray) {
+    if (dataMap.get("MultiRun") != null) {
+      virtualanObj.put("MultiRun", dataMap.get("MultiRun"));
+      String row = dataMap.get("MultiRun").split(";")[0];
+      for (String param : row.split("\\|")) {
+        buildParam(param, "<"+param+">", paramsArray, "ADDIFY_PARAM");
+      }
+    }
+  }
+
 
   private static void builHttpStausCode(Map<String, String> dataMap, JSONObject virtualanObj) {
     if (dataMap.get("StatusCode") != null) {
