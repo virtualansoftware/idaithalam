@@ -6,7 +6,7 @@
   <name>idaithalam-platform-testing</name>
   <version>1.2.1-SNAPSHOT</version>
   <properties>
-    <cucumblan.version>1.1.5</cucumblan.version>
+    <cucumblan-api.version>1.1.8-SNAPSHOT</cucumblan-api.version>
     <java.version>1.8</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -155,7 +155,7 @@
     <dependency>
       <groupId>io.virtualan</groupId>
       <artifactId>cucumblan-api</artifactId>
-      <version>${cucumblan.version}</version>
+      <version>${cucumblan-api.version}</version>
     </dependency>
    <dependency>
     <groupId>com.fasterxml.jackson.core</groupId>

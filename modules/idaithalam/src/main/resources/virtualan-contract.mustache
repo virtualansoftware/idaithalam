@@ -21,17 +21,20 @@ Feature: {{feature}} - API Contract validation status
     {{/tags}}
     Scenario: {{scenario}} - {{method}} api call
       Given a user perform a api action
+      {{#hasCreateParams}}
+      {{#createParams}}
+      And Add the {{{value}}} value of the key as {{{key}}}
+      {{/createParams}}
+      {{/hasCreateParams}}
+      {{#skipScenario}}
+      And perform the {{{skipScenario}}} condition to skip scenario
+      {{/skipScenario}}
       {{#okta}}
       And Bearer auth with [AccessToken.{{{resource}}}] token
       {{/okta}}
       {{#basicAuth}}
       And basic authentication with [basic_auth_user_id.{{{resource}}}] and [basic_auth_password.{{{resource}}}]
       {{/basicAuth}}
-      {{#hasCreateParams}}
-      {{#createParams}}
-      And Add the {{{value}}} value of the key as {{{key}}}
-      {{/createParams}}
-      {{/hasCreateParams}}
       {{#hasFormParams}}
       And add request with {{contentType}} given form params
       {{#formParams}}
@@ -137,4 +140,11 @@ Feature: {{feature}} - API Contract validation status
       And Store the {{{value}}} value of the key as {{{key}}}
       {{/storageParams}}
       {{/hasStorageParams}}
+    {{#hasMultiRun}}
+  Examples:
+      {{#multiRun}}
+        | {{{.}}} |
+      {{/multiRun}}
+    {{/hasMultiRun}}
+
 {{/items}}

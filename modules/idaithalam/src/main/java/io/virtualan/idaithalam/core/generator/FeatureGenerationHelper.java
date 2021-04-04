@@ -19,7 +19,6 @@ package io.virtualan.idaithalam.core.generator;
 import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.cucumblan.props.ExcludeConfiguration;
 import io.virtualan.idaithalam.core.domain.AvailableParam;
-import io.virtualan.idaithalam.core.domain.ContentType;
 import io.virtualan.idaithalam.core.domain.Item;
 import io.virtualan.mapson.Mapson;
 import java.io.IOException;
@@ -216,6 +215,8 @@ public class FeatureGenerationHelper {
   private static Item getItem(JSONObject object, String path) throws IOException {
     Item item = new Item();
     extractedInput(object, item, path);
+    getValueMapping("SkipScenario", object, item);
+    extractedMultiRun(object, item);
     item.setTags(object.optString("tags"));
     item.setHttpStatusCode(object.optString("httpStatusCode"));
     item.setMethod(object.optString("method"));
@@ -237,6 +238,22 @@ public class FeatureGenerationHelper {
     extractedOutput(object, item, path);
     item.setStdType(getStandardType(availableParams));
     return item;
+  }
+
+  private static void extractedMultiRun(JSONObject object, Item item) {
+    List<String> multiRun = new ArrayList();
+    if (object.optString("MultiRun") != null && !object.optString("MultiRun").isEmpty()) {
+      String[] loopHeaders = object.optString("MultiRun").split(";");
+      multiRun.addAll(Arrays.asList(loopHeaders));
+      item.setMultiRun(multiRun);
+      item.setHasMultiRun(true);
+    }
+  }
+
+  private static void getValueMapping(String mapping, JSONObject object, Item item) {
+    if (object.optString(mapping) != null && !object.optString(mapping).isEmpty()) {
+      item.setSkipScenario(object.optString(mapping));
+    }
   }
 
   private static String getStandardType(List<AvailableParam> availableParams) {
@@ -274,16 +291,16 @@ public class FeatureGenerationHelper {
   private static void extractedOutput(JSONObject object, Item item, String path)
       throws IOException {
     if (object.optString("outputFields") != null
-          && !object.optString("outputFields").isEmpty()) {
+        && !object.optString("outputFields").isEmpty()) {
       item.setHasResponseByField(true);
-      String[] outputFields =  object.optString("outputFields").split(";");
-      Map<String,String> outputFieldMap =  new HashMap<>();
-      for(String outputJson :  outputFields){
-        if(outputJson.split("=").length ==2) {
-          outputFieldMap.put(outputJson.split("=")[0],outputJson.split("=")[1]);
+      String[] outputFields = object.optString("outputFields").split(";");
+      Map<String, String> outputFieldMap = new HashMap<>();
+      for (String outputJson : outputFields) {
+        if (outputJson.split("=").length == 2) {
+          outputFieldMap.put(outputJson.split("=")[0], outputJson.split("=")[1]);
         }
       }
-      if(outputFieldMap.isEmpty()){
+      if (outputFieldMap.isEmpty()) {
         log.warn("Unable to populate the ResponseByField" + object.optString("outputFields"));
       } else {
         item.setResponseByField(outputFieldMap);
@@ -291,7 +308,7 @@ public class FeatureGenerationHelper {
     } else {
       item.setHasOutputFileByPath(!object.optString("outputPaths").isEmpty());
       item.setOutput(object.optString("output"));
-      if(item.isHasOutputFileByPath()) {
+      if (item.isHasOutputFileByPath()) {
         item.setOutputFileByPath(Arrays.asList(object.optString("outputPaths").split(";")));
         String fileName =
             object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]", "-") + "_response.txt";
@@ -312,8 +329,6 @@ public class FeatureGenerationHelper {
         try {
           Object jsonObject = getJSON(item.getOutput());
           if (jsonObject instanceof JSONArray || jsonObject instanceof JSONObject) {
-            item.setInputJsonMap(Mapson.buildMAPsonFromJson(item.getInput()));
-            item.setHasInputJsonMap(true);
             item.setOutputJsonMap(Mapson.buildMAPsonFromJson(item.getOutput()));
             if (!ExcludeConfiguration.shouldSkip(item.getUrl(), null)) {
               item.setHasOutputJsonMap(true);
