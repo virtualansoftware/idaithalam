@@ -14,10 +14,10 @@ Feature: {{feature}} - API Contract validation status
 {{/items}}
 {{#items}}
     {{#tags}}
-    {{{tags}}} @{{{resource}}}
+    {{{tags}}} @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
     {{/tags}}
     {{^tags}}
-    @{{{resource}}}
+    @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
     {{/tags}}
     Scenario: {{scenario}} - {{method}} api call
       Given a user perform a api action
