@@ -1,6 +1,6 @@
 {
   "category": {
-    "id": 100,
+    "id": 0,
     "name": "string"
   },
   "id": <petId>,
@@ -14,5 +14,6 @@
       "id": 0,
       "name": "string"
     }
-  ]
+  ],
+  "type": "DOGS"
 }

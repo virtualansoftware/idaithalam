@@ -18,6 +18,7 @@ package io.virtualan.idaithalam.core.generator;
 
 import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.cucumblan.props.ExcludeConfiguration;
+import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.domain.AvailableParam;
 import io.virtualan.idaithalam.core.domain.Item;
 import io.virtualan.mapson.Mapson;
@@ -307,7 +308,7 @@ public class FeatureGenerationHelper {
       }
     } else {
       item.setHasOutputFileByPath(!object.optString("outputPaths").isEmpty());
-      item.setOutput(object.optString("output"));
+      item.setOutput(replaceSpecialChar(object.optString("output")));
       if (item.isHasOutputFileByPath()) {
         item.setOutputFileByPath(Arrays.asList(object.optString("outputPaths").split(";")));
         String fileName =
@@ -322,7 +323,7 @@ public class FeatureGenerationHelper {
           createFile(item.getOutput(), path + "/" + fileName);
           item.setOutputFile(fileName);
         } else {
-          item.setOutputInline(getStringAsList(item.getOutput()));
+          item.setOutputInline(getStringAsList(replaceSpecialChar(item.getOutput())));
           item.setHasOutputInline(item.getOutput());
         }
       } else if (item.getOutput() != null && !object.optString("output").isEmpty()) {
@@ -353,7 +354,7 @@ public class FeatureGenerationHelper {
 
   private static void extractedInput(JSONObject object, Item item, String path) throws IOException {
     item.setContentType(object.optString("contentType"));
-    item.setInput(object.optString("input"));
+    item.setInput(replaceSpecialChar(object.optString("input")));
     if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())
         && object.optString("contentType").toLowerCase().contains("xml")) {
       if (!ApplicationConfiguration.getInline() && item.getInput().length() > 700) {
@@ -396,6 +397,16 @@ public class FeatureGenerationHelper {
         return json;
       }
     }
+  }
+
+  private static String replaceSpecialChar(String request){
+    String  skipChars = IdaithalamConfiguration.getProperty("SPECIAL_SKIP_CHAR");
+    skipChars = skipChars == null ? "\\|=\\\\\\\\|;" : skipChars;
+    String replacedChar = request;
+    for(String skipChar : skipChars.split(";") ) {
+      replacedChar = replacedChar.replaceAll(skipChar.split("=")[0], skipChar.split("=")[1]);
+    }
+    return replacedChar;
   }
 
   private static List<String> getStringAsList(String item) {

@@ -142,7 +142,8 @@ public class ExcelToCollectionGenerator {
 
   }
 
-  private static void getAsSingleFile(int sheet, List<String> generatedTestCaseList, String generatedPath,
+  private static void getAsSingleFile(int sheet, List<String> generatedTestCaseList,
+      String generatedPath,
       Map<String, String> cucumblanMap, JSONArray virtualanArray) {
     for (int rowIndex = 0; rowIndex < virtualanArray.length(); rowIndex++) {
       JSONObject object = virtualanArray.getJSONObject(rowIndex);
@@ -154,7 +155,8 @@ public class ExcelToCollectionGenerator {
         createFileInfo.setCucumblanMap(cucumblanMap);
         createFileInfo.setVirtualanArray(virtualanSingle);
         createFileInfo
-            .setTestcaseName("Virtualan_" +sheet+"_"+ object.optString("scenarioId") + "_" + rowIndex);
+            .setTestcaseName(
+                "Virtualan_" + sheet + "_" + object.optString("scenarioId") + "_" + rowIndex);
         createFileInfo.setScenario(object.optString("scenario"));
         createIdaithalamProcessingFile(createFileInfo);
       }
@@ -172,9 +174,9 @@ public class ExcelToCollectionGenerator {
         headers = getHeader(nextRow);
       } else {
         row = getRow(nextRow, headers);
-        if(generatedTestCaseList== null || generatedTestCaseList.isEmpty() ||
+        if (generatedTestCaseList == null || generatedTestCaseList.isEmpty() ||
             generatedTestCaseList.contains(row.get("TestCaseName"))) {
-          if(row.get("Type") == null || "REST".equalsIgnoreCase(row.get("Type"))) {
+          if (row.get("Type") == null || "REST".equalsIgnoreCase(row.get("Type"))) {
             JSONObject object = buildRESTVirtualanCollection(sheetObject.getBasePath(),
                 row);
             populateConfigMaps(row, sheetObject.getCucumblanMap(),
@@ -294,7 +296,7 @@ public class ExcelToCollectionGenerator {
       Map<String, String> dataMap) throws MalformedURLException {
     JSONObject virtualanObj = new JSONObject();
     JSONArray paramsArray = new JSONArray();
-    getMultiRunValue( dataMap, virtualanObj, paramsArray);
+    getMultiRunValue(dataMap, virtualanObj, paramsArray);
     virtualanObj.put("contentType", dataMap.get("ContentType"));
     buildParam("contentType", dataMap.get("ContentType"), paramsArray, "HEADER_PARAM");
     createProcessingType(dataMap, paramsArray, "FormParams", "FORM_PARAM");
@@ -323,16 +325,16 @@ public class ExcelToCollectionGenerator {
     } else {
       log.error("URL IS MANDATORY!!! for " + dataMap.get("TestCaseName"));
     }
-    if (dataMap.get("RequestFile") != null) {
-      virtualanObj.put("input", buildObject(basePath, dataMap.get("RequestFile")));
+    if (dataMap.get("RequestFile") != null || dataMap.get("RequestContent") != null) {
+      virtualanObj.put("input", buildObjectRequest(basePath, dataMap));
     }
     if (dataMap.get("ResponseByFields") != null) {
       virtualanObj.put("outputFields", dataMap.get("ResponseByFields"));
-    } else if (dataMap.get("ResponseFile") != null) {
-        if(dataMap.get("IncludesByPath") != null) {
-          virtualanObj.put("outputPaths", dataMap.get("IncludesByPath"));
-        }
-        virtualanObj.put("output", buildObject(basePath, dataMap.get("ResponseFile")));
+    } else if (dataMap.get("ResponseFile") != null || dataMap.get("ResponseContent") != null) {
+      if (dataMap.get("IncludesByPath") != null) {
+        virtualanObj.put("outputPaths", dataMap.get("IncludesByPath"));
+      }
+      virtualanObj.put("output", buildObjectResponse(basePath, dataMap));
     }
     builHttpStausCode(dataMap, virtualanObj);
     if (paramsArray.length() > 0) {
@@ -357,12 +359,13 @@ public class ExcelToCollectionGenerator {
     }
   }
 
-  private static void getMultiRunValue( Map<String, String> dataMap, JSONObject virtualanObj, JSONArray paramsArray) {
+  private static void getMultiRunValue(Map<String, String> dataMap, JSONObject virtualanObj,
+      JSONArray paramsArray) {
     if (dataMap.get("MultiRun") != null) {
       virtualanObj.put("MultiRun", dataMap.get("MultiRun"));
       String row = dataMap.get("MultiRun").split(";")[0];
       for (String param : row.split("\\|")) {
-        buildParam(param, "<"+param+">", paramsArray, "ADDIFY_PARAM");
+        buildParam(param, "<" + param + ">", paramsArray, "ADDIFY_PARAM");
       }
     }
   }
@@ -376,17 +379,40 @@ public class ExcelToCollectionGenerator {
     }
   }
 
-  private static String buildObject(String basePath, String requestFile) {
+  private static String buildObjectResponse(String basePath, Map<String, String> responseFile) {
     try {
       String body = null;
-      body = getFileAsString(basePath, requestFile);
+      if (responseFile.get("ResponseContent") != null) {
+        body = responseFile.get("ResponseContent");
+      } else if(responseFile.get("ResponseFile") != null) {
+        body = getFileAsString(basePath, responseFile.get("ResponseFile"));
+      }
       if (body != null) {
-        return body;
+        return body.trim();
       } else {
-        log.warn("Unable to load " + requestFile + " file > " + requestFile);
+        log.warn("Unable to load " + responseFile.get("ResponseFile") + " file or content > " + responseFile.get("ResponseContent"));
       }
     } catch (IOException e) {
-      log.warn("Unable to load " + requestFile + " file > " + requestFile);
+      log.warn("Unable to load " + responseFile.get("ResponseFile") + " file or content > " + responseFile.get("ResponseContent"));
+    }
+    return null;
+  }
+
+  private static String buildObjectRequest(String basePath, Map<String, String> requestFile) {
+    try {
+      String body = null;
+      if (requestFile.get("RequestContent") != null) {
+        body = requestFile.get("RequestContent");
+      } else if(requestFile.get("RequestFile") != null) {
+        body = getFileAsString(basePath, requestFile.get("RequestFile"));
+      }
+      if (body != null) {
+        return body.trim();
+      } else {
+        log.warn("Unable to load " + requestFile + " file or content > " + requestFile);
+      }
+    } catch (IOException e) {
+      log.warn("Unable to load " + requestFile + " file or conten> " + requestFile);
     }
     return null;
   }
@@ -523,13 +549,14 @@ public class ExcelToCollectionGenerator {
         case BOOLEAN:
           return String.valueOf(cell.getBooleanCellValue());
         case NUMERIC:
-          return String.valueOf((int)cell.getNumericCellValue());
+          return String.valueOf((int) cell.getNumericCellValue());
         default:
           return null;
       }
     }
-    return  null;
+    return null;
   }
+
   private static class BuildCollections {
 
     private final String basePath;
@@ -574,7 +601,8 @@ public class ExcelToCollectionGenerator {
       return this;
     }
 
-    private void createCollections(List<String> generatedTestCaseList, int sheet, Sheet firstSheet, SheetObject sheetObject)
+    private void createCollections(List<String> generatedTestCaseList, int sheet, Sheet firstSheet,
+        SheetObject sheetObject)
         throws MalformedURLException {
       JSONArray virtualanArray = getObjectSheet(generatedTestCaseList, sheetObject);
       log.info(virtualanArray.toString());
@@ -583,8 +611,9 @@ public class ExcelToCollectionGenerator {
         createFileInfo.setGeneratedPath(generatedPath);
         createFileInfo.setCucumblanMap(cucumblanMap);
         createFileInfo.setVirtualanArray(virtualanArray);
-        createFileInfo.setTestcaseName("Virtualan_"+sheet+"_"+firstSheet.getSheetName().replaceAll(" ","_")
-              + "_WORKFLOW_" + sheet);
+        createFileInfo.setTestcaseName(
+            "Virtualan_" + sheet + "_" + firstSheet.getSheetName().replaceAll(" ", "_")
+                + "_WORKFLOW_" + sheet);
         createFileInfo.setScenario("WORKFLOW:" + firstSheet.getSheetName());
         createIdaithalamProcessingFile(createFileInfo);
       } else {

@@ -26,3 +26,4 @@ Feature: virtualan.json - API Contract validation status
         | </CelsiusToFahrenheitResponse> |
         | </soap:Body> |
         | </soap:Envelope> |
+

@@ -9,6 +9,8 @@
                     <include name="executeApiTests_2"/>
                     <include name="executeApiTests_3"/>
                     <include name="executeApiTests_4"/>
+                    <include name="executeApiTests_5"/>
+                    <include name="executeApiTests_6"/>
                     <include name="executeApiTests_7"/>
                 </methods>
             </class>
