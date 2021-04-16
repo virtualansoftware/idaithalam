@@ -37,7 +37,7 @@ public class APITestWithExcelAsRunManager {
             //Add the testcaseName that List of testcases to be executed from the excel
             //for the test selected execution
             //list.add("PetPost");
-            list.add("PetGet");  // uncomment and test again see the summary report
+            //list.add("PetGet");  // uncomment and test again see the summary report
             File f  = new File(System.getProperty("user.dir") +"/target/"+testcase);
             if(!f.exists())
                 f.mkdir();

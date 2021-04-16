@@ -1,6 +1,7 @@
 package io.virtualan.idaithalam.core.generator;
 
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
+import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.CreateFileInfo;
 import io.virtualan.idaithalam.core.domain.SheetObject;
 import java.io.BufferedReader;
@@ -74,7 +75,7 @@ public class ExcelToCollectionGenerator {
   public static void createCollection(List<String> generatedTestCaseList,
       String excelFilePath,
       String generatedPath)
-      throws IOException {
+      throws IOException, UnableToProcessException {
     createCollection(null, generatedTestCaseList,
         excelFilePath,
         generatedPath);
@@ -112,7 +113,7 @@ public class ExcelToCollectionGenerator {
   public static void createCollection(String basePath, List<String> generatedTestCaseList,
       String excelFilePath,
       String generatedPath)
-      throws IOException {
+      throws IOException, UnableToProcessException {
     InputStream stream = getInputStream(basePath, excelFilePath);
     try {
       if (stream != null) {
@@ -206,7 +207,7 @@ public class ExcelToCollectionGenerator {
    * @throws FileNotFoundException the file not found exception
    */
   public static InputStream getInputStream(String basePath, String fileNameWithSubCategory)
-      throws FileNotFoundException {
+      throws FileNotFoundException, UnableToProcessException {
     InputStream stream = null;
     String filePath = basePath + File.separator + fileNameWithSubCategory;
     File file = new File(filePath);
@@ -232,7 +233,7 @@ public class ExcelToCollectionGenerator {
     }
     if (stream == null) {
       log.error(" File is missing(" + basePath + ") : " + fileNameWithSubCategory);
-      System.exit(-1);
+      throw new UnableToProcessException(" File is missing(" + basePath + ") : " + fileNameWithSubCategory);
     }
     return stream;
   }
