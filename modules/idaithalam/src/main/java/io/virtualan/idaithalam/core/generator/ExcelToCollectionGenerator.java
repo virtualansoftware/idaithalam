@@ -468,7 +468,7 @@ public class ExcelToCollectionGenerator {
     }
   }
 
-  private static void createPrpos(String path, Map<String, String> propsMap, String fileName) {
+  public static void createPrpos(String path, Map<String, String> propsMap, String fileName) {
     try {
       Properties props = new Properties();
       //Populating the properties file

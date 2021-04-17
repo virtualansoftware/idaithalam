@@ -27,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Properties;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -55,13 +56,13 @@ public class FeatureFileGenerator {
      * @throws UnableToProcessException the unable to process exception
      * @throws IOException              the io exception
      */
-    public static List<List<Item>> generateFeatureFile(String path)
+    public static List<List<Item>> generateFeatureFile(Properties properties, String path)
         throws UnableToProcessException, IOException {
         List<List<Item>> items = new ArrayList<>();
         ApplicationConfiguration.reload();
         ExcludeConfiguration.reload();
-        String contractFileName = ApplicationConfiguration.getProperty("virtualan.data.load");
-        String contractFileType = ApplicationConfiguration.getProperty("virtualan.data.type");
+        String contractFileName = properties.getProperty("virtualan.data.load");
+        String contractFileType = properties.getProperty("virtualan.data.type");
         JSONArray jsonArray = null;
         if (contractFileType == null) {
             LOGGER.severe("provide appropriate virtualan.data.type for the input data?");
