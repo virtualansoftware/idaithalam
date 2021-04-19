@@ -27,6 +27,7 @@ import io.virtualan.idaithalam.core.domain.Item;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.MalformedURLException;
@@ -35,6 +36,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Logger;
 import net.masterthought.cucumber.Configuration;
@@ -108,18 +110,25 @@ public class IdaithalamExecutor {
         byte exitStatus;
         try {
             String fileIndex = UUID.randomUUID().toString();
-            VirtualanClassLoader classLoader = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
-            feature = featureHeading;
-            addConfToClasspath(classLoader, path);
-            generateFeatureFile(path);
-            String[] argv = getCucumberOptions(path);
+            VirtualanClassLoader classLoaderParnet = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
+            ExecutionClassloader classLoader = addConfToClasspath(classLoaderParnet, path);
+            generateFeatureFile(classLoader, path);
+            String[] argv = getCucumberOptions(path, fileIndex);
             exitStatus = Main.run(argv, classLoader);
-            generateReport(path, fileIndex);
+            generateReport(featureHeading, path, fileIndex);
         } catch (IOException | UnableToProcessException e) {
             LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
             throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
         }
         return exitStatus;
+    }
+
+    private static String[] getCucumberOptions(String path, String build) {
+        return new String[]{
+            "-p", path == null ? "json:target/cucumber-"+build+".json" : "json:"+path+"/cucumber-"+build+".json",
+            "-p", path == null ? "html:target/cucumber-html-report.html" : "html:"+path+"/cucumber-html-report.html",
+            "--glue", "io.virtualan.cucumblan.core", "", path == null ? "conf/feature/" : path+"/feature/",
+        };
     }
 
     /**
@@ -136,14 +145,12 @@ public class IdaithalamExecutor {
         byte exitStatus;
         try {
             String fileIndex = UUID.randomUUID().toString();
-            VirtualanClassLoader classLoader = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
-            feature = featureHeading;
-            addConfToClasspath(classLoader, path);
-            addConfToClasspath( classLoader, path + File.separator + runId);
-            generateFeatureFile(path + File.separator + runId);
-            String[] argv = getCucumberOptions(path + File.separator + runId);
+            VirtualanClassLoader classLoaderParent = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
+            ExecutionClassloader classLoader = addConfToClasspath( classLoaderParent, path + File.separator + runId);
+            generateFeatureFile(classLoader, path + File.separator + runId);
+            String[] argv = getCucumberOptions(path + File.separator + runId, fileIndex);
             exitStatus = Main.run(argv, classLoader);
-            generateReport(path + File.separator + runId, fileIndex);
+            generateReport(featureHeading, path + File.separator + runId, fileIndex);
         } catch (IOException | UnableToProcessException e) {
             LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
             throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
@@ -155,13 +162,13 @@ public class IdaithalamExecutor {
      *  generate cucumber report
      */
 
-    private static void generateReport(String path, String index) {
+    private static void generateReport(String featureHeading, String path, String index) {
         path = path == null ? "target" : path;
         File reportOutputDirectory = new File(path);
         List<String> jsonFiles = new ArrayList<>();
-        jsonFiles.add(path+"/cucumber.json");
+        jsonFiles.add(path+"/cucumber-"+index+".json");
         String buildNumber = index;
-        String projectName = feature + " - Testing";
+        String projectName = featureHeading + " - Testing";
         Configuration configuration = new Configuration(reportOutputDirectory, projectName);
         configuration.setNotFailingStatuses(Collections.singleton(Status.SKIPPED));
         configuration.setBuildNumber(buildNumber);
@@ -192,44 +199,37 @@ public class IdaithalamExecutor {
      * @throws MalformedURLException
      */
 
-    private static void addConfToClasspath(VirtualanClassLoader classLoader, String path) throws MalformedURLException {
+    private static ExecutionClassloader addConfToClasspath(VirtualanClassLoader classLoader, String path) throws MalformedURLException {
         path = path == null ? "conf" : path;
         ExecutionClassloader cl = new ExecutionClassloader(new URL[] {new File(path).toURI().toURL()}, classLoader);
         Thread.currentThread().setContextClassLoader(cl);
+        return cl;
     }
 
-    /**
-     * The type Execution classloader.
-     */
-    static class ExecutionClassloader extends URLClassLoader {
+    public static Properties readCucumblan(ClassLoader classLoader) {
+        Properties propertiesForInstance = new Properties();
 
-        /**
-         * Instantiates a new Execution classloader.
-         *
-         * @param urls        the urls
-         * @param classLoader the class loader
-         */
-        ExecutionClassloader(URL[] urls, ClassLoader classLoader) {
-            super(urls, classLoader);
+        try {
+            InputStream stream = classLoader.getResourceAsStream("cucumblan.properties");
+            if (stream != null) {
+                propertiesForInstance.load(stream);
+            } else {
+                LOGGER.warning("unable to load cucumblan.properties");
+            }
+        } catch (Exception var3) {
+            LOGGER.warning("cucumblan.properties not found");
         }
 
-        @Override
-        public Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
-            return super.loadClass(name, resolve);
-        }
-
-        @Override
-        protected Class<?> findClass(String name) throws ClassNotFoundException {
-            return super.findClass(name);
-        }
+        return propertiesForInstance;
     }
+
     /**
      * Generate the feature file for the provided collection
      *
      * @throws IOException
      */
 
-    private static void generateFeatureFile(String path) throws IOException, UnableToProcessException {
+    private static void generateFeatureFile(ExecutionClassloader classloader, String path) throws IOException, UnableToProcessException {
         if(path == null || !new File(path).exists()) {
             if (!new File("conf").exists()) {
                 new File("conf").mkdir();
@@ -239,9 +239,11 @@ public class IdaithalamExecutor {
         if (!new File(path+"/feature").exists()) {
             new File(path+"/feature").mkdir();
         }
-        List<List<Item>> items = FeatureFileGenerator.generateFeatureFile(path);
-        String okta = ApplicationConfiguration.getProperty("service.api.okta");
-        String featureTitle = ApplicationConfiguration.getProperty("virtualan.data.heading");
+        Properties properties = readCucumblan(classloader);
+        List<List<Item>> items = FeatureFileGenerator.generateFeatureFile(properties, path);
+
+        String okta = properties.getProperty("service.api.okta");
+        String featureTitle = properties.getProperty("virtualan.data.heading");
 
         for(int i=0; i< items.size(); i++){
             MustacheFactory mf = new DefaultMustacheFactory();
