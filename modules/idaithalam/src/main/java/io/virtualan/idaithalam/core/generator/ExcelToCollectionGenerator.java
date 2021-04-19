@@ -146,22 +146,38 @@ public class ExcelToCollectionGenerator {
   private static void getAsSingleFile(int sheet, List<String> generatedTestCaseList,
       String generatedPath,
       Map<String, String> cucumblanMap, JSONArray virtualanArray) {
-    for (int rowIndex = 0; rowIndex < virtualanArray.length(); rowIndex++) {
-      JSONObject object = virtualanArray.getJSONObject(rowIndex);
-      if (byEachTestCase(generatedTestCaseList, object)) {
-        JSONArray virtualanSingle = new JSONArray();
-        virtualanSingle.put(object);
+    Map<String, JSONArray> arrayMap = buildByMiniCategory(virtualanArray);
+    for (Map.Entry<String, JSONArray> entry : arrayMap.entrySet()) {
+      JSONArray virtualanSingle = entry.getValue();
+      String scenarioId = virtualanSingle.getJSONObject(0).getString("scenarioId").split("-")[0];
+      if (byEachTestCase(generatedTestCaseList, scenarioId)) {
         CreateFileInfo createFileInfo = new CreateFileInfo();
         createFileInfo.setGeneratedPath(generatedPath);
         createFileInfo.setCucumblanMap(cucumblanMap);
         createFileInfo.setVirtualanArray(virtualanSingle);
         createFileInfo
             .setTestcaseName(
-                "Virtualan_" + sheet + "_" + object.optString("scenarioId") + "_" + rowIndex);
-        createFileInfo.setScenario(object.optString("scenario"));
+                "Virtualan_" + sheet + "_" + scenarioId);
+        createFileInfo.setScenario(scenarioId);
         createIdaithalamProcessingFile(createFileInfo);
       }
     }
+  }
+
+  private static Map<String, JSONArray> buildByMiniCategory(JSONArray virtualanArray) {
+    Map<String, JSONArray> arrayMap = new HashMap<>();
+    for (int i = 0; i < virtualanArray.length(); i++) {
+      String scenarioId = virtualanArray.getJSONObject(i).getString("scenarioId").split("-")[0];
+      JSONArray array = null;
+      if (arrayMap.containsKey(scenarioId)) {
+        array = arrayMap.get(scenarioId);
+      } else {
+        array = new JSONArray();
+      }
+      array.put(virtualanArray.getJSONObject(i));
+      arrayMap.put(scenarioId, array);
+    }
+    return arrayMap;
   }
 
   private static JSONArray getObjectSheet(List<String> generatedTestCaseList,
@@ -190,12 +206,14 @@ public class ExcelToCollectionGenerator {
     return virtualanArray;
   }
 
+
   private static boolean byEachTestCase(List<String> generatedTestCaseList,
-      JSONObject row) {
+      String scenarioId) {
     return (!IdaithalamConfiguration.isWorkFlow()
         && (generatedTestCaseList == null || generatedTestCaseList.isEmpty()
         || generatedTestCaseList
-        .contains(row.optString("scenarioId"))));
+        .contains(scenarioId)));
+
   }
 
   /**
@@ -233,7 +251,8 @@ public class ExcelToCollectionGenerator {
     }
     if (stream == null) {
       log.error(" File is missing(" + basePath + ") : " + fileNameWithSubCategory);
-      throw new UnableToProcessException(" File is missing(" + basePath + ") : " + fileNameWithSubCategory);
+      throw new UnableToProcessException(
+          " File is missing(" + basePath + ") : " + fileNameWithSubCategory);
     }
     return stream;
   }
@@ -385,16 +404,18 @@ public class ExcelToCollectionGenerator {
       String body = null;
       if (responseFile.get("ResponseContent") != null) {
         body = responseFile.get("ResponseContent");
-      } else if(responseFile.get("ResponseFile") != null) {
+      } else if (responseFile.get("ResponseFile") != null) {
         body = getFileAsString(basePath, responseFile.get("ResponseFile"));
       }
       if (body != null) {
         return body.trim();
       } else {
-        log.warn("Unable to load " + responseFile.get("ResponseFile") + " file or content > " + responseFile.get("ResponseContent"));
+        log.warn("Unable to load " + responseFile.get("ResponseFile") + " file or content > "
+            + responseFile.get("ResponseContent"));
       }
     } catch (IOException e) {
-      log.warn("Unable to load " + responseFile.get("ResponseFile") + " file or content > " + responseFile.get("ResponseContent"));
+      log.warn("Unable to load " + responseFile.get("ResponseFile") + " file or content > "
+          + responseFile.get("ResponseContent"));
     }
     return null;
   }
@@ -404,7 +425,7 @@ public class ExcelToCollectionGenerator {
       String body = null;
       if (requestFile.get("RequestContent") != null) {
         body = requestFile.get("RequestContent");
-      } else if(requestFile.get("RequestFile") != null) {
+      } else if (requestFile.get("RequestFile") != null) {
         body = getFileAsString(basePath, requestFile.get("RequestFile"));
       }
       if (body != null) {
@@ -607,7 +628,7 @@ public class ExcelToCollectionGenerator {
         throws MalformedURLException {
       JSONArray virtualanArray = getObjectSheet(generatedTestCaseList, sheetObject);
       log.info(virtualanArray.toString());
-      if (IdaithalamConfiguration.isWorkFlow()) {
+      if (IdaithalamConfiguration.isWorkFlow() && virtualanArray.length() > 0) {
         CreateFileInfo createFileInfo = new CreateFileInfo();
         createFileInfo.setGeneratedPath(generatedPath);
         createFileInfo.setCucumblanMap(cucumblanMap);

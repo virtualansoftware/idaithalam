@@ -8,11 +8,11 @@
   "photoUrls": [
     "string"
   ],
-  "status": "available",
+  "status": "available \r\n Testing \r\n again ",
   "tags": [
     {
       "id": 201,
-      "name": "grey"
+      "name": "red"
     }
   ]
 }

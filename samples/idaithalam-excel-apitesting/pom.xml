@@ -7,7 +7,7 @@
 	<version>1.0.1-SNAPSHOT</version>
 	<properties>
 		<slf4j.version>1.7.30</slf4j.version>
-		<idaithalam.version>1.2.2-SNAPSHOT</idaithalam.version>
+		<idaithalam.version>1.2.4-SNAPSHOT</idaithalam.version>
     <testng.ver>7.4.0</testng.ver>
     <java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
@@ -50,6 +50,11 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version>
 		</dependency>
 	</dependencies>
 
