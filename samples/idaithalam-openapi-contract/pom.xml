@@ -12,9 +12,9 @@
 		<java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
-		<virtualan.version>2.1.10</virtualan.version>
+		<virtualan.version>1.0.7</virtualan.version>
 		<hsqldb.version>2.3.2</hsqldb.version>
-		<spring.boot.version>2.4.3</spring.boot.version>
+		<spring.boot.version>2.3.0.RELEASE</spring.boot.version>
 		<springfox.version>2.9.2</springfox.version>
 		<groovy.version>2.4.7</groovy.version>
 		<json.version>20190722</json.version>
@@ -118,16 +118,11 @@
 			<version>2.10.5.1</version>
 		</dependency>
 
-		<dependency>
-			<groupId>io.virtualan</groupId>
-			<artifactId>idaithalam</artifactId>
-			<version>${idaithalam.version}</version>
-		</dependency>
 
 		<!-- START Virtual Service API support -->
 		<dependency>
 			<groupId>io.virtualan</groupId>
-			<artifactId>virtualan-plugin</artifactId>
+			<artifactId>virtualization</artifactId>
 			<version>${virtualan.version}</version>
 			<exclusions>
 				<exclusion>
@@ -148,6 +143,14 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<dependency>
+			<groupId>io.virtualan</groupId>
+			<artifactId>idaithalam</artifactId>
+			<version>${idaithalam.version}</version>
+		</dependency>
+
+		<!-- START Virtual Service API support -->
 
 		<!-- HyperSQL DB -->
 		<dependency>
