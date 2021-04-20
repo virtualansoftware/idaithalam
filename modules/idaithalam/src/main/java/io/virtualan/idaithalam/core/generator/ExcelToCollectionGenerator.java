@@ -626,18 +626,21 @@ public class ExcelToCollectionGenerator {
         throws MalformedURLException {
       JSONArray virtualanArray = getObjectSheet(generatedTestCaseList, sheetObject);
       log.info(virtualanArray.toString());
-      if (IdaithalamConfiguration.isWorkFlow() && virtualanArray.length() > 0) {
-        CreateFileInfo createFileInfo = new CreateFileInfo();
-        createFileInfo.setGeneratedPath(generatedPath);
-        createFileInfo.setCucumblanMap(cucumblanMap);
-        createFileInfo.setVirtualanArray(virtualanArray);
-        createFileInfo.setTestcaseName(
-            "Virtualan_" + sheet + "_" + firstSheet.getSheetName().replaceAll(" ", "_")
-                + "_WORKFLOW_" + sheet);
-        createFileInfo.setScenario("WORKFLOW:" + firstSheet.getSheetName());
-        createIdaithalamProcessingFile(createFileInfo);
-      } else {
-        getAsSingleFile(sheet, generatedTestCaseList, generatedPath, cucumblanMap, virtualanArray);
+      if(virtualanArray.length() > 0) {
+        if (IdaithalamConfiguration.isWorkFlow()) {
+          CreateFileInfo createFileInfo = new CreateFileInfo();
+          createFileInfo.setGeneratedPath(generatedPath);
+          createFileInfo.setCucumblanMap(cucumblanMap);
+          createFileInfo.setVirtualanArray(virtualanArray);
+          createFileInfo.setTestcaseName(
+              "Virtualan_" + sheet + "_" + firstSheet.getSheetName().replaceAll(" ", "_")
+                  + "_WORKFLOW_" + sheet);
+          createFileInfo.setScenario("WORKFLOW:" + firstSheet.getSheetName());
+          createIdaithalamProcessingFile(createFileInfo);
+        } else {
+          getAsSingleFile(sheet, generatedTestCaseList, generatedPath, cucumblanMap,
+              virtualanArray);
+        }
       }
     }
   }
