@@ -233,11 +233,21 @@ public class APITestWithExcelAsRunManager {
     int status =0 ;
     try {
       IdaithalamConfiguration.setProperty("SPECIAL_SKIP_CHAR","\\\\r\\\\n=\\\\\\\\r\\\\\\\\n");
+      //pass the spreadsheet that you want to pass to the user
+      IdaithalamConfiguration.setProperty("workflow","Disabled");
+      List<String> list = new ArrayList<>();
+      //Add the testcaseName that List of testcases to be executed from the excel
+      //for the test selected execution
+      //list.add("PetPost");
+      list.add("PetGet");  // uncomment and test again see the summary report
+      //list.add("PetGet-Test");  // uncomment and test again see the summary report
+
+
       int testPlanIndex = 7;
       File f  = new File(System.getProperty("user.dir") +"/target/"+testPlanIndex);
       if(!f.exists())
         f.mkdir();
-      ExcelToCollectionGenerator.createCollection(null, "virtualan_collection_pet_empty.xlsx",
+      ExcelToCollectionGenerator.createCollection(list, "virtualan_collection_pet_empty.xlsx",
           System.getProperty("user.dir") +"/target/"+testPlanIndex);
       //Generate feature and summary page html report for the selected testcase from the excel
       status = IdaithalamExecutor.validateContract("Scriptlet testcase execution version 5", System.getProperty("user.dir") +"/target/"+testPlanIndex);

@@ -183,20 +183,19 @@ public class ExcelToCollectionGenerator {
   private static JSONArray getObjectSheet(List<String> generatedTestCaseList,
       SheetObject sheetObject)
       throws MalformedURLException {
-    Map<String, String> row;
     Map<Integer, String> headers = new HashMap<>();
     JSONArray virtualanArray = new JSONArray();
     for (Row nextRow : sheetObject.getFirstSheet()) {
       if (headers.isEmpty()) {
         headers = getHeader(nextRow);
       } else {
-        row = getRow(nextRow, headers);
+        Map<String, String> finalRow = getRow(nextRow, headers);
         if (generatedTestCaseList == null || generatedTestCaseList.isEmpty() ||
-            generatedTestCaseList.contains(row.get("TestCaseName"))) {
-          if (row.get("Type") == null || "REST".equalsIgnoreCase(row.get("Type"))) {
+            generatedTestCaseList.stream().anyMatch(x -> finalRow.get("TestCaseName").contains(x))) {
+          if (finalRow.get("Type") == null || "REST".equalsIgnoreCase(finalRow.get("Type"))) {
             JSONObject object = buildRESTVirtualanCollection(sheetObject.getBasePath(),
-                row);
-            populateConfigMaps(row, sheetObject.getCucumblanMap(),
+                finalRow);
+            populateConfigMaps(finalRow, sheetObject.getCucumblanMap(),
                 sheetObject.getExcludeResponseMap());
             virtualanArray.put(object);
           }
@@ -211,8 +210,7 @@ public class ExcelToCollectionGenerator {
       String scenarioId) {
     return (!IdaithalamConfiguration.isWorkFlow()
         && (generatedTestCaseList == null || generatedTestCaseList.isEmpty()
-        || generatedTestCaseList
-        .contains(scenarioId)));
+        || generatedTestCaseList.stream().anyMatch(x -> scenarioId.contains(x))));
 
   }
 
