@@ -185,13 +185,14 @@ public class ExcelToCollectionGenerator {
       throws MalformedURLException {
     Map<Integer, String> headers = new HashMap<>();
     JSONArray virtualanArray = new JSONArray();
-    for (Row nextRow : sheetObject.getFirstSheet()) {
+    for (int i =0; i<sheetObject.getFirstSheet().getPhysicalNumberOfRows(); i++) {
+      Row nextRow = sheetObject.getFirstSheet().getRow(i);
       if (headers.isEmpty()) {
         headers = getHeader(nextRow);
       } else {
         Map<String, String> finalRow = getRow(nextRow, headers);
-        if (generatedTestCaseList == null || generatedTestCaseList.isEmpty() ||
-            generatedTestCaseList.stream().anyMatch(x -> finalRow.get("TestCaseName").contains(x))) {
+        if (!finalRow.isEmpty() && (generatedTestCaseList == null || generatedTestCaseList.isEmpty() ||
+            generatedTestCaseList.stream().anyMatch(x -> finalRow.get("TestCaseName").contains(x)))) {
           if (finalRow.get("Type") == null || "REST".equalsIgnoreCase(finalRow.get("Type"))) {
             JSONObject object = buildRESTVirtualanCollection(sheetObject.getBasePath(),
                 finalRow);

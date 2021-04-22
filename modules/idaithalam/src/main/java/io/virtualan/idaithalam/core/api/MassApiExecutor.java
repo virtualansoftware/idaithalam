@@ -25,7 +25,7 @@ public class MassApiExecutor {
         .getResourceAsStream(configMapper);
     ExecutionPlanner executionPlanner = yaml.load(inputStream);
     ExecutorService executor = Executors
-        .newFixedThreadPool(executionPlanner.getApiExecutor().size());
+        .newFixedThreadPool(executionPlanner.getParallelExecution());
     List<Future<Integer>> futures = new ArrayList<>();
     executionPlanner.getApiExecutor().stream().forEach(
         x -> {
