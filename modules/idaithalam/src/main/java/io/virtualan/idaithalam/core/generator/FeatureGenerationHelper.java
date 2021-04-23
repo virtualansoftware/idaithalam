@@ -291,6 +291,10 @@ public class FeatureGenerationHelper {
 
   private static void extractedOutput(JSONObject object, Item item, String path)
       throws IOException {
+    if(!object.optString("csvson").trim().isEmpty()) {
+      item.setHasCsvson(object.optString("csvson"));
+      item.setCsvson(Arrays.asList(object.optString("csvson").split("\n")));
+    }
     if (object.optString("outputFields") != null
         && !object.optString("outputFields").isEmpty()) {
       item.setHasResponseByField(true);
