@@ -406,7 +406,7 @@ public class FeatureGenerationHelper {
 
   private static String replaceSpecialChar(String request){
     String  skipChars = IdaithalamConfiguration.getProperty("SPECIAL_SKIP_CHAR");
-    skipChars = skipChars == null ? "\\|=\\\\\\\\|;\\\\n=\\\\\\\\n;" : skipChars;
+    skipChars = skipChars == null ? "\\|=\\\\\\\\|;\\\\n=\\\\\\\\n;\\\\r=\\\\\\\\r;" : skipChars;
     String replacedChar = request;
     for(String skipChar : skipChars.split(";") ) {
       replacedChar = replacedChar.replaceAll(skipChar.split("=")[0], skipChar.split("=")[1]);

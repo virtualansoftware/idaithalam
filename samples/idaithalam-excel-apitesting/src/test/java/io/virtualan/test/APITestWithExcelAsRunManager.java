@@ -233,7 +233,7 @@ public class APITestWithExcelAsRunManager {
   public void executeApiTests_empty_7() {
     int status =0 ;
     try {
-      IdaithalamConfiguration.setProperty("SPECIAL_SKIP_CHAR","\\\\r\\\\n=\\\\\\\r\\\\\\\\n");
+      //IdaithalamConfiguration.setProperty("SPECIAL_SKIP_CHAR","\\\\r\\\\n=\\\\\\\r\\\\\\\\n");
       //pass the spreadsheet that you want to pass to the user
       IdaithalamConfiguration.setProperty("workflow","Disabled");
       List<String> list = new ArrayList<>();
