@@ -12,6 +12,7 @@
                     <include name="executeApiTests_5"/>
                     <include name="executeApiTests_6"/>
                     <include name="executeApiTests_7"/>
+                    <include name="executeApiTests_multiplesheet_8"/>
                 </methods>
             </class>
         </classes>

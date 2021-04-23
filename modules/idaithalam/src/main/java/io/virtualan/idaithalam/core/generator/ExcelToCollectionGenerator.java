@@ -104,9 +104,6 @@ public class ExcelToCollectionGenerator {
                     dataMap.put(key, getCellValue(cell));
                 }
             }
-        }else {
-            log.error(
-                    "Unable to process the row and row is empty >>> ");
         }
         return dataMap;
     }

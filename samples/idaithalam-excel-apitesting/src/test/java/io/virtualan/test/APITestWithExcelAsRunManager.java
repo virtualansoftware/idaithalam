@@ -269,7 +269,6 @@ public class APITestWithExcelAsRunManager {
   public void executeApiTests_multiplesheet_8() {
     int status =0 ;
     try {
-      IdaithalamConfiguration.setProperty("SPECIAL_SKIP_CHAR","\\\\r\\\\n=\\\\\\\\r\\\\\\\\n");
       //pass the spreadsheet that you want to pass to the user
       IdaithalamConfiguration.setProperty("workflow","Disabled");
       List<String> list = new ArrayList<>();
@@ -286,7 +285,7 @@ public class APITestWithExcelAsRunManager {
       File f  = new File(System.getProperty("user.dir") +"/target/"+testPlanIndex);
       if(!f.exists())
         f.mkdir();
-      ExcelToCollectionGenerator.createCollection(list, "virtualan_collection_pet_sheet_2.xlsx",
+      ExcelToCollectionGenerator.createCollection(list, "virtualan_collection_testcase_8.xlsx",
           System.getProperty("user.dir") +"/target/"+testPlanIndex);
       //Generate feature and summary page html report for the selected testcase from the excel
       status = IdaithalamExecutor.validateContract("Scriptlet testcase execution version 5", System.getProperty("user.dir") +"/target/"+testPlanIndex);
