@@ -188,7 +188,7 @@ public class ExcelToCollectionGenerator {
             throws MalformedURLException {
         Map<Integer, String> headers = new HashMap<>();
         JSONArray virtualanArray = new JSONArray();
-        for (int i = 0; i < sheetObject.getFirstSheet().getLastRowNum() ; i++) {
+        for (int i = 0; i <= sheetObject.getFirstSheet().getLastRowNum() ; i++) {
             Row nextRow = sheetObject.getFirstSheet().getRow(i);
             if (headers.isEmpty()) {
                 headers = getHeader(nextRow);
