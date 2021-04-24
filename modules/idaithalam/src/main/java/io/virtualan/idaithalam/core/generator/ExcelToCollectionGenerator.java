@@ -94,16 +94,21 @@ public class ExcelToCollectionGenerator {
   }
 
   private static boolean isEmptyRow(Row row) {
-    boolean isEmptyRow = true;
+    if (row == null) {
+      return true;
+    }
+    if (row.getLastCellNum() <= 0) {
+      return true;
+    }
     for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
       Cell cell = row.getCell(cellNum);
-      if (cell != null && cell.getCellType() != CellType.BLANK && StringUtils
-          .isNotBlank(cell.toString())) {
-        isEmptyRow = false;
+      if (cell != null && cell.getCellTypeEnum() != CellType.BLANK && StringUtils.isNotBlank(cell.toString())) {
+        return false;
       }
     }
-    return isEmptyRow;
+    return true;
   }
+
 
   private static Map<String, String> getRow(Row nextRow, Map<Integer, String> headers) {
     Map<String, String> dataMap = new HashMap<>();
