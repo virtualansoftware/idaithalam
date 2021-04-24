@@ -398,7 +398,9 @@ public class FeatureGenerationHelper {
       try {
         return new JSONArray(json);
       } catch (Exception e) {
-        LOGGER.warning(json + " is invalid");
+        if (json.contains("{") && json.contains("}")) {
+          log.warn(  json +" is not a valid JSON!. Correct the JSON file!");
+        }
         return json;
       }
     }
