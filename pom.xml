@@ -75,6 +75,7 @@
       </activation>
       <modules>
         <module>samples/idaithalam-postmancoll-apitesting</module>
+        <module>samples/idaithalam-massapibatch-testing</module>
         <module>samples/idaithalam-excel-apitesting</module>
         <module>samples/idaithalam-openapi-contract</module>
       </modules>
