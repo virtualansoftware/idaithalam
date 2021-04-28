@@ -85,11 +85,17 @@ Feature: {{feature}} - API Contract validation status
       And Update api with given input
       {{/isPut}}
       {{#inputJsonMap}}
-        | {{{key}}}                   |  {{{value}}}                        |
+      | {{{key}}}                   |  {{{value}}}                        |
       {{/inputJsonMap}}
       {{/hasInputJsonMap}}
       When a user {{action}} {{contentType}} in {{url}} resource on {{resource}}
       Then Verify the status code is {{httpStatusCode}}
+      {{#hasCsvson}}
+      And Verify api response csvson includes in the response
+      {{#csvson}}
+      | {{{.}}} |
+      {{/csvson}}
+      {{/hasCsvson}}
       {{#stdType}}
       {{#outputFile}}
       And Verify-standard {{stdType}} all {{{outputFile}}} file {{url}} api includes following in the response

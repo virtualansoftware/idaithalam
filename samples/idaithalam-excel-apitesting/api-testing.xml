@@ -3,7 +3,7 @@
 <suite name="End-2-End API automation Suite">
     <test name="End-2-End API automation Suite">
         <classes>
-            <class name="io.virtualan.test.APITestWithExcelAsRunManager">
+            <class name="io.virtualan.test.APITestWithExcelAsTestManager">
                 <methods>
                     <include name="executeApiTests_1"/>
                     <include name="executeApiTests_2"/>
@@ -11,7 +11,8 @@
                     <include name="executeApiTests_4"/>
                     <include name="executeApiTests_5"/>
                     <include name="executeApiTests_6"/>
-                    <include name="executeApiTests_7"/>
+                    <include name=" executeApiTests_empty_7"/>
+                    <include name="executeApiTests_multiplesheet_8"/>
                 </methods>
             </class>
         </classes>

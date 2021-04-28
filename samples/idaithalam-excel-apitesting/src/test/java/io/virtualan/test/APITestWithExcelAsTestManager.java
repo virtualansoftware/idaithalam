@@ -11,7 +11,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-public class APITestWithExcelAsRunManager {
+public class APITestWithExcelAsTestManager {
 
     @BeforeClass
     public void testBeforeClass(){
@@ -32,12 +32,13 @@ public class APITestWithExcelAsRunManager {
     public void executeApiTests_1(){
         int status =0 ;
         try {
-            int testcase =1;
+          IdaithalamConfiguration.setProperty("SPECIAL_SKIP_CHAR","\\\\r\\\\n=\\\\\\\\r\\\\\\\\n");
+          int testcase =1;
             List<String> list = new ArrayList<>();
             //Add the testcaseName that List of testcases to be executed from the excel
             //for the test selected execution
-            //list.add("PetPost");
-            //list.add("PetGet");  // uncomment and test again see the summary report
+            list.add("PetPost");
+            list.add("PetGet");  // uncomment and test again see the summary report
             File f  = new File(System.getProperty("user.dir") +"/target/"+testcase);
             if(!f.exists())
                 f.mkdir();
@@ -227,5 +228,77 @@ public class APITestWithExcelAsRunManager {
       Assert.assertTrue(false);
     }
   }
+
+  @Test
+  public void executeApiTests_empty_7() {
+    int status =0 ;
+    try {
+      //IdaithalamConfiguration.setProperty("SPECIAL_SKIP_CHAR","\\\\r\\\\n=\\\\\\\r\\\\\\\\n");
+      //pass the spreadsheet that you want to pass to the user
+      IdaithalamConfiguration.setProperty("workflow","Disabled");
+      List<String> list = new ArrayList<>();
+      //Add the testcaseName that List of testcases to be executed from the excel
+      //for the test selected execution
+      //list.add("PetPost");
+      //list.add("PetGet");  // uncomment and test again see the summary report
+      //list.add("PetGet-Test");  // uncomment and test again see the summary report
+
+
+      int testPlanIndex = 7;
+      File f  = new File(System.getProperty("user.dir") +"/target/"+testPlanIndex);
+      if(!f.exists())
+        f.mkdir();
+      ExcelToCollectionGenerator.createCollection(list, "virtualan_collection_pet_empty.xlsx",
+          System.getProperty("user.dir") +"/target/"+testPlanIndex);
+      //Generate feature and summary page html report for the selected testcase from the excel
+      status = IdaithalamExecutor.validateContract("Scriptlet testcase execution version 5", System.getProperty("user.dir") +"/target/"+testPlanIndex);
+      System.out.println(status);
+      if(status != 0) {
+        Assert.assertTrue(false);
+      }
+      Assert.assertTrue   (true);
+    }catch (Exception e){
+      System.out.println(e.getMessage());
+      Assert.assertTrue(false);
+    }
+  }
+
+
+
+  @Test
+  public void executeApiTests_multiplesheet_8() {
+    int status =0 ;
+    try {
+      //pass the spreadsheet that you want to pass to the user
+      IdaithalamConfiguration.setProperty("workflow","Disabled");
+      List<String> list = new ArrayList<>();
+      //Add the testcaseName that List of testcases to be executed from the excel
+      //for the test selected execution
+      list.add("EDI271_1");
+      list.add("EDI271");
+      list.add("PetPost_3");
+      //list.add("PetGet");  // uncomment and test again see the summary report
+      //list.add("PetGet-Test");  // uncomment and test again see the summary report
+
+
+      int testPlanIndex = 8;
+      File f  = new File(System.getProperty("user.dir") +"/target/"+testPlanIndex);
+      if(!f.exists())
+        f.mkdir();
+      ExcelToCollectionGenerator.createCollection(list, "virtualan_collection_testcase_8.xlsx",
+          System.getProperty("user.dir") +"/target/"+testPlanIndex);
+      //Generate feature and summary page html report for the selected testcase from the excel
+      status = IdaithalamExecutor.validateContract("Scriptlet testcase execution version 5", System.getProperty("user.dir") +"/target/"+testPlanIndex);
+      System.out.println(status);
+      if(status != 0) {
+        Assert.assertTrue(false);
+      }
+      Assert.assertTrue   (true);
+    }catch (Exception e){
+      System.out.println(e.getMessage());
+      Assert.assertTrue(false);
+    }
+  }
+
 
 }

@@ -90,6 +90,16 @@ public class Item {
   String skipScenario;
 
   /**
+   * The Csvson.
+   */
+  String hasCsvson;
+
+  /**
+   * The Csvson.
+   */
+  List<String> csvson;
+
+  /**
    * The Output file by path.
    */
   List<String> multiRun;
@@ -486,6 +496,22 @@ public class Item {
     this.hasInputInline = hasInputInline;
   }
 
+
+  public List<String> getCsvson() {
+    return csvson;
+  }
+
+  public void setCsvson(List<String> csvson) {
+    this.csvson = csvson;
+  }
+
+  public String getHasCsvson() {
+    return hasCsvson;
+  }
+
+  public void setHasCsvson(String hasCsvson) {
+    this.hasCsvson = hasCsvson;
+  }
 
   /**
    * Gets std type.

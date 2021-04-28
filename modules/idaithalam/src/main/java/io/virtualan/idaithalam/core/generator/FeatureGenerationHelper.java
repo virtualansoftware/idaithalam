@@ -291,6 +291,10 @@ public class FeatureGenerationHelper {
 
   private static void extractedOutput(JSONObject object, Item item, String path)
       throws IOException {
+    if(!object.optString("csvson").trim().isEmpty()) {
+      item.setHasCsvson(object.optString("csvson"));
+      item.setCsvson(Arrays.asList(object.optString("csvson").split("\n")));
+    }
     if (object.optString("outputFields") != null
         && !object.optString("outputFields").isEmpty()) {
       item.setHasResponseByField(true);
@@ -394,6 +398,9 @@ public class FeatureGenerationHelper {
       try {
         return new JSONArray(json);
       } catch (Exception e) {
+        if (json.contains("{") && json.contains("}")) {
+          log.warn(  json +" is not a valid JSON!. Correct the JSON file!");
+        }
         return json;
       }
     }
@@ -401,7 +408,7 @@ public class FeatureGenerationHelper {
 
   private static String replaceSpecialChar(String request){
     String  skipChars = IdaithalamConfiguration.getProperty("SPECIAL_SKIP_CHAR");
-    skipChars = skipChars == null ? "\\|=\\\\\\\\|;" : skipChars;
+    skipChars = skipChars == null ? "\\|=\\\\\\\\|;\\\\n=\\\\\\\\n;\\\\r=\\\\\\\\r;" : skipChars;
     String replacedChar = request;
     for(String skipChar : skipChars.split(";") ) {
       replacedChar = replacedChar.replaceAll(skipChar.split("=")[0], skipChar.split("=")[1]);
