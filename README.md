@@ -1,6 +1,6 @@
 <h1 align="center">Idaithalam</h1>
 
-**Idaithalam:** [![Maven Central](https://img.shields.io/maven-central/v/io.virtualan/idaithalam.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.virtualan%22%20AND%20a:%22idaithalam%22)  [![Build Status](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)] (https://ci.appveyor.com/api/projects/status/up09e6hyd8dn2c3c?svg=true)              
+**Idaithalam:** [![Maven Central](https://img.shields.io/maven-central/v/io.virtualan/idaithalam.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.virtualan%22%20AND%20a:%22idaithalam%22)  ![Build Status](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)             
 # What is Idaithalam: Scriptless Automation Framework.
 
 Idaithalam is a Cucumber feature file generation product.
