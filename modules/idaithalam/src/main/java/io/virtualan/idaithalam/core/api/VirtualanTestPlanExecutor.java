@@ -15,13 +15,13 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 @Slf4j
-public class TestPlanExecutor {
+public class VirtualanTestPlanExecutor {
 
   private static final int NTHREDS = 1;
 
   public static boolean invoke(String configMapper) throws InterruptedException {
     Yaml yaml = new Yaml(new Constructor(ExecutionPlanner.class));
-    InputStream inputStream = TestPlanExecutor.class.getClassLoader()
+    InputStream inputStream = VirtualanTestPlanExecutor.class.getClassLoader()
         .getResourceAsStream(configMapper);
     ExecutionPlanner executionPlanner = yaml.load(inputStream);
     ExecutorService executor = Executors

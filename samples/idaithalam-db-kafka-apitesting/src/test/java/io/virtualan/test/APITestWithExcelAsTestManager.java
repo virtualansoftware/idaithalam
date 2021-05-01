@@ -1,7 +1,7 @@
 package io.virtualan.test;
 
 
-import io.virtualan.idaithalam.core.api.MassApiExecutor;
+import io.virtualan.idaithalam.core.api.VirtualanTestPlanExecutor;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -26,7 +26,7 @@ public class APITestWithExcelAsTestManager {
   @Test
   public static void execute_workflow() {
     try {
-      boolean isSuccess = MassApiExecutor.invoke("work-flow.yaml");
+      boolean isSuccess = VirtualanTestPlanExecutor.invoke("work-flow.yaml");
       if (!isSuccess) {
         Assert.assertTrue(false);
       }

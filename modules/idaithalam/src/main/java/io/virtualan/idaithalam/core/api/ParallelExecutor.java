@@ -5,6 +5,7 @@ import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.generator.ExcelToCollectionGenerator;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Callable;
@@ -18,6 +19,7 @@ public class ParallelExecutor implements Callable<Integer> {
   private String env;
   private String reportTitle;
   private Map<String, String> cucumblanProperies;
+  private List<String> generatedTestList;
 
   ParallelExecutor(ApiExecutorParam apiExecutorPrarm) {
     this.outputDir = apiExecutorPrarm.getOutputDir();
@@ -25,6 +27,7 @@ public class ParallelExecutor implements Callable<Integer> {
     this.env = apiExecutorPrarm.getEnv();
     this.reportTitle = apiExecutorPrarm.getReportTitle();
     this.cucumblanProperies = apiExecutorPrarm.getCucumblanProperies();
+    this.generatedTestList = apiExecutorPrarm.getGeneratedTestList();
   }
 
 
@@ -36,7 +39,7 @@ public class ParallelExecutor implements Callable<Integer> {
       if (!f.exists()) {
         f.mkdirs();
       }
-      ExcelToCollectionGenerator.createCollection(null, inputExcel, outputDir);
+      ExcelToCollectionGenerator.createCollection(generatedTestList, inputExcel, outputDir);
 
       if(cucumblanProperies != null && !cucumblanProperies.isEmpty()) {
         File file = new File(outputDir +File.separator+"cucumblan.properties");

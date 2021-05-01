@@ -5,26 +5,30 @@ import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.generator.ExcelToCollectionGenerator;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class TestExecutor  {
+public class VirtualanTestExecutor {
 
   private String outputDir;
   private String inputExcel;
   private String env;
   private String reportTitle;
   private Map<String, String> cucumblanProperies;
+  List<String> generatedTestList;
 
-  TestExecutor(ApiExecutorParam apiExecutorPrarm) {
+  public VirtualanTestExecutor(ApiExecutorParam apiExecutorPrarm) {
     this.outputDir = apiExecutorPrarm.getOutputDir();
     this.inputExcel = apiExecutorPrarm.getInputExcel();
     this.env = apiExecutorPrarm.getEnv();
     this.reportTitle = apiExecutorPrarm.getReportTitle();
     this.cucumblanProperies = apiExecutorPrarm.getCucumblanProperies();
+    this.generatedTestList = apiExecutorPrarm.getGeneratedTestList();
+
   }
 
 
@@ -35,7 +39,7 @@ public class TestExecutor  {
       if (!f.exists()) {
         f.mkdirs();
       }
-      ExcelToCollectionGenerator.createCollection(null, inputExcel, outputDir);
+      ExcelToCollectionGenerator.createCollection(generatedTestList, inputExcel, outputDir);
 
       if(cucumblanProperies != null && !cucumblanProperies.isEmpty()) {
         File file = new File(outputDir +File.separator+"cucumblan.properties");
