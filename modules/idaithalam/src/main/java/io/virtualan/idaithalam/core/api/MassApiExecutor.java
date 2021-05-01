@@ -41,7 +41,7 @@ public class MassApiExecutor {
     }
     // Wait until all threads are finish
     executor.awaitTermination(executionPlanner.getTimeout(), TimeUnit.MINUTES);
-    boolean bool = futures.stream().anyMatch(x -> {
+    boolean bool = futures.stream().allMatch(x -> {
       try {
         return x.get() != 0;
       } catch (InterruptedException | ExecutionException e) {
@@ -50,7 +50,7 @@ public class MassApiExecutor {
     });
 
     log.info("Finished all api execution");
-    return true;
+    return !bool;
   }
 
 }

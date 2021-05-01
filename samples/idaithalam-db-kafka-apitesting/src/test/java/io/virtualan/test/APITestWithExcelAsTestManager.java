@@ -1,14 +1,7 @@
 package io.virtualan.test;
 
 
-import io.virtualan.cucumblan.props.ApplicationConfiguration;
-import io.virtualan.idaithalam.config.IdaithalamConfiguration;
-import io.virtualan.idaithalam.contract.IdaithalamExecutor;
 import io.virtualan.idaithalam.core.api.MassApiExecutor;
-import io.virtualan.idaithalam.core.generator.ExcelToCollectionGenerator;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -31,7 +24,7 @@ public class APITestWithExcelAsTestManager {
 
 
   @Test
-  public static void main() {
+  public static void execute_workflow() {
     try {
       boolean isSuccess = MassApiExecutor.invoke("work-flow.yaml");
       if (!isSuccess) {
