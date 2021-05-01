@@ -359,6 +359,8 @@ public class ExcelToCollectionGenerator {
       //createProcessingType(dataMap, paramsArray, "CookieVariables", "COOKIE_PARAM");
       getValue("Tags", dataMap, virtualanObj);
       getValue("SkipScenario", dataMap, virtualanObj);
+      virtualanObj.put("method", dataMap.get("Action").toUpperCase());
+
       //getSecurityValue(dataMap, virtualanObj);
       if (dataMap.get("RequestFile") != null || dataMap.get("RequestContent") != null) {
         virtualanObj.put("input", buildObjectRequest(basePath, dataMap));

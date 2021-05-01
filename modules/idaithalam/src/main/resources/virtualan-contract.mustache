@@ -13,7 +13,7 @@ Feature: {{feature}} - API Contract validation status
   {{/okta}}
 {{/items}}
 {{#items}}
-  {{#isRest}}
+    {{#isRest}}
     {{#tags}}
     {{{tags}}} @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
     {{/tags}}
@@ -22,6 +22,46 @@ Feature: {{feature}} - API Contract validation status
     {{/tags}}
     Scenario: {{scenario}} - {{method}} api call
     {{/isRest}}
+    {{#isKafka}}
+    {{#kafkaInput}}
+    {{#tags}}
+    {{{tags}}} @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
+    {{/tags}}
+    {{^tags}}
+    @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
+    {{/tags}}
+    Scenario: {{scenario}} - {{method}} kafka message
+      Given As a user perform message {{scenario}} action
+      {{#hasInputJsonMap}}
+      When Send mapson message {{scenario}} for event {{event}} on {{resource}} with type {{messageType}}
+      {{#inputJsonMap}}
+        | {{{key}}}                   |  {{{value}}}                        |
+      {{/inputJsonMap}}
+      {{/hasInputJsonMap}}
+      {{#hasInputInline}}
+      When Send inline message {{scenario}} for event {{event}} on {{resource}} with type {{messageType}}
+      {{#inputInline}}
+        | {{{.}}} |
+      {{/inputInline}}
+    {{/hasInputInline}}
+    {{/kafkaInput}}
+    {{/isKafka}}
+    {{#isDatabase}}
+    {{#dbInput}}
+    {{#tags}}
+    {{{tags}}} @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
+    {{/tags}}
+    {{^tags}}
+    @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
+    {{/tags}}
+    Scenario: {{scenario}} - database action
+      Given As a user perform sql {{scenario}} action
+      When Execute {{method}} for the given sql for {{scenario}} on {{resource}}
+      {{#inputInline}}
+        | {{{.}}} |
+      {{/inputInline}}
+    {{/dbInput}}
+    {{/isDatabase}}
       {{#isRest}}
       Given a user perform a api action
       {{#hasCreateParams}}
@@ -69,10 +109,10 @@ Feature: {{feature}} - API Contract validation status
       {{/cookieParams}}
       {{/hasCookieParams}}
       {{#inputFile}}
-       And add {{{inputFile}}} data file with {{contentType}} given input
+      And add {{{inputFile}}} data file with {{contentType}} given input
       {{/inputFile}}
       {{#hasInputInline}}
-       And add request data inline with {{contentType}} given input
+      And add request data inline with {{contentType}} given input
       {{#inputInline}}
         | {{{.}}} |
       {{/inputInline}}
@@ -88,7 +128,7 @@ Feature: {{feature}} - API Contract validation status
       And Update api with given input
       {{/isPut}}
       {{#inputJsonMap}}
-      | {{{key}}}                   |  {{{value}}}                        |
+        | {{{key}}}                   |  {{{value}}}                        |
       {{/inputJsonMap}}
       {{/hasInputJsonMap}}
       When a user {{action}} {{contentType}} in {{url}} resource on {{resource}}
@@ -96,7 +136,7 @@ Feature: {{feature}} - API Contract validation status
       {{#hasCsvson}}
       And Verify api response csvson includes in the response
       {{#csvson}}
-      | {{{.}}} |
+        | {{{.}}} |
       {{/csvson}}
       {{/hasCsvson}}
       {{#stdType}}
@@ -114,7 +154,7 @@ Feature: {{feature}} - API Contract validation status
       {{#hasResponseByField}}
       And Verify across response includes following in the response
       {{#responseByField}}
-       | {{{key}}}                 |  {{{value}}}                          |
+        | {{{key}}}                 |  {{{value}}}                          |
       {{/responseByField}}
       {{/hasResponseByField}}
       {{#hasOutputFileByPath}}
@@ -151,17 +191,25 @@ Feature: {{feature}} - API Contract validation status
       {{/hasStorageParams}}
       {{/isRest}}
       {{#isKafka}}
-      {{#kafkaInput}}
-      {{/kafkaInput}}
       {{#kafkaOutput}}
       {{#hasResponseByField}}
+      {{#kafkaInput}}
+      Then Verify-by-elements {{scenario}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      {{/kafkaInput}}
+      {{^kafkaInput}}
       And Verify-by-elements {{scenario}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      {{/kafkaInput}}
       {{#responseByField}}
         | {{{key}}}                 |  {{{value}}}                          |
       {{/responseByField}}
       {{/hasResponseByField}}
       {{#hasCsvson}}
+      {{#kafkaInput}}
+      Then Verify {{scenario}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      {{/kafkaInput}}
+      {{^kafkaInput}}
       And Verify {{scenario}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      {{/kafkaInput}}
       {{#csvson}}
         | {{{.}}} |
       {{/csvson}}
@@ -171,7 +219,12 @@ Feature: {{feature}} - API Contract validation status
       {{#isDatabase}}
       {{#dbOutput}}
       {{#hasCsvson}}
+      {{#dbInput}}
+      Then Verify details with the given sql for {{scenario}} on {{resource}}
+      {{/dbInput}}
+      {{^dbInput}}
       And Verify details with the given sql for {{scenario}} on {{resource}}
+      {{/dbInput}}
       {{#csvson}}
         | {{{.}}} |
       {{/csvson}}
