@@ -13,6 +13,7 @@ Feature: {{feature}} - API Contract validation status
   {{/okta}}
 {{/items}}
 {{#items}}
+  {{#isRest}}
     {{#tags}}
     {{{tags}}} @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
     {{/tags}}
@@ -20,6 +21,10 @@ Feature: {{feature}} - API Contract validation status
     @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
     {{/tags}}
     Scenario: {{scenario}} - {{method}} api call
+    {{/isRest}}
+{{/items}}
+{{#items}}
+      {{#isRest}}
       Given a user perform a api action
       {{#hasCreateParams}}
       {{#createParams}}
@@ -146,11 +151,39 @@ Feature: {{feature}} - API Contract validation status
       And Store the {{{value}}} value of the key as {{{key}}}
       {{/storageParams}}
       {{/hasStorageParams}}
-    {{#hasMultiRun}}
+      {{/isRest}}
+      {{#isKafka}}
+      {{#kafkaInput}}
+      {{/kafkaInput}}
+      {{#kafkaOutput}}
+      {{#hasResponseByField}}
+      And Verify-by-elements {{scenario}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      {{#responseByField}}
+        | {{{key}}}                 |  {{{value}}}                          |
+      {{/responseByField}}
+      {{/hasResponseByField}}
+      {{#hasCsvson}}
+      And Verify {{scenario}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      {{#csvson}}
+        | {{{.}}} |
+      {{/csvson}}
+      {{/hasCsvson}}
+      {{/kafkaOutput}}
+      {{/isKafka}}
+      {{#isDatabase}}
+      {{#dbOutput}}
+      {{#hasCsvson}}
+      And Verify details with the given sql for {{scenario}} on {{resource}}
+      {{#csvson}}
+        | {{{.}}} |
+      {{/csvson}}
+      {{/hasCsvson}}
+      {{/dbOutput}}
+      {{/isDatabase}}
+      {{#hasMultiRun}}
   Examples:
       {{#multiRun}}
         | {{{.}}} |
       {{/multiRun}}
     {{/hasMultiRun}}
-
 {{/items}}

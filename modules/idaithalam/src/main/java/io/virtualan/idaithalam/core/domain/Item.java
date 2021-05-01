@@ -27,6 +27,22 @@ import java.util.stream.Collectors;
  */
 public class Item {
 
+
+  /**
+   * The Event.
+   */
+  String event;
+
+  /**
+   * The Message type.
+   */
+  String messageType;
+
+  /**
+   * The Identifier.
+   */
+  String identifier;
+
   /**
    * The Scenario.
    */
@@ -71,6 +87,42 @@ public class Item {
    * The Std type.
    */
   String tags;
+
+  /**
+   * The db output.
+   */
+  boolean dbOutput;
+
+  /**
+   * The db input.
+   */
+  boolean dbInput;
+
+  /**
+   * The Kafka output.
+   */
+  boolean kafkaOutput;
+
+  /**
+   * The Kafka input.
+   */
+  boolean kafkaInput;
+
+  /**
+   * The Std type.
+   */
+  boolean isRest;
+
+  /**
+   * The Is kafka.
+   */
+  boolean isKafka;
+
+  /**
+   * The Is Database.
+   */
+  boolean isDatabase;
+
   /**
    * The Std type.
    */
@@ -179,6 +231,186 @@ public class Item {
   boolean hasCookieParams;
 
   /**
+   * Is db output boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isDbOutput() {
+    return dbOutput;
+  }
+
+  /**
+   * Sets db output.
+   *
+   * @param dbOutput the db output
+   */
+  public void setDbOutput(boolean dbOutput) {
+    this.dbOutput = dbOutput;
+  }
+
+  /**
+   * Is db input boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isDbInput() {
+    return dbInput;
+  }
+
+  /**
+   * Sets db input.
+   *
+   * @param dbInput the db input
+   */
+  public void setDbInput(boolean dbInput) {
+    this.dbInput = dbInput;
+  }
+
+  /**
+   * Gets event.
+   *
+   * @return the event
+   */
+  public String getEvent() {
+    return event;
+  }
+
+  /**
+   * Sets event.
+   *
+   * @param event the event
+   */
+  public void setEvent(String event) {
+    this.event = event;
+  }
+
+  /**
+   * Gets message type.
+   *
+   * @return the message type
+   */
+  public String getMessageType() {
+    return messageType;
+  }
+
+  /**
+   * Sets message type.
+   *
+   * @param messageType the message type
+   */
+  public void setMessageType(String messageType) {
+    this.messageType = messageType;
+  }
+
+  /**
+   * Gets identifier.
+   *
+   * @return the identifier
+   */
+  public String getIdentifier() {
+    return identifier;
+  }
+
+  /**
+   * Sets identifier.
+   *
+   * @param identifier the identifier
+   */
+  public void setIdentifier(String identifier) {
+    this.identifier = identifier;
+  }
+
+  /**
+   * Gets kafka output.
+   *
+   * @return the kafka output
+   */
+  public boolean isKafkaOutput() {
+    return kafkaOutput;
+  }
+
+  /**
+   * Sets kafka output.
+   *
+   * @param kafkaOutput the kafka output
+   */
+  public void setKafkaOutput(boolean kafkaOutput) {
+    this.kafkaOutput = kafkaOutput;
+  }
+
+  /**
+   * Gets kafka input.
+   *
+   * @return the kafka input
+   */
+  public boolean isKafkaInput() {
+    return kafkaInput;
+  }
+
+  /**
+   * Sets kafka input.
+   *
+   * @param kafkaInput the kafka input
+   */
+  public void setKafkaInput(boolean kafkaInput) {
+    this.kafkaInput = kafkaInput;
+  }
+
+  /**
+   * Is rest boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isRest() {
+    return isRest;
+  }
+
+  /**
+   * Sets rest.
+   *
+   * @param rest the rest
+   */
+  public void setRest(boolean rest) {
+    isRest = rest;
+  }
+
+  /**
+   * Is kafka boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isKafka() {
+    return isKafka;
+  }
+
+  /**
+   * Sets kafka.
+   *
+   * @param kafka the kafka
+   */
+  public void setKafka(boolean kafka) {
+    isKafka = kafka;
+  }
+
+  /**
+   * Is database boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isDatabase() {
+    return isDatabase;
+  }
+
+  /**
+   * Sets database.
+   *
+   * @param database the database
+   */
+  public void setDatabase(boolean database) {
+    isDatabase = database;
+  }
+
+  /**
    * Gets multi run.
    *
    * @return the multi run
@@ -283,6 +515,7 @@ public class Item {
    * The Input file xml.
    */
   String inputFile;
+
 
   /**
    * Is has multi run boolean.
@@ -497,18 +730,38 @@ public class Item {
   }
 
 
+  /**
+   * Gets csvson.
+   *
+   * @return the csvson
+   */
   public List<String> getCsvson() {
     return csvson;
   }
 
+  /**
+   * Sets csvson.
+   *
+   * @param csvson the csvson
+   */
   public void setCsvson(List<String> csvson) {
     this.csvson = csvson;
   }
 
+  /**
+   * Gets has csvson.
+   *
+   * @return the has csvson
+   */
   public String getHasCsvson() {
     return hasCsvson;
   }
 
+  /**
+   * Sets has csvson.
+   *
+   * @param hasCsvson the has csvson
+   */
   public void setHasCsvson(String hasCsvson) {
     this.hasCsvson = hasCsvson;
   }

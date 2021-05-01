@@ -102,7 +102,8 @@ public class ExcelToCollectionGenerator {
     }
     for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
       Cell cell = row.getCell(cellNum);
-      if (cell != null && cell.getCellTypeEnum() != CellType.BLANK && StringUtils.isNotBlank(cell.toString())) {
+      if (cell != null && cell.getCellTypeEnum() != CellType.BLANK && StringUtils
+          .isNotBlank(cell.toString())) {
         return false;
       }
     }
@@ -206,19 +207,32 @@ public class ExcelToCollectionGenerator {
         try {
           Map<String, String> finalRow = getRow(nextRow, headers);
           testcaseName = finalRow.get("TestCaseName");
-          if (!finalRow.isEmpty() && (generatedTestCaseList == null || generatedTestCaseList.isEmpty() ||
-              generatedTestCaseList.stream().anyMatch(x -> finalRow.get("TestCaseName").contains(x)))) {
+          if (!finalRow.isEmpty() && (generatedTestCaseList == null || generatedTestCaseList
+              .isEmpty() ||
+              generatedTestCaseList.stream()
+                  .anyMatch(x -> finalRow.get("TestCaseName").contains(x)))) {
             if (finalRow.get("Type") == null || "REST".equalsIgnoreCase(finalRow.get("Type"))) {
-              JSONObject object = buildRESTVirtualanCollection(sheetObject.getBasePath(),finalRow);
+              JSONObject object = buildRESTVirtualanCollection(sheetObject.getBasePath(),
+                  finalRow);
               populateConfigMaps(finalRow, sheetObject.getCucumblanMap(),
                   sheetObject.getExcludeResponseMap());
+              virtualanArray.put(object);
+            } else if ("KAFKA".equalsIgnoreCase(finalRow.get("Type"))) {
+              JSONObject object = buildKAFKAVirtualanCollection(sheetObject.getBasePath(),
+                  finalRow);
+              virtualanArray.put(object);
+
+            } else if ("DB".equalsIgnoreCase(finalRow.get("Type"))) {
+              JSONObject object = buildDataBaseVirtualanCollection(sheetObject.getBasePath(),
+                  finalRow);
               virtualanArray.put(object);
             }
           }
         } catch (Exception e) {
-          log.warn("Spread sheet (" + testcaseName + ") " + (sheet+1) + " with row number " + (i+1)
-              + " is unable to process for the reason >> "
-              + e.getMessage());
+          log.warn(
+              "Spread sheet (" + testcaseName + ") " + (sheet + 1) + " with row number " + (i + 1)
+                  + " is unable to process for the reason >> "
+                  + e.getMessage());
         }
       }
     }
@@ -330,11 +344,95 @@ public class ExcelToCollectionGenerator {
     return cucumblanMap;
   }
 
+  private static JSONObject buildDataBaseVirtualanCollection(String basePath,
+      Map<String, String> dataMap)
+      throws UnableToProcessException {
+    JSONObject virtualanObj = new JSONObject();
+    try {
+      JSONArray paramsArray = new JSONArray();
+      virtualanObj.put("type", "DB");
+      virtualanObj.put("scenarioId", dataMap.get("TestCaseName"));
+      virtualanObj.put("scenario", dataMap.get("TestCaseNameDesc"));
+      virtualanObj.put("resource", dataMap.get("Resource"));
+      //createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
+      //createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
+      //createProcessingType(dataMap, paramsArray, "CookieVariables", "COOKIE_PARAM");
+      getValue("Tags", dataMap, virtualanObj);
+      getValue("SkipScenario", dataMap, virtualanObj);
+      //getSecurityValue(dataMap, virtualanObj);
+      if (dataMap.get("RequestFile") != null || dataMap.get("RequestContent") != null) {
+        virtualanObj.put("input", buildObjectRequest(basePath, dataMap));
+      }
+      if (dataMap.get("ResponseByFields") != null) {
+        virtualanObj.put("outputFields", dataMap.get("ResponseByFields"));
+      }
+      if (dataMap.get("Csvson") != null) {
+        virtualanObj.put("csvson", dataMap.get("Csvson"));
+      }
+      if (dataMap.get("ResponseFile") != null || dataMap.get("ResponseContent") != null) {
+        if (dataMap.get("IncludesByPath") != null) {
+          virtualanObj.put("outputPaths", dataMap.get("IncludesByPath"));
+        }
+        virtualanObj.put("output", buildObjectResponse(basePath, dataMap));
+      }
+    } catch (Exception e) {
+      throw new UnableToProcessException(
+          "Unable to build collection object for Kafka " + dataMap.get("TestCaseName") + " :: " + e
+              .getMessage());
+    }
+    return virtualanObj;
+  }
+
+
+
+  private static JSONObject buildKAFKAVirtualanCollection(String basePath,
+      Map<String, String> dataMap)
+      throws UnableToProcessException {
+    JSONObject virtualanObj = new JSONObject();
+    try {
+      JSONArray paramsArray = new JSONArray();
+      virtualanObj.put("type", "KAFKA");
+      virtualanObj.put("scenarioId", dataMap.get("TestCaseName"));
+      virtualanObj.put("scenario", dataMap.get("TestCaseNameDesc"));
+      virtualanObj.put("resource", dataMap.get("Resource"));
+      virtualanObj.put("event", dataMap.get("Event"));
+      virtualanObj.put("identifier", dataMap.get("Identifier"));
+      virtualanObj.put("messageType", dataMap.get("MessageType"));
+      //createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
+      //createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
+      //createProcessingType(dataMap, paramsArray, "CookieVariables", "COOKIE_PARAM");
+      getValue("Tags", dataMap, virtualanObj);
+      getValue("SkipScenario", dataMap, virtualanObj);
+      //getSecurityValue(dataMap, virtualanObj);
+      if (dataMap.get("RequestFile") != null || dataMap.get("RequestContent") != null) {
+        virtualanObj.put("input", buildObjectRequest(basePath, dataMap));
+      }
+      if (dataMap.get("ResponseByFields") != null) {
+        virtualanObj.put("outputFields", dataMap.get("ResponseByFields"));
+      }
+      if (dataMap.get("Csvson") != null) {
+        virtualanObj.put("csvson", dataMap.get("Csvson"));
+      }
+      if (dataMap.get("ResponseFile") != null || dataMap.get("ResponseContent") != null) {
+        if (dataMap.get("IncludesByPath") != null) {
+          virtualanObj.put("outputPaths", dataMap.get("IncludesByPath"));
+        }
+        virtualanObj.put("output", buildObjectResponse(basePath, dataMap));
+      }
+    } catch (Exception e) {
+      throw new UnableToProcessException(
+          "Unable to build collection object for Kafka " + dataMap.get("TestCaseName") + " :: " + e
+              .getMessage());
+    }
+    return virtualanObj;
+  }
+
   private static JSONObject buildRESTVirtualanCollection(String basePath,
       Map<String, String> dataMap)
       throws UnableToProcessException {
     JSONObject virtualanObj = new JSONObject();
     try {
+      virtualanObj.put("type", "REST");
       JSONArray paramsArray = new JSONArray();
       getMultiRunValue(dataMap, virtualanObj, paramsArray);
       virtualanObj.put("contentType", dataMap.get("ContentType"));
@@ -347,8 +445,8 @@ public class ExcelToCollectionGenerator {
       createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
       createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
       createProcessingType(dataMap, paramsArray, "CookieVariables", "COOKIE_PARAM");
-      getValue("Tags", dataMap, virtualanObj);
-      getValue("SkipScenario", dataMap, virtualanObj);
+      getValue("tags", dataMap, virtualanObj);
+      getValue("skipScenario", dataMap, virtualanObj);
       getSecurityValue(dataMap, virtualanObj);
       if (dataMap.get("Action") != null) {
         virtualanObj.put("method",
@@ -365,6 +463,7 @@ public class ExcelToCollectionGenerator {
       } else {
         log.error("URL IS MANDATORY!!! for " + dataMap.get("TestCaseName"));
       }
+      getValue("resource", dataMap, virtualanObj);
       if (dataMap.get("RequestFile") != null || dataMap.get("RequestContent") != null) {
         virtualanObj.put("input", buildObjectRequest(basePath, dataMap));
       }
@@ -654,12 +753,12 @@ public class ExcelToCollectionGenerator {
             "Unable to create collection for the given excel file " + inputExcel + " <<< " + e
                 .getMessage());
       } finally {
-          if (workbook != null) {
-              workbook.close();
-          }
-          if (stream != null) {
-              stream.close();
-          }
+        if (workbook != null) {
+          workbook.close();
+        }
+        if (stream != null) {
+          stream.close();
+        }
       }
       return this;
     }

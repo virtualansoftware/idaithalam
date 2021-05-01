@@ -215,8 +215,21 @@ public class FeatureGenerationHelper {
 
   private static Item getItem(JSONObject object, String path) throws IOException {
     Item item = new Item();
+    if("KAFKA".equalsIgnoreCase(object.optString("type"))) {
+      item.setKafka(true);
+      item.setKafkaOutput(true);
+    } else if ("REST".equalsIgnoreCase(object.optString("type"))){
+      item.setRest(true);
+    } else if ("DB".equalsIgnoreCase(object.optString("type"))) {
+      item.setDatabase(true);
+      item.setDbOutput(true);
+    }
+
+    item.setMessageType(getValueMapping("messageType", object, item));
+    item.setIdentifier(getValueMapping("identifier", object, item));
+    item.setEvent(getValueMapping("event", object, item));
     extractedInput(object, item, path);
-    getValueMapping("SkipScenario", object, item);
+    item.setSkipScenario(getValueMapping("skipScenario", object, item));
     extractedMultiRun(object, item);
     item.setTags(object.optString("tags"));
     item.setHttpStatusCode(object.optString("httpStatusCode"));
@@ -251,10 +264,11 @@ public class FeatureGenerationHelper {
     }
   }
 
-  private static void getValueMapping(String mapping, JSONObject object, Item item) {
+  private static String getValueMapping(String mapping, JSONObject object, Item item) {
     if (object.optString(mapping) != null && !object.optString(mapping).isEmpty()) {
-      item.setSkipScenario(object.optString(mapping));
+      return object.optString(mapping);
     }
+    return null;
   }
 
   private static String getStandardType(List<AvailableParam> availableParams) {
