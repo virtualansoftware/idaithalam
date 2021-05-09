@@ -23,6 +23,3 @@ Feature: Sample.yaml - API Contract validation status
       | id      | i~1   |
       | sample3 | three |
       | sample2 | two   |
-    And Verify-all /sample/validate/{sampleId} api includes following in the responsexxx
-      |id|sample1|sample2|sample3|
-      |1 |test1  |test2|test3|
