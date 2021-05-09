@@ -11,7 +11,7 @@ public class BatchAPITestExecutionManager {
   @Test
   public static void main() {
     try {
-       boolean isSuccess = MassApiExecutor.invoke("apiexecution.yaml");
+       boolean isSuccess = VirtualanTestPlanExecutor.invoke("apiexecution.yaml");
       if (!isSuccess) {
         Assert.assertTrue(false);
       }
