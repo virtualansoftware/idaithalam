@@ -359,6 +359,9 @@ public class ExcelToCollectionGenerator {
       //createProcessingType(dataMap, paramsArray, "CookieVariables", "COOKIE_PARAM");
       getValue("Tags", dataMap, virtualanObj);
       getValue("SkipScenario", dataMap, virtualanObj);
+      if(dataMap.get("StepInfo") != null && !dataMap.get("StepInfo").isEmpty()) {
+        virtualanObj.put("stepInfo", dataMap.get("StepInfo"));
+      }
       virtualanObj.put("method", dataMap.get("Action").toUpperCase());
 
       //getSecurityValue(dataMap, virtualanObj);
@@ -400,6 +403,9 @@ public class ExcelToCollectionGenerator {
       virtualanObj.put("event", dataMap.get("Event"));
       virtualanObj.put("identifier", dataMap.get("Identifier"));
       virtualanObj.put("messageType", dataMap.get("MessageType"));
+      if(dataMap.get("StepInfo") != null && !dataMap.get("StepInfo").isEmpty()) {
+        virtualanObj.put("stepInfo", dataMap.get("StepInfo"));
+      }
       //createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
       //createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
       //createProcessingType(dataMap, paramsArray, "CookieVariables", "COOKIE_PARAM");
@@ -449,6 +455,9 @@ public class ExcelToCollectionGenerator {
       createProcessingType(dataMap, paramsArray, "CookieVariables", "COOKIE_PARAM");
       getValue("tags", dataMap, virtualanObj);
       getValue("skipScenario", dataMap, virtualanObj);
+      if(dataMap.get("StepInfo") != null && !dataMap.get("StepInfo").isEmpty()) {
+        virtualanObj.put("stepInfo", dataMap.get("StepInfo"));
+      }
       getSecurityValue(dataMap, virtualanObj);
       if (dataMap.get("Action") != null) {
         virtualanObj.put("method",

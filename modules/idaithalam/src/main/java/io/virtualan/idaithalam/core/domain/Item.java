@@ -230,6 +230,30 @@ public class Item {
    */
   boolean hasCookieParams;
 
+
+  /**
+   * The Step info.
+   */
+  String stepInfo;
+
+  /**
+   * Gets step info.
+   *
+   * @return the step info
+   */
+  public String getStepInfo() {
+    return stepInfo;
+  }
+
+  /**
+   * Sets step info.
+   *
+   * @param stepInfo the step info
+   */
+  public void setStepInfo(String stepInfo) {
+    this.stepInfo = stepInfo;
+  }
+
   /**
    * Is db output boolean.
    *

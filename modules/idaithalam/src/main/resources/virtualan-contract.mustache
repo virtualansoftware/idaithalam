@@ -33,13 +33,13 @@ Feature: {{feature}} - API Contract validation status
     Scenario: {{scenario}} - {{method}} kafka message
       Given As a user perform message {{scenario}} action
       {{#hasInputJsonMap}}
-      When Send mapson message {{scenario}} for event {{event}} on {{resource}} with type {{messageType}}
+      When Send mapson message {{stepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
       {{#inputJsonMap}}
         | {{{key}}}                   |  {{{value}}}                        |
       {{/inputJsonMap}}
       {{/hasInputJsonMap}}
       {{#hasInputInline}}
-      When Send inline message {{scenario}} for event {{event}} on {{resource}} with type {{messageType}}
+      When Send inline message {{stepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
       {{#inputInline}}
         | {{{.}}} |
       {{/inputInline}}
@@ -55,8 +55,8 @@ Feature: {{feature}} - API Contract validation status
     @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
     {{/tags}}
     Scenario: {{scenario}} - database action
-      Given As a user perform sql {{scenario}} action
-      When Execute {{method}} for the given sql for {{scenario}} on {{resource}}
+      Given As a user perform sql {{stepInfo}} action
+      When Execute {{method}} for the given sql {{stepInfo}} on {{resource}}
       {{#inputInline}}
         | {{{.}}} |
       {{/inputInline}}
@@ -194,10 +194,10 @@ Feature: {{feature}} - API Contract validation status
       {{#kafkaOutput}}
       {{#hasResponseByField}}
       {{#kafkaInput}}
-      Then Verify-by-elements {{scenario}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      Then Verify-by-elements {{stepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{^kafkaInput}}
-      And Verify-by-elements {{scenario}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      And Verify-by-elements {{stepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{#responseByField}}
         | {{{key}}}                 |  {{{value}}}                          |
@@ -205,10 +205,10 @@ Feature: {{feature}} - API Contract validation status
       {{/hasResponseByField}}
       {{#hasCsvson}}
       {{#kafkaInput}}
-      Then Verify {{scenario}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      Then Verify {{stepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{^kafkaInput}}
-      And Verify {{scenario}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      And Verify {{stepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{#csvson}}
         | {{{.}}} |
@@ -220,10 +220,10 @@ Feature: {{feature}} - API Contract validation status
       {{#dbOutput}}
       {{#hasCsvson}}
       {{#dbInput}}
-      Then Verify details with the given sql for {{scenario}} on {{resource}}
+      Then Verify details with the given sql {{stepInfo}} on {{resource}}
       {{/dbInput}}
       {{^dbInput}}
-      And Verify details with the given sql for {{scenario}} on {{resource}}
+      And Verify details with the given sql {{stepInfo}} on {{resource}}
       {{/dbInput}}
       {{#csvson}}
         | {{{.}}} |

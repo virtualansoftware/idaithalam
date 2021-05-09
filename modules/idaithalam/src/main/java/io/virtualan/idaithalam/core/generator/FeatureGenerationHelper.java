@@ -218,6 +218,7 @@ public class FeatureGenerationHelper {
     item.setMessageType(getValueMapping("messageType", object, item));
     item.setIdentifier(getValueMapping("identifier", object, item));
     item.setEvent(getValueMapping("event", object, item));
+    item.setStepInfo(getValueMapping("stepInfo", object, item));
     extractedInput(object, item, path);
     item.setSkipScenario(getValueMapping("skipScenario", object, item));
     extractedMultiRun(object, item);
@@ -243,13 +244,13 @@ public class FeatureGenerationHelper {
     item.setStdType(getStandardType(availableParams));
     if ("KAFKA".equalsIgnoreCase(object.optString("type"))) {
       item.setKafka(true);
-      item.setKafkaInput(item.getInput() != null);
+      item.setKafkaInput(item.getInput() != null && !item.getInput().isEmpty());
       item.setKafkaOutput(hasOutput(item));
     } else if ("REST".equalsIgnoreCase(object.optString("type"))) {
       item.setRest(true);
     } else if ("DB".equalsIgnoreCase(object.optString("type"))) {
       item.setDatabase(true);
-      item.setDbInput(item.getInput() != null);
+      item.setDbInput(item.getInput() != null && !item.getInput().isEmpty());
       item.setDbOutput(hasOutput(item));
     }
     return item;
