@@ -1,7 +1,7 @@
 package io.virtualan.test;
 
 
-import io.virtualan.idaithalam.core.api.MassApiExecutor;
+import io.virtualan.idaithalam.core.api.VirtualanTestPlanExecutor;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
