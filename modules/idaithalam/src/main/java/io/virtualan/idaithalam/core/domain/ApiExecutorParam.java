@@ -1,5 +1,6 @@
 package io.virtualan.idaithalam.core.domain;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,7 +13,29 @@ public class ApiExecutorParam {
   private  String outputDir;
   private  String inputExcel;
   private Map<String,String> cucumblanProperies;
+  /**
+   * The Generated test list.
+   */
+  List<String> generatedTestList;
 
+
+  /**
+   * Gets generated test list.
+   *
+   * @return the generated test list
+   */
+  public List<String> getGeneratedTestList() {
+    return generatedTestList;
+  }
+
+  /**
+   * Sets generated test list.
+   *
+   * @param generatedTestList the generated test list
+   */
+  public void setGeneratedTestList(List<String> generatedTestList) {
+    this.generatedTestList = generatedTestList;
+  }
 
   /**
    * Instantiates a new Api executor param.

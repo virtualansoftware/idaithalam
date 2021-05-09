@@ -215,8 +215,12 @@ public class FeatureGenerationHelper {
 
   private static Item getItem(JSONObject object, String path) throws IOException {
     Item item = new Item();
+    item.setMessageType(getValueMapping("messageType", object, item));
+    item.setIdentifier(getValueMapping("identifier", object, item));
+    item.setEvent(getValueMapping("event", object, item));
+    item.setStepInfo(getValueMapping("stepInfo", object, item));
     extractedInput(object, item, path);
-    getValueMapping("SkipScenario", object, item);
+    item.setSkipScenario(getValueMapping("skipScenario", object, item));
     extractedMultiRun(object, item);
     item.setTags(object.optString("tags"));
     item.setHttpStatusCode(object.optString("httpStatusCode"));
@@ -238,7 +242,23 @@ public class FeatureGenerationHelper {
     item.setUrl(object.optString("url"));
     extractedOutput(object, item, path);
     item.setStdType(getStandardType(availableParams));
+    if ("KAFKA".equalsIgnoreCase(object.optString("type"))) {
+      item.setKafka(true);
+      item.setKafkaInput(item.getInput() != null && !item.getInput().isEmpty());
+      item.setKafkaOutput(hasOutput(item));
+    } else if ("REST".equalsIgnoreCase(object.optString("type"))) {
+      item.setRest(true);
+    } else if ("DB".equalsIgnoreCase(object.optString("type"))) {
+      item.setDatabase(true);
+      item.setDbInput(item.getInput() != null && !item.getInput().isEmpty());
+      item.setDbOutput(hasOutput(item));
+    }
     return item;
+  }
+
+  private static boolean hasOutput(Item item) {
+    return item.getHasCsvson() != null || item.isHasResponseByField() || item
+        .isHasOutputFileByPath() || item.getOutput() != null;
   }
 
   private static void extractedMultiRun(JSONObject object, Item item) {
@@ -251,10 +271,11 @@ public class FeatureGenerationHelper {
     }
   }
 
-  private static void getValueMapping(String mapping, JSONObject object, Item item) {
+  private static String getValueMapping(String mapping, JSONObject object, Item item) {
     if (object.optString(mapping) != null && !object.optString(mapping).isEmpty()) {
-      item.setSkipScenario(object.optString(mapping));
+      return object.optString(mapping);
     }
+    return null;
   }
 
   private static String getStandardType(List<AvailableParam> availableParams) {
@@ -291,7 +312,7 @@ public class FeatureGenerationHelper {
 
   private static void extractedOutput(JSONObject object, Item item, String path)
       throws IOException {
-    if(!object.optString("csvson").trim().isEmpty()) {
+    if (!object.optString("csvson").trim().isEmpty()) {
       item.setHasCsvson(object.optString("csvson"));
       item.setCsvson(Arrays.asList(object.optString("csvson").split("\n")));
     }
@@ -359,7 +380,10 @@ public class FeatureGenerationHelper {
   private static void extractedInput(JSONObject object, Item item, String path) throws IOException {
     item.setContentType(object.optString("contentType"));
     item.setInput(replaceSpecialChar(object.optString("input")));
-    if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())
+    if ("DB".equalsIgnoreCase(object.optString("type"))) {
+      item.setInputInline(getStringAsList(item.getInput()));
+      item.setHasInputInline(item.getInput());
+    } else if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())
         && object.optString("contentType").toLowerCase().contains("xml")) {
       if (!ApplicationConfiguration.getInline() && item.getInput().length() > 700) {
         String fileName =
@@ -399,18 +423,18 @@ public class FeatureGenerationHelper {
         return new JSONArray(json);
       } catch (Exception e) {
         if (json.contains("{") && json.contains("}")) {
-          log.warn(  json +" is not a valid JSON!. Correct the JSON file!");
+          log.warn(json + " is not a valid JSON!. Correct the JSON file!");
         }
         return json;
       }
     }
   }
 
-  private static String replaceSpecialChar(String request){
-    String  skipChars = IdaithalamConfiguration.getProperty("SPECIAL_SKIP_CHAR");
+  private static String replaceSpecialChar(String request) {
+    String skipChars = IdaithalamConfiguration.getProperty("SPECIAL_SKIP_CHAR");
     skipChars = skipChars == null ? "\\|=\\\\\\\\|;\\\\n=\\\\\\\\n;\\\\r=\\\\\\\\r;" : skipChars;
     String replacedChar = request;
-    for(String skipChar : skipChars.split(";") ) {
+    for (String skipChar : skipChars.split(";")) {
       replacedChar = replacedChar.replaceAll(skipChar.split("=")[0], skipChar.split("=")[1]);
     }
     return replacedChar;

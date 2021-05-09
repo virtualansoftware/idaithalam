@@ -15,13 +15,13 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 @Slf4j
-public class MassApiExecutor {
+public class VirtualanTestPlanExecutor {
 
   private static final int NTHREDS = 1;
 
   public static boolean invoke(String configMapper) throws InterruptedException {
     Yaml yaml = new Yaml(new Constructor(ExecutionPlanner.class));
-    InputStream inputStream = MassApiExecutor.class.getClassLoader()
+    InputStream inputStream = VirtualanTestPlanExecutor.class.getClassLoader()
         .getResourceAsStream(configMapper);
     ExecutionPlanner executionPlanner = yaml.load(inputStream);
     ExecutorService executor = Executors
@@ -41,7 +41,7 @@ public class MassApiExecutor {
     }
     // Wait until all threads are finish
     executor.awaitTermination(executionPlanner.getTimeout(), TimeUnit.MINUTES);
-    boolean bool = futures.stream().anyMatch(x -> {
+    boolean bool = futures.stream().allMatch(x -> {
       try {
         return x.get() != 0;
       } catch (InterruptedException | ExecutionException e) {
@@ -50,7 +50,7 @@ public class MassApiExecutor {
     });
 
     log.info("Finished all api execution");
-    return true;
+    return !bool;
   }
 
 }

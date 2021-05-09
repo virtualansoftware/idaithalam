@@ -12,26 +12,26 @@ import java.util.concurrent.Callable;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ParallelExecutor implements Callable<Integer> {
+public class VirtualanTestExecutor {
 
   private String outputDir;
   private String inputExcel;
   private String env;
   private String reportTitle;
   private Map<String, String> cucumblanProperies;
-  private List<String> generatedTestList;
+  List<String> generatedTestList;
 
-  ParallelExecutor(ApiExecutorParam apiExecutorPrarm) {
+  public VirtualanTestExecutor(ApiExecutorParam apiExecutorPrarm) {
     this.outputDir = apiExecutorPrarm.getOutputDir();
     this.inputExcel = apiExecutorPrarm.getInputExcel();
     this.env = apiExecutorPrarm.getEnv();
     this.reportTitle = apiExecutorPrarm.getReportTitle();
     this.cucumblanProperies = apiExecutorPrarm.getCucumblanProperies();
     this.generatedTestList = apiExecutorPrarm.getGeneratedTestList();
+
   }
 
 
-  @Override
   public Integer call() {
     int status = 0;
     try {
