@@ -1,0 +1,19 @@
+{
+  "category": {
+    "id": 0,
+    "name": "string"
+  },
+  "id": <petId>,
+  "name": "<petName>",
+  "photoUrls": [
+    "string"
+  ],
+  "status": "available",
+  "tags": [
+    {
+      "id": 0,
+      "name": "string"
+    }
+  ],
+  "type": "DOGS"
+}

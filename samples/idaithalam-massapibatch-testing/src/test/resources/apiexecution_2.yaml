@@ -1,0 +1,25 @@
+parallelExecution: 4
+timeout: 5
+apiExecutor:
+  - reportTitle: "Risk factor"
+    env: dev
+    outputDir: target/dev/risk/1
+    inputExcel: virtualan_collection_testcase_02.xlsx
+  - reportTitle: "pet"
+    env: dev
+    outputDir: target/dev/pet/1
+    inputExcel: virtualan_collection_testcase_01.xlsx
+    cucumblanProperies:
+      service.api.api: https://live.virtualandemo.com
+  - reportTitle: "API Testing 1"
+    env: dev
+    outputDir: target/dev/2
+    inputExcel: virtualan_collection_testcase_7.xlsx
+    cucumblanProperies:
+      service.api.api: https://live.virtualandemo.com
+  - reportTitle: "API Testing 2"
+    env: dev
+    outputDir: target/dev/3
+    inputExcel: virtualan_collection_testcase_2.xlsx
+    cucumblanProperies:
+      service.api.api: https://live.virtualandemo.com

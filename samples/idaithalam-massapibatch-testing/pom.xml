@@ -1,0 +1,93 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>io.virtualan</groupId>
+	<artifactId>idaithalam-massapibatch-apitesting</artifactId>
+	<packaging>jar</packaging>
+	<name>idaithalam-batch-apitesting</name>
+	<version>1.0.1-SNAPSHOT</version>
+	<properties>
+		<slf4j.version>1.7.30</slf4j.version>
+		<idaithalam.version>1.3.0-SNAPSHOT</idaithalam.version>
+    <java.version>1.8</java.version>
+		<testng.ver>7.4.0</testng.ver>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+  </properties>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.0.0-M3</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+						<configuration>
+
+							<!-- UNCOMMENT - To add any exclusions if required -->
+							<!-- <excludes> <exclude>**/*IT*.java</exclude> </excludes> -->
+
+							<includes>
+
+								<!-- UNCOMMENT BELOW LINE - To execute feature files with a single
+									runner -->
+								<!-- <include>**/Default.java</include> -->
+
+								<!-- UNCOMMENT BELOW LINE - To execute feature files with multiple
+									runners -->
+								<include>**/*Runner.java</include>
+							</includes>
+
+							<!-- OPTIONAL UNCOMMENT BELOW 6 LINES - To set data provider thread count value.
+							Default is 10. For executing using parallel or forking -->
+							<!-- <properties>
+								<property>
+									<name>dataproviderthreadcount</name>
+									<value>4</value>
+								</property>
+							</properties> -->
+
+							<!-- OPTIONAL UNCOMMENT BELOW 3 LINES - In case of multiple runners to further reduce times.
+							For executing using parallel -->
+							<!-- <parallel>classes</parallel>
+							<threadCount>4</threadCount>
+							<perCoreThreadCount>true</perCoreThreadCount> -->
+
+							<!-- UNCOMMENT BELOW 3 LINES - To execute using forking
+								option -->
+							<!-- <forkCount>2</forkCount>
+							<reuseForks>true</reuseForks>
+							<reportsDirectory>${project.build.directory}/failsafe-reports_${surefire.forkNumber}</reportsDirectory> -->
+
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>io.virtualan</groupId>
+			<artifactId>idaithalam</artifactId>
+			<version>${idaithalam.version}</version>
+		</dependency>
+    <dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>${testng.ver}</version>
+		</dependency>
+	</dependencies>
+
+</project>
