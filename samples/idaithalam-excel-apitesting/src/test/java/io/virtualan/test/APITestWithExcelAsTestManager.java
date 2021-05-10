@@ -29,7 +29,6 @@ public class APITestWithExcelAsTestManager {
     System.out.println("-------------------------------------------");
   }
 
-
   @Test
   public void executeApiTests_1() {
     int status = 0;
@@ -62,7 +61,6 @@ public class APITestWithExcelAsTestManager {
     }
 
   }
-
 
   @Test
   public void executeApiTests_2() {
@@ -100,7 +98,6 @@ public class APITestWithExcelAsTestManager {
 
   }
 
-
   @Test
   public void executeApiTests_3() {
     int status = 0;
@@ -128,7 +125,7 @@ public class APITestWithExcelAsTestManager {
     }
   }
 
-  @Test
+    @Test
   public void executeApiTests_7() {
     int status = 0;
     try {
@@ -153,7 +150,6 @@ public class APITestWithExcelAsTestManager {
       System.out.println(e.getMessage());
       Assert.assertTrue(false);
     }
-
   }
 
   @Test
@@ -183,34 +179,35 @@ public class APITestWithExcelAsTestManager {
     }
   }
 
-  //Multi Run and Skip the test
+//Multi Run and Skip the test
   @Test
   public void executeApiTests_5() {
-    int status = 0;
-    try {
-      int testcase = 5;
-      File f = new File(System.getProperty("user.dir") + "/target/" + testcase);
-      if (!f.exists()) {
-        f.mkdir();
-      }
-      //pass the spreadsheet that you want to pass to the user
-      IdaithalamConfiguration.setProperty("workflow", "Enabled");
-      ExcelToCollectionGenerator.createCollection(null, "virtualan_collection_testcase_01.xlsx",
-          System.getProperty("user.dir") + "/target/" + testcase);
-      //Generate feature and summary page html report for the selected testcase from the excel
-      status = IdaithalamExecutor.validateContract("Scriptless-5-Multi Run and Skip Scenario",
-          System.getProperty("user.dir") + "/target/" + testcase);
-      System.out.println(status);
-      if (status != 0) {
-        Assert.assertTrue(false);
-      } else {
-        Assert.assertTrue(true);
-      }
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
+
+    int testcase = 5;
+    ApiExecutorParam apiExecutorParam = new ApiExecutorParam();
+    List<String> list = new ArrayList<>();
+    //Add the testcaseName that List of testcases to be executed from the excel
+    //for the test selected execution
+    list.add("PetPost");
+    list.add("PetGet");  // uncomment and test again see the summary report
+    apiExecutorParam.setGeneratedTestList(list);
+    //apiExecutorParam.setCucumblanProperies();
+    apiExecutorParam.setInputExcel("virtualan_collection_testcase_01.xlsx");
+    apiExecutorParam.setOutputDir(System.getProperty("user.dir") + "/target/" + testcase);
+    apiExecutorParam.setReportTitle("Pet API testing");
+    VirtualanTestExecutor testExecutor = new VirtualanTestExecutor(apiExecutorParam);
+    IdaithalamConfiguration.setProperty("workflow", "Disabled");
+    int status = testExecutor.call();
+    System.out.println(status);
+    if (status != 0) {
+      //actual it will fail but it made as pass
+      //purposefully passed to show case okta and basic auth demo
       Assert.assertTrue(false);
+    } else {
+      Assert.assertTrue(true);
     }
   }
+
 
   @Test
   public void executeApiTests_6() {
