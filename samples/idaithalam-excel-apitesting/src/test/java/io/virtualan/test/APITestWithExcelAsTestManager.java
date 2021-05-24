@@ -267,8 +267,6 @@ public class APITestWithExcelAsTestManager {
       }
   }
 
-
-
     @Test
     public void storeVariables() {
         int status = 0;
@@ -300,7 +298,6 @@ public class APITestWithExcelAsTestManager {
             System.out.println(e.getMessage());
             Assert.assertTrue(true);
         }
-
     }
 
 
