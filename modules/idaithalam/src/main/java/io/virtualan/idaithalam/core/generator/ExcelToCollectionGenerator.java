@@ -451,6 +451,7 @@ public class ExcelToCollectionGenerator {
       virtualanObj.put("scenarioId", dataMap.get("TestCaseName"));
       virtualanObj.put("scenario", dataMap.get("TestCaseNameDesc"));
       createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
+      createProcessingType(dataMap, paramsArray, "EvaluateFunctionVariables", "EVAL_PARAM");
       createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
       createProcessingType(dataMap, paramsArray, "CookieVariables", "COOKIE_PARAM");
       getValue("tags", dataMap, virtualanObj);
@@ -581,10 +582,9 @@ public class ExcelToCollectionGenerator {
     if (dataMap.get(requestProcessingType) != null) {
       String[] processTypes = dataMap.get(requestProcessingType).split(";");
       for (String keyValue : processTypes) {
-        String[] processType = keyValue.split("=");
-        if (processType.length == 2) {
-          buildParam(processType[0], processType[1], paramsArray, param);
-        }
+        String key = keyValue.substring(0, keyValue.indexOf("="));
+        String value = keyValue.substring(keyValue.indexOf("=")+1);
+        buildParam(key , value, paramsArray, param);
       }
     }
   }

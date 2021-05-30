@@ -218,6 +218,12 @@ public class Item {
   /**
    * The Path params.
    */
+  List<AvailableParam> evaluateParams;
+
+
+  /**
+   * The Path params.
+   */
   List<AvailableParam> storageParams;
 
   /**
@@ -484,6 +490,12 @@ public class Item {
    * The Has header params.
    */
   boolean hasCreateParams;
+
+  /**
+   * The Has evaluate params.
+   */
+  boolean hasEvaluateParams;
+
   /**
    * The Is put.
    */
@@ -540,6 +552,25 @@ public class Item {
    */
   String inputFile;
 
+
+  /**
+   * Gets evaluate params.
+   *
+   * @return the evaluate params
+   */
+  public List<AvailableParam> getEvaluateParams() {
+    return evaluateParams;
+  }
+
+  /**
+   * Sets evaluate params.
+   *
+   * @param evaluateParams the evaluate params
+   */
+  public void setEvaluateParams(
+      List<AvailableParam> evaluateParams) {
+    this.evaluateParams = evaluateParams;
+  }
 
   /**
    * Is has multi run boolean.
@@ -1336,6 +1367,8 @@ public class Item {
       hasStorageParams = storageParams != null && !storageParams.isEmpty();
       createParams = stringListMap.get("ADDIFY_PARAM");
       hasCreateParams = createParams != null && !createParams.isEmpty();
+      evaluateParams = stringListMap.get("EVAL_PARAM");
+      hasEvaluateParams = evaluateParams != null && !evaluateParams.isEmpty();
       cookieParams = stringListMap.get("COOKIE_PARAM");
       hasCookieParams = cookieParams != null && !cookieParams.isEmpty();
     }

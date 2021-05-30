@@ -189,6 +189,11 @@ Feature: {{feature}} - API Contract validation status
       And Store the {{{value}}} value of the key as {{{key}}}
       {{/storageParams}}
       {{/hasStorageParams}}
+      {{#hasEvaluateParams}}
+      {{#evaluateParams}}
+      And evaluate the {{{value}}} condition {{{key}}}
+      {{/evaluateParams}}
+      {{/hasEvaluateParams}}
       {{/isRest}}
       {{#isKafka}}
       {{#kafkaOutput}}
