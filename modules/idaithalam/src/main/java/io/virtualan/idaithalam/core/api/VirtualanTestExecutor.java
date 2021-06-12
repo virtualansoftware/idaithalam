@@ -20,10 +20,10 @@ public class VirtualanTestExecutor {
   private String env;
   private String reportTitle;
   private String basePath;
-  private Map<String, String> cucumblanProperies;
+  private Map<String, String> cucumblanProperties;
   List<String> generatedTestList;
-  private Map<String, String> cucumblanEnvProperies;
-  private Map<String, String> excludeProperies;
+  private Map<String, String> cucumblanEnvProperties;
+  private Map<String, String> excludeProperties;
 
   public VirtualanTestExecutor(ApiExecutorParam apiExecutorPrarm) {
     this.outputDir = apiExecutorPrarm.getOutputDir();
@@ -31,10 +31,10 @@ public class VirtualanTestExecutor {
     this.env = apiExecutorPrarm.getEnv();
     this.basePath = apiExecutorPrarm.getBasePath();
     this.reportTitle = apiExecutorPrarm.getReportTitle();
-    this.cucumblanProperies = apiExecutorPrarm.getCucumblanProperies();
+    this.cucumblanProperties = apiExecutorPrarm.getCucumblanProperties();
     this.generatedTestList = apiExecutorPrarm.getGeneratedTestList();
-    this.excludeProperies = apiExecutorPrarm.getExcludeProperies();
-    this.cucumblanEnvProperies = apiExecutorPrarm.getCucumblanEnvProperies();
+    this.excludeProperties = apiExecutorPrarm.getExcludeProperties();
+    this.cucumblanEnvProperties = apiExecutorPrarm.getCucumblanEnvProperties();
 
   }
 
@@ -49,9 +49,9 @@ public class VirtualanTestExecutor {
       if (inputExcel != null){
         ExcelToCollectionGenerator.createCollection(basePath,generatedTestList, inputExcel, outputDir);
       }
-      buildProperties("cucumblan.properties", cucumblanProperies);
-      buildProperties("cucumblan-env.properties", cucumblanEnvProperies);
-      buildProperties("exclude-response.properties", excludeProperies);
+      buildProperties("cucumblan.properties", cucumblanProperties);
+      buildProperties("cucumblan-env.properties", cucumblanEnvProperties);
+      buildProperties("exclude-response.properties", excludeProperties);
 
       //Generate feature and summary page html report for the selected testcase from the excel
       String title = env != null ? env + " : " + reportTitle : reportTitle;

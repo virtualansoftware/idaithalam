@@ -14,9 +14,9 @@ public class ApiExecutorParam {
   private  String outputDir;
   private  String inputFile;
   private  String inputExcel;
-  private Map<String,String> cucumblanProperies;
-  private Map<String,String> cucumblanEnvProperies;
-  private Map<String,String> excludeProperies;
+  private Map<String,String> cucumblanProperties;
+  private Map<String,String> cucumblanEnvProperties;
+  private Map<String,String> excludeProperties;
 
 
   /**
@@ -24,17 +24,17 @@ public class ApiExecutorParam {
    *
    * @return the exclude properies
    */
-  public Map<String, String> getExcludeProperies() {
-    return excludeProperies;
+  public Map<String, String> getExcludeProperties() {
+    return excludeProperties;
   }
 
   /**
    * Sets exclude properies.
    *
-   * @param excludeProperies the exclude properies
+   * @param excludeProperties the exclude properies
    */
-  public void setExcludeProperies(Map<String, String> excludeProperies) {
-    this.excludeProperies = excludeProperies;
+  public void setExcludeProperties(Map<String, String> excludeProperties) {
+    this.excludeProperties = excludeProperties;
   }
 
   /**
@@ -42,18 +42,18 @@ public class ApiExecutorParam {
    *
    * @return the cucumblan env properies
    */
-  public Map<String, String> getCucumblanEnvProperies() {
-    return cucumblanEnvProperies;
+  public Map<String, String> getCucumblanEnvProperties() {
+    return cucumblanEnvProperties;
   }
 
   /**
    * Sets cucumblan env properies.
    *
-   * @param cucumblanEnvProperies the cucumblan env properies
+   * @param cucumblanEnvProperties the cucumblan env properies
    */
-  public void setCucumblanEnvProperies(
-      Map<String, String> cucumblanEnvProperies) {
-    this.cucumblanEnvProperies = cucumblanEnvProperies;
+  public void setCucumblanEnvProperties(
+      Map<String, String> cucumblanEnvProperties) {
+    this.cucumblanEnvProperties = cucumblanEnvProperties;
   }
 
   /**
@@ -127,17 +127,17 @@ public class ApiExecutorParam {
    *
    * @return the cucumblan props
    */
-  public Map<String, String> getCucumblanProperies() {
-    return cucumblanProperies;
+  public Map<String, String> getCucumblanProperties() {
+    return cucumblanProperties;
   }
 
   /**
    * Sets cucumblan props.
    *
-   * @param cucumblanProperies the cucumblan props
+   * @param cucumblanProperties the cucumblan props
    */
-  public void setCucumblanProperies(Map<String, String> cucumblanProperies) {
-    this.cucumblanProperies = cucumblanProperies;
+  public void setCucumblanProperties(Map<String, String> cucumblanProperties) {
+    this.cucumblanProperties = cucumblanProperties;
   }
 
   /**

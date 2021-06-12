@@ -533,6 +533,11 @@ public class Item {
 
 
   /**
+   * The No skip output.
+   */
+  boolean noSkipOutput;
+
+  /**
    * The Output file xml.
    */
   String outputFile;
@@ -552,6 +557,15 @@ public class Item {
    */
   String inputFile;
 
+
+  /**
+   * Is no skip output boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isNoSkipOutput() {
+    return noSkipOutput;
+  }
 
   /**
    * Gets evaluate params.
@@ -1408,5 +1422,14 @@ public class Item {
    */
   public void setTags(String tags) {
     this.tags = tags;
+  }
+
+  /**
+   * Sets no skip output.
+   *
+   * @param noSkipOutput the no skip output
+   */
+  public void setNoSkipOutput(boolean noSkipOutput) {
+      this.noSkipOutput = noSkipOutput;
   }
 }

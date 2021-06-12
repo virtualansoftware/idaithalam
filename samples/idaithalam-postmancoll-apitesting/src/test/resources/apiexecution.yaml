@@ -4,7 +4,7 @@ apiExecutor:
   - reportTitle: "API Testing POSTMAN Collection 1 with 2 files"
     env: dev
     outputDir: target/postman/1
-    cucumblanProperies:
+    cucumblanProperties:
       service.api: https://live.virtualandemo.com
       service.api.xml: https://www.w3schools.com
       virtualan.data.heading: Idaithalan REST Postman_Collection_1_1;Idaithalan SOAP Postman_Collection_1_2
@@ -13,9 +13,11 @@ apiExecutor:
   - reportTitle: "API Testing SOAP POSTMAN Collection 2 with 1 file"
     env: dev
     outputDir: target/postman/2
-    cucumblanProperies:
+    cucumblanProperties:
       service.api: https://live.virtualandemo.com
       service.api.xml: https://www.w3schools.com
       virtualan.data.heading: Idaithalan SOAP Postman_Collection_report2_1
       virtualan.data.load: soap_postman_virtualan.json
       virtualan.data.type: POSTMAN
+    excludeProperties:
+      .*: IGNORE

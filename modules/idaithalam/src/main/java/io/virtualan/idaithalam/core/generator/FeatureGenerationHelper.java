@@ -202,18 +202,18 @@ public class FeatureGenerationHelper {
    * @return the list
    * @throws IOException the io exception
    */
-  public static List<Item> createFeatureFile(JSONArray arr, String path) throws IOException {
+  public static List<Item> createFeatureFile(Map<String,String> excludeConfiguration, JSONArray arr, String path) throws IOException {
     List<Item> result = new ArrayList<>();
     if (arr != null && arr.length() > 0) {
       for (int i = 0; i < arr.length(); i++) {
-        Item item = getItem(arr.optJSONObject(i), path);
+        Item item = getItem(excludeConfiguration, arr.optJSONObject(i), path);
         result.add(item);
       }
     }
     return result;
   }
 
-  private static Item getItem(JSONObject object, String path) throws IOException {
+  private static Item getItem(Map<String,String> excludeConfiguration,JSONObject object, String path) throws IOException {
     Item item = new Item();
     item.setMessageType(getValueMapping("messageType", object, item));
     item.setIdentifier(getValueMapping("identifier", object, item));
@@ -240,7 +240,7 @@ public class FeatureGenerationHelper {
     List<AvailableParam> availableParams = getAvailableParamList(object);
     item.setAvailableParams(availableParams);
     item.setUrl(object.optString("url"));
-    extractedOutput(object, item, path);
+    extractedOutput(excludeConfiguration, object, item, path);
     item.setStdType(getStandardType(availableParams));
     if ("KAFKA".equalsIgnoreCase(object.optString("type"))) {
       item.setKafka(true);
@@ -310,8 +310,9 @@ public class FeatureGenerationHelper {
     }
   }
 
-  private static void extractedOutput(JSONObject object, Item item, String path)
+  private static void extractedOutput(Map<String,String> excludeProperties, JSONObject object, Item item, String path)
       throws IOException {
+    item.setNoSkipOutput(!ExcludeConfiguration.shouldSkip(excludeProperties, item.getUrl(), null));
     if (!object.optString("csvson").trim().isEmpty()) {
       item.setHasCsvson(object.optString("csvson"));
       item.setCsvson(Arrays.asList(object.optString("csvson").split("\n")));
@@ -356,7 +357,7 @@ public class FeatureGenerationHelper {
           Object jsonObject = getJSON(item.getOutput());
           if (jsonObject instanceof JSONArray || jsonObject instanceof JSONObject) {
             item.setOutputJsonMap(Mapson.buildMAPsonFromJson(item.getOutput()));
-            if (!ExcludeConfiguration.shouldSkip(item.getUrl(), null)) {
+            if (!ExcludeConfiguration.shouldSkip(excludeProperties, item.getUrl(), null)) {
               item.setHasOutputJsonMap(true);
             }
           } else {

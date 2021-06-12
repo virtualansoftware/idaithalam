@@ -20,9 +20,9 @@ public class ParallelExecutor implements Callable<Integer> {
   private String env;
   private String reportTitle;
   private String basePath;
-  private Map<String, String> cucumblanProperies;
-  private Map<String, String> cucumblanEnvProperies;
-  private Map<String, String> excludeProperies;
+  private Map<String, String> cucumblanProperties;
+  private Map<String, String> cucumblanEnvProperties;
+  private Map<String, String> excludeProperties;
   private List<String> generatedTestList;
 
   ParallelExecutor(ApiExecutorParam apiExecutorPrarm) {
@@ -31,9 +31,9 @@ public class ParallelExecutor implements Callable<Integer> {
     this.basePath = apiExecutorPrarm.getBasePath();
     this.env = apiExecutorPrarm.getEnv();
     this.reportTitle = apiExecutorPrarm.getReportTitle();
-    this.cucumblanProperies = apiExecutorPrarm.getCucumblanProperies();
-    this.cucumblanEnvProperies = apiExecutorPrarm.getCucumblanEnvProperies();
-    this.excludeProperies = apiExecutorPrarm.getExcludeProperies();
+    this.cucumblanProperties = apiExecutorPrarm.getCucumblanProperties();
+    this.cucumblanEnvProperties = apiExecutorPrarm.getCucumblanEnvProperties();
+    this.excludeProperties = apiExecutorPrarm.getExcludeProperties();
     this.generatedTestList = apiExecutorPrarm.getGeneratedTestList();
 
   }
@@ -51,9 +51,9 @@ public class ParallelExecutor implements Callable<Integer> {
         ExcelToCollectionGenerator
             .createCollection(basePath, generatedTestList, inputExcel, outputDir);
       }
-      buildProperties("cucumblan.properties", cucumblanProperies);
-      buildProperties("cucumblan-env.properties", cucumblanEnvProperies);
-      buildProperties("exclude-response.properties", excludeProperies);
+      buildProperties("cucumblan.properties", cucumblanProperties);
+      buildProperties("cucumblan-env.properties", cucumblanEnvProperties);
+      buildProperties("exclude-response.properties", excludeProperties);
 
       //Generate feature and summary page html report for the selected testcase from the excel
       String title = env != null ? env + " : " + reportTitle : reportTitle;
