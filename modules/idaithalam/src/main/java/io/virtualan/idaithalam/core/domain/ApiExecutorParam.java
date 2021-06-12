@@ -15,6 +15,46 @@ public class ApiExecutorParam {
   private  String inputFile;
   private  String inputExcel;
   private Map<String,String> cucumblanProperies;
+  private Map<String,String> cucumblanEnvProperies;
+  private Map<String,String> excludeProperies;
+
+
+  /**
+   * Gets exclude properies.
+   *
+   * @return the exclude properies
+   */
+  public Map<String, String> getExcludeProperies() {
+    return excludeProperies;
+  }
+
+  /**
+   * Sets exclude properies.
+   *
+   * @param excludeProperies the exclude properies
+   */
+  public void setExcludeProperies(Map<String, String> excludeProperies) {
+    this.excludeProperies = excludeProperies;
+  }
+
+  /**
+   * Gets cucumblan env properies.
+   *
+   * @return the cucumblan env properies
+   */
+  public Map<String, String> getCucumblanEnvProperies() {
+    return cucumblanEnvProperies;
+  }
+
+  /**
+   * Sets cucumblan env properies.
+   *
+   * @param cucumblanEnvProperies the cucumblan env properies
+   */
+  public void setCucumblanEnvProperies(
+      Map<String, String> cucumblanEnvProperies) {
+    this.cucumblanEnvProperies = cucumblanEnvProperies;
+  }
 
   /**
    * Gets base path.

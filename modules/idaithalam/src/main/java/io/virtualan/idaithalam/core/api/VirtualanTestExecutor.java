@@ -5,6 +5,8 @@ import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.generator.ExcelToCollectionGenerator;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -20,6 +22,8 @@ public class VirtualanTestExecutor {
   private String basePath;
   private Map<String, String> cucumblanProperies;
   List<String> generatedTestList;
+  private Map<String, String> cucumblanEnvProperies;
+  private Map<String, String> excludeProperies;
 
   public VirtualanTestExecutor(ApiExecutorParam apiExecutorPrarm) {
     this.outputDir = apiExecutorPrarm.getOutputDir();
@@ -29,6 +33,9 @@ public class VirtualanTestExecutor {
     this.reportTitle = apiExecutorPrarm.getReportTitle();
     this.cucumblanProperies = apiExecutorPrarm.getCucumblanProperies();
     this.generatedTestList = apiExecutorPrarm.getGeneratedTestList();
+    this.excludeProperies = apiExecutorPrarm.getExcludeProperies();
+    this.cucumblanEnvProperies = apiExecutorPrarm.getCucumblanEnvProperies();
+
   }
 
 
@@ -42,22 +49,9 @@ public class VirtualanTestExecutor {
       if (inputExcel != null){
         ExcelToCollectionGenerator.createCollection(basePath,generatedTestList, inputExcel, outputDir);
       }
-      if(cucumblanProperies != null && !cucumblanProperies.isEmpty()) {
-        File file = new File(outputDir +File.separator+"cucumblan.properties");
-        if(!file.exists()){
-          file.createNewFile();
-        }
-        Properties properties = new Properties();
-        properties.load(new FileInputStream(file));
-        cucumblanProperies.entrySet().stream().forEach(
-            x -> {
-              properties.setProperty(x.getKey(), x.getValue());
-            }
-        );
-        ExcelToCollectionGenerator.createPrpos(outputDir,
-            (Map)properties,
-            "cucumblan.properties");
-      }
+      buildProperties("cucumblan.properties", cucumblanProperies);
+      buildProperties("cucumblan-env.properties", cucumblanEnvProperies);
+      buildProperties("exclude-response.properties", excludeProperies);
 
       //Generate feature and summary page html report for the selected testcase from the excel
       String title = env != null ? env + " : " + reportTitle : reportTitle;
@@ -69,5 +63,24 @@ public class VirtualanTestExecutor {
     }
     log.info(env + " : " + reportTitle + " : status : " + status);
     return status;
+  }
+
+  private void buildProperties(String fileName, Map<String, String> existingProperties) throws IOException {
+    if(existingProperties != null && !existingProperties.isEmpty()) {
+      File file = new File(outputDir +File.separator+fileName);
+      if(!file.exists()){
+        file.createNewFile();
+      }
+      Properties properties = new Properties();
+      properties.load(new FileInputStream(file));
+      existingProperties.entrySet().stream().forEach(
+          x -> {
+            properties.setProperty(x.getKey(), x.getValue());
+          }
+      );
+      ExcelToCollectionGenerator.createPrpos(outputDir,
+          (Map)properties,
+          fileName);
+    }
   }
 }
