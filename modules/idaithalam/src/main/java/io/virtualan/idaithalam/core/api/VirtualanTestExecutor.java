@@ -58,9 +58,14 @@ public class VirtualanTestExecutor {
             "cucumblan.properties");
       }
       //Generate feature and summary page html report for the selected testcase from the excel
-      status = IdaithalamExecutor
-          .validateContract(env + " : " + reportTitle,
-              outputDir);
+      if(env == null){
+        status = IdaithalamExecutor
+            .validateContract(reportTitle, outputDir);
+      } else {
+        status = IdaithalamExecutor
+            .validateContract(env + " : " + reportTitle,
+                outputDir);
+      }
     } catch (Exception e) {
       log.warn(env + " : " + reportTitle + " : " + e.getMessage());
       status = 1;

@@ -162,7 +162,6 @@ public class APITestWithExcelAsTestManager {
       int testcase = 5;
       IdaithalamConfiguration.setProperty("workflow", "Enabled");
       ApiExecutorParam apiExecutorParam = new ApiExecutorParam();
-      //apiExecutorParam.setCucumblanProperies();
       apiExecutorParam.setInputExcel("virtualan_collection_testcase_6.xlsx");
       apiExecutorParam.setOutputDir(System.getProperty("user.dir") + "/target/" + testcase);
       apiExecutorParam.setReportTitle("Pet 5 API EXCEL based api testing");
@@ -283,13 +282,6 @@ public class APITestWithExcelAsTestManager {
             list.add("CreatePet");
             ApiExecutorParam apiExecutorParam = new ApiExecutorParam();
             apiExecutorParam.setGeneratedTestList(list);
-
-//            Map<String, String> cucumblanProperies = new HashMap<>();
-//            cucumblanProperies.put("service.api","https://live.virtualandemo.com");
-//            cucumblanProperies.put("service.api.xml","https://www.w3schools.com");
-//            cucumblanProperies.put("virtualan.data.load", "idaithalan.postman_collection.json;virtualan.json");
-//            cucumblanProperies.put("virtualan.data.type", "POSTMAN");
-//            apiExecutorParam.setCucumblanProperies(cucumblanProperies);
 
             apiExecutorParam.setInputExcel("virtualan_bdd_testcase_run_manager.xlsx");
             apiExecutorParam.setOutputDir(System.getProperty("user.dir") + "/target/" + testcase);
