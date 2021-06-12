@@ -39,7 +39,6 @@ public class VirtualanTestExecutor {
       if (!f.exists()) {
         f.mkdirs();
       }
-
       if (inputExcel != null){
         ExcelToCollectionGenerator.createCollection(basePath,generatedTestList, inputExcel, outputDir);
       }
@@ -62,9 +61,7 @@ public class VirtualanTestExecutor {
 
       //Generate feature and summary page html report for the selected testcase from the excel
       String title = env != null ? env + " : " + reportTitle : reportTitle;
-      status = IdaithalamExecutor
-          .validateContract(title,
-              outputDir);
+      status = IdaithalamExecutor.validateContract(title, outputDir);
 
     } catch (Exception e) {
       log.warn(env + " : " + reportTitle + " : " + e.getMessage());
