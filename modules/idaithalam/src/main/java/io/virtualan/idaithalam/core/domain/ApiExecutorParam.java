@@ -11,8 +11,29 @@ public class ApiExecutorParam {
   private  String reportTitle;
   private  String env;
   private  String outputDir;
+  private  String inputFile;
   private  String inputExcel;
   private Map<String,String> cucumblanProperies;
+
+
+  /**
+   * Gets input file.
+   *
+   * @return the input file
+   */
+  public String getInputFile() {
+    return inputFile;
+  }
+
+  /**
+   * Sets input file.
+   *
+   * @param inputFile the input file
+   */
+  public void setInputFile(String inputFile) {
+    this.inputFile = inputFile;
+  }
+
   /**
    * The Generated test list.
    */

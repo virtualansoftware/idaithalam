@@ -1,0 +1,11 @@
+parallelExecution: 4
+timeout:  30000
+apiExecutor:
+  - reportTitle: "API Testing POSTMAN Collection"
+    env: dev
+    outputDir: target/postman/1
+    cucumblanProperies:
+      service.api: https://live.virtualandemo.com
+      service.api.xml: https://www.w3schools.com
+      virtualan.data.load: idaithalan.postman_collection.json;virtualan.json
+      virtualan.data.type: POSTMAN

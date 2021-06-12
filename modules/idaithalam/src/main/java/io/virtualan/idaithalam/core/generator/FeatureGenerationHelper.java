@@ -246,12 +246,12 @@ public class FeatureGenerationHelper {
       item.setKafka(true);
       item.setKafkaInput(item.getInput() != null && !item.getInput().isEmpty());
       item.setKafkaOutput(hasOutput(item));
-    } else if ("REST".equalsIgnoreCase(object.optString("type"))) {
-      item.setRest(true);
     } else if ("DB".equalsIgnoreCase(object.optString("type"))) {
       item.setDatabase(true);
       item.setDbInput(item.getInput() != null && !item.getInput().isEmpty());
       item.setDbOutput(hasOutput(item));
+    } else {
+      item.setRest(true);
     }
     return item;
   }

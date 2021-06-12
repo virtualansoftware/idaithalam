@@ -18,12 +18,14 @@ public class ParallelExecutor implements Callable<Integer> {
   private String inputExcel;
   private String env;
   private String reportTitle;
+  private String inputFile;
   private Map<String, String> cucumblanProperies;
   private List<String> generatedTestList;
 
   ParallelExecutor(ApiExecutorParam apiExecutorPrarm) {
     this.outputDir = apiExecutorPrarm.getOutputDir();
     this.inputExcel = apiExecutorPrarm.getInputExcel();
+    this.inputFile = apiExecutorPrarm.getInputFile();
     this.env = apiExecutorPrarm.getEnv();
     this.reportTitle = apiExecutorPrarm.getReportTitle();
     this.cucumblanProperies = apiExecutorPrarm.getCucumblanProperies();
@@ -39,10 +41,14 @@ public class ParallelExecutor implements Callable<Integer> {
       if (!f.exists()) {
         f.mkdirs();
       }
-      ExcelToCollectionGenerator.createCollection(generatedTestList, inputExcel, outputDir);
-
-      if(cucumblanProperies != null && !cucumblanProperies.isEmpty()) {
-        File file = new File(outputDir +File.separator+"cucumblan.properties");
+      if (inputExcel != null) {
+        ExcelToCollectionGenerator.createCollection(generatedTestList, inputExcel, outputDir);
+      }
+      if (!cucumblanProperies.isEmpty()) {
+        File file = new File(outputDir + File.separator + "cucumblan.properties");
+        if(!file.exists()){
+          file.createNewFile();
+        }
         Properties properties = new Properties();
         properties.load(new FileInputStream(file));
         cucumblanProperies.entrySet().stream().forEach(
@@ -51,7 +57,7 @@ public class ParallelExecutor implements Callable<Integer> {
             }
         );
         ExcelToCollectionGenerator.createPrpos(outputDir,
-            (Map)properties,
+            (Map) properties,
             "cucumblan.properties");
       }
       //Generate feature and summary page html report for the selected testcase from the excel

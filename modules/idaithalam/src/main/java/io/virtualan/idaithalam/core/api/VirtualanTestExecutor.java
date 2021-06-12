@@ -8,7 +8,6 @@ import java.io.FileInputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.Callable;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -28,7 +27,6 @@ public class VirtualanTestExecutor {
     this.reportTitle = apiExecutorPrarm.getReportTitle();
     this.cucumblanProperies = apiExecutorPrarm.getCucumblanProperies();
     this.generatedTestList = apiExecutorPrarm.getGeneratedTestList();
-
   }
 
 
@@ -39,10 +37,15 @@ public class VirtualanTestExecutor {
       if (!f.exists()) {
         f.mkdirs();
       }
-      ExcelToCollectionGenerator.createCollection(generatedTestList, inputExcel, outputDir);
 
+      if (inputExcel != null){
+        ExcelToCollectionGenerator.createCollection(generatedTestList, inputExcel, outputDir);
+      }
       if(cucumblanProperies != null && !cucumblanProperies.isEmpty()) {
         File file = new File(outputDir +File.separator+"cucumblan.properties");
+        if(!file.exists()){
+          file.createNewFile();
+        }
         Properties properties = new Properties();
         properties.load(new FileInputStream(file));
         cucumblanProperies.entrySet().stream().forEach(
