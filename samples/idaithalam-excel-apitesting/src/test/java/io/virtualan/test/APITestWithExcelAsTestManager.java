@@ -1,17 +1,11 @@
 package io.virtualan.test;
 
-import io.cucumber.java.it.Ma;
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
-import io.virtualan.idaithalam.contract.IdaithalamExecutor;
 import io.virtualan.idaithalam.core.api.VirtualanTestExecutor;
+import io.virtualan.idaithalam.core.api.VirtualanTestPlanExecutor;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
-import io.virtualan.idaithalam.core.generator.ExcelToCollectionGenerator;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -33,6 +27,26 @@ public class APITestWithExcelAsTestManager {
     System.out.println("-------------------------------------------");
   }
 
+
+  /**
+   *  Example include RequestFile, ResponseFile, AddifyVariables  and StoreResponseVariables
+   *  features
+   */
+  @Test
+  public void storeResponseAndAddifyVariables() {
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor.invoke("workflow_storeResponseAndAddifyVariables_4.yml");
+      if (!isSuccess) {
+        Assert.assertTrue(false);
+      }
+      Assert.assertTrue(true);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+    }
+  }
+
+
   @Test
   public void executeApiTests_1() {
     int status = 0;
@@ -50,8 +64,9 @@ public class APITestWithExcelAsTestManager {
       apiExecutorParam.setInputExcel("virtualan_collection_testcase_4.xlsx");
       apiExecutorParam.setOutputDir(System.getProperty("user.dir") + "/target/" + testcase);
       apiExecutorParam.setReportTitle("Pet 1 API EXCEL based api testing");
-      VirtualanTestExecutor testExecutor = new VirtualanTestExecutor(apiExecutorParam);
       IdaithalamConfiguration.setProperty("workflow", "Disabled");
+
+      VirtualanTestExecutor testExecutor = new VirtualanTestExecutor(apiExecutorParam);
       status = testExecutor.call();
       System.out.println(status);
       if (status != 0) {

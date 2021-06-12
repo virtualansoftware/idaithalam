@@ -45,7 +45,7 @@ public class ParallelExecutor implements Callable<Integer> {
         ExcelToCollectionGenerator
             .createCollection(basePath, generatedTestList, inputExcel, outputDir);
       }
-      if (!cucumblanProperies.isEmpty()) {
+      if (cucumblanProperies != null && !cucumblanProperies.isEmpty()) {
         File file = new File(outputDir + File.separator + "cucumblan.properties");
         if (!file.exists()) {
           file.createNewFile();

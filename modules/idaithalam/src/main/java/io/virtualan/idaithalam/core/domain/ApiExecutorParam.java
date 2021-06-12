@@ -16,7 +16,6 @@ public class ApiExecutorParam {
   private  String inputExcel;
   private Map<String,String> cucumblanProperies;
 
-
   /**
    * Gets base path.
    *
