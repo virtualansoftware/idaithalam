@@ -69,7 +69,6 @@ public class ParallelExecutor implements Callable<Integer> {
     } catch (Exception e) {
       log.warn(env + " : " + reportTitle + " : " + e.getMessage());
       status = 1;
-      e.printStackTrace();
     }
     log.info(env + " : " + reportTitle + " : status : " + status);
     return status;

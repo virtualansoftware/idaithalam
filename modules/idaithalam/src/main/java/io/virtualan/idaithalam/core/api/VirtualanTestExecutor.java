@@ -59,6 +59,7 @@ public class VirtualanTestExecutor {
             (Map)properties,
             "cucumblan.properties");
       }
+
       //Generate feature and summary page html report for the selected testcase from the excel
       String title = env != null ? env + " : " + reportTitle : reportTitle;
       status = IdaithalamExecutor
@@ -68,7 +69,6 @@ public class VirtualanTestExecutor {
     } catch (Exception e) {
       log.warn(env + " : " + reportTitle + " : " + e.getMessage());
       status = 1;
-      e.printStackTrace();
     }
     log.info(env + " : " + reportTitle + " : status : " + status);
     return status;
