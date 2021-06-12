@@ -17,6 +17,7 @@ public class VirtualanTestExecutor {
   private String inputExcel;
   private String env;
   private String reportTitle;
+  private String basePath;
   private Map<String, String> cucumblanProperies;
   List<String> generatedTestList;
 
@@ -24,6 +25,7 @@ public class VirtualanTestExecutor {
     this.outputDir = apiExecutorPrarm.getOutputDir();
     this.inputExcel = apiExecutorPrarm.getInputExcel();
     this.env = apiExecutorPrarm.getEnv();
+    this.basePath = apiExecutorPrarm.getBasePath();
     this.reportTitle = apiExecutorPrarm.getReportTitle();
     this.cucumblanProperies = apiExecutorPrarm.getCucumblanProperies();
     this.generatedTestList = apiExecutorPrarm.getGeneratedTestList();
@@ -39,7 +41,7 @@ public class VirtualanTestExecutor {
       }
 
       if (inputExcel != null){
-        ExcelToCollectionGenerator.createCollection(generatedTestList, inputExcel, outputDir);
+        ExcelToCollectionGenerator.createCollection(basePath,generatedTestList, inputExcel, outputDir);
       }
       if(cucumblanProperies != null && !cucumblanProperies.isEmpty()) {
         File file = new File(outputDir +File.separator+"cucumblan.properties");
@@ -58,14 +60,11 @@ public class VirtualanTestExecutor {
             "cucumblan.properties");
       }
       //Generate feature and summary page html report for the selected testcase from the excel
-      if(env == null){
-        status = IdaithalamExecutor
-            .validateContract(reportTitle, outputDir);
-      } else {
-        status = IdaithalamExecutor
-            .validateContract(env + " : " + reportTitle,
-                outputDir);
-      }
+      String title = env != null ? env + " : " + reportTitle : reportTitle;
+      status = IdaithalamExecutor
+          .validateContract(title,
+              outputDir);
+
     } catch (Exception e) {
       log.warn(env + " : " + reportTitle + " : " + e.getMessage());
       status = 1;

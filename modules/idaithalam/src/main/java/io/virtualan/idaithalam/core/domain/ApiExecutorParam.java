@@ -10,11 +10,30 @@ public class ApiExecutorParam {
 
   private  String reportTitle;
   private  String env;
+  private  String basePath;
   private  String outputDir;
   private  String inputFile;
   private  String inputExcel;
   private Map<String,String> cucumblanProperies;
 
+
+  /**
+   * Gets base path.
+   *
+   * @return the base path
+   */
+  public String getBasePath() {
+    return basePath;
+  }
+
+  /**
+   * Sets base path.
+   *
+   * @param basePath the base path
+   */
+  public void setBasePath(String basePath) {
+    this.basePath = basePath;
+  }
 
   /**
    * Gets input file.

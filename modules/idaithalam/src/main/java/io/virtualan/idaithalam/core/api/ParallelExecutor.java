@@ -18,14 +18,14 @@ public class ParallelExecutor implements Callable<Integer> {
   private String inputExcel;
   private String env;
   private String reportTitle;
-  private String inputFile;
+  private String basePath;
   private Map<String, String> cucumblanProperies;
   private List<String> generatedTestList;
 
   ParallelExecutor(ApiExecutorParam apiExecutorPrarm) {
     this.outputDir = apiExecutorPrarm.getOutputDir();
     this.inputExcel = apiExecutorPrarm.getInputExcel();
-    this.inputFile = apiExecutorPrarm.getInputFile();
+    this.basePath = apiExecutorPrarm.getBasePath();
     this.env = apiExecutorPrarm.getEnv();
     this.reportTitle = apiExecutorPrarm.getReportTitle();
     this.cucumblanProperies = apiExecutorPrarm.getCucumblanProperies();
@@ -42,7 +42,8 @@ public class ParallelExecutor implements Callable<Integer> {
         f.mkdirs();
       }
       if (inputExcel != null) {
-        ExcelToCollectionGenerator.createCollection(generatedTestList, inputExcel, outputDir);
+        ExcelToCollectionGenerator
+            .createCollection(basePath, generatedTestList, inputExcel, outputDir);
       }
       if (!cucumblanProperies.isEmpty()) {
         File file = new File(outputDir + File.separator + "cucumblan.properties");
@@ -61,15 +62,10 @@ public class ParallelExecutor implements Callable<Integer> {
             "cucumblan.properties");
       }
       //Generate feature and summary page html report for the selected testcase from the excel
-      if (env != null) {
-        status = IdaithalamExecutor
-            .validateContract(reportTitle,
-                outputDir);
-      } else {
-        status = IdaithalamExecutor
-            .validateContract(env + " : " + reportTitle,
-                outputDir);
-      }
+      String title = env != null ? env + " : " + reportTitle : reportTitle;
+      status = IdaithalamExecutor
+          .validateContract(title,
+              outputDir);
     } catch (Exception e) {
       log.warn(env + " : " + reportTitle + " : " + e.getMessage());
       status = 1;
