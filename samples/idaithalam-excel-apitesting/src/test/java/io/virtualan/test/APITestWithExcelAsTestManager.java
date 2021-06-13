@@ -83,7 +83,7 @@ public class APITestWithExcelAsTestManager {
   public void excelFieldExamples_3() {
     int status = 0;
     try {
-      int testcase = 10;
+      IdaithalamConfiguration.setProperty("workflow", "Enabled");
       List<String> list = new ArrayList<>();
       //Add the testcaseName that List of testcases to be executed from the excel
       //for the test selected execution
@@ -93,19 +93,19 @@ public class APITestWithExcelAsTestManager {
       ApiExecutorParam apiExecutorParam = new ApiExecutorParam();
       apiExecutorParam.setGeneratedTestList(list);
 
-      apiExecutorParam.setInputExcel("virtualan_bdd_testcase_run_manager.xlsx");
-      apiExecutorParam.setOutputDir(System.getProperty("user.dir") + "/target/excel/" + testcase);
+      apiExecutorParam.setInputExcel("virtualan_collection_pet_empty.xlsx");
+      apiExecutorParam.setOutputDir(System.getProperty("user.dir") + "/target/excel/empty");
       apiExecutorParam.setReportTitle("Via code - API EXCEL based api testing");
       VirtualanTestExecutor testExecutor = new VirtualanTestExecutor(apiExecutorParam);
-      IdaithalamConfiguration.setProperty("workflow", "Enabled");
       status = testExecutor.call();
       System.out.println(status);
       if (status != 0) {
         //actual it will fail but it made as pass
         //purposefully passed to show case okta and basic auth demo
         Assert.assertTrue(true);
+      } else {
+        Assert.assertTrue(true);
       }
-      Assert.assertTrue(true);
     } catch (Exception e) {
       System.out.println(e.getMessage());
       Assert.assertTrue(true);

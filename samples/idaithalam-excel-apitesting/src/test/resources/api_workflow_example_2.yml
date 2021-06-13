@@ -11,10 +11,6 @@ apiExecutor:
     env: dev
     outputDir: target/excel/02
     inputExcel: virtualan_collection_testcase_02.xlsx
-  - reportTitle: "Pet empty API EXCEL based api testing"
-    env: dev
-    outputDir: target/excel/empty
-    inputExcel: virtualan_collection_pet_empty.xlsx
   - reportTitle: "Pet run_manager API EXCEL based api testing"
     env: dev
     outputDir: target/excel/run_manager
