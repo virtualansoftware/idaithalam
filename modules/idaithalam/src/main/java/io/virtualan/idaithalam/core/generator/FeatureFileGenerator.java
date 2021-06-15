@@ -18,6 +18,9 @@ package io.virtualan.idaithalam.core.generator;
 
 import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.cucumblan.props.ExcludeConfiguration;
+import io.virtualan.idaithalam.contract.ExecutionClassloader;
+import io.virtualan.idaithalam.contract.IdaithalamExecutor;
+import io.virtualan.idaithalam.contract.VirtualanClassLoader;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ConversionType;
 import io.virtualan.idaithalam.core.domain.Item;
@@ -25,8 +28,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Properties;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,6 +54,32 @@ public class FeatureFileGenerator {
 
     }
 
+
+    private static ExecutionClassloader addConfToClasspath(VirtualanClassLoader classLoader, String path) throws MalformedURLException {
+        path = path == null ? "conf" : path;
+        ExecutionClassloader cl = new ExecutionClassloader(new URL[] {new File(path).toURI().toURL()}, classLoader);
+        Thread.currentThread().setContextClassLoader(cl);
+        return cl;
+    }
+
+    public static Properties readPropsFromClasspath(ClassLoader classLoader, String fileName) {
+        Properties propertiesForInstance = new Properties();
+
+        try {
+            InputStream stream = classLoader.getResourceAsStream(fileName);
+            if (stream != null) {
+                propertiesForInstance.load(stream);
+            } else {
+                LOGGER.warning("unable to load "+ fileName);
+            }
+        } catch (Exception var3) {
+            LOGGER.warning(fileName +" not found");
+        }
+
+        return propertiesForInstance;
+    }
+
+
     /**
      * Generate feature file list.
      *
@@ -59,8 +91,12 @@ public class FeatureFileGenerator {
     public static List<List<Item>> generateFeatureFile(Properties properties, String path)
         throws UnableToProcessException, IOException {
         List<List<Item>> items = new ArrayList<>();
-        ApplicationConfiguration.reload();
-        ExcludeConfiguration.reload();
+        VirtualanClassLoader classLoaderParnet = new VirtualanClassLoader(
+            IdaithalamExecutor.class.getClassLoader());
+        ExecutionClassloader classLoader = addConfToClasspath(classLoaderParnet, path);
+        //Is it needed??
+        //ApplicationConfiguration.reload();
+        Map<String, String> excludeConfiguration = (Map)readPropsFromClasspath(classLoader, "exclude-response.properties");
         String contractFileName = properties.getProperty("virtualan.data.load");
         String contractFileType = properties.getProperty("virtualan.data.type");
         JSONArray jsonArray = null;
@@ -80,7 +116,7 @@ public class FeatureFileGenerator {
           } else {
             jsonArray = getJSONArray(fileNames[i]);
           }
-          List<Item> result = FeatureGenerationHelper.createFeatureFile(jsonArray, path);
+          List<Item> result = FeatureGenerationHelper.createFeatureFile(excludeConfiguration, jsonArray, path);
           items.add(result);
         }
         return items;

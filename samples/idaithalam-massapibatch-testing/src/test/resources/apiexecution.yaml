@@ -9,53 +9,53 @@ apiExecutor:
     env: dev
     outputDir: target/dev/1
     inputExcel: virtualan_collection_testcase_01.xlsx
-    cucumblanProperies:
+    cucumblanProperties:
       service.api.api: https://live.virtualandemo.com
   - reportTitle: "API Testing 1 - 82"
     env: dev
     outputDir: target/dev/2
     inputExcel: virtualan_collection_testcase_02.xlsx
-    cucumblanProperies:
+    cucumblanProperties:
       service.api.api: https://localhost:8082
   - reportTitle: "API Testing 83"
     env: dev
     outputDir: target/dev/3
     inputExcel: virtualan_collection_testcase_2.xlsx
-    cucumblanProperies:
+    cucumblanProperties:
       service.api.api: https://localhost:8083
   - reportTitle: "API Testing 84"
     env: dev
     outputDir: target/dev/4
     inputExcel: virtualan_collection_testcase_3.xlsx
-    cucumblanProperies:
+    cucumblanProperties:
       service.api.api: https://localhost:8084
   - reportTitle: "API Testing 85"
     env: dev
     outputDir: target/dev/5
     inputExcel: virtualan_collection_testcase_4.xlsx
-    cucumblanProperies:
+    cucumblanProperties:
       service.api.api: https://localhost:8085
   - reportTitle: "API Testing 86"
     env: dev
     outputDir: target/dev/6
     inputExcel: virtualan_collection_testcase_5.xlsx
-    cucumblanProperies:
+    cucumblanProperties:
       service.api.api: https://localhost:8086
   - reportTitle: "API Testing 87"
     env: dev
     outputDir: target/dev/7
     inputExcel: virtualan_collection_testcase_6.xlsx
-    cucumblanProperies:
+    cucumblanProperties:
       service.api.api: https://localhost:8087
   - reportTitle: "API Testing 88"
     env: dev
     outputDir: target/dev/8
     inputExcel: virtualan_collection_testcase_7.xlsx
-    cucumblanProperies:
+    cucumblanProperties:
       service.api.api: https://localhost:8088
   - reportTitle: "API Testing 89"
     env: dev
     outputDir: target/dev/9
     inputExcel: virtualan_collection_testcase_8.xlsx
-    cucumblanProperies:
+    cucumblanProperties:
       service.api.api: https://localhost:8089
