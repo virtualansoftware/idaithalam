@@ -6,7 +6,7 @@
 	<name>idaithalam-postmancoll-apitesting</name>
 	<version>1.0.1-SNAPSHOT</version>
 	<properties>
-	  <idaithalam.version>1.3.2-SNAPSHOT</idaithalam.version>
+	  <idaithalam.version>1.3.2</idaithalam.version>
 		<java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
