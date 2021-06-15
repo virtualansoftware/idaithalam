@@ -1,5 +1,7 @@
 package io.virtualan.idaithalam.core.api;
 
+import io.virtualan.idaithalam.config.IdaithalamConfiguration;
+import io.virtualan.idaithalam.contract.IdaithalamExecutor;
 import io.virtualan.idaithalam.core.domain.ExecutionPlanner;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -26,6 +28,10 @@ public class VirtualanTestPlanExecutor {
     ExecutionPlanner executionPlanner = yaml.load(inputStream);
     ExecutorService executor = Executors
         .newFixedThreadPool(executionPlanner.getParallelExecution());
+    if(executionPlanner.getIdaithalamProperties() != null
+        && !executionPlanner.getIdaithalamProperties().isEmpty()) {
+      IdaithalamConfiguration.setProperties(executionPlanner.getIdaithalamProperties());
+    }
     List<Future<Integer>> futures = new ArrayList<>();
     executionPlanner.getApiExecutor().stream().forEach(
         x -> {

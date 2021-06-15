@@ -15,6 +15,9 @@ public class IdaithalamConfiguration {
     reload();
   }
 
+  /**
+   * Reload.
+   */
   public static  void reload(){
     try {
       InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("idaithalam.properties");
@@ -30,6 +33,7 @@ public class IdaithalamConfiguration {
 
     }
   }
+
   /**
    * Gets properties.
    *
@@ -43,6 +47,8 @@ public class IdaithalamConfiguration {
   /**
    * Gets properties.
    *
+   * @param key   the key
+   * @param value the value
    */
   public static void setProperty(String key, String value) {
     properties.put(key, value);
@@ -59,8 +65,21 @@ public class IdaithalamConfiguration {
     return properties.getProperty(keyName);
   }
 
+  /**
+   * Is work flow boolean.
+   *
+   * @return the boolean
+   */
   public static boolean isWorkFlow() {
     return  properties.getProperty("workflow") != null ?   properties.getProperty("workflow").equalsIgnoreCase("Enabled") : false;
   }
 
+  /**
+   * Sets property.
+   *
+   * @param idaithalamProperies the idaithalam properies
+   */
+  public static void setProperties(Map<String, String> idaithalamProperies) {
+    properties.putAll(idaithalamProperies);
+  }
 }
