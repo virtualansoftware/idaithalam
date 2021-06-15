@@ -5,14 +5,9 @@
         <classes>
             <class name="io.virtualan.test.APITestWithExcelAsTestManager">
                 <methods>
-                    <include name="executeApiTests_1"/>
-                    <include name="executeApiTests_2"/>
-                    <include name="executeApiTests_3"/>
-                    <include name="executeApiTests_4"/>
-                    <include name="executeApiTests_5"/>
-                    <include name="executeApiTests_6"/>
-                    <include name=" executeApiTests_empty_7"/>
-                    <include name="executeApiTests_multiplesheet_8"/>
+                    <include name="excelFieldExamples_1"/>
+                    <include name="excelFieldExamples_2"/>
+                    <include name="excelFieldExamples_3"/>
                 </methods>
             </class>
         </classes>

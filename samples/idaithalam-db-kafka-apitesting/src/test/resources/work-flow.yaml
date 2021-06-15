@@ -5,7 +5,7 @@ apiExecutor:
     env: dev
     outputDir: target/dev/1
     inputExcel: virtualan_collection_kafka_db_testcase_0.xlsx
-    cucumblanProperies:
+    cucumblanProperties:
       service.api.api: https://live.virtualandemo.com
       pet.cucumblan.jdbc.driver-class-name: org.hsqldb.jdbc.JDBCDriver
       pet.cucumblan.jdbc.username: SA
