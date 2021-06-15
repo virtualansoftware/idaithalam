@@ -133,6 +133,7 @@ Feature: {{feature}} - API Contract validation status
       {{/hasInputJsonMap}}
       When a user {{action}} {{contentType}} in {{url}} resource on {{resource}}
       Then Verify the status code is {{httpStatusCode}}
+      {{#noSkipOutput}}
       {{#hasCsvson}}
       And Verify api response csvson includes in the response
       {{#csvson}}
@@ -184,11 +185,17 @@ Feature: {{feature}} - API Contract validation status
       {{/outputJsonMap}}
       {{/hasOutputJsonMap}}
       {{/stdType}}
+      {{/noSkipOutput}}
       {{#hasStorageParams}}
       {{#storageParams}}
       And Store the {{{value}}} value of the key as {{{key}}}
       {{/storageParams}}
       {{/hasStorageParams}}
+      {{#hasEvaluateParams}}
+      {{#evaluateParams}}
+      And evaluate the {{{value}}} condition {{{key}}}
+      {{/evaluateParams}}
+      {{/hasEvaluateParams}}
       {{/isRest}}
       {{#isKafka}}
       {{#kafkaOutput}}

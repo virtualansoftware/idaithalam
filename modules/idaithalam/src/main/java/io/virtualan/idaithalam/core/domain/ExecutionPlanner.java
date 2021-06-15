@@ -1,6 +1,7 @@
 package io.virtualan.idaithalam.core.domain;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The type Execution planner.
@@ -18,6 +19,27 @@ public class ExecutionPlanner {
     private int parallelExecution;
     private List<ApiExecutorParam> apiExecutor;
     private int timeout;
+
+    private Map<String,String> idaithalamProperties;
+
+
+    /**
+     * Gets idaithalam properies.
+     *
+     * @return the idaithalam properies
+     */
+    public Map<String, String> getIdaithalamProperties() {
+        return idaithalamProperties;
+    }
+
+    /**
+     * Sets idaithalam properies.
+     *
+     * @param idaithalamProperties the idaithalam properies
+     */
+    public void setIdaithalamProperties(Map<String, String> idaithalamProperties) {
+        this.idaithalamProperties = idaithalamProperties;
+    }
 
     /**
      * Gets timeout.
