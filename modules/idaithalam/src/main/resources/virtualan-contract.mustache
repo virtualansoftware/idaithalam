@@ -127,6 +127,9 @@ Feature: {{feature}} - API Contract validation status
       {{#isPut}}
       And Update api with given input
       {{/isPut}}
+      {{#isPatch}}
+      And Update api with given input
+      {{/isPatch}}
       {{#inputJsonMap}}
         | {{{key}}}                   |  {{{value}}}                        |
       {{/inputJsonMap}}
