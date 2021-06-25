@@ -648,12 +648,12 @@ public class ExcelToCollectionGenerator {
             //Populating the properties file
             props.putAll(propsMap);
             //Instantiating the FileInputStream for output file
-          try ( FileOutputStream outputStrem = new FileOutputStream(
-                  path + File.separator + fileName)) {
-            //Storing the properties file
-            props.store(outputStrem, "This is a " + fileName + " properties file");
-            log.info(fileName + " Properties file created......");
-          }
+            try ( FileOutputStream outputStrem = new FileOutputStream(
+                    path + File.separator + fileName)) {
+                //Storing the properties file
+                props.store(outputStrem, "This is a " + fileName + " properties file");
+                log.info(fileName + " Properties file created......");
+            }
 
         } catch (IOException e) {
             log.warn(" Unable to generate " + fileName + " properties  " + e.getMessage());
@@ -662,9 +662,9 @@ public class ExcelToCollectionGenerator {
 
     private static String generateExcelJson(String path, JSONArray excelArray, String fileName) {
         String fileCreated = null;
-        try (
+        try {
             FileOutputStream outputStream = new FileOutputStream(
-                    path + File.separator + fileName + ".json")){
+                    path + File.separator + fileName + ".json");
             Writer writer = new OutputStreamWriter(outputStream);
             CharSequence cs = excelArray.toString();
             writer.append(cs);
