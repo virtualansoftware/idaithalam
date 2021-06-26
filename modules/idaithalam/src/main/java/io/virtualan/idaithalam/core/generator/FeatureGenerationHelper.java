@@ -315,7 +315,17 @@ public class FeatureGenerationHelper {
     item.setNoSkipOutput(!ExcludeConfiguration.shouldSkip(excludeProperties, item.getUrl(), null));
     if (!object.optString("csvson").trim().isEmpty()) {
       item.setHasCsvson(object.optString("csvson"));
-      item.setCsvson(Arrays.asList(object.optString("csvson").split("\n")));
+      String[] listOFRows = object.optString("csvson").split("\n");
+      if(listOFRows.length > 0 &&
+              listOFRows[0].contains("jsonpath=")) {
+        List<String> stringList = Arrays.asList(object.optString("csvson").split("\n"));
+        String jpath = stringList.get(0).replaceAll("jsonpath=", "");
+        item.setCsvsonPath(jpath);
+        item.setCsvson(stringList.subList(1, stringList.size()));
+      } else {
+        item.setCsvsonPath("api");
+        item.setCsvson(Arrays.asList(object.optString("csvson").split("\n")));
+      }
     }
     if (object.optString("outputFields") != null
         && !object.optString("outputFields").isEmpty()) {

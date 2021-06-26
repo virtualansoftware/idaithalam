@@ -138,7 +138,7 @@ Feature: {{feature}} - API Contract validation status
       Then Verify the status code is {{httpStatusCode}}
       {{#noSkipOutput}}
       {{#hasCsvson}}
-      And Verify api response csvson includes in the response
+      And Verify {{csvsonPath}} response csvson includes in the response
       {{#csvson}}
         | {{{.}}} |
       {{/csvson}}

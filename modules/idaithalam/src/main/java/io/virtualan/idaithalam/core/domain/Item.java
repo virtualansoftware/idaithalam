@@ -149,6 +149,11 @@ public class Item {
   /**
    * The Csvson.
    */
+  String csvsonPath;
+
+  /**
+   * The Csvson.
+   */
   List<String> csvson;
 
   /**
@@ -456,6 +461,23 @@ public class Item {
    */
   public void setMultiRun(List<String> multiRun) {
     this.multiRun = multiRun;
+  }
+
+  /**
+   * gets csvsonPath run.
+   *
+   * get csvsonPath
+   */
+  public String getCsvsonPath() {
+    return csvsonPath;
+  }
+  /**
+   * Sets csvsonPath .
+   *
+   * @param csvsonPath 
+   */
+  public void setCsvsonPath(String csvsonPath) {
+    this.csvsonPath = csvsonPath;
   }
 
   /**
@@ -834,6 +856,8 @@ public class Item {
   public void setHasCsvson(String hasCsvson) {
     this.hasCsvson = hasCsvson;
   }
+
+
 
   /**
    * Gets std type.

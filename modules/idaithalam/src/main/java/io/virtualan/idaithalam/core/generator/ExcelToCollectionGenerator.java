@@ -500,7 +500,8 @@ public class ExcelToCollectionGenerator {
             }
             if (dataMap.get("ResponseByFields") != null) {
                 virtualanObj.put("outputFields", dataMap.get("ResponseByFields"));
-            } else if (dataMap.get("Csvson") != null) {
+            }
+            if (dataMap.get("Csvson") != null) {
                 virtualanObj.put("csvson", dataMap.get("Csvson"));
             } else if (dataMap.get("ResponseFile") != null || dataMap.get("ResponseContent") != null) {
                 if (dataMap.get("IncludesByPath") != null) {
