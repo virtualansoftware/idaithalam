@@ -125,6 +125,8 @@ public class IdaithalamExecutor {
 
     private static String[] getCucumberOptions(String path, String build) {
         return new String[]{
+            "-p", "pretty",
+            "-p", "io.virtualan.cucumblan.props.hook.FeatureScope",
             "-p", path == null ? "json:target/cucumber-"+build+".json" : "json:"+path+"/cucumber-"+build+".json",
             "-p", path == null ? "html:target/cucumber-html-report.html" : "html:"+path+"/cucumber-html-report.html",
             "--glue", "io.virtualan.cucumblan.core", "", path == null ? "conf/feature/" : path+"/feature/",

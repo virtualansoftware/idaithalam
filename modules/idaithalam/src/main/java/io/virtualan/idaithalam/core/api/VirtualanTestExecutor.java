@@ -6,6 +6,7 @@ import io.virtualan.idaithalam.core.generator.ExcelToCollectionGenerator;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,19 +69,24 @@ public class VirtualanTestExecutor {
   private void buildProperties(String fileName, Map<String, String> existingProperties) throws IOException {
     if(existingProperties != null && !existingProperties.isEmpty()) {
       File file = new File(outputDir +File.separator+fileName);
-      if(!file.exists()){
-        file.createNewFile();
+      boolean isFileCreated = file.exists();
+      if(!isFileCreated) {
+        isFileCreated =file.createNewFile();
       }
-      Properties properties = new Properties();
-      properties.load(new FileInputStream(file));
-      existingProperties.entrySet().stream().forEach(
-          x -> {
-            properties.setProperty(x.getKey(), x.getValue());
-          }
-      );
-      ExcelToCollectionGenerator.createPrpos(outputDir,
-          (Map)properties,
-          fileName);
+      if(isFileCreated) {
+        Properties properties = new Properties();
+        try (InputStream stream = new FileInputStream(file)) {
+          properties.load(stream);
+        }
+        existingProperties.entrySet().stream().forEach(
+                x -> {
+                  properties.setProperty(x.getKey(), x.getValue());
+                }
+        );
+        ExcelToCollectionGenerator.createPrpos(outputDir,
+                (Map) properties,
+                fileName);
+      }
     }
   }
 }

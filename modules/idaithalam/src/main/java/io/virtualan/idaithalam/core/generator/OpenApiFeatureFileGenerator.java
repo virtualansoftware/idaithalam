@@ -40,7 +40,7 @@ public class OpenApiFeatureFileGenerator {
     public static JSONArray generateOpenApiContractForVirtualan(String contractFileName) {
         JSONArray openApiContractArray = new JSONArray();
         OpenAPI swagger = new OpenAPIV3Parser().read(contractFileName);
-        if(swagger != null) {
+        if (swagger != null) {
             Map<String, Schema> definitions = swagger.getComponents().getSchemas();
             Paths paths = swagger.getPaths();
             for (Map.Entry<String, PathItem> mapPath : paths.entrySet()) {
@@ -76,15 +76,14 @@ public class OpenApiFeatureFileGenerator {
         return openApiContractArray;
     }
 
-    private static void generateProviderJson(JSONArray openApiContractArray)  {
-        try {
-            FileOutputStream outputStream = new FileOutputStream("conf/virtualan-provider.json");
+    private static void generateProviderJson(JSONArray openApiContractArray) {
+        try (FileOutputStream outputStream = new FileOutputStream("conf/virtualan-provider.json")) {
             Writer writer = new OutputStreamWriter(outputStream);
             CharSequence cs = openApiContractArray.toString();
             writer.append(cs);
             writer.close();
-        }catch (IOException e){
-            LOGGER.warning(" Unable to generate Virtualan Provider JSON : "+e.getMessage());
+        } catch (IOException e) {
+            LOGGER.warning(" Unable to generate Virtualan Provider JSON : " + e.getMessage());
         }
     }
 
@@ -151,18 +150,20 @@ public class OpenApiFeatureFileGenerator {
         getSuccessResponse(operationBuilder, virtualanObj, "201");
         JSONArray paramsArray = new JSONArray();
         extractedParams(operationBuilder, paramsArray);
-        virtualanObj.put("availableParams",paramsArray);
+        virtualanObj.put("availableParams", paramsArray);
         return virtualanObj;
     }
 
+    // TODO wrong code
     private static String getJsonForSuccessCase(OperationBuilder operationBuilder, Content content) {
-        Map.Entry<String, MediaType> entryMediaDefault = null;
         for (Map.Entry<String, MediaType> entryMedia : content.entrySet()) {
-            System.out.println("Key = " + entryMedia.getKey() +
-                ", Value = " + entryMedia.getValue().getSchema().get$ref());
+            log.info("Key = " + entryMedia.getKey() +
+                    ", Value = " + entryMedia.getValue().getSchema().get$ref());
             String schema = entryMedia.getValue().getSchema().get$ref();
-            schema = schema.substring(schema.lastIndexOf("/") + 1);
-            return buildJson(operationBuilder.getDefinitions(), schema);
+            if(schema != null) {
+                schema = schema.substring(schema.lastIndexOf("/") + 1);
+                return buildJson(operationBuilder.getDefinitions(), schema);
+            }
         }
         return null;
     }
@@ -188,7 +189,7 @@ public class OpenApiFeatureFileGenerator {
     }
 
     private static String getResource(String resource) {
-        if (resource.split("/").length >0) {
+        if (resource.split("/").length > 0) {
             return resource.split("/")[1];
         }
         return "default";
@@ -216,12 +217,12 @@ public class OpenApiFeatureFileGenerator {
         getSuccessResponse(operationBuilder, virtualanObj, "200");
         JSONArray paramsArray = new JSONArray();
         extractedParams(operationBuilder, paramsArray);
-        virtualanObj.put("availableParams",paramsArray);
+        virtualanObj.put("availableParams", paramsArray);
         return virtualanObj;
     }
 
-    private static void extractedParams(OperationBuilder operationBuilder,  JSONArray paramsArray) {
-        if(operationBuilder.getOperation().getParameters() != null) {
+    private static void extractedParams(OperationBuilder operationBuilder, JSONArray paramsArray) {
+        if (operationBuilder.getOperation().getParameters() != null) {
             for (Parameter parameter : operationBuilder.getOperation().getParameters()) {
                 if (parameter.getExample() != null && parameter.getName() != null) {
                     JSONObject virtualanParamObj = new JSONObject();
@@ -239,7 +240,7 @@ public class OpenApiFeatureFileGenerator {
             return "PATH_PARAM";
         } else if ("query".equalsIgnoreCase(type)) {
             return "QUERY_PARAM";
-        }else if ("header".equalsIgnoreCase(type)){
+        } else if ("header".equalsIgnoreCase(type)) {
             return "HEADER_PARAM";
         }
         return null;
@@ -252,7 +253,7 @@ public class OpenApiFeatureFileGenerator {
             for (Map.Entry<String, ApiResponse> entry : responses.entrySet()) {
                 System.out.println("Key = " + entry.getKey());
                 if (statusCode.equalsIgnoreCase(entry.getKey())) {
-                    if(entry.getValue().getContent() != null) {
+                    if (entry.getValue().getContent() != null) {
                         virtualanObj.put("output", getJsonForSuccessCase(operationBuilder, entry.getValue().getContent()));
                     }
                     return;
@@ -270,14 +271,13 @@ public class OpenApiFeatureFileGenerator {
     private static String getUrl(OperationBuilder operationBuilder) {
         String url = operationBuilder.getUrl();
         for (Parameter parameter : operationBuilder.getOperation().getParameters()) {
-            if(parameter.getExample() != null) {
+            if (parameter.getExample() != null) {
                 url = operationBuilder.getUrl()
-                    .replaceAll(parameter.getName(), parameter.getExample().toString());
+                        .replaceAll(parameter.getName(), parameter.getExample().toString());
             }
         }
         return url;
     }
-
 
 
     private static String buildJson(Map<String, Schema> definitions, String schema) {
