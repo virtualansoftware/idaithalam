@@ -356,7 +356,7 @@ public class ExcelToCollectionGenerator {
             virtualanObj.put("scenarioId", dataMap.get("TestCaseName"));
             virtualanObj.put("scenario", dataMap.get("TestCaseNameDesc"));
             virtualanObj.put("resource", dataMap.get("Resource"));
-            //createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
+            createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
             //createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
             //createProcessingType(dataMap, paramsArray, "CookieVariables", "COOKIE_PARAM");
             if (dataMap.get("SkipScenario") != null) {
@@ -387,6 +387,10 @@ public class ExcelToCollectionGenerator {
                     virtualanObj.put("outputPaths", dataMap.get("IncludesByPath"));
                 }
                 virtualanObj.put("output", buildObjectResponse(basePath, dataMap));
+            }
+
+            if (paramsArray.length() > 0) {
+                virtualanObj.put("availableParams", paramsArray);
             }
         } catch (Exception e) {
             throw new UnableToProcessException(
