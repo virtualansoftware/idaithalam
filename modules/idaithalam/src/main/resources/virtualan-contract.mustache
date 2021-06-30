@@ -240,6 +240,11 @@ Feature: {{feature}} - API Contract validation status
       {{/csvson}}
       {{/hasCsvson}}
       {{/dbOutput}}
+      {{#hasStorageParams}}
+      {{#storageParams}}
+      And Store-sql's {{{value}}} value of the key as {{{key}}}
+      {{/storageParams}}
+      {{/hasStorageParams}}
       {{/isDatabase}}
       {{#hasMultiRun}}
   Examples:

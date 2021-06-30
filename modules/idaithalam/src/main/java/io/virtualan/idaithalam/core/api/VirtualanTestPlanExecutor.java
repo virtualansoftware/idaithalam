@@ -50,7 +50,7 @@ public class VirtualanTestPlanExecutor {
       executor.awaitTermination(executionPlanner.getTimeout(), TimeUnit.MINUTES);
       boolean bool = futures.stream().allMatch(x -> {
         try {
-          return x.get() != 0;
+          return x.get() == 0;
         }catch ( ExecutionException e){
           return false;
         } catch (InterruptedException e) {
@@ -60,7 +60,7 @@ public class VirtualanTestPlanExecutor {
       });
 
       log.info("Finished all api execution");
-      return !bool;
+      return bool;
     } else {
       log.error(configMapper + " file is missing!");
       return false;
