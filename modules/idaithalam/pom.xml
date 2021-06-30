@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.virtualan</groupId>
   <artifactId>idaithalam</artifactId>
@@ -19,12 +21,14 @@
     - Utilized for API testing.
     - Utilized Contract testing.
     - Utilized Production Checkout.
-    - Agile Testing - Progressive Regression can be done for each sprint. Reduce lot of manual effects.
+    - Agile Testing - Progressive Regression can be done for each sprint. Reduce lot of manual
+    effects.
   </description>
   <url>https://virtualan.io</url>
   <scm>
     <connection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git</developerConnection>
+    <developerConnection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git
+    </developerConnection>
     <url>https://github.com/virtualansoftware/idaithalam.git</url>
     <tag>V1.0.13.1</tag>
   </scm>
@@ -232,6 +236,17 @@
       <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
       <artifactId>owasp-java-html-sanitizer</artifactId>
       <version>20200713.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.guava</groupId>
+          <artifactId>guava</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>30.0-jre</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
