@@ -6,9 +6,9 @@
   <name>idaithalam-platform-testing</name>
   <version>1.3.5-SNAPSHOT</version>
   <properties>
-    <cucumblan-api.version>1.3.2</cucumblan-api.version>
-    <cucumblan-db.version>1.2.2</cucumblan-db.version>
-    <cucumblan-message.version>1.2.2</cucumblan-message.version>
+    <cucumblan-api.version>1.3.3</cucumblan-api.version>
+    <cucumblan-db.version>1.2.3</cucumblan-db.version>
+    <cucumblan-message.version>1.2.3</cucumblan-message.version>
     <java.version>1.8</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -22,7 +22,7 @@
     - Agile Testing - Progressive Regression can be done for each sprint. Reduce lot of manual
     effects.
   </description>
-  <url>https://virtualan.io</url>
+  <url>https://www.virtualan.io</url>
   <scm>
     <connection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git
@@ -196,34 +196,7 @@
       <groupId>net.masterthought</groupId>
       <artifactId>cucumber-reporting</artifactId>
       <version>5.5.3</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
-          <artifactId>owasp-java-html-sanitizer</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
-
-
-    <!-- Cucumber report version change -->
-    <dependency>
-      <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
-      <artifactId>owasp-java-html-sanitizer</artifactId>
-      <version>20200713.1</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.google.guava</groupId>
-          <artifactId>guava</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>30.1.1-jre</version>
-    </dependency>
-    <!-- Cucumber report version change -->
-
 
     <dependency>
       <groupId>com.github.spullara.mustache.java</groupId>

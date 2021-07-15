@@ -209,15 +209,15 @@ public class ExcelToCollectionGenerator {
                 try {
                     Map<String, String> finalRow = getRow(nextRow, headers);
                     testcaseName = finalRow.get("TestCaseName");
-                    if (!finalRow.isEmpty() && (generatedTestCaseList == null || generatedTestCaseList
-                            .isEmpty() ||
-                            generatedTestCaseList.stream()
-                                    .anyMatch(x -> finalRow.get("TestCaseName").contains(x)))) {
+                    String scenarioId = testcaseName.split("-").length > 0 ?
+                        testcaseName.split("-")[0] :
+                        testcaseName;
+                    if (!finalRow.isEmpty() && byEachTestCase(generatedTestCaseList, scenarioId)) {
                         if (finalRow.get("Type") == null || "REST".equalsIgnoreCase(finalRow.get("Type"))) {
                             JSONObject object = buildRESTVirtualanCollection(sheetObject.getBasePath(),
-                                    finalRow);
+                                finalRow);
                             populateConfigMaps(finalRow, sheetObject.getCucumblanMap(),
-                                    sheetObject.getExcludeResponseMap());
+                                sheetObject.getExcludeResponseMap());
                             virtualanArray.put(object);
                         } else if ("KAFKA".equalsIgnoreCase(finalRow.get("Type"))) {
                             JSONObject object = buildKAFKAVirtualanCollection(sheetObject.getBasePath(),
@@ -231,10 +231,9 @@ public class ExcelToCollectionGenerator {
                         }
                     }
                 } catch (Exception e) {
-                    log.warn(
-                            "Spread sheet (" + testcaseName + ") " + (sheet + 1) + " with row number " + (i + 1)
-                                    + " is unable to process for the reason >> "
-                                    + e.getMessage());
+                    log.warn("Spread sheet (" + testcaseName + ") " + (sheet + 1) + " with row number " + (i + 1)
+                        + " is unable to process for the reason >> "
+                        + e.getMessage());
                 }
             }
         }
