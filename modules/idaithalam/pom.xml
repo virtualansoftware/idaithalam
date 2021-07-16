@@ -4,7 +4,7 @@
   <artifactId>idaithalam</artifactId>
   <packaging>jar</packaging>
   <name>idaithalam-platform-testing</name>
-  <version>1.3.6</version>
+  <version>1.3.7-SNAPSHOT</version>
   <properties>
     <cucumblan-api.version>1.3.3</cucumblan-api.version>
     <cucumblan-db.version>1.2.3</cucumblan-db.version>
@@ -28,7 +28,7 @@
     <developerConnection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git
     </developerConnection>
     <url>https://github.com/virtualansoftware/idaithalam.git</url>
-    <tag>v1.3.6.3</tag>
+    <tag>V1.0.13.1</tag>
   </scm>
   <developers>
     <!-- original author of the project -->
