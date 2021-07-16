@@ -209,10 +209,8 @@ public class ExcelToCollectionGenerator {
                 try {
                     Map<String, String> finalRow = getRow(nextRow, headers);
                     testcaseName = finalRow.get("TestCaseName");
-                    String scenarioId = testcaseName.split("-").length > 0 ?
-                        testcaseName.split("-")[0] :
-                        testcaseName;
-                    if (!finalRow.isEmpty() && byEachTestCase(generatedTestCaseList, scenarioId)) {
+                    if (!finalRow.isEmpty() && ( generatedTestCaseList == null || generatedTestCaseList.isEmpty()
+                        || generatedTestCaseList.contains(testcaseName))) {
                         if (finalRow.get("Type") == null || "REST".equalsIgnoreCase(finalRow.get("Type"))) {
                             JSONObject object = buildRESTVirtualanCollection(sheetObject.getBasePath(),
                                 finalRow);
