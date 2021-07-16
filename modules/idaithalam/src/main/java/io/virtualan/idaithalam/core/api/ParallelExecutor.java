@@ -57,7 +57,7 @@ public class ParallelExecutor implements Callable<Integer> {
       buildProperties("exclude-response.properties", excludeProperties);
 
       //Generate feature and summary page html report for the selected testcase from the excel
-      String title = env != null ? env + " : " + reportTitle : reportTitle;
+      String title = env != null ? reportTitle + "(" + env + ")" : reportTitle;
       status = IdaithalamExecutor
           .validateContract(title,
               outputDir);

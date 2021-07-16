@@ -170,7 +170,7 @@ public class IdaithalamExecutor {
         List<String> jsonFiles = new ArrayList<>();
         jsonFiles.add(path+"/cucumber-"+index+".json");
         String buildNumber = index;
-        String projectName = featureHeading + " - Testing";
+        String projectName = featureHeading;
         Configuration configuration = new Configuration(reportOutputDirectory, projectName);
         configuration.setNotFailingStatuses(Collections.singleton(Status.SKIPPED));
         configuration.setBuildNumber(buildNumber);

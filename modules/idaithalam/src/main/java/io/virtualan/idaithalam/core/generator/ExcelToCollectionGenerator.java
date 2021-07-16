@@ -813,7 +813,7 @@ public class ExcelToCollectionGenerator {
                     createFileInfo.setTestcaseName(
                             "Virtualan_" + sheet + "_" + firstSheet.getSheetName().replaceAll(" ", "_")
                                     + "_WORKFLOW_" + sheet);
-                    createFileInfo.setScenario("WORKFLOW:" + firstSheet.getSheetName());
+                    createFileInfo.setScenario( firstSheet.getSheetName() + " - Workflow");
                     createIdaithalamProcessingFile(createFileInfo);
                 } else {
                     getAsSingleFile(sheet, generatedTestCaseList, generatedPath, cucumblanMap,
