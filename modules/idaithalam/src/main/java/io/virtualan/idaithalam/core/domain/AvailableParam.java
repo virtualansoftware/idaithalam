@@ -34,6 +34,16 @@ public class AvailableParam {
      */
     String parameterType;
 
+    boolean isBoolean;
+
+    boolean isInteger;
+
+    boolean  isDecimal;
+
+    boolean isString = true;
+
+    boolean isCondition;
+
     /**
      * Instantiates a new Available param.
      *
@@ -99,5 +109,45 @@ public class AvailableParam {
      */
     public void setParameterType(String parameterType) {
         this.parameterType = parameterType;
+    }
+
+    public boolean isBoolean() {
+        return isBoolean;
+    }
+
+    public void setBoolean(boolean aBoolean) {
+        isBoolean = aBoolean;
+    }
+
+    public boolean isInteger() {
+        return isInteger;
+    }
+
+    public void setInteger(boolean integer) {
+        isInteger = integer;
+    }
+
+    public boolean isDecimal() {
+        return isDecimal;
+    }
+
+    public void setDecimal(boolean decimal) {
+        isDecimal = decimal;
+    }
+
+    public boolean isString() {
+        return isString;
+    }
+
+    public void setString(boolean string) {
+        isString = string;
+    }
+
+    public boolean isCondition() {
+        return isCondition;
+    }
+
+    public void setCondition(boolean condition) {
+        isCondition = condition;
     }
 }

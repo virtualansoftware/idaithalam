@@ -1,5 +1,7 @@
 package io.virtualan.idaithalam.core.generator;
 
+import static org.apache.poi.ss.usermodel.CellType.*;
+
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.CreateFileInfo;
@@ -104,7 +106,7 @@ public class ExcelToCollectionGenerator {
         }
         for (int cellNum = row.getFirstCellNum(); cellNum < row.getLastCellNum(); cellNum++) {
             Cell cell = row.getCell(cellNum);
-            if (cell != null && cell.getCellTypeEnum() != CellType.BLANK && StringUtils
+            if (cell != null && cell.getCellType() != BLANK && StringUtils
                     .isNotBlank(cell.toString())) {
                 return false;
             }
@@ -726,8 +728,8 @@ public class ExcelToCollectionGenerator {
     }
 
     private static String getCellValue(Cell cell) {
-        if (cell.getCellTypeEnum() != CellType.FORMULA) {
-            switch (cell.getCellTypeEnum()) {
+        if (cell.getCellType() != FORMULA) {
+            switch (cell.getCellType()) {
                 case STRING:
                     return cell.getStringCellValue().trim();
                 case BOOLEAN:

@@ -1,7 +1,6 @@
 package io.virtualan.idaithalam.core.api;
 
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
-import io.virtualan.idaithalam.contract.IdaithalamExecutor;
 import io.virtualan.idaithalam.core.domain.ExecutionPlanner;
 import java.io.InputStream;
 import java.util.ArrayList;

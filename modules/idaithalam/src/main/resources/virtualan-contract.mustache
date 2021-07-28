@@ -196,7 +196,21 @@ Feature: {{feature}}
       {{/hasStorageParams}}
       {{#hasEvaluateParams}}
       {{#evaluateParams}}
+      {{#isString}}
+      And evaluate the {{{value}}} function value of the key as {{{key}}}
+      {{/isString}}
+      {{#isInteger}}
+      And evaluate the {{{value}}} integer value of the key as {{{key}}}
+      {{/isInteger}}
+      {{#isDecimal}}
+      And evaluate the {{{value}}} decimal value of the key as {{{key}}}
+      {{/isDecimal}}
+      {{#isBoolean}}
+      And evaluate the {{{value}}} boolean value of the key as {{{key}}}
+      {{/isBoolean}}
+      {{#isCondition}}
       And evaluate the {{{value}}} condition {{{key}}}
+      {{/isCondition}}
       {{/evaluateParams}}
       {{/hasEvaluateParams}}
       {{/isRest}}

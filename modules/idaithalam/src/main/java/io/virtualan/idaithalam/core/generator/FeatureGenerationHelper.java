@@ -202,7 +202,8 @@ public class FeatureGenerationHelper {
    * @return the list
    * @throws IOException the io exception
    */
-  public static List<Item> createFeatureFile(Map<String,String> excludeConfiguration, JSONArray arr, String path) throws IOException {
+  public static List<Item> createFeatureFile(Map<String, String> excludeConfiguration,
+      JSONArray arr, String path) throws IOException {
     List<Item> result = new ArrayList<>();
     if (arr != null && arr.length() > 0) {
       for (int i = 0; i < arr.length(); i++) {
@@ -213,7 +214,8 @@ public class FeatureGenerationHelper {
     return result;
   }
 
-  private static Item getItem(Map<String,String> excludeConfiguration,JSONObject object, String path) throws IOException {
+  private static Item getItem(Map<String, String> excludeConfiguration, JSONObject object,
+      String path) throws IOException {
     Item item = new Item();
     item.setMessageType(getValueMapping("messageType", object, item));
     item.setIdentifier(getValueMapping("identifier", object, item));
@@ -310,14 +312,15 @@ public class FeatureGenerationHelper {
     }
   }
 
-  private static void extractedOutput(Map<String,String> excludeProperties, JSONObject object, Item item, String path)
+  private static void extractedOutput(Map<String, String> excludeProperties, JSONObject object,
+      Item item, String path)
       throws IOException {
     item.setNoSkipOutput(!ExcludeConfiguration.shouldSkip(excludeProperties, item.getUrl(), null));
     if (!object.optString("csvson").trim().isEmpty()) {
       item.setHasCsvson(object.optString("csvson"));
       String[] listOFRows = object.optString("csvson").split("\n");
-      if(listOFRows.length > 0 &&
-              listOFRows[0].contains("jsonpath=")) {
+      if (listOFRows.length > 0 &&
+          listOFRows[0].contains("jsonpath=")) {
         List<String> stringList = Arrays.asList(object.optString("csvson").split("\n"));
         String jpath = stringList.get(0).replaceAll("jsonpath=", "");
         item.setCsvsonPath(jpath);
@@ -466,9 +469,27 @@ public class FeatureGenerationHelper {
     JSONArray params = object.optJSONArray("availableParams");
     if (params != null && params.length() > 0) {
       for (int j = 0; j < params.length(); j++) {
-        availableParams.add(new AvailableParam(params.optJSONObject(j).optString("key"),
+        AvailableParam param = new AvailableParam(params.optJSONObject(j).optString("key"),
             params.optJSONObject(j).optString("value"),
-            params.optJSONObject(j).optString("parameterType")));
+            params.optJSONObject(j).optString("parameterType"));
+        if ("EVAL_PARAM".equalsIgnoreCase(param.getParameterType())) {
+          if (param.getValue().startsWith("i~")) {
+            param.setInteger(true);
+            param.setValue(param.getValue().substring(2));
+          } else if (param.getValue().startsWith("d~")) {
+            param.setDecimal(true);
+            param.setValue(param.getValue().substring(2));
+          } else if (param.getValue().startsWith("c~")) {
+            param.setCondition(true);
+            param.setValue(param.getValue().substring(2));
+          } else if (param.getValue().startsWith("b~")) {
+            param.setBoolean(true);
+            param.setValue(param.getValue().substring(2));
+          } else {
+            param.setString(true);
+          }
+        }
+        availableParams.add(param);
       }
     }
     return availableParams;
