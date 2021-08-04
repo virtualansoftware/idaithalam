@@ -40,7 +40,7 @@ public class AvailableParam {
 
     boolean  isDecimal;
 
-    boolean isString = true;
+    boolean isString;
 
     boolean isCondition;
 
