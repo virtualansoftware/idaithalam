@@ -94,8 +94,6 @@ public class FeatureFileGenerator {
         VirtualanClassLoader classLoaderParnet = new VirtualanClassLoader(
             IdaithalamExecutor.class.getClassLoader());
         ExecutionClassloader classLoader = addConfToClasspath(classLoaderParnet, path);
-        //Is it needed??
-        //ApplicationConfiguration.reload();
         Map<String, String> excludeConfiguration = (Map)readPropsFromClasspath(classLoader, "exclude-response.properties");
         String contractFileName = properties.getProperty("virtualan.data.load");
         String contractFileType = properties.getProperty("virtualan.data.type");
@@ -109,7 +107,7 @@ public class FeatureFileGenerator {
         for(int i=0; i < fileNames.length; i++) {
           if (ConversionType.POSTMAN.name().equalsIgnoreCase(contractFileType)) {
             jsonArray = FeatureGenerationHelper
-                .createPostManToVirtualan(getJSONObject(fileNames[i]));
+                .createPostManToVirtualan(getJSONObject(classLoader, fileNames[i]));
           } else if (ConversionType.OPENAPI.name().equalsIgnoreCase(contractFileType)) {
             jsonArray = OpenApiFeatureFileGenerator
                 .generateOpenApiContractForVirtualan(fileNames[i]);
@@ -122,6 +120,7 @@ public class FeatureFileGenerator {
         return items;
     }
 
+
     /**
      * Gets json object.
      *
@@ -129,11 +128,15 @@ public class FeatureFileGenerator {
      * @return the json object
      * @throws UnableToProcessException the unable to process exception
      */
-    public static JSONObject getJSONObject(String contractFileName)
+    public static JSONObject getJSONObject(ClassLoader classLoader, String contractFileName)
         throws UnableToProcessException {
         JSONObject jsonObject = null;
         try {
-            if(FeatureFileGenerator.class.getClassLoader().getResourceAsStream(contractFileName) != null) {
+            InputStream stream = classLoader.getResourceAsStream(contractFileName);
+            if(stream != null){
+                String objectStr = readString(stream);
+                jsonObject = new JSONObject(objectStr);
+            } else if(FeatureFileGenerator.class.getClassLoader().getResourceAsStream(contractFileName) != null) {
                 String objectStr = readString(FeatureFileGenerator.class.getClassLoader()
                     .getResourceAsStream(contractFileName));
                 jsonObject = new JSONObject(objectStr);
@@ -142,7 +145,7 @@ public class FeatureFileGenerator {
             }
         } catch (IOException e) {
             LOGGER
-                    .warning("Unable to process the input file(" + contractFileName + ")" + e.getMessage());
+                .warning("Unable to process the input file(" + contractFileName + ")" + e.getMessage());
             throw new UnableToProcessException("Unable to process the input file(" + contractFileName + ") :" + e.getMessage());
         }
         return jsonObject;
