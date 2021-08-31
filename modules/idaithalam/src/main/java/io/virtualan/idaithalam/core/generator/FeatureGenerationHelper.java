@@ -333,11 +333,16 @@ public class FeatureGenerationHelper {
     if (object.optString("outputFields") != null
         && !object.optString("outputFields").isEmpty()) {
       item.setHasResponseByField(true);
-      String[] outputFields = object.optString("outputFields").split(";");
+      String[] outputFields = object.optString("outputFields").split("(?<!\\\\);");
       Map<String, String> outputFieldMap = new HashMap<>();
-      for (String outputJson : outputFields) {
+      for (String outputJsonUnEscaped : outputFields) {
+        String outputJson = removeVirtualanSemicolonEscape(outputJsonUnEscaped);
         if (outputJson.split("=").length == 2) {
           outputFieldMap.put(outputJson.split("=")[0], outputJson.split("=")[1]);
+        } else if (outputJson.split("(?<!\\\\)=").length == 2) {
+          outputFieldMap.put(removeVirtualanEqualsEscape(outputJson.split("(?<!\\\\)=")[0]), removeVirtualanEqualsEscape(outputJson.split("(?<!\\\\)=")[1]));
+        } else {
+          log.warn(" Does not seems like Kep Value Pair - {}" , outputJson);
         }
       }
       if (outputFieldMap.isEmpty()) {
@@ -385,6 +390,14 @@ public class FeatureGenerationHelper {
         }
       }
     }
+  }
+
+  private static String removeVirtualanSemicolonEscape(String input) {
+    return input.replace("\\\\;",";");
+  }
+
+  private static String removeVirtualanEqualsEscape(String input) {
+    return input.replace("\\\\=","=");
   }
 
   private static void createFile(String content, String path) throws IOException {
