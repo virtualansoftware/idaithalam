@@ -154,6 +154,11 @@ public class Item {
   /**
    * The Csvson.
    */
+  String matchPattern;
+
+  /**
+   * The Csvson.
+   */
   List<String> csvson;
 
   /**
@@ -465,19 +470,40 @@ public class Item {
 
   /**
    * gets csvsonPath run.
-   *
+   * <p>
    * get csvsonPath
+   *
+   * @return the csvson path
    */
   public String getCsvsonPath() {
     return csvsonPath;
   }
+
   /**
    * Sets csvsonPath .
    *
-   * @param csvsonPath 
+   * @param csvsonPath the csvson path
    */
   public void setCsvsonPath(String csvsonPath) {
     this.csvsonPath = csvsonPath;
+  }
+
+  /**
+   * Gets mathch pattern.
+   *
+   * @return the mathch pattern
+   */
+  public String getMatchPattern() {
+    return matchPattern;
+  }
+
+  /**
+   * Sets match pattern.
+   *
+   * @param matchPattern the match pattern
+   */
+  public void setMatchPattern(String matchPattern) {
+    this.matchPattern = matchPattern;
   }
 
   /**
@@ -856,7 +882,6 @@ public class Item {
   public void setHasCsvson(String hasCsvson) {
     this.hasCsvson = hasCsvson;
   }
-
 
 
   /**
