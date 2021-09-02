@@ -25,6 +25,8 @@ import io.virtualan.mapson.Mapson;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -312,6 +314,22 @@ public class FeatureGenerationHelper {
     }
   }
 
+  private static boolean isExtraCondition(String condition) {
+    return condition.contains("jsonpath=") || condition.contains("match");
+  }
+
+  private static SimpleEntry<String, String> keyValue(String filters) {
+    if (filters.split("=").length == 2) {
+      return new SimpleEntry(filters.split("=")[0], filters.split("=")[1]);
+    } else if (filters.split("(?<!\\\\)=").length == 2) {
+      return new SimpleEntry(removeVirtualanEqualsEscape(filters.split("(?<!\\\\)=")[0]),
+          removeVirtualanEqualsEscape(filters.split("(?<!\\\\)=")[1]));
+    } else {
+      log.warn(" Does not seems like Kep Value Pair - {}", filters);
+    }
+    return null;
+  }
+
   private static void extractedOutput(Map<String, String> excludeProperties, JSONObject object,
       Item item, String path)
       throws IOException {
@@ -319,11 +337,23 @@ public class FeatureGenerationHelper {
     if (!object.optString("csvson").trim().isEmpty()) {
       item.setHasCsvson(object.optString("csvson"));
       String[] listOFRows = object.optString("csvson").split("\n");
-      if (listOFRows.length > 0 &&
-          listOFRows[0].contains("jsonpath=")) {
+      if (listOFRows.length > 0 && isExtraCondition(listOFRows[0])) {
         List<String> stringList = Arrays.asList(object.optString("csvson").split("\n"));
-        String jpath = stringList.get(0).replaceAll("jsonpath=", "");
-        item.setCsvsonPath(jpath);
+        String[] filterConditions = listOFRows[0].split("(?<!\\\\);");
+        for (String outputJsonUnEscaped : filterConditions) {
+          SimpleEntry<String, String> filter = keyValue(
+              removeVirtualanSemicolonEscape(outputJsonUnEscaped));
+          if (filter == null) {
+          } else if (filter.getKey().contains("jsonpath")) {
+            item.setCsvsonPath(filter.getValue());
+          } else if (filter.getKey().contains("match") &&
+              (filter.getValue().contains("exact-match") || filter.getValue().contains("exact-order-match"))) {
+              item.setMatchPattern(filter.getValue());
+          }
+        }
+        if(item.getCsvsonPath() == null){
+          item.setCsvsonPath("api");
+        }
         item.setCsvson(stringList.subList(1, stringList.size()));
       } else {
         item.setCsvsonPath("api");
@@ -340,9 +370,10 @@ public class FeatureGenerationHelper {
         if (outputJson.split("=").length == 2) {
           outputFieldMap.put(outputJson.split("=")[0], outputJson.split("=")[1]);
         } else if (outputJson.split("(?<!\\\\)=").length == 2) {
-          outputFieldMap.put(removeVirtualanEqualsEscape(outputJson.split("(?<!\\\\)=")[0]), removeVirtualanEqualsEscape(outputJson.split("(?<!\\\\)=")[1]));
+          outputFieldMap.put(removeVirtualanEqualsEscape(outputJson.split("(?<!\\\\)=")[0]),
+              removeVirtualanEqualsEscape(outputJson.split("(?<!\\\\)=")[1]));
         } else {
-          log.warn(" Does not seems like Kep Value Pair - {}" , outputJson);
+          log.warn(" Does not seems like Kep Value Pair - {}", outputJson);
         }
       }
       if (outputFieldMap.isEmpty()) {
@@ -393,18 +424,19 @@ public class FeatureGenerationHelper {
   }
 
   private static String removeVirtualanSemicolonEscape(String input) {
-    return input.replace("\\\\;",";");
+    return input.replace("\\\\;", ";");
   }
 
   private static String removeVirtualanEqualsEscape(String input) {
-    return input.replace("\\\\=","=");
+    return input.replace("\\\\=", "=");
   }
 
   private static void createFile(String content, String path) throws IOException {
     Files.write(Paths.get(path), content.getBytes());
   }
 
-  private static void extractedInput(JSONObject object, Item item, String path) throws IOException {
+  private static void extractedInput(JSONObject object, Item item, String path) throws
+      IOException {
     item.setContentType(object.optString("contentType"));
     item.setInput(replaceSpecialChar(object.optString("input")));
     if ("DB".equalsIgnoreCase(object.optString("type"))) {
@@ -475,7 +507,6 @@ public class FeatureGenerationHelper {
     }
     return lists;
   }
-
 
   private static List<AvailableParam> getAvailableParamList(JSONObject object) {
     List<AvailableParam> availableParams = new ArrayList<>();
