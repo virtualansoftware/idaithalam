@@ -138,7 +138,12 @@ Feature: {{feature}}
       Then Verify the status code is {{httpStatusCode}}
       {{#noSkipOutput}}
       {{#hasCsvson}}
+      {{#matchPattern}}
+      And Verify {{csvsonPath}} response csvson includes {{matchPattern}} in the response
+      {{/matchPattern}}
+      {{^matchPattern}}
       And Verify {{csvsonPath}} response csvson includes in the response
+      {{/matchPattern}}
       {{#csvson}}
         | {{{.}}} |
       {{/csvson}}
