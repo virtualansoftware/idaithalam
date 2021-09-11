@@ -125,13 +125,6 @@ public class EDI270And271Parser implements StandardProcessing {
     providerMap.put("UC", "Urgent Care");
   }
 
-  public static void main(String[] args) throws IOException {
-
-    new EDI270And271Parser().getXMLValue(ExcelToCollectionGenerator.getFileAsString(
-        "\"D:\\\\Elan\\\\virtualan-software-ws\\\\idaithalam\\\\excel-idaithalam\\\\idaithalam\\\\samples\\\\idaithalam-excel-apitesting\\\\src\\\\test\\\\resources",
-        "output.xml"));
-  }
-
   @Override
   public String getType() {
     return "EDI-271";

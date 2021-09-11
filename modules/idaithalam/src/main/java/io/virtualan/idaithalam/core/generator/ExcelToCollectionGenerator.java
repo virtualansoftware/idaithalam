@@ -299,7 +299,7 @@ public class ExcelToCollectionGenerator {
      * @throws IOException the io exception
      */
     public static String getFileAsString(String basePath, String fileNameWithSubCategory)
-            throws IOException {
+        throws Exception {
         InputStream stream = null;
         String filePath = basePath + File.separator + fileNameWithSubCategory;
         File file = new File(filePath);
@@ -319,7 +319,7 @@ public class ExcelToCollectionGenerator {
         }
         if (stream == null) {
             log.error(" File is missing(" + basePath + ") : " + fileNameWithSubCategory);
-            System.exit(-1);
+           throw new Exception(" File is missing(" + basePath + ") : " + fileNameWithSubCategory);
         }
         return convertStreamToString(stream);
     }
@@ -555,7 +555,8 @@ public class ExcelToCollectionGenerator {
         }
     }
 
-    private static String buildObjectResponse(String basePath, Map<String, String> responseFile) {
+    private static String buildObjectResponse(String basePath, Map<String, String> responseFile)
+        throws Exception {
         try {
             String body = null;
             if (responseFile.get("ResponseContent") != null) {
@@ -576,7 +577,8 @@ public class ExcelToCollectionGenerator {
         return null;
     }
 
-    private static String buildObjectRequest(String basePath, Map<String, String> requestFile) {
+    private static String buildObjectRequest(String basePath, Map<String, String> requestFile)
+        throws Exception {
         try {
             String body = null;
             if (requestFile.get("RequestContent") != null) {
