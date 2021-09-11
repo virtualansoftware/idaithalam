@@ -184,7 +184,7 @@
     <dependency>
       <groupId>net.masterthought</groupId>
       <artifactId>cucumber-reporting</artifactId>
-      <version>5.5.4</version>
+      <version>5.6.0</version>
     </dependency>
     <dependency>
       <groupId>com.github.spullara.mustache.java</groupId>
