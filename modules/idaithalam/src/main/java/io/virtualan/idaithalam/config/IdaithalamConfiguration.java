@@ -26,8 +26,6 @@ public class IdaithalamConfiguration {
       }
       if(stream != null) {
         properties.load(stream);
-      } else {
-        properties.put("workflow", "Enabled");
       }
     } catch (Exception e) {
 
@@ -71,7 +69,7 @@ public class IdaithalamConfiguration {
    * @return the boolean
    */
   public static boolean isWorkFlow() {
-    return  properties.getProperty("workflow") != null ?   properties.getProperty("workflow").equalsIgnoreCase("Enabled") : false;
+    return  properties.getProperty("workflow") != null ?   !properties.getProperty("workflow").equalsIgnoreCase("Enabled") : true;
   }
 
   /**
@@ -81,5 +79,9 @@ public class IdaithalamConfiguration {
    */
   public static void setProperties(Map<String, String> idaithalamProperies) {
     properties.putAll(idaithalamProperies);
+  }
+
+  public static boolean isReportEnabled() {
+    return  properties.getProperty("generateReport") != null ?   !properties.getProperty("generateReport").equalsIgnoreCase("Disabled") : true;
   }
 }

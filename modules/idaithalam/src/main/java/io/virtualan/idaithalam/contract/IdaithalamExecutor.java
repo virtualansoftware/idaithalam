@@ -21,6 +21,7 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import io.cucumber.core.cli.Main;
 import io.virtualan.cucumblan.props.ApplicationConfiguration;
+import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.generator.FeatureFileGenerator;
 import io.virtualan.idaithalam.core.domain.Item;
@@ -114,7 +115,9 @@ public class IdaithalamExecutor {
             generateFeatureFile(classLoader, path);
             String[] argv = getCucumberOptions(path, fileIndex);
             exitStatus = Main.run(argv, classLoader);
-            generateReport(featureHeading, path, fileIndex);
+            if(IdaithalamConfiguration.isReportEnabled()) {
+                generateReport(featureHeading, path, fileIndex);
+            }
         } catch (IOException | UnableToProcessException e) {
             LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
             throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
@@ -123,11 +126,15 @@ public class IdaithalamExecutor {
     }
 
     private static String[] getCucumberOptions(String path, String build) {
+        String jsonPath = path;
+        if(!IdaithalamConfiguration.isReportEnabled()){
+            jsonPath = path +"/"+build;
+        }
         return new String[]{
             "-p", "pretty",
             "-p", "io.virtualan.cucumblan.props.hook.FeatureScope",
-            "-p", path == null ? "json:target/cucumber-"+build+".json" : "json:"+path+"/cucumber-"+build+".json",
-            "-p", path == null ? "html:target/cucumber-html-report.html" : "html:"+path+"/cucumber-html-report.html",
+            "-p", path == null ? "json:target/cucumber-"+build+".json" : "json:"+jsonPath+"/cucumber-"+build+".json",
+            "-p", path == null ? "html:target/cucumber-html-report.html" : "html:"+jsonPath+"/cucumber-html-report.html",
             "--glue", "io.virtualan.cucumblan.core", "", path == null ? "conf/feature/" : path+"/feature/",
         };
     }
