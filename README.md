@@ -1,16 +1,16 @@
 <h1 align="center">Idaithalam</h1>
 
-- Refer tutorials for more details: 
+#### Refer tutorials for more details:(#table-of-contents) 
     
    > [https://tutorials.virtualan.io/#/Idaithalam](https://tutorials.virtualan.io/#/Idaithalam)  
 
-- Latest release and build
+####  Latest release and build (#table-of-contents)
    > [![Maven Central](https://img.shields.io/maven-central/v/io.virtualan/idaithalam.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.virtualan%22%20AND%20a:%22idaithalam%22)  ![Build Status](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)             
 
 
 
 
-### [License](#table-of-contents)
+#### [License](#table-of-contents)
 -------
 
 Copyright 2021 Virtualan Contributors (https://virtualan.io)  
