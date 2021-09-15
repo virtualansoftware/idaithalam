@@ -1,16 +1,11 @@
 <h1 align="center">Idaithalam</h1>
 
-**Idaithalam:** [![Maven Central](https://img.shields.io/maven-central/v/io.virtualan/idaithalam.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.virtualan%22%20AND%20a:%22idaithalam%22)  ![Build Status](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)             
-
-# Idaithalam:
-
-## Refer tutorials for more details: 
+- Refer tutorials for more details: 
     
-   
-   [https://tutorials.virtualan.io/#/Idaithalam](https://tutorials.virtualan.io/#/Idaithalam)
+   > [https://tutorials.virtualan.io/#/Idaithalam](https://tutorials.virtualan.io/#/Idaithalam)  
 
-
-
+- Latest release and build
+   > [![Maven Central](https://img.shields.io/maven-central/v/io.virtualan/idaithalam.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.virtualan%22%20AND%20a:%22idaithalam%22)  ![Build Status](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)             
 
 
 
@@ -29,6 +24,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
----
 
