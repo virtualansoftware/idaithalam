@@ -14,7 +14,7 @@ import org.junit.jupiter.api.*;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ExcelToCollectionGeneratorTest {
+public class ExcelToCollectionGeneratorTests {
 
 
   @Test
@@ -37,7 +37,7 @@ public class ExcelToCollectionGeneratorTest {
   @Order(1)
   public void createCollectionTest_HappyPath() throws IOException, UnableToProcessException, URISyntaxException {
     String basePath = "target";
-    URL excelFilePath = ExcelToCollectionGeneratorTest.class.getClassLoader().getResource("customer-self-service-with-db.xlsx");
+    URL excelFilePath = ExcelToCollectionGeneratorTests.class.getClassLoader().getResource("customer-self-service-with-db.xlsx");
     String generatedPath = "target/1";
     if(!new File(generatedPath).exists()) {
         new File(generatedPath).mkdirs();
@@ -67,12 +67,12 @@ public class ExcelToCollectionGeneratorTest {
   }
 
   private InputStream getFileAsStream(String fileName) throws IOException {
-    return ExcelToCollectionGeneratorTest.class.getClassLoader().getResourceAsStream(fileName);
+    return ExcelToCollectionGeneratorTests.class.getClassLoader().getResourceAsStream(fileName);
   }
 
 
   private String getFileAsString(String fileName) throws IOException {
-    return getFileAsString(ExcelToCollectionGeneratorTest.class.getClassLoader().getResourceAsStream(fileName));
+    return getFileAsString(ExcelToCollectionGeneratorTests.class.getClassLoader().getResourceAsStream(fileName));
   }
 
     private String getFileAsString(InputStream inputStream)
@@ -88,7 +88,7 @@ public class ExcelToCollectionGeneratorTest {
     @Order(2)
     public void createCollectionTest_With_Kafka() throws IOException, UnableToProcessException {
         String basePath = "target/2";
-        URL excelFilePath = ExcelToCollectionGeneratorTest.class.getClassLoader().getResource("virtualan_collection_kafka_db_testcase_0.xlsx");
+        URL excelFilePath = ExcelToCollectionGeneratorTests.class.getClassLoader().getResource("virtualan_collection_kafka_db_testcase_0.xlsx");
         String generatedPath = "target/2";
         if(!new File(generatedPath).exists()) {
             new File(generatedPath).mkdirs();
@@ -120,7 +120,7 @@ public class ExcelToCollectionGeneratorTest {
     @Order(3)
     public void createCollectionTest_Multirun() throws IOException, UnableToProcessException {
         String basePath = "target/4";
-        URL excelFilePath = ExcelToCollectionGeneratorTest.class.getClassLoader().getResource("virtualan_collection_testcase_multirun.xlsx");
+        URL excelFilePath = ExcelToCollectionGeneratorTests.class.getClassLoader().getResource("virtualan_collection_testcase_multirun.xlsx");
         String generatedPath = "target/4";
         if(!new File(generatedPath).exists()) {
             new File(generatedPath).mkdirs();
@@ -152,7 +152,7 @@ public class ExcelToCollectionGeneratorTest {
     public void createCollectionTest_Single_Workflow() throws IOException, UnableToProcessException {
         IdaithalamConfiguration.setProperty("workflow", "Enabled");
         String basePath = "target/3";
-        URL excelFilePath = ExcelToCollectionGeneratorTest.class.getClassLoader().getResource("virtualan_collection_testcase_4.xlsx");
+        URL excelFilePath = ExcelToCollectionGeneratorTests.class.getClassLoader().getResource("virtualan_collection_testcase_4.xlsx");
         String generatedPath = "target/3";
         if(!new File(generatedPath).exists()) {
             new File(generatedPath).mkdirs();
