@@ -1,0 +1,56 @@
+[
+  {
+    "MultiRun": "petId|petName;1000|Test1;2000|Test2",
+    "input": "{\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"id\": <petId>,\n  \"name\": \"<petName>\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ],\n  \"type\": \"DOGS\"\n}",
+    "method": "POST",
+    "scenario": "post API Testing",
+    "resource": "api",
+    "availableParams": [
+      {
+        "parameterType": "ADDIFY_PARAM",
+        "value": "<petId>",
+        "key": "petId"
+      },
+      {
+        "parameterType": "ADDIFY_PARAM",
+        "value": "<petName>",
+        "key": "petName"
+      },
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/json",
+        "key": "contentType"
+      }
+    ],
+    "type": "REST",
+    "skipScenario": "EXACT (\"[petName]\",\"Test2\")",
+    "contentType": "application/json",
+    "scenarioId": "PetPost",
+    "url": "/api/pets",
+    "httpStatusCode": "201"
+  },
+  {
+    "outputFields": "name=Rocky",
+    "method": "GET",
+    "scenario": "get by Id",
+    "resource": "api",
+    "csvson": "id,name, category/id:name,status\ni~101,Rockey,i~100:german shepherd,available",
+    "availableParams": [
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/json",
+        "key": "contentType"
+      },
+      {
+        "parameterType": "ADDIFY_PARAM",
+        "value": "100",
+        "key": "petId"
+      }
+    ],
+    "type": "REST",
+    "contentType": "application/json",
+    "scenarioId": "PetGet",
+    "url": "/api/pets/[petId]",
+    "httpStatusCode": "200"
+  }
+]

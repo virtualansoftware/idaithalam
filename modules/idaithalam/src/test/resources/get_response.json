@@ -1,0 +1,18 @@
+{
+  "category": {
+    "id": 200,
+    "name": "Bulldog"
+  },
+  "id": 201,
+  "name": "Butch",
+  "photoUrls": [
+    "string"
+  ],
+  "status": "available",
+  "tags": [
+    {
+      "id": 201,
+      "name": "grey"
+    }
+  ]
+}
