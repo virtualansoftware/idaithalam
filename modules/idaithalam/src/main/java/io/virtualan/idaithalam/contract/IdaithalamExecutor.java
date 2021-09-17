@@ -128,7 +128,7 @@ public class IdaithalamExecutor {
     private static String[] getCucumberOptions(String path, String build) {
         String jsonPath = path;
         if(!IdaithalamConfiguration.isReportEnabled()){
-            jsonPath = path +"/"+build;
+            jsonPath = path +"/cucumblan";
         }
         return new String[]{
             "-p", "pretty",

@@ -16,59 +16,42 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class VirtualanTestExecutor {
 
-  private String outputDir;
-  private String inputExcel;
-  private String env;
-  private String reportTitle;
-  private String basePath;
-  private Map<String, String> cucumblanProperties;
-  List<String> generatedTestList;
-  private Map<String, String> cucumblanEnvProperties;
-  private Map<String, String> excludeProperties;
+  private ApiExecutorParam apiExecutorParam;
 
   public VirtualanTestExecutor(ApiExecutorParam apiExecutorPrarm) {
-    this.outputDir = apiExecutorPrarm.getOutputDir();
-    this.inputExcel = apiExecutorPrarm.getInputExcel();
-    this.env = apiExecutorPrarm.getEnv();
-    this.basePath = apiExecutorPrarm.getBasePath();
-    this.reportTitle = apiExecutorPrarm.getReportTitle();
-    this.cucumblanProperties = apiExecutorPrarm.getCucumblanProperties();
-    this.generatedTestList = apiExecutorPrarm.getGeneratedTestList();
-    this.excludeProperties = apiExecutorPrarm.getExcludeProperties();
-    this.cucumblanEnvProperties = apiExecutorPrarm.getCucumblanEnvProperties();
-
+    this.apiExecutorParam = apiExecutorParam;
   }
 
 
   public Integer call() {
     int status = 0;
     try {
-      File f = new File(outputDir);
+      File f = new File(apiExecutorParam.getOutputDir());
       if (!f.exists()) {
         f.mkdirs();
       }
-      if (inputExcel != null){
-        ExcelToCollectionGenerator.createCollection(basePath,generatedTestList, inputExcel, outputDir);
+      if (apiExecutorParam.getInputExcel() != null){
+        ExcelToCollectionGenerator.createCollection(apiExecutorParam);
       }
-      buildProperties("cucumblan.properties", cucumblanProperties);
-      buildProperties("cucumblan-env.properties", cucumblanEnvProperties);
-      buildProperties("exclude-response.properties", excludeProperties);
+      buildProperties("cucumblan.properties", apiExecutorParam.getCucumblanProperties());
+      buildProperties("cucumblan-env.properties", apiExecutorParam.getCucumblanEnvProperties());
+      buildProperties("exclude-response.properties", apiExecutorParam.getExcludeProperties());
 
       //Generate feature and summary page html report for the selected testcase from the excel
-      String title = env != null ? reportTitle + "(" + env + ")" : reportTitle;
-      status = IdaithalamExecutor.validateContract(title, outputDir);
+      String title = apiExecutorParam.getEnv() != null ? apiExecutorParam.getReportTitle() + "(" + apiExecutorParam.getEnv() + ")" : apiExecutorParam.getReportTitle();
+      status = IdaithalamExecutor.validateContract(title, apiExecutorParam.getOutputDir());
 
     } catch (Exception e) {
-      log.warn(env + " : " + reportTitle + " : " + e.getMessage());
+      log.warn(apiExecutorParam.getEnv() + " : " + apiExecutorParam.getReportTitle() + " : " + e.getMessage());
       status = 1;
     }
-    log.info(env + " : " + reportTitle + " : status : " + status);
+    log.info(apiExecutorParam.getEnv() + " : " + apiExecutorParam.getReportTitle() + " : status : " + status);
     return status;
   }
 
   private void buildProperties(String fileName, Map<String, String> existingProperties) throws IOException {
     if(existingProperties != null && !existingProperties.isEmpty()) {
-      File file = new File(outputDir +File.separator+fileName);
+      File file = new File(apiExecutorParam.getOutputDir() +File.separator+fileName);
       boolean isFileCreated = file.exists();
       if(!isFileCreated) {
         isFileCreated =file.createNewFile();
@@ -83,7 +66,7 @@ public class VirtualanTestExecutor {
                   properties.setProperty(x.getKey(), x.getValue());
                 }
         );
-        ExcelToCollectionGenerator.createPrpos(outputDir,
+        ExcelToCollectionGenerator.createPrpos(apiExecutorParam.getOutputDir(),
                 (Map) properties,
                 fileName);
       }

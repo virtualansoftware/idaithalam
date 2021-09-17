@@ -4,6 +4,7 @@ import static org.apache.poi.ss.usermodel.CellType.*;
 
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
+import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.domain.CreateFileInfo;
 import io.virtualan.idaithalam.core.domain.SheetObject;
 
@@ -69,23 +70,6 @@ public class ExcelToCollectionGenerator {
         }
     }
 
-    /**
-     * Create collection.
-     *
-     * @param generatedTestCaseList the generated test case list
-     * @param excelFilePath         the excel file path
-     * @param generatedPath         the generated path
-     * @throws IOException the io exception
-     */
-    public static void createCollection(List<String> generatedTestCaseList,
-                                        String excelFilePath,
-                                        String generatedPath)
-            throws IOException, UnableToProcessException {
-        createCollection(null, generatedTestCaseList,
-                excelFilePath,
-                generatedPath);
-
-    }
 
     private static Map<Integer, String> getHeader(Row nextRow) {
         Map<Integer, String> headers = new HashMap<>();
@@ -129,33 +113,27 @@ public class ExcelToCollectionGenerator {
     /**
      * Create collection.
      *
-     * @param basePath              the base path
-     * @param generatedTestCaseList the generated test case list
-     * @param excelFilePath         the excel file path
-     * @param generatedPath         the generated path
+
      * @throws IOException the io exception
      */
-    public static boolean createCollection(String basePath, List<String> generatedTestCaseList,
-                                        String excelFilePath,
-                                        String generatedPath)
+    public static boolean createCollection(ApiExecutorParam apiExecutorParam)
             throws IOException, UnableToProcessException {
         try {
-            Map<String, Map<String, String>> buildCollections = new BuildCollections().createCollection(basePath, generatedTestCaseList,
-                    generatedPath, excelFilePath);
+            Map<String, Map<String, String>> buildCollections = new BuildCollections().createCollection(apiExecutorParam);
             Map<String, String> excludeResponseMap = buildCollections.get("exclude");
             Map<String, String> cucumblanMap = buildCollections.get("cucumblan");
-            createPrpos(generatedPath, cucumblanMap, "cucumblan.properties");
+            createPrpos(apiExecutorParam.getOutputDir(), cucumblanMap, "cucumblan.properties");
             InputStream streamEnv = Thread.currentThread().getContextClassLoader()
                     .getResourceAsStream("cucumblan-env.properties");
             if (streamEnv != null) {
-                createPrpos(generatedPath, streamEnv, "cucumblan-env.properties");
+                createPrpos(apiExecutorParam.getOutputDir(), streamEnv, "cucumblan-env.properties");
             }
             if (!excludeResponseMap.isEmpty()) {
-                createPrpos(generatedPath, excludeResponseMap, "exclude-response.properties");
+                createPrpos(apiExecutorParam.getOutputDir(), excludeResponseMap, "exclude-response.properties");
             }
         } catch (Exception e) {
             log.error(
-                    "Unable to create collection for the given excel file " + excelFilePath + " >>> " + e
+                    "Unable to create collection for the given excel file " + apiExecutorParam.getInputExcel() + " >>> " + e
                             .getMessage());
             return false;
         }
@@ -214,13 +192,13 @@ public class ExcelToCollectionGenerator {
                 try {
                     Map<String, String> finalRow = getRow(nextRow, headers);
                     testcaseName = finalRow.get("TestCaseName");
-                    if (!finalRow.isEmpty() && ( generatedTestCaseList == null || generatedTestCaseList.isEmpty()
-                        || generatedTestCaseList.contains(testcaseName))) {
+                    if (!finalRow.isEmpty() && (generatedTestCaseList == null || generatedTestCaseList.isEmpty()
+                            || generatedTestCaseList.contains(testcaseName))) {
                         if (finalRow.get("Type") == null || "REST".equalsIgnoreCase(finalRow.get("Type"))) {
                             JSONObject object = buildRESTVirtualanCollection(sheetObject.getBasePath(),
-                                finalRow);
+                                    finalRow);
                             populateConfigMaps(finalRow, sheetObject.getCucumblanMap(),
-                                sheetObject.getExcludeResponseMap());
+                                    sheetObject.getExcludeResponseMap());
                             virtualanArray.put(object);
                         } else if ("KAFKA".equalsIgnoreCase(finalRow.get("Type"))) {
                             JSONObject object = buildKAFKAVirtualanCollection(sheetObject.getBasePath(),
@@ -235,8 +213,8 @@ public class ExcelToCollectionGenerator {
                     }
                 } catch (Exception e) {
                     log.warn("Spread sheet (" + testcaseName + ") " + (sheet + 1) + " with row number " + (i + 1)
-                        + " is unable to process for the reason >> "
-                        + e.getMessage());
+                            + " is unable to process for the reason >> "
+                            + e.getMessage());
                 }
             }
         }
@@ -302,7 +280,7 @@ public class ExcelToCollectionGenerator {
      * @throws IOException the io exception
      */
     public static String getFileAsString(String basePath, String fileNameWithSubCategory)
-        throws Exception {
+            throws Exception {
         InputStream stream = null;
         String filePath = basePath + File.separator + fileNameWithSubCategory;
         File file = new File(filePath);
@@ -322,7 +300,7 @@ public class ExcelToCollectionGenerator {
         }
         if (stream == null) {
             log.error(" File is missing(" + basePath + ") : " + fileNameWithSubCategory);
-           throw new Exception(" File is missing(" + basePath + ") : " + fileNameWithSubCategory);
+            throw new Exception(" File is missing(" + basePath + ") : " + fileNameWithSubCategory);
         }
         return convertStreamToString(stream);
     }
@@ -559,7 +537,7 @@ public class ExcelToCollectionGenerator {
     }
 
     private static String buildObjectResponse(String basePath, Map<String, String> responseFile)
-        throws Exception {
+            throws Exception {
         try {
             String body = null;
             if (responseFile.get("ResponseContent") != null) {
@@ -581,7 +559,7 @@ public class ExcelToCollectionGenerator {
     }
 
     private static String buildObjectRequest(String basePath, Map<String, String> requestFile)
-        throws Exception {
+            throws Exception {
         try {
             String body = null;
             if (requestFile.get("RequestContent") != null) {
@@ -657,7 +635,7 @@ public class ExcelToCollectionGenerator {
             //Populating the properties file
             props.putAll(propsMap);
             //Instantiating the FileInputStream for output file
-            try ( FileOutputStream outputStrem = new FileOutputStream(
+            try (FileOutputStream outputStrem = new FileOutputStream(
                     path + File.separator + fileName)) {
                 //Storing the properties file
                 props.store(outputStrem, "This is a " + fileName + " properties file");
@@ -750,37 +728,31 @@ public class ExcelToCollectionGenerator {
 
     private static class BuildCollections {
 
-
         BuildCollections() {
-
         }
 
-
-        Map<String, Map<String, String>> createCollection(String basePath, List<String> generatedTestCaseList,
-                                          String generatedPath,
-                                          String inputExcel) throws IOException, UnableToProcessException {
-
+        Map<String, Map<String, String>> createCollection(ApiExecutorParam apiExecutorParam) throws IOException, UnableToProcessException {
             Map<String, String> excludeResponseMap;
             Map<String, String> cucumblanMap;
 
             excludeResponseMap = new HashMap<>();
             cucumblanMap = getCucumblan();
-            InputStream stream = getInputStream(basePath, inputExcel);
+            InputStream stream = getInputStream(apiExecutorParam.getBasePath(), apiExecutorParam.getInputExcel());
             Workbook workbook = null;
             try {
                 workbook = new XSSFWorkbook(stream);
                 for (int sheet = 0; sheet < workbook.getNumberOfSheets(); sheet++) {
                     Sheet firstSheet = workbook.getSheetAt(sheet);
                     SheetObject sheetObject = new SheetObject();
-                    sheetObject.setBasePath(basePath);
+                    sheetObject.setBasePath(apiExecutorParam.getBasePath());
                     sheetObject.setExcludeResponseMap(excludeResponseMap);
                     sheetObject.setCucumblanMap(cucumblanMap);
                     sheetObject.setFirstSheet(firstSheet);
-                    createCollections(generatedTestCaseList, sheet, firstSheet, sheetObject, generatedPath);
+                    createCollections(apiExecutorParam.getGeneratedTestList(), sheet, firstSheet, sheetObject, apiExecutorParam.getOutputDir());
                 }
             } catch (Exception e) {
                 log.error(
-                        "Unable to create collection for the given excel file " + inputExcel + " <<< " + e
+                        "Unable to create collection for the given excel file " + apiExecutorParam.getInputExcel() + " <<< " + e
                                 .getMessage());
             } finally {
                 if (workbook != null) {
@@ -810,7 +782,7 @@ public class ExcelToCollectionGenerator {
                     createFileInfo.setTestcaseName(
                             "Virtualan_" + sheet + "_" + firstSheet.getSheetName().replaceAll(" ", "_")
                                     + "_WORKFLOW_" + sheet);
-                    createFileInfo.setScenario( firstSheet.getSheetName() + " - Workflow");
+                    createFileInfo.setScenario(firstSheet.getSheetName() + " - Workflow");
                     createIdaithalamProcessingFile(createFileInfo);
                 } else {
                     getAsSingleFile(sheet, generatedTestCaseList, generatedPath, sheetObject.getCucumblanMap(),
