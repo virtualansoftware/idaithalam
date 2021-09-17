@@ -194,7 +194,10 @@ public class FeatureFileGenerator {
         throws IOException {
         InputStream stream  = null;
         File file = new File(filePath);
-        if(file.exists()){
+        if (apiExecutorParam.getVirtualanSpecPath() != null) {
+            stream = new FileInputStream(apiExecutorParam.getVirtualanSpecPath() +File.separator+ filePath);
+        }
+        if(stream == null && file.exists()){
             stream = new FileInputStream(file);
         }
         if (stream == null) {
@@ -202,9 +205,6 @@ public class FeatureFileGenerator {
         }
         if (stream == null) {
             stream = ExcelToCollectionGenerator.class.getClassLoader().getResourceAsStream(filePath);
-        }
-        if (stream == null) {
-            stream = new FileInputStream(apiExecutorParam.getVirtualanSpecPath() +File.separator+ filePath);
         }
 
         return convertStreamToString(stream);
