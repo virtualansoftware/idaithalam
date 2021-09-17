@@ -130,7 +130,7 @@ public class IdaithalamExecutor {
         String path = apiExecutorParam.getOutputDir();
         String jsonPath = path;
         if(!IdaithalamConfiguration.isReportEnabled()){
-            jsonPath = path +"/cucumblan";
+            jsonPath = path +"/idaithalam";
         }
         return new String[]{
             "-p", "pretty",
@@ -141,32 +141,7 @@ public class IdaithalamExecutor {
         };
     }
 
-    /**
-     * Validate contract int.
-     *
-     * @param featureHeading the feature heading
-     * @param path           the path
-     * @param runId          the run id
-     * @return the int
-     * @throws UnableToProcessException the unable to process exception
-     */
-//    public static int validateContract(String featureHeading, String path, int runId)
-//        throws UnableToProcessException {
-//        byte exitStatus;
-//        try {
-//            String fileIndex = UUID.randomUUID().toString();
-//            VirtualanClassLoader classLoaderParent = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
-//            ExecutionClassloader classLoader = addConfToClasspath( classLoaderParent, path + File.separator + runId);
-//            generateFeatureFile(classLoader, path + File.separator + runId);
-//            String[] argv = getCucumberOptions(path + File.separator + runId, fileIndex);
-//            exitStatus = Main.run(argv, classLoader);
-//            generateReport(featureHeading, path + File.separator + runId, fileIndex);
-//        } catch (IOException | UnableToProcessException e) {
-//            LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
-//            throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
-//        }
-//        return exitStatus;
-//    }
+
 
     /**
      *  generate cucumber report
