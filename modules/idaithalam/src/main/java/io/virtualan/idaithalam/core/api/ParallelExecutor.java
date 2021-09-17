@@ -42,7 +42,7 @@ public class ParallelExecutor implements Callable<Integer> {
       String title = apiExecutorPrarm.getEnv() != null ? apiExecutorPrarm.getReportTitle() + "(" + apiExecutorPrarm.getEnv() + ")" : apiExecutorPrarm.getReportTitle();
       status = IdaithalamExecutor
           .validateContract(title,
-                  apiExecutorPrarm.getOutputDir());
+                  apiExecutorPrarm);
     } catch (Exception e) {
       log.warn(apiExecutorPrarm.getEnv() + " : " + apiExecutorPrarm.getReportTitle() + " : " + e.getMessage());
       status = 1;

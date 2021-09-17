@@ -39,7 +39,7 @@ public class VirtualanTestExecutor {
 
       //Generate feature and summary page html report for the selected testcase from the excel
       String title = apiExecutorParam.getEnv() != null ? apiExecutorParam.getReportTitle() + "(" + apiExecutorParam.getEnv() + ")" : apiExecutorParam.getReportTitle();
-      status = IdaithalamExecutor.validateContract(title, apiExecutorParam.getOutputDir());
+      status = IdaithalamExecutor.validateContract(title, apiExecutorParam);
 
     } catch (Exception e) {
       log.warn(apiExecutorParam.getEnv() + " : " + apiExecutorParam.getReportTitle() + " : " + e.getMessage());

@@ -113,7 +113,6 @@ public class ExcelToCollectionGenerator {
     /**
      * Create collection.
      *
-
      * @throws IOException the io exception
      */
     public static boolean createCollection(ApiExecutorParam apiExecutorParam)
@@ -142,16 +141,15 @@ public class ExcelToCollectionGenerator {
 
     }
 
-    private static void getAsSingleFile(int sheet, List<String> generatedTestCaseList,
-                                        String generatedPath,
+    private static void getAsSingleFile(ApiExecutorParam apiExecutorParam, int sheet,
                                         Map<String, String> cucumblanMap, JSONArray virtualanArray) {
         Map<String, JSONArray> arrayMap = buildByMiniCategory(virtualanArray);
         for (Map.Entry<String, JSONArray> entry : arrayMap.entrySet()) {
             JSONArray virtualanSingle = entry.getValue();
             String scenarioId = virtualanSingle.getJSONObject(0).getString("scenarioId").split("-")[0];
-            if (byEachTestCase(generatedTestCaseList, scenarioId)) {
+            if (byEachTestCase(apiExecutorParam.getGeneratedTestList(), scenarioId)) {
                 CreateFileInfo createFileInfo = new CreateFileInfo();
-                createFileInfo.setGeneratedPath(generatedPath);
+                createFileInfo.setGeneratedPath(apiExecutorParam);
                 createFileInfo.setCucumblanMap(cucumblanMap);
                 createFileInfo.setVirtualanArray(virtualanSingle);
                 createFileInfo
@@ -647,11 +645,18 @@ public class ExcelToCollectionGenerator {
         }
     }
 
-    private static String generateExcelJson(String path, JSONArray excelArray, String fileName) {
+    private static String generateExcelJson(ApiExecutorParam apiExecutorParam, JSONArray excelArray, String fileName) {
         String fileCreated = null;
         try {
-            FileOutputStream outputStream = new FileOutputStream(
-                    path + File.separator + fileName + ".json");
+            FileOutputStream outputStream = null;
+            if (apiExecutorParam.getVirtualanSpecPath() != null) {
+                outputStream = new FileOutputStream(
+                        apiExecutorParam.getVirtualanSpecPath() + File.separator + fileName + ".json");
+            } else {
+                outputStream = new FileOutputStream(
+                        apiExecutorParam.getOutputDir() + File.separator + fileName + ".json");
+
+            }
             Writer writer = new OutputStreamWriter(outputStream);
             CharSequence cs = excelArray.toString(4);
             writer.append(cs);
@@ -748,7 +753,7 @@ public class ExcelToCollectionGenerator {
                     sheetObject.setExcludeResponseMap(excludeResponseMap);
                     sheetObject.setCucumblanMap(cucumblanMap);
                     sheetObject.setFirstSheet(firstSheet);
-                    createCollections(apiExecutorParam.getGeneratedTestList(), sheet, firstSheet, sheetObject, apiExecutorParam.getOutputDir());
+                    createCollections(apiExecutorParam, sheet, firstSheet, sheetObject);
                 }
             } catch (Exception e) {
                 log.error(
@@ -768,15 +773,15 @@ public class ExcelToCollectionGenerator {
             return response;
         }
 
-        private void createCollections(List<String> generatedTestCaseList, int sheet, Sheet firstSheet,
-                                       SheetObject sheetObject, String generatedPath)
+        private void createCollections(ApiExecutorParam apiExecutorParam, int sheet, Sheet firstSheet,
+                                       SheetObject sheetObject)
                 throws MalformedURLException {
-            JSONArray virtualanArray = getObjectSheet(sheet, generatedTestCaseList, sheetObject);
+            JSONArray virtualanArray = getObjectSheet(sheet, apiExecutorParam.getGeneratedTestList(), sheetObject);
             log.info("Sheet no " + sheet + " build out" + virtualanArray.toString());
             if (virtualanArray.length() > 0) {
                 if (IdaithalamConfiguration.isWorkFlow()) {
                     CreateFileInfo createFileInfo = new CreateFileInfo();
-                    createFileInfo.setGeneratedPath(generatedPath);
+                    createFileInfo.setGeneratedPath(apiExecutorParam);
                     createFileInfo.setCucumblanMap(sheetObject.getCucumblanMap());
                     createFileInfo.setVirtualanArray(virtualanArray);
                     createFileInfo.setTestcaseName(
@@ -785,7 +790,7 @@ public class ExcelToCollectionGenerator {
                     createFileInfo.setScenario(firstSheet.getSheetName() + " - Workflow");
                     createIdaithalamProcessingFile(createFileInfo);
                 } else {
-                    getAsSingleFile(sheet, generatedTestCaseList, generatedPath, sheetObject.getCucumblanMap(),
+                    getAsSingleFile(apiExecutorParam, sheet, sheetObject.getCucumblanMap(),
                             virtualanArray);
                 }
             }

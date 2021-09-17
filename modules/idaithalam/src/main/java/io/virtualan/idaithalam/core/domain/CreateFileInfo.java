@@ -8,12 +8,11 @@ import org.json.JSONArray;
  */
 public class CreateFileInfo {
 
-  private  String generatedPath;
+  private  ApiExecutorParam generatedPath;
   private  Map<String, String> cucumblanMap;
   private  JSONArray virtualanArray;
   private  String testcaseName;
   private  String scenario;
-
   @Override
   public String toString() {
     return "CreateFileInfo{" +
@@ -25,12 +24,14 @@ public class CreateFileInfo {
         '}';
   }
 
+
+
   /**
    * Sets generated path.
    *
    * @param generatedPath the generated path
    */
-  public void setGeneratedPath(String generatedPath) {
+  public void setGeneratedPath(ApiExecutorParam generatedPath) {
     this.generatedPath = generatedPath;
   }
 
@@ -75,7 +76,7 @@ public class CreateFileInfo {
    *
    * @return the generated path
    */
-  public String getGeneratedPath() {
+  public ApiExecutorParam getGeneratedPath() {
     return generatedPath;
   }
 
