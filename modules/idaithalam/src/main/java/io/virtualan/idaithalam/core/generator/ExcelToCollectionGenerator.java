@@ -46,6 +46,13 @@ public class ExcelToCollectionGenerator {
     }
 
 
+    /**
+     * Convert stream to string string.
+     *
+     * @param is the is
+     * @return the string
+     * @throws IOException the io exception
+     */
     public static String convertStreamToString(InputStream is) throws IOException {
         if (is != null) {
             StringBuilder sb = new StringBuilder();
@@ -112,7 +119,10 @@ public class ExcelToCollectionGenerator {
     /**
      * Create collection.
      *
-     * @throws IOException the io exception
+     * @param apiExecutorParam the api executor param
+     * @return the boolean
+     * @throws IOException              the io exception
+     * @throws UnableToProcessException the unable to process exception
      */
     public static boolean createCollection(ApiExecutorParam apiExecutorParam)
             throws IOException, UnableToProcessException {
@@ -233,7 +243,8 @@ public class ExcelToCollectionGenerator {
      * @param basePath                the base path
      * @param fileNameWithSubCategory the file name with sub category
      * @return the input stream
-     * @throws FileNotFoundException the file not found exception
+     * @throws FileNotFoundException    the file not found exception
+     * @throws UnableToProcessException the unable to process exception
      */
     public static InputStream getInputStream(String basePath, String fileNameWithSubCategory)
             throws FileNotFoundException, UnableToProcessException {
@@ -274,7 +285,7 @@ public class ExcelToCollectionGenerator {
      * @param basePath                the base path
      * @param fileNameWithSubCategory the file name with sub category
      * @return the file as string
-     * @throws IOException the io exception
+     * @throws Exception the exception
      */
     public static String getFileAsString(String basePath, String fileNameWithSubCategory)
             throws Exception {
@@ -626,6 +637,13 @@ public class ExcelToCollectionGenerator {
         }
     }
 
+    /**
+     * Create prpos.
+     *
+     * @param path     the path
+     * @param propsMap the props map
+     * @param fileName the file name
+     */
     public static void createPrpos(String path, Map<String, String> propsMap, String fileName) {
         try {
             Properties props = new Properties();
@@ -732,9 +750,20 @@ public class ExcelToCollectionGenerator {
 
     private static class BuildCollections {
 
+        /**
+         * Instantiates a new Build collections.
+         */
         BuildCollections() {
         }
 
+        /**
+         * Create collection map.
+         *
+         * @param apiExecutorParam the api executor param
+         * @return the map
+         * @throws IOException              the io exception
+         * @throws UnableToProcessException the unable to process exception
+         */
         Map<String, Map<String, String>> createCollection(ApiExecutorParam apiExecutorParam) throws IOException, UnableToProcessException {
             Map<String, String> excludeResponseMap;
             Map<String, String> cucumblanMap;

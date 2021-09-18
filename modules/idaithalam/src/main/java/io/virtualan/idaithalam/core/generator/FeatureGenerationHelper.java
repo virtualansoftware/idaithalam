@@ -198,8 +198,9 @@ public class FeatureGenerationHelper {
   /**
    * Create feature file list.
    *
-   * @param arr  the arr
-   * @param path the path
+   * @param excludeConfiguration the exclude configuration
+   * @param arr                  the arr
+   * @param path                 the path
    * @return the list
    * @throws IOException the io exception
    */

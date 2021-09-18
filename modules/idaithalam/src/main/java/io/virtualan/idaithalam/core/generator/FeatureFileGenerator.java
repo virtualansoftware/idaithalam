@@ -61,6 +61,13 @@ public class FeatureFileGenerator {
         return cl;
     }
 
+    /**
+     * Read props from classpath properties.
+     *
+     * @param classLoader the class loader
+     * @param fileName    the file name
+     * @return the properties
+     */
     public static Properties readPropsFromClasspath(ClassLoader classLoader, String fileName) {
         Properties propertiesForInstance = new Properties();
 
@@ -82,6 +89,8 @@ public class FeatureFileGenerator {
     /**
      * Generate feature file list.
      *
+     * @param properties       the properties
+     * @param apiExecutorParam the api executor param
      * @return the list
      * @throws UnableToProcessException the unable to process exception
      * @throws IOException              the io exception
@@ -122,6 +131,7 @@ public class FeatureFileGenerator {
     /**
      * Gets json object.
      *
+     * @param classLoader      the class loader
      * @param contractFileName the contract file name
      * @return the json object
      * @throws UnableToProcessException the unable to process exception
@@ -170,6 +180,7 @@ public class FeatureFileGenerator {
     /**
      * Gets json array.
      *
+     * @param apiExecutorParam the api executor param
      * @param contractFileName the contract file name
      * @return the json array
      * @throws UnableToProcessException the unable to process exception

@@ -101,8 +101,8 @@ public class IdaithalamExecutor {
     /**
      * Validate contract int.
      *
-     * @param featureHeading the feature heading
-     * @param path           the path
+     * @param featureHeading   the feature heading
+     * @param apiExecutorParam the api executor param
      * @return the int
      * @throws UnableToProcessException the unable to process exception
      */
@@ -198,6 +198,12 @@ public class IdaithalamExecutor {
         return cl;
     }
 
+    /**
+     * Read cucumblan properties.
+     *
+     * @param classLoader the class loader
+     * @return the properties
+     */
     public static Properties readCucumblan(ClassLoader classLoader) {
         Properties propertiesForInstance = new Properties();
 
