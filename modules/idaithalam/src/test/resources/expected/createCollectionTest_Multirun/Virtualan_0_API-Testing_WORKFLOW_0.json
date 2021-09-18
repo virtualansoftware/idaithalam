@@ -40,7 +40,7 @@
         "httpStatusCode": "201"
     },
     {
-        "outputFields": "name=Rocky",
+        "outputFields": {"name": "Rocky"},
         "requestType": "REST",
         "method": "GET",
         "scenario": "get by Id",

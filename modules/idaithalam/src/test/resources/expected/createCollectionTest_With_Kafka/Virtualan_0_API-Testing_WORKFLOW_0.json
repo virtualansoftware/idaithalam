@@ -3,8 +3,14 @@
         "identifier": "100",
         "requestType": "KAFKA",
         "resource": "pet",
-        "outputPaths": "id;category.name",
-        "outputFields": "id=i~100;name=doggie",
+        "outputPaths": [
+            "id",
+            "category.name"
+        ],
+        "outputFields": {
+            "name": "doggie",
+            "id": "i~100"
+        },
         "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
         "input": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
         "messageType": "JSON",
@@ -18,7 +24,7 @@
         "scenarioId": "Pet-Kafka"
     },
     {
-        "outputFields": "name=Rocky",
+        "outputFields": {"name": "Rocky"},
         "requestType": "REST",
         "method": "GET",
         "scenario": "get By Id",
@@ -90,7 +96,10 @@
         "httpStatusCode": "200"
     },
     {
-        "outputFields": "id=i~100;name=doggie",
+        "outputFields": {
+            "name": "doggie",
+            "id": "i~100"
+        },
         "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
         "identifier": "100",
         "requestType": "KAFKA",
@@ -103,7 +112,10 @@
         "stepInfo": "contains pet information",
         "event": "TEST",
         "scenarioId": "PetPost-kafka-response",
-        "outputPaths": "id;category.name"
+        "outputPaths": [
+            "id",
+            "category.name"
+        ]
     },
     {
         "input": "create table employees (emp_no int, birth_date date,first_name VARCHAR(50),last_name VARCHAR(50), gender VARCHAR(50),hire_date date)",

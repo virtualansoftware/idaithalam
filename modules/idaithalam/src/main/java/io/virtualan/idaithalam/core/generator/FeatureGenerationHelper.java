@@ -381,32 +381,17 @@ public class FeatureGenerationHelper {
         item.setCsvson(stringList);
       }
     }
-    if (object.optString("outputFields") != null
-        && !object.optString("outputFields").isEmpty()) {
-      item.setHasResponseByField(true);
-      String[] outputFields = object.optString("outputFields").split("(?<!\\\\);");
-      Map<String, String> outputFieldMap = new HashMap<>();
-      for (String outputJsonUnEscaped : outputFields) {
-        String outputJson = removeVirtualanSemicolonEscape(outputJsonUnEscaped);
-        if (outputJson.split("=").length == 2) {
-          outputFieldMap.put(outputJson.split("=")[0], outputJson.split("=")[1]);
-        } else if (outputJson.split("(?<!\\\\)=").length == 2) {
-          outputFieldMap.put(removeVirtualanEqualsEscape(outputJson.split("(?<!\\\\)=")[0]),
-              removeVirtualanEqualsEscape(outputJson.split("(?<!\\\\)=")[1]));
-        } else {
-          log.warn(" Does not seems like Kep Value Pair - {}", outputJson);
-        }
-      }
-      if (outputFieldMap.isEmpty()) {
-        log.warn("Unable to populate the ResponseByField" + object.optString("outputFields"));
-      } else {
+      if (object.optJSONObject("outputFields") != null && object.optJSONObject("outputFields").length() != 0) {
+        item.setHasResponseByField(true);
+        Map<String, String> outputFieldMap = new HashMap(object.optJSONObject("outputFields").toMap());
+        item.setHasResponseByField(true);
         item.setResponseByField(outputFieldMap);
-      }
     } else {
-      item.setHasOutputFileByPath(!object.optString("outputPaths").isEmpty());
+      item.setHasOutputFileByPath(!object.optJSONArray("outputPaths").isEmpty());
       item.setOutput(replaceSpecialChar(object.optString("output")));
       if (item.isHasOutputFileByPath()) {
-        item.setOutputFileByPath(Arrays.asList(object.optString("outputPaths").split(";")));
+        List<String> stringList = IntStream.range(0,object.optJSONArray("outputPaths").length()).mapToObj(i->object.optJSONArray("outputPaths").getString(i)).collect(Collectors.toList());
+        item.setOutputFileByPath(stringList);
         String fileName =
             object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]", "-") + "_response.txt";
         createFile(item.getOutput(), path + "/" + fileName);
@@ -444,11 +429,11 @@ public class FeatureGenerationHelper {
     }
   }
 
-  private static String removeVirtualanSemicolonEscape(String input) {
+  public static String removeVirtualanSemicolonEscape(String input) {
     return input.replace("\\\\;", ";");
   }
 
-  private static String removeVirtualanEqualsEscape(String input) {
+  public static String removeVirtualanEqualsEscape(String input) {
     return input.replace("\\\\=", "=");
   }
 
