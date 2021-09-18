@@ -162,7 +162,10 @@
         "method": "PATCH",
         "scenario": "AcceptInsuranceQuote",
         "resource": "css",
-        "csvson": "statusHistory/status\nREQUEST_SUBMITTED\\|QUOTE_RECEIVED\\|QUOTE_ACCEPTED\\|",
+        "csvson": [
+            "statusHistory/status",
+            "REQUEST_SUBMITTED\\|QUOTE_RECEIVED\\|QUOTE_ACCEPTED\\|"
+        ],
         "availableParams": [
             {
                 "parameterType": "HEADER_PARAM",
@@ -185,7 +188,11 @@
         "method": "VERIFY",
         "scenario": "InsuranceQuoteByDB",
         "resource": "css",
-        "csvson": "select iqr.id, iq.insurance_premium_amount, iq.insurance_premium_currency, iq.policy_limit_amount from insurancequotes iq INNER JOIN insurancequoterequests iqr on iq.id = iqr.insurance_quote_id and iqr.id  =  [quoteId]\nid,insurance_premium_amount, insurance_premium_currency, policy_limit_amount\ni~[quoteId],d~500.00,CHF,d~50000.00",
+        "csvson": [
+            "select iqr.id, iq.insurance_premium_amount, iq.insurance_premium_currency, iq.policy_limit_amount from insurancequotes iq INNER JOIN insurancequoterequests iqr on iq.id = iqr.insurance_quote_id and iqr.id  =  [quoteId]",
+            "id,insurance_premium_amount, insurance_premium_currency, policy_limit_amount",
+            "i~[quoteId],d~500.00,CHF,d~50000.00"
+        ],
         "availableParams": [{
             "parameterType": "STORAGE_PARAM",
             "value": "[0].policy_limit_amount",

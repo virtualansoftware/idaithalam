@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -267,9 +269,9 @@ public class FeatureGenerationHelper {
 
   private static void extractedMultiRun(JSONObject object, Item item) {
     List<String> multiRun = new ArrayList();
-    if (object.optString("MultiRun") != null && !object.optString("MultiRun").isEmpty()) {
-      String[] loopHeaders = object.optString("MultiRun").split(";");
-      multiRun.addAll(Arrays.asList(loopHeaders));
+    if (object.optString("rule") != null && !object.optString("rule").isEmpty()) {
+      List<String> stringList = IntStream.range(0,object.optJSONArray("rule").length()).mapToObj(i->object.optJSONArray("rule").getString(i)).collect(Collectors.toList());
+      multiRun.addAll(stringList);
       item.setMultiRun(multiRun);
       item.setHasMultiRun(true);
     }
@@ -334,12 +336,12 @@ public class FeatureGenerationHelper {
       Item item, String path)
       throws IOException {
     item.setNoSkipOutput(!ExcludeConfiguration.shouldSkip(excludeProperties, item.getUrl(), null));
-    if (!object.optString("csvson").trim().isEmpty()) {
-      item.setHasCsvson(object.optString("csvson"));
-      String[] listOFRows = object.optString("csvson").split("\n");
-      if (listOFRows.length > 0 && isExtraCondition(listOFRows[0])) {
-        List<String> stringList = Arrays.asList(object.optString("csvson").split("\n"));
-        String[] filterConditions = listOFRows[0].split("(?<!\\\\);");
+    if (!object.optJSONArray("csvson").isEmpty() && object.optJSONArray("csvson").length() > 0) {
+      item.setHasCsvson(object.optJSONArray("csvson").toString());
+      JSONArray listOFRows = object.optJSONArray("csvson");
+      List<String> stringList = IntStream.range(0,object.optJSONArray("csvson").length()).mapToObj(i->object.optJSONArray("csvson").getString(i)).collect(Collectors.toList());
+      if (isExtraCondition(listOFRows.optString(0))) {
+        String[] filterConditions = listOFRows.optString(0).split("(?<!\\\\);");
         for (String outputJsonUnEscaped : filterConditions) {
           SimpleEntry<String, String> filter = keyValue(
               removeVirtualanSemicolonEscape(outputJsonUnEscaped));
@@ -357,7 +359,7 @@ public class FeatureGenerationHelper {
         item.setCsvson(stringList.subList(1, stringList.size()));
       } else {
         item.setCsvsonPath("api");
-        item.setCsvson(Arrays.asList(object.optString("csvson").split("\n")));
+        item.setCsvson(stringList);
       }
     }
     if (object.optString("outputFields") != null

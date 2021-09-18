@@ -162,7 +162,13 @@
         "method": "PATCH",
         "scenario": "RejectInsuranceQuote",
         "resource": "css",
-        "csvson": "jsonpath=statusHistory\nstatus\nREQUEST_SUBMITTED\nQUOTE_RECEIVED\nQUOTE_REJECTED",
+        "csvson": [
+            "jsonpath=statusHistory",
+            "status",
+            "REQUEST_SUBMITTED",
+            "QUOTE_RECEIVED",
+            "QUOTE_REJECTED"
+        ],
         "availableParams": [
             {
                 "parameterType": "HEADER_PARAM",

@@ -1,125 +1,138 @@
 [
-  {
-    "identifier": "100",
-    "resource": "pet",
-    "type": "KAFKA",
-    "outputPaths": "id;category.name",
-    "outputFields": "id=i~100;name=doggie",
-    "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
-    "input": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
-    "messageType": "JSON",
-    "scenario": "Validate pet Response",
-    "csvson": "id,name, category/id:name,status\ni~100,doggie,i~100:string,available",
-    "stepInfo": "contains pet information",
-    "event": "TEST",
-    "scenarioId": "Pet-Kafka"
-  },
-  {
-    "outputFields": "name=Rocky",
-    "method": "GET",
-    "scenario": "get By Id",
-    "resource": "api",
-    "csvson": "id,name, category/id:name,status\ni~101,Rockey,i~100:german shepherd,available",
-    "availableParams": [
-      {
-        "parameterType": "HEADER_PARAM",
-        "value": "application/json",
-        "key": "contentType"
-      },
-      {
-        "parameterType": "ADDIFY_PARAM",
-        "value": "100",
-        "key": "petId"
-      }
-    ],
-    "type": "REST",
-    "contentType": "application/json",
-    "scenarioId": "PetGet",
-    "url": "/api/pets/[petId]",
-    "httpStatusCode": "200"
-  },
-  {
-    "output": "{\n  \"category\": {\n    \"id\": 200,\n    \"name\": \"Bulldog\"\n  },\n  \"id\": 201,\n  \"name\": \"Butch\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 201,\n      \"name\": \"grey\"\n    }\n  ]\n}",
-    "method": "GET",
-    "scenario": "get API testing",
-    "resource": "api",
-    "availableParams": [
-      {
-        "parameterType": "HEADER_PARAM",
-        "value": "application/json",
-        "key": "contentType"
-      },
-      {
-        "parameterType": "ADDIFY_PARAM",
-        "value": "grey",
-        "key": "tag"
-      },
-      {
-        "parameterType": "QUERY_PARAM",
-        "value": "[tag]",
-        "key": "tags"
-      }
-    ],
-    "type": "REST",
-    "contentType": "application/json",
-    "scenarioId": "PetGet",
-    "url": "/api/pets/findByTags",
-    "httpStatusCode": "200"
-  },
-  {
-    "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
-    "input": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
-    "method": "POST",
-    "scenario": "post API Testing",
-    "resource": "api",
-    "availableParams": [{
-      "parameterType": "HEADER_PARAM",
-      "value": "application/json",
-      "key": "contentType"
-    }],
-    "type": "REST",
-    "contentType": "application/json",
-    "scenarioId": "PetPost",
-    "url": "/api/pets",
-    "httpStatusCode": "200"
-  },
-  {
-    "outputFields": "id=i~100;name=doggie",
-    "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
-    "identifier": "100",
-    "messageType": "JSON",
-    "resource": "pet",
-    "csvson": "id,name, category/id:name,status\ni~100,doggie,i~100:string,available",
-    "stepInfo": "contains pet information",
-    "type": "KAFKA",
-    "event": "TEST",
-    "scenarioId": "PetPost-kafka-response",
-    "outputPaths": "id;category.name"
-  },
-  {
-    "input": "create table employees (emp_no int, birth_date date,first_name VARCHAR(50),last_name VARCHAR(50), gender VARCHAR(50),hire_date date)",
-    "method": "DDL",
-    "scenario": "Create employee Table",
-    "resource": "pet",
-    "stepInfo": "to define employee table",
-    "type": "DB",
-    "scenarioId": "Pet-DB-1"
-  },
-  {
-    "input": "insert into employees (emp_no,birth_date,first_name,last_name, gender,hire_date) values  (1,'1978-01-08','ELan', 'Thangamani', 'Male', '2007-10-10')",
-    "method": "INSERT",
-    "scenario": "Insert Employee info",
-    "resource": "pet",
-    "stepInfo": "to insert employee record",
-    "type": "DB",
-    "scenarioId": "Pet-DB-21"
-  },
-  {
-    "method": "VERIFY",
-    "resource": "pet",
-    "csvson": "select * from employees where emp_no = 1 \nEMP_NO,BIRTH_DATE,FIRST_NAME,LAST_NAME,GENDER,HIRE_DATE\ni~1,l~253087200000,ELan,Thangamani,Male,l~1191992400000",
-    "stepInfo": "verify record",
-    "type": "DB",
-    "scenarioId": "Pet-DB-22"
-  }
+    {
+        "identifier": "100",
+        "resource": "pet",
+        "type": "KAFKA",
+        "outputPaths": "id;category.name",
+        "outputFields": "id=i~100;name=doggie",
+        "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+        "input": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+        "messageType": "JSON",
+        "scenario": "Validate pet Response",
+        "csvson": [
+            "id,name, category/id:name,status",
+            "i~100,doggie,i~100:string,available"
+        ],
+        "stepInfo": "contains pet information",
+        "event": "TEST",
+        "scenarioId": "Pet-Kafka"
+    },
+    {
+        "outputFields": "name=Rocky",
+        "method": "GET",
+        "scenario": "get By Id",
+        "resource": "api",
+        "csvson": [
+            "id,name, category/id:name,status",
+            "i~101,Rockey,i~100:german shepherd,available"
+        ],
+        "availableParams": [
+            {
+                "parameterType": "HEADER_PARAM",
+                "value": "application/json",
+                "key": "contentType"
+            },
+            {
+                "parameterType": "ADDIFY_PARAM",
+                "value": "100",
+                "key": "petId"
+            }
+        ],
+        "type": "REST",
+        "contentType": "application/json",
+        "scenarioId": "PetGet",
+        "url": "/api/pets/[petId]",
+        "httpStatusCode": "200"
+    },
+    {
+        "output": "{\n  \"category\": {\n    \"id\": 200,\n    \"name\": \"Bulldog\"\n  },\n  \"id\": 201,\n  \"name\": \"Butch\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 201,\n      \"name\": \"grey\"\n    }\n  ]\n}",
+        "method": "GET",
+        "scenario": "get API testing",
+        "resource": "api",
+        "availableParams": [
+            {
+                "parameterType": "HEADER_PARAM",
+                "value": "application/json",
+                "key": "contentType"
+            },
+            {
+                "parameterType": "ADDIFY_PARAM",
+                "value": "grey",
+                "key": "tag"
+            },
+            {
+                "parameterType": "QUERY_PARAM",
+                "value": "[tag]",
+                "key": "tags"
+            }
+        ],
+        "type": "REST",
+        "contentType": "application/json",
+        "scenarioId": "PetGet",
+        "url": "/api/pets/findByTags",
+        "httpStatusCode": "200"
+    },
+    {
+        "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+        "input": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+        "method": "POST",
+        "scenario": "post API Testing",
+        "resource": "api",
+        "availableParams": [{
+            "parameterType": "HEADER_PARAM",
+            "value": "application/json",
+            "key": "contentType"
+        }],
+        "type": "REST",
+        "contentType": "application/json",
+        "scenarioId": "PetPost",
+        "url": "/api/pets",
+        "httpStatusCode": "200"
+    },
+    {
+        "outputFields": "id=i~100;name=doggie",
+        "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+        "identifier": "100",
+        "messageType": "JSON",
+        "resource": "pet",
+        "csvson": [
+            "id,name, category/id:name,status",
+            "i~100,doggie,i~100:string,available"
+        ],
+        "stepInfo": "contains pet information",
+        "type": "KAFKA",
+        "event": "TEST",
+        "scenarioId": "PetPost-kafka-response",
+        "outputPaths": "id;category.name"
+    },
+    {
+        "input": "create table employees (emp_no int, birth_date date,first_name VARCHAR(50),last_name VARCHAR(50), gender VARCHAR(50),hire_date date)",
+        "method": "DDL",
+        "scenario": "Create employee Table",
+        "resource": "pet",
+        "stepInfo": "to define employee table",
+        "type": "DB",
+        "scenarioId": "Pet-DB-1"
+    },
+    {
+        "input": "insert into employees (emp_no,birth_date,first_name,last_name, gender,hire_date) values  (1,'1978-01-08','ELan', 'Thangamani', 'Male', '2007-10-10')",
+        "method": "INSERT",
+        "scenario": "Insert Employee info",
+        "resource": "pet",
+        "stepInfo": "to insert employee record",
+        "type": "DB",
+        "scenarioId": "Pet-DB-21"
+    },
+    {
+        "method": "VERIFY",
+        "resource": "pet",
+        "csvson": [
+            "select * from employees where emp_no = 1 ",
+            "EMP_NO,BIRTH_DATE,FIRST_NAME,LAST_NAME,GENDER,HIRE_DATE",
+            "i~1,l~253087200000,ELan,Thangamani,Male,l~1191992400000"
+        ],
+        "stepInfo": "verify record",
+        "type": "DB",
+        "scenarioId": "Pet-DB-22"
+    }
 ]

@@ -9,10 +9,12 @@ import java.util.stream.Collectors;
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
-import io.virtualan.jassert.VirtualJSONAssert;
 import org.json.JSONArray;
+import org.junit.Assert;
 import org.junit.jupiter.api.*;
+import org.skyscreamer.jsonassert.JSONCompare;
 import org.skyscreamer.jsonassert.JSONCompareMode;
+import org.skyscreamer.jsonassert.JSONCompareResult;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ExcelToCollectionGeneratorTests {
@@ -51,11 +53,18 @@ public class ExcelToCollectionGeneratorTests {
         Assertions.assertTrue(actual);
         JSONArray expectedSheet_0 = new JSONArray(getFileAsString("expected/createCollectionTest_HappyPath/Virtualan_0_CSS-Accept-DB_WORKFLOW_0.json"));
         JSONArray actualSheet_0 = new JSONArray(getFileAsString(new FileInputStream("target/1/Virtualan_0_CSS-Accept-DB_WORKFLOW_0.json")));
-        VirtualJSONAssert.jAssertArray(expectedSheet_0, actualSheet_0, JSONCompareMode.STRICT);
+
+        JSONCompareResult result = JSONCompare.compareJSON(expectedSheet_0, actualSheet_0, JSONCompareMode.STRICT);
+        if(result.failed()) {
+            Assert.assertTrue(result.getMessage(), result.passed());
+        }
 
         JSONArray expectedSheet_1 = new JSONArray(getFileAsString("expected/createCollectionTest_HappyPath/Virtualan_1_CSS-Reject-DB_WORKFLOW_1.json"));
         JSONArray actualSheet_1 = new JSONArray(getFileAsString(new FileInputStream("target/1/Virtualan_1_CSS-Reject-DB_WORKFLOW_1.json")));
-        VirtualJSONAssert.jAssertArray(expectedSheet_1, actualSheet_1, JSONCompareMode.STRICT);
+        result = JSONCompare.compareJSON(expectedSheet_1, actualSheet_1, JSONCompareMode.STRICT);
+        if(result.failed()) {
+            Assert.assertTrue(result.getMessage(), result.passed());
+        }
 
         Properties expectedCucmblanProperties = new Properties();
         expectedCucmblanProperties.load(getFileAsStream("expected/createCollectionTest_HappyPath/cucumblan.properties"));
@@ -107,7 +116,11 @@ public class ExcelToCollectionGeneratorTests {
 
         JSONArray expectedSheet_0 = new JSONArray(getFileAsString("expected/createCollectionTest_With_Kafka/Virtualan_0_API-Testing_WORKFLOW_0.json"));
         JSONArray actualSheet_0 = new JSONArray(getFileAsString(new FileInputStream("target/2/Virtualan_0_API-Testing_WORKFLOW_0.json")));
-        VirtualJSONAssert.jAssertArray(expectedSheet_0, actualSheet_0, JSONCompareMode.STRICT);
+
+        JSONCompareResult result = JSONCompare.compareJSON(expectedSheet_0, actualSheet_0, JSONCompareMode.STRICT);
+        if(result.failed()) {
+            Assert.assertTrue(result.getMessage(), result.passed());
+        }
 
         Properties expectedCucmblanProperties = new Properties();
         expectedCucmblanProperties.load(getFileAsStream("expected/createCollectionTest_With_Kafka/cucumblan.properties"));
@@ -143,7 +156,11 @@ public class ExcelToCollectionGeneratorTests {
 
         JSONArray expectedSheet_0 = new JSONArray(getFileAsString("expected/createCollectionTest_Multirun/Virtualan_0_API-Testing_WORKFLOW_0.json"));
         JSONArray actualSheet_0 = new JSONArray(getFileAsString(new FileInputStream("target/4/Virtualan_0_API-Testing_WORKFLOW_0.json")));
-        VirtualJSONAssert.jAssertArray(expectedSheet_0, actualSheet_0, JSONCompareMode.STRICT);
+
+        JSONCompareResult result = JSONCompare.compareJSON(expectedSheet_0, actualSheet_0, JSONCompareMode.STRICT);
+        if(result.failed()) {
+            Assert.assertTrue(result.getMessage(), result.passed());
+        }
 
         Properties expectedCucmblanProperties = new Properties();
         expectedCucmblanProperties.load(getFileAsStream("expected/createCollectionTest_Multirun/cucumblan.properties"));
@@ -180,11 +197,18 @@ public class ExcelToCollectionGeneratorTests {
 
         JSONArray expectedSheet_0 = new JSONArray(getFileAsString("expected/createCollectionTest_Single_Workflow/Virtualan_0_PetGet.json"));
         JSONArray actualSheet_0 = new JSONArray(getFileAsString(new FileInputStream("target/3/Virtualan_0_PetGet.json")));
-        VirtualJSONAssert.jAssertArray(expectedSheet_0, actualSheet_0, JSONCompareMode.STRICT);
+
+        JSONCompareResult result = JSONCompare.compareJSON(expectedSheet_0, actualSheet_0, JSONCompareMode.STRICT);
+        if(result.failed()) {
+            Assert.assertTrue(result.getMessage(), result.passed());
+        }
 
         JSONArray expectedSheet = new JSONArray(getFileAsString("expected/createCollectionTest_Single_Workflow/Virtualan_1_PetGet.json"));
         JSONArray actualSheet = new JSONArray(getFileAsString(new FileInputStream("target/3/Virtualan_1_PetGet.json")));
-        VirtualJSONAssert.jAssertArray(expectedSheet, actualSheet, JSONCompareMode.STRICT);
+        result = JSONCompare.compareJSON(expectedSheet, actualSheet, JSONCompareMode.STRICT);
+        if(result.failed()) {
+            Assert.assertTrue(result.getMessage(), result.passed());
+        }
 
         Properties expectedCucmblanProperties = new Properties();
         expectedCucmblanProperties.load(getFileAsStream("expected/createCollectionTest_Single_Workflow/cucumblan.properties"));

@@ -20,6 +20,8 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -368,7 +370,7 @@ public class ExcelToCollectionGenerator {
                 virtualanObj.put("outputFields", dataMap.get("ResponseByFields"));
             }
             if (dataMap.get("Csvson") != null) {
-                virtualanObj.put("csvson", dataMap.get("Csvson"));
+                buildCSVSON(dataMap, virtualanObj);
             }
             if (dataMap.get("ResponseFile") != null || dataMap.get("ResponseContent") != null) {
                 if (dataMap.get("IncludesByPath") != null) {
@@ -424,7 +426,7 @@ public class ExcelToCollectionGenerator {
                 virtualanObj.put("outputFields", dataMap.get("ResponseByFields"));
             }
             if (dataMap.get("Csvson") != null) {
-                virtualanObj.put("csvson", dataMap.get("Csvson"));
+                buildCSVSON(dataMap, virtualanObj);
             }
             if (dataMap.get("ResponseFile") != null || dataMap.get("ResponseContent") != null) {
                 if (dataMap.get("IncludesByPath") != null) {
@@ -494,7 +496,7 @@ public class ExcelToCollectionGenerator {
                 virtualanObj.put("outputFields", dataMap.get("ResponseByFields"));
             }
             if (dataMap.get("Csvson") != null) {
-                virtualanObj.put("csvson", dataMap.get("Csvson"));
+                buildCSVSON(dataMap, virtualanObj);
             } else if (dataMap.get("ResponseFile") != null || dataMap.get("ResponseContent") != null) {
                 if (dataMap.get("IncludesByPath") != null) {
                     virtualanObj.put("outputPaths", dataMap.get("IncludesByPath"));
@@ -513,6 +515,12 @@ public class ExcelToCollectionGenerator {
         return virtualanObj;
     }
 
+    private static void buildCSVSON(Map<String, String> dataMap, JSONObject virtualanObj) {
+        List<String> cvson = new ArrayList<String>(Arrays.asList(dataMap.get("Csvson").split("\n")));
+        JSONArray jsArray = new JSONArray(cvson);
+        virtualanObj.put("csvson", jsArray);
+    }
+
     private static void getSecurityValue(Map<String, String> dataMap, JSONObject virtualanObj) {
         String security = dataMap.get("Security");
         if (security != null && !security.isEmpty() && security.split("=").length == 2) {
@@ -527,8 +535,10 @@ public class ExcelToCollectionGenerator {
     private static void getMultiRunValue(Map<String, String> dataMap, JSONObject virtualanObj,
                                          JSONArray paramsArray) {
         if (dataMap.get("MultiRun") != null) {
-            virtualanObj.put("MultiRun", dataMap.get("MultiRun"));
-            String row = dataMap.get("MultiRun").split(";")[0];
+            List<String> rules = new ArrayList<String>(Arrays.asList(dataMap.get("MultiRun").split(";")));
+            JSONArray jsArray = new JSONArray(rules);
+            virtualanObj.put("rule", jsArray);
+            String row = jsArray.optString(0);
             for (String param : row.split("\\|")) {
                 buildParam(param, "<" + param + ">", paramsArray, "ADDIFY_PARAM");
             }
