@@ -249,11 +249,11 @@ public class FeatureGenerationHelper {
     item.setUrl(object.optString("url"));
     extractedOutput(excludeConfiguration, object, item, path);
     item.setStdType(getStandardType(availableParams));
-    if ("KAFKA".equalsIgnoreCase(object.optString("type"))) {
+    if ("KAFKA".equalsIgnoreCase(object.optString("requestType"))) {
       item.setKafka(true);
       item.setKafkaInput(item.getInput() != null && !item.getInput().isEmpty());
       item.setKafkaOutput(hasOutput(item));
-    } else if ("DB".equalsIgnoreCase(object.optString("type"))) {
+    } else if ("DB".equalsIgnoreCase(object.optString("requestType"))) {
       item.setDatabase(true);
       item.setDbInput(item.getInput() != null && !item.getInput().isEmpty());
       item.setDbOutput(hasOutput(item));
@@ -355,7 +355,7 @@ public class FeatureGenerationHelper {
       Item item, String path)
       throws IOException {
     item.setNoSkipOutput(!ExcludeConfiguration.shouldSkip(excludeProperties, item.getUrl(), null));
-    if (!object.optJSONArray("csvson").isEmpty() && object.optJSONArray("csvson").length() > 0) {
+    if (object.optJSONArray("csvson") != null && object.optJSONArray("csvson").length() > 0) {
       item.setHasCsvson(object.optJSONArray("csvson").toString());
       JSONArray listOFRows = object.optJSONArray("csvson");
       List<String> stringList = IntStream.range(0,object.optJSONArray("csvson").length()).mapToObj(i->object.optJSONArray("csvson").getString(i)).collect(Collectors.toList());
@@ -387,7 +387,7 @@ public class FeatureGenerationHelper {
         item.setHasResponseByField(true);
         item.setResponseByField(outputFieldMap);
     } else {
-      item.setHasOutputFileByPath(!object.optJSONArray("outputPaths").isEmpty());
+      item.setHasOutputFileByPath(object.optJSONArray("outputPaths") != null && !object.optJSONArray("outputPaths").isEmpty());
       item.setOutput(replaceSpecialChar(object.optString("output")));
       if (item.isHasOutputFileByPath()) {
         List<String> stringList = IntStream.range(0,object.optJSONArray("outputPaths").length()).mapToObj(i->object.optJSONArray("outputPaths").getString(i)).collect(Collectors.toList());
