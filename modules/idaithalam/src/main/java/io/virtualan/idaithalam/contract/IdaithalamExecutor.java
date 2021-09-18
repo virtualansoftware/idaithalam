@@ -129,8 +129,11 @@ public class IdaithalamExecutor {
     private static String[] getCucumberOptions(ApiExecutorParam apiExecutorParam, String build) {
         String path = apiExecutorParam.getOutputDir();
         String jsonPath = path;
-        if(!IdaithalamConfiguration.isReportEnabled()){
-            jsonPath = path +"/idaithalam";
+        if(apiExecutorParam.getOutputJsonDir() != null){
+            if(new File(apiExecutorParam.getOutputJsonDir()).exists()){
+                new File(apiExecutorParam.getOutputJsonDir()).mkdirs();
+            }
+            jsonPath = apiExecutorParam.getOutputJsonDir();
         }
         return new String[]{
             "-p", "pretty",
@@ -149,6 +152,9 @@ public class IdaithalamExecutor {
 
     private static void generateReport(String featureHeading, ApiExecutorParam apiExecutorParam, String index) {
         String path = apiExecutorParam.getOutputDir();
+        if(apiExecutorParam.getOutputJsonDir() != null){
+            path = apiExecutorParam.getOutputJsonDir();
+        }
         path = path == null ? "target" : path;
         File reportOutputDirectory = new File(path);
         List<String> jsonFiles = new ArrayList<>();

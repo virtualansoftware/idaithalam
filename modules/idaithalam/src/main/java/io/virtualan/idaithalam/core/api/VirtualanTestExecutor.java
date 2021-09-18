@@ -7,8 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +16,7 @@ public class VirtualanTestExecutor {
 
   private ApiExecutorParam apiExecutorParam;
 
-  public VirtualanTestExecutor(ApiExecutorParam apiExecutorPrarm) {
+  public VirtualanTestExecutor(ApiExecutorParam apiExecutorParam) {
     this.apiExecutorParam = apiExecutorParam;
   }
 
@@ -30,9 +28,13 @@ public class VirtualanTestExecutor {
       if (!f.exists()) {
         f.mkdirs();
       }
-      if (apiExecutorParam.getInputExcel() != null){
+
+      if ((System.getenv("IDAITHALAM") == null
+              || !"PROD".equalsIgnoreCase(System.getenv("IDAITHALAM"))
+              && apiExecutorParam.getInputExcel() != null)) {
         ExcelToCollectionGenerator.createCollection(apiExecutorParam);
       }
+
       buildProperties("cucumblan.properties", apiExecutorParam.getCucumblanProperties());
       buildProperties("cucumblan-env.properties", apiExecutorParam.getCucumblanEnvProperties());
       buildProperties("exclude-response.properties", apiExecutorParam.getExcludeProperties());

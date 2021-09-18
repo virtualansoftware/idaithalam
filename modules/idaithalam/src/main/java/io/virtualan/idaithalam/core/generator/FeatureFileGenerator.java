@@ -16,8 +16,6 @@
 
 package io.virtualan.idaithalam.core.generator;
 
-import io.virtualan.cucumblan.props.ApplicationConfiguration;
-import io.virtualan.cucumblan.props.ExcludeConfiguration;
 import io.virtualan.idaithalam.contract.ExecutionClassloader;
 import io.virtualan.idaithalam.contract.IdaithalamExecutor;
 import io.virtualan.idaithalam.contract.VirtualanClassLoader;

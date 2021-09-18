@@ -12,6 +12,7 @@ public class ApiExecutorParam {
   private  String env;
   private  String basePath;
   private  String outputDir;
+  private  String outputJsonDir;
   private  String virtualanSpecPath;
   private  String inputFile;
   private  String inputExcel;
@@ -44,6 +45,14 @@ public class ApiExecutorParam {
 
   public void setVirtualanSpecPath(String virtualanSpecPath) {
     this.virtualanSpecPath = virtualanSpecPath;
+  }
+
+  public String getOutputJsonDir() {
+    return outputJsonDir;
+  }
+
+  public void setOutputJsonDir(String outputJsonDir) {
+    this.outputJsonDir = outputJsonDir;
   }
 
   /**
