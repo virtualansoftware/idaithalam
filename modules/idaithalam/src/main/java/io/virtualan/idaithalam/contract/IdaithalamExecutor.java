@@ -241,8 +241,11 @@ public class IdaithalamExecutor {
         Properties properties = readCucumblan(classloader);
         List<List<Item>> items = FeatureFileGenerator.generateFeatureFile(properties, apiExecutorParam);
 
-        String okta = properties.getProperty("service.api.okta");
         String featureTitle = properties.getProperty("virtualan.data.heading");
+
+        if(featureTitle.endsWith(".json")){
+            featureTitle = featureTitle.replace(".json", "");
+        }
 
         for(int i=0; i< items.size(); i++){
             MustacheFactory mf = new DefaultMustacheFactory();
