@@ -25,7 +25,6 @@ import io.virtualan.mapson.Mapson;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +32,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -199,8 +201,9 @@ public class FeatureGenerationHelper {
   /**
    * Create feature file list.
    *
-   * @param arr  the arr
-   * @param path the path
+   * @param excludeConfiguration the exclude configuration
+   * @param arr                  the arr
+   * @param path                 the path
    * @return the list
    * @throws IOException the io exception
    */
@@ -246,11 +249,11 @@ public class FeatureGenerationHelper {
     item.setUrl(object.optString("url"));
     extractedOutput(excludeConfiguration, object, item, path);
     item.setStdType(getStandardType(availableParams));
-    if ("KAFKA".equalsIgnoreCase(object.optString("type"))) {
+    if ("KAFKA".equalsIgnoreCase(object.optString("requestType"))) {
       item.setKafka(true);
       item.setKafkaInput(item.getInput() != null && !item.getInput().isEmpty());
       item.setKafkaOutput(hasOutput(item));
-    } else if ("DB".equalsIgnoreCase(object.optString("type"))) {
+    } else if ("DB".equalsIgnoreCase(object.optString("requestType"))) {
       item.setDatabase(true);
       item.setDbInput(item.getInput() != null && !item.getInput().isEmpty());
       item.setDbOutput(hasOutput(item));
@@ -267,12 +270,30 @@ public class FeatureGenerationHelper {
 
   private static void extractedMultiRun(JSONObject object, Item item) {
     List<String> multiRun = new ArrayList();
-    if (object.optString("MultiRun") != null && !object.optString("MultiRun").isEmpty()) {
-      String[] loopHeaders = object.optString("MultiRun").split(";");
-      multiRun.addAll(Arrays.asList(loopHeaders));
+    if (object.optJSONArray("rule") != null && !object.optJSONArray("rule").isEmpty()) {
+      multiRun.add(object.optJSONArray("rule").getJSONObject(0).keySet().stream().map(x -> x).collect(Collectors.joining("|")));
+      Set<String> keys = object.optJSONArray("rule").getJSONObject(0).keySet();
+      List<String> stringList = IntStream.range(0,object.optJSONArray("rule").length())
+          .mapToObj(i-> getPipeSeparatedValue(object.optJSONArray("rule").getJSONObject(i), keys))
+          .collect(Collectors.toList());
+      multiRun.addAll(stringList);
       item.setMultiRun(multiRun);
       item.setHasMultiRun(true);
     }
+  }
+
+  private static String getPipeSeparatedValue(JSONObject rule, Set<String> keys) {
+    StringBuffer buffer = new StringBuffer();
+    boolean skip = false;
+    for (String key: keys) {
+      if(skip) {
+        buffer.append("|").append(rule.getString(key));
+      } else {
+        buffer.append(rule.getString(key));
+        skip = true;
+      }
+    }
+    return buffer.toString();
   }
 
   private static String getValueMapping(String mapping, JSONObject object, Item item) {
@@ -334,12 +355,12 @@ public class FeatureGenerationHelper {
       Item item, String path)
       throws IOException {
     item.setNoSkipOutput(!ExcludeConfiguration.shouldSkip(excludeProperties, item.getUrl(), null));
-    if (!object.optString("csvson").trim().isEmpty()) {
-      item.setHasCsvson(object.optString("csvson"));
-      String[] listOFRows = object.optString("csvson").split("\n");
-      if (listOFRows.length > 0 && isExtraCondition(listOFRows[0])) {
-        List<String> stringList = Arrays.asList(object.optString("csvson").split("\n"));
-        String[] filterConditions = listOFRows[0].split("(?<!\\\\);");
+    if (object.optJSONArray("csvson") != null && object.optJSONArray("csvson").length() > 0) {
+      item.setHasCsvson(object.optJSONArray("csvson").toString());
+      JSONArray listOFRows = object.optJSONArray("csvson");
+      List<String> stringList = IntStream.range(0,object.optJSONArray("csvson").length()).mapToObj(i->object.optJSONArray("csvson").getString(i)).collect(Collectors.toList());
+      if (isExtraCondition(listOFRows.optString(0))) {
+        String[] filterConditions = listOFRows.optString(0).split("(?<!\\\\);");
         for (String outputJsonUnEscaped : filterConditions) {
           SimpleEntry<String, String> filter = keyValue(
               removeVirtualanSemicolonEscape(outputJsonUnEscaped));
@@ -357,35 +378,20 @@ public class FeatureGenerationHelper {
         item.setCsvson(stringList.subList(1, stringList.size()));
       } else {
         item.setCsvsonPath("api");
-        item.setCsvson(Arrays.asList(object.optString("csvson").split("\n")));
+        item.setCsvson(stringList);
       }
     }
-    if (object.optString("outputFields") != null
-        && !object.optString("outputFields").isEmpty()) {
-      item.setHasResponseByField(true);
-      String[] outputFields = object.optString("outputFields").split("(?<!\\\\);");
-      Map<String, String> outputFieldMap = new HashMap<>();
-      for (String outputJsonUnEscaped : outputFields) {
-        String outputJson = removeVirtualanSemicolonEscape(outputJsonUnEscaped);
-        if (outputJson.split("=").length == 2) {
-          outputFieldMap.put(outputJson.split("=")[0], outputJson.split("=")[1]);
-        } else if (outputJson.split("(?<!\\\\)=").length == 2) {
-          outputFieldMap.put(removeVirtualanEqualsEscape(outputJson.split("(?<!\\\\)=")[0]),
-              removeVirtualanEqualsEscape(outputJson.split("(?<!\\\\)=")[1]));
-        } else {
-          log.warn(" Does not seems like Kep Value Pair - {}", outputJson);
-        }
-      }
-      if (outputFieldMap.isEmpty()) {
-        log.warn("Unable to populate the ResponseByField" + object.optString("outputFields"));
-      } else {
+      if (object.optJSONObject("outputFields") != null && object.optJSONObject("outputFields").length() != 0) {
+        item.setHasResponseByField(true);
+        Map<String, String> outputFieldMap = new HashMap(object.optJSONObject("outputFields").toMap());
+        item.setHasResponseByField(true);
         item.setResponseByField(outputFieldMap);
-      }
     } else {
-      item.setHasOutputFileByPath(!object.optString("outputPaths").isEmpty());
+      item.setHasOutputFileByPath(object.optJSONArray("outputPaths") != null && !object.optJSONArray("outputPaths").isEmpty());
       item.setOutput(replaceSpecialChar(object.optString("output")));
       if (item.isHasOutputFileByPath()) {
-        item.setOutputFileByPath(Arrays.asList(object.optString("outputPaths").split(";")));
+        List<String> stringList = IntStream.range(0,object.optJSONArray("outputPaths").length()).mapToObj(i->object.optJSONArray("outputPaths").getString(i)).collect(Collectors.toList());
+        item.setOutputFileByPath(stringList);
         String fileName =
             object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]", "-") + "_response.txt";
         createFile(item.getOutput(), path + "/" + fileName);
@@ -423,11 +429,11 @@ public class FeatureGenerationHelper {
     }
   }
 
-  private static String removeVirtualanSemicolonEscape(String input) {
+  public static String removeVirtualanSemicolonEscape(String input) {
     return input.replace("\\\\;", ";");
   }
 
-  private static String removeVirtualanEqualsEscape(String input) {
+  public static String removeVirtualanEqualsEscape(String input) {
     return input.replace("\\\\=", "=");
   }
 

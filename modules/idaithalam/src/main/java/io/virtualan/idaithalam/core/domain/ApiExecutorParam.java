@@ -12,6 +12,8 @@ public class ApiExecutorParam {
   private  String env;
   private  String basePath;
   private  String outputDir;
+  private  String outputJsonDir;
+  private  String virtualanSpecPath;
   private  String inputFile;
   private  String inputExcel;
   private Map<String,String> cucumblanProperties;
@@ -35,6 +37,22 @@ public class ApiExecutorParam {
    */
   public void setExcludeProperties(Map<String, String> excludeProperties) {
     this.excludeProperties = excludeProperties;
+  }
+
+  public String getVirtualanSpecPath() {
+    return virtualanSpecPath;
+  }
+
+  public void setVirtualanSpecPath(String virtualanSpecPath) {
+    this.virtualanSpecPath = virtualanSpecPath;
+  }
+
+  public String getOutputJsonDir() {
+    return outputJsonDir;
+  }
+
+  public void setOutputJsonDir(String outputJsonDir) {
+    this.outputJsonDir = outputJsonDir;
   }
 
   /**

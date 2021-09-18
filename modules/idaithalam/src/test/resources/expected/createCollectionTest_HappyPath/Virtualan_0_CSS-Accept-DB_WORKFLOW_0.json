@@ -1,7 +1,8 @@
 [
     {
-        "outputFields": "email=[email]",
+        "outputFields": {"email": "[email]"},
         "input": "{\"email\":\"[email]\",\"password\":\"[password]\"}",
+        "requestType": "REST",
         "method": "POST",
         "scenario": "Customer Self-Service Auth",
         "resource": "css",
@@ -17,14 +18,14 @@
                 "key": "token"
             }
         ],
-        "type": "REST",
         "contentType": "application/json",
         "scenarioId": "CustomerSelfServiceAuth",
         "url": "/auth",
         "httpStatusCode": "200"
     },
     {
-        "outputFields": "email=[email]",
+        "outputFields": {"email": "[email]"},
+        "requestType": "REST",
         "method": "GET",
         "scenario": "GetCustomerByLogin",
         "resource": "css",
@@ -45,14 +46,14 @@
                 "key": "customerId"
             }
         ],
-        "type": "REST",
         "contentType": "application/json",
         "scenarioId": "GetCustomerByLogin",
         "url": "/user",
         "httpStatusCode": "200"
     },
     {
-        "outputFields": "firstname=Max",
+        "outputFields": {"firstname": "Max"},
+        "requestType": "REST",
         "method": "GET",
         "scenario": "GetCustomerInfoByCustomerId",
         "resource": "css",
@@ -98,7 +99,6 @@
                 "key": "city"
             }
         ],
-        "type": "REST",
         "contentType": "application/json",
         "scenarioId": "GetCustomerInfoByCustomerId",
         "url": "/customers/[customerId]",
@@ -106,6 +106,7 @@
     },
     {
         "input": "{\n    \"statusHistory\": [],\n    \"customerInfo\": {\n        \"customerId\": \"[customerId]\",\n        \"firstname\": \"[firstname]\",\n        \"lastname\": \"[lastname]\",\n        \"contactAddress\": {\n            \"streetAddress\": \"[streetAddress]\",\n            \"postalCode\": \"[postalCode]\",\n            \"city\": \"[city]\"\n        },\n        \"billingAddress\": {\n            \"streetAddress\": \"[streetAddress]\",\n            \"postalCode\": \"[postalCode]\",\n            \"city\": \"[city]\"\n        }\n    },\n    \"insuranceOptions\": {\n        \"startDate\": \"2021-06-20\",\n        \"insuranceType\": \"Life Insurance\",\n        \"deductible\": {\n            \"amount\": 500,\n            \"currency\": \"CHF\"\n        }\n    }\n}",
+        "requestType": "REST",
         "method": "POST",
         "scenario": "CreateInsuranceQuote",
         "resource": "css",
@@ -126,15 +127,15 @@
                 "key": "quoteId"
             }
         ],
-        "type": "REST",
         "contentType": "application/json",
         "scenarioId": "CreateInsuranceQuote",
         "url": "/insurance-quote-requests",
         "httpStatusCode": "200"
     },
     {
-        "outputFields": "id=[quoteId]",
+        "outputFields": {"id": "[quoteId]"},
         "input": "{\n    \"status\": \"QUOTE_RECEIVED\",\n    \"expirationDate\": \"2021-09-21T04:59:00.000Z\",\n    \"insurancePremium\": {\n        \"amount\": 500,\n        \"currency\": \"CHF\"\n    },\n    \"policyLimit\": {\n        \"amount\": 50000,\n        \"currency\": \"CHF\"\n    }\n}",
+        "requestType": "REST",
         "method": "PATCH",
         "scenario": "ReceiveInsuranceQuote",
         "resource": "quote",
@@ -150,19 +151,22 @@
                 "key": "X-Auth-Token"
             }
         ],
-        "type": "REST",
         "contentType": "application/json",
         "scenarioId": "ReceiveInsuranceQuote",
         "url": "/insurance-quote-requests/[quoteId]",
         "httpStatusCode": "200"
     },
     {
-        "outputFields": "id=[quoteId]",
+        "outputFields": {"id": "[quoteId]"},
         "input": "{\n    \"status\": \"QUOTE_ACCEPTED\" \n}",
+        "requestType": "REST",
         "method": "PATCH",
         "scenario": "AcceptInsuranceQuote",
         "resource": "css",
-        "csvson": "statusHistory/status\nREQUEST_SUBMITTED\\|QUOTE_RECEIVED\\|QUOTE_ACCEPTED\\|",
+        "csvson": [
+            "statusHistory/status",
+            "REQUEST_SUBMITTED\\|QUOTE_RECEIVED\\|QUOTE_ACCEPTED\\|"
+        ],
         "availableParams": [
             {
                 "parameterType": "HEADER_PARAM",
@@ -175,24 +179,27 @@
                 "key": "X-Auth-Token"
             }
         ],
-        "type": "REST",
         "contentType": "application/json",
         "scenarioId": "AcceptInsuranceQuote",
         "url": "/insurance-quote-requests/[quoteId]",
         "httpStatusCode": "200"
     },
     {
+        "requestType": "DB",
         "method": "VERIFY",
         "scenario": "InsuranceQuoteByDB",
         "resource": "css",
-        "csvson": "select iqr.id, iq.insurance_premium_amount, iq.insurance_premium_currency, iq.policy_limit_amount from insurancequotes iq INNER JOIN insurancequoterequests iqr on iq.id = iqr.insurance_quote_id and iqr.id  =  [quoteId]\nid,insurance_premium_amount, insurance_premium_currency, policy_limit_amount\ni~[quoteId],d~500.00,CHF,d~50000.00",
+        "csvson": [
+            "select iqr.id, iq.insurance_premium_amount, iq.insurance_premium_currency, iq.policy_limit_amount from insurancequotes iq INNER JOIN insurancequoterequests iqr on iq.id = iqr.insurance_quote_id and iqr.id  =  [quoteId]",
+            "id,insurance_premium_amount, insurance_premium_currency, policy_limit_amount",
+            "i~[quoteId],d~500.00,CHF,d~50000.00"
+        ],
         "availableParams": [{
             "parameterType": "STORAGE_PARAM",
             "value": "[0].policy_limit_amount",
             "key": "policy_limit_amount"
         }],
         "stepInfo": "verify record",
-        "type": "DB",
         "scenarioId": "InsuranceQuoteByDB"
     }
 ]

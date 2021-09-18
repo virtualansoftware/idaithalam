@@ -23,6 +23,7 @@ import io.cucumber.core.cli.Main;
 import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
+import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.generator.FeatureFileGenerator;
 import io.virtualan.idaithalam.core.domain.Item;
 import java.io.File;
@@ -100,23 +101,23 @@ public class IdaithalamExecutor {
     /**
      * Validate contract int.
      *
-     * @param featureHeading the feature heading
-     * @param path           the path
+     * @param featureHeading   the feature heading
+     * @param apiExecutorParam the api executor param
      * @return the int
      * @throws UnableToProcessException the unable to process exception
      */
-    public static int validateContract(String featureHeading, String path)
+    public static int validateContract(String featureHeading, ApiExecutorParam apiExecutorParam)
         throws UnableToProcessException {
         byte exitStatus;
         try {
             String fileIndex = UUID.randomUUID().toString();
             VirtualanClassLoader classLoaderParnet = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
-            ExecutionClassloader classLoader = addConfToClasspath(classLoaderParnet, path);
-            generateFeatureFile(classLoader, path);
-            String[] argv = getCucumberOptions(path, fileIndex);
+            ExecutionClassloader classLoader = addConfToClasspath(classLoaderParnet, apiExecutorParam.getOutputDir());
+            generateFeatureFile(classLoader, apiExecutorParam);
+            String[] argv = getCucumberOptions(apiExecutorParam, fileIndex);
             exitStatus = Main.run(argv, classLoader);
             if(IdaithalamConfiguration.isReportEnabled()) {
-                generateReport(featureHeading, path, fileIndex);
+                generateReport(featureHeading, apiExecutorParam, fileIndex);
             }
         } catch (IOException | UnableToProcessException e) {
             LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
@@ -125,10 +126,14 @@ public class IdaithalamExecutor {
         return exitStatus;
     }
 
-    private static String[] getCucumberOptions(String path, String build) {
+    private static String[] getCucumberOptions(ApiExecutorParam apiExecutorParam, String build) {
+        String path = apiExecutorParam.getOutputDir();
         String jsonPath = path;
-        if(!IdaithalamConfiguration.isReportEnabled()){
-            jsonPath = path +"/"+build;
+        if(apiExecutorParam.getOutputJsonDir() != null){
+            if(new File(apiExecutorParam.getOutputJsonDir()).exists()){
+                new File(apiExecutorParam.getOutputJsonDir()).mkdirs();
+            }
+            jsonPath = apiExecutorParam.getOutputJsonDir();
         }
         return new String[]{
             "-p", "pretty",
@@ -139,38 +144,17 @@ public class IdaithalamExecutor {
         };
     }
 
-    /**
-     * Validate contract int.
-     *
-     * @param featureHeading the feature heading
-     * @param path           the path
-     * @param runId          the run id
-     * @return the int
-     * @throws UnableToProcessException the unable to process exception
-     */
-    public static int validateContract(String featureHeading, String path, int runId)
-        throws UnableToProcessException {
-        byte exitStatus;
-        try {
-            String fileIndex = UUID.randomUUID().toString();
-            VirtualanClassLoader classLoaderParent = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
-            ExecutionClassloader classLoader = addConfToClasspath( classLoaderParent, path + File.separator + runId);
-            generateFeatureFile(classLoader, path + File.separator + runId);
-            String[] argv = getCucumberOptions(path + File.separator + runId, fileIndex);
-            exitStatus = Main.run(argv, classLoader);
-            generateReport(featureHeading, path + File.separator + runId, fileIndex);
-        } catch (IOException | UnableToProcessException e) {
-            LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
-            throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
-        }
-        return exitStatus;
-    }
+
 
     /**
      *  generate cucumber report
      */
 
-    private static void generateReport(String featureHeading, String path, String index) {
+    private static void generateReport(String featureHeading, ApiExecutorParam apiExecutorParam, String index) {
+        String path = apiExecutorParam.getOutputDir();
+        if(apiExecutorParam.getOutputJsonDir() != null){
+            path = apiExecutorParam.getOutputJsonDir();
+        }
         path = path == null ? "target" : path;
         File reportOutputDirectory = new File(path);
         List<String> jsonFiles = new ArrayList<>();
@@ -214,6 +198,12 @@ public class IdaithalamExecutor {
         return cl;
     }
 
+    /**
+     * Read cucumblan properties.
+     *
+     * @param classLoader the class loader
+     * @return the properties
+     */
     public static Properties readCucumblan(ClassLoader classLoader) {
         Properties propertiesForInstance = new Properties();
 
@@ -237,7 +227,8 @@ public class IdaithalamExecutor {
      * @throws IOException
      */
 
-    private static void generateFeatureFile(ExecutionClassloader classloader, String path) throws IOException, UnableToProcessException {
+    private static void generateFeatureFile(ExecutionClassloader classloader, ApiExecutorParam apiExecutorParam) throws IOException, UnableToProcessException {
+        String path = apiExecutorParam.getOutputDir();
         if(path == null || !new File(path).exists()) {
             if (!new File("conf").exists()) {
                 new File("conf").mkdir();
@@ -248,7 +239,7 @@ public class IdaithalamExecutor {
             new File(path+"/feature").mkdir();
         }
         Properties properties = readCucumblan(classloader);
-        List<List<Item>> items = FeatureFileGenerator.generateFeatureFile(properties, path);
+        List<List<Item>> items = FeatureFileGenerator.generateFeatureFile(properties, apiExecutorParam);
 
         String okta = properties.getProperty("service.api.okta");
         String featureTitle = properties.getProperty("virtualan.data.heading");

@@ -16,12 +16,11 @@
 
 package io.virtualan.idaithalam.core.generator;
 
-import io.virtualan.cucumblan.props.ApplicationConfiguration;
-import io.virtualan.cucumblan.props.ExcludeConfiguration;
 import io.virtualan.idaithalam.contract.ExecutionClassloader;
 import io.virtualan.idaithalam.contract.IdaithalamExecutor;
 import io.virtualan.idaithalam.contract.VirtualanClassLoader;
 import io.virtualan.idaithalam.core.UnableToProcessException;
+import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.domain.ConversionType;
 import io.virtualan.idaithalam.core.domain.Item;
 import java.io.BufferedReader;
@@ -62,6 +61,13 @@ public class FeatureFileGenerator {
         return cl;
     }
 
+    /**
+     * Read props from classpath properties.
+     *
+     * @param classLoader the class loader
+     * @param fileName    the file name
+     * @return the properties
+     */
     public static Properties readPropsFromClasspath(ClassLoader classLoader, String fileName) {
         Properties propertiesForInstance = new Properties();
 
@@ -83,17 +89,18 @@ public class FeatureFileGenerator {
     /**
      * Generate feature file list.
      *
-     * @param path the path
+     * @param properties       the properties
+     * @param apiExecutorParam the api executor param
      * @return the list
      * @throws UnableToProcessException the unable to process exception
      * @throws IOException              the io exception
      */
-    public static List<List<Item>> generateFeatureFile(Properties properties, String path)
+    public static List<List<Item>> generateFeatureFile(Properties properties, ApiExecutorParam apiExecutorParam)
         throws UnableToProcessException, IOException {
         List<List<Item>> items = new ArrayList<>();
         VirtualanClassLoader classLoaderParnet = new VirtualanClassLoader(
             IdaithalamExecutor.class.getClassLoader());
-        ExecutionClassloader classLoader = addConfToClasspath(classLoaderParnet, path);
+        ExecutionClassloader classLoader = addConfToClasspath(classLoaderParnet, apiExecutorParam.getOutputDir());
         Map<String, String> excludeConfiguration = (Map)readPropsFromClasspath(classLoader, "exclude-response.properties");
         String contractFileName = properties.getProperty("virtualan.data.load");
         String contractFileType = properties.getProperty("virtualan.data.type");
@@ -112,9 +119,9 @@ public class FeatureFileGenerator {
             jsonArray = OpenApiFeatureFileGenerator
                 .generateOpenApiContractForVirtualan(fileNames[i]);
           } else {
-            jsonArray = getJSONArray(fileNames[i]);
+            jsonArray = getJSONArray(apiExecutorParam, fileNames[i]);
           }
-          List<Item> result = FeatureGenerationHelper.createFeatureFile(excludeConfiguration, jsonArray, path);
+          List<Item> result = FeatureGenerationHelper.createFeatureFile(excludeConfiguration, jsonArray, apiExecutorParam.getOutputDir());
           items.add(result);
         }
         return items;
@@ -124,6 +131,7 @@ public class FeatureFileGenerator {
     /**
      * Gets json object.
      *
+     * @param classLoader      the class loader
      * @param contractFileName the contract file name
      * @return the json object
      * @throws UnableToProcessException the unable to process exception
@@ -172,15 +180,16 @@ public class FeatureFileGenerator {
     /**
      * Gets json array.
      *
+     * @param apiExecutorParam the api executor param
      * @param contractFileName the contract file name
      * @return the json array
      * @throws UnableToProcessException the unable to process exception
      */
-    public static JSONArray getJSONArray(String contractFileName)
+    public static JSONArray getJSONArray(ApiExecutorParam apiExecutorParam, String contractFileName)
         throws UnableToProcessException {
         JSONArray jsonArray = null;
         try {
-            String jsonArrayStr = getFileAsString(contractFileName);
+            String jsonArrayStr = getFileAsString(apiExecutorParam, contractFileName);
             jsonArray = new JSONArray(jsonArrayStr);
         } catch (IOException e) {
             LOGGER
@@ -190,11 +199,14 @@ public class FeatureFileGenerator {
         return jsonArray;
     }
 
-    private static String getFileAsString(String filePath)
+    private static String getFileAsString(ApiExecutorParam apiExecutorParam, String filePath)
         throws IOException {
         InputStream stream  = null;
         File file = new File(filePath);
-        if(file.exists()){
+        if (apiExecutorParam.getVirtualanSpecPath() != null) {
+            stream = new FileInputStream(apiExecutorParam.getVirtualanSpecPath() +File.separator+ filePath);
+        }
+        if(stream == null && file.exists()){
             stream = new FileInputStream(file);
         }
         if (stream == null) {
@@ -203,6 +215,7 @@ public class FeatureFileGenerator {
         if (stream == null) {
             stream = ExcelToCollectionGenerator.class.getClassLoader().getResourceAsStream(filePath);
         }
+
         return convertStreamToString(stream);
     }
 
