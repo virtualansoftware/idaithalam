@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -269,12 +270,30 @@ public class FeatureGenerationHelper {
 
   private static void extractedMultiRun(JSONObject object, Item item) {
     List<String> multiRun = new ArrayList();
-    if (object.optString("rule") != null && !object.optString("rule").isEmpty()) {
-      List<String> stringList = IntStream.range(0,object.optJSONArray("rule").length()).mapToObj(i->object.optJSONArray("rule").getString(i)).collect(Collectors.toList());
+    if (object.optJSONArray("rule") != null && !object.optJSONArray("rule").isEmpty()) {
+      multiRun.add(object.optJSONArray("rule").getJSONObject(0).keySet().stream().map(x -> x).collect(Collectors.joining("|")));
+      Set<String> keys = object.optJSONArray("rule").getJSONObject(0).keySet();
+      List<String> stringList = IntStream.range(0,object.optJSONArray("rule").length())
+          .mapToObj(i-> getPipeSeparatedValue(object.optJSONArray("rule").getJSONObject(i), keys))
+          .collect(Collectors.toList());
       multiRun.addAll(stringList);
       item.setMultiRun(multiRun);
       item.setHasMultiRun(true);
     }
+  }
+
+  private static String getPipeSeparatedValue(JSONObject rule, Set<String> keys) {
+    StringBuffer buffer = new StringBuffer();
+    boolean skip = false;
+    for (String key: keys) {
+      if(skip) {
+        buffer.append("|").append(rule.getString(key));
+      } else {
+        buffer.append(rule.getString(key));
+        skip = true;
+      }
+    }
+    return buffer.toString();
   }
 
   private static String getValueMapping(String mapping, JSONObject object, Item item) {

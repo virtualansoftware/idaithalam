@@ -1,8 +1,8 @@
 [
     {
         "identifier": "100",
+        "requestType": "KAFKA",
         "resource": "pet",
-        "type": "KAFKA",
         "outputPaths": "id;category.name",
         "outputFields": "id=i~100;name=doggie",
         "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
@@ -19,6 +19,7 @@
     },
     {
         "outputFields": "name=Rocky",
+        "requestType": "REST",
         "method": "GET",
         "scenario": "get By Id",
         "resource": "api",
@@ -38,7 +39,6 @@
                 "key": "petId"
             }
         ],
-        "type": "REST",
         "contentType": "application/json",
         "scenarioId": "PetGet",
         "url": "/api/pets/[petId]",
@@ -46,6 +46,7 @@
     },
     {
         "output": "{\n  \"category\": {\n    \"id\": 200,\n    \"name\": \"Bulldog\"\n  },\n  \"id\": 201,\n  \"name\": \"Butch\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 201,\n      \"name\": \"grey\"\n    }\n  ]\n}",
+        "requestType": "REST",
         "method": "GET",
         "scenario": "get API testing",
         "resource": "api",
@@ -66,7 +67,6 @@
                 "key": "tags"
             }
         ],
-        "type": "REST",
         "contentType": "application/json",
         "scenarioId": "PetGet",
         "url": "/api/pets/findByTags",
@@ -75,6 +75,7 @@
     {
         "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
         "input": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+        "requestType": "REST",
         "method": "POST",
         "scenario": "post API Testing",
         "resource": "api",
@@ -83,7 +84,6 @@
             "value": "application/json",
             "key": "contentType"
         }],
-        "type": "REST",
         "contentType": "application/json",
         "scenarioId": "PetPost",
         "url": "/api/pets",
@@ -93,6 +93,7 @@
         "outputFields": "id=i~100;name=doggie",
         "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
         "identifier": "100",
+        "requestType": "KAFKA",
         "messageType": "JSON",
         "resource": "pet",
         "csvson": [
@@ -100,30 +101,30 @@
             "i~100,doggie,i~100:string,available"
         ],
         "stepInfo": "contains pet information",
-        "type": "KAFKA",
         "event": "TEST",
         "scenarioId": "PetPost-kafka-response",
         "outputPaths": "id;category.name"
     },
     {
         "input": "create table employees (emp_no int, birth_date date,first_name VARCHAR(50),last_name VARCHAR(50), gender VARCHAR(50),hire_date date)",
+        "requestType": "DB",
         "method": "DDL",
         "scenario": "Create employee Table",
         "resource": "pet",
         "stepInfo": "to define employee table",
-        "type": "DB",
         "scenarioId": "Pet-DB-1"
     },
     {
         "input": "insert into employees (emp_no,birth_date,first_name,last_name, gender,hire_date) values  (1,'1978-01-08','ELan', 'Thangamani', 'Male', '2007-10-10')",
+        "requestType": "DB",
         "method": "INSERT",
         "scenario": "Insert Employee info",
         "resource": "pet",
         "stepInfo": "to insert employee record",
-        "type": "DB",
         "scenarioId": "Pet-DB-21"
     },
     {
+        "requestType": "DB",
         "method": "VERIFY",
         "resource": "pet",
         "csvson": [
@@ -132,7 +133,6 @@
             "i~1,l~253087200000,ELan,Thangamani,Male,l~1191992400000"
         ],
         "stepInfo": "verify record",
-        "type": "DB",
         "scenarioId": "Pet-DB-22"
     }
 ]

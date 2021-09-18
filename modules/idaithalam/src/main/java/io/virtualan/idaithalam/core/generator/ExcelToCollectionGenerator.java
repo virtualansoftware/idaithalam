@@ -342,7 +342,7 @@ public class ExcelToCollectionGenerator {
         JSONObject virtualanObj = new JSONObject();
         try {
             JSONArray paramsArray = new JSONArray();
-            virtualanObj.put("type", "DB");
+            virtualanObj.put("requestType", "DB");
             virtualanObj.put("scenarioId", dataMap.get("TestCaseName"));
             virtualanObj.put("scenario", dataMap.get("TestCaseNameDesc"));
             virtualanObj.put("resource", dataMap.get("Resource"));
@@ -397,7 +397,7 @@ public class ExcelToCollectionGenerator {
         JSONObject virtualanObj = new JSONObject();
         try {
             JSONArray paramsArray = new JSONArray();
-            virtualanObj.put("type", "KAFKA");
+            virtualanObj.put("requestType", "KAFKA");
             virtualanObj.put("scenarioId", dataMap.get("TestCaseName"));
             virtualanObj.put("scenario", dataMap.get("TestCaseNameDesc"));
             virtualanObj.put("resource", dataMap.get("Resource"));
@@ -447,7 +447,7 @@ public class ExcelToCollectionGenerator {
             throws UnableToProcessException {
         JSONObject virtualanObj = new JSONObject();
         try {
-            virtualanObj.put("type", "REST");
+            virtualanObj.put("requestType", "REST");
             JSONArray paramsArray = new JSONArray();
             getMultiRunValue(dataMap, virtualanObj, paramsArray);
             virtualanObj.put("contentType", dataMap.get("ContentType"));
@@ -536,11 +536,24 @@ public class ExcelToCollectionGenerator {
                                          JSONArray paramsArray) {
         if (dataMap.get("MultiRun") != null) {
             List<String> rules = new ArrayList<String>(Arrays.asList(dataMap.get("MultiRun").split(";")));
-            JSONArray jsArray = new JSONArray(rules);
-            virtualanObj.put("rule", jsArray);
-            String row = jsArray.optString(0);
-            for (String param : row.split("\\|")) {
-                buildParam(param, "<" + param + ">", paramsArray, "ADDIFY_PARAM");
+            if(!rules.isEmpty()) {
+                JSONArray jsArray = new JSONArray();
+                String[] headers = rules.get(0).split("\\|");
+
+                for (int i = 1; i < rules.size(); i++) {
+                    String[] values = rules.get(i).split("\\|");
+                    JSONObject object = new JSONObject();
+                    for (int j = 0; j < values.length; j++) {
+                        object.put(headers[j], values[j]);
+                    }
+                    jsArray.put(object);
+                }
+
+                virtualanObj.put("rule", jsArray);
+                virtualanObj.put("type", "PARAMS");
+                for (String param : headers) {
+                    buildParam(param, "<" + param + ">", paramsArray, "ADDIFY_PARAM");
+                }
             }
         }
     }

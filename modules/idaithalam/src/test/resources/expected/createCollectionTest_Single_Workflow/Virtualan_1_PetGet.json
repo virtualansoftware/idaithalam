@@ -1,6 +1,7 @@
 [{
     "output": "{\n  \"category\": {\n    \"id\": 200,\n    \"name\": \"Bulldog\"\n  },\n  \"id\": 201,\n  \"name\": \"Butch\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 201,\n      \"name\": \"grey\"\n    }\n  ]\n}",
     "security": "basicAuth",
+    "requestType": "REST",
     "method": "GET",
     "scenario": "get API testing",
     "resource": "api",
@@ -31,7 +32,6 @@
             "key": "tags"
         }
     ],
-    "type": "REST",
     "contentType": "application/json",
     "scenarioId": "PetGet",
     "url": "/api/pets/findByTags",
