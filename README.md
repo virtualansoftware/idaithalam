@@ -1,7 +1,11 @@
 <h1 align="center">Idaithalam</h1>
 
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.virtualan/idaithalam.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.virtualan%22%20AND%20a:%22idaithalam%22)  ![Build Status](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)             
+<div align="center">  
+   
+   [![Maven Central](https://img.shields.io/maven-central/v/io.virtualan/idaithalam.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.virtualan%22%20AND%20a:%22idaithalam%22)  ![Build Status](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)             
+
+</div>
 
    > Idaithalam is a #lowcode/#nocode automation framework for API, Database and Kafka/Event message Testing. We developed a #codeless or #scriptless automation framework using Excel(by Tester/Non-Technical), Postman and UI(Coming Soon).
 
