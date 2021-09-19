@@ -8,6 +8,21 @@
    > [![Maven Central](https://img.shields.io/maven-central/v/io.virtualan/idaithalam.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.virtualan%22%20AND%20a:%22idaithalam%22)  ![Build Status](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)             
 
 
+## Idaithalam:
+   > Idaithalam is a #lowcode/#nocode automation framework for API, Database and Kafka/Event message Testing. We developed a #codeless or #scriptless automation framework using Excel(by Tester/Non-Technical), Postman and UI(Coming Soon).
+
+**Product page:** https://www.linkedin.com/products/virtualan-software-idaithalam/
+
+**Tutorials:**  https://tutorials.virtualan.io/#/Idaithalam
+
+**Example:**  https://github.com/virtualansoftware/microservices-lowcode-testautomation  
+
+**Video:**  https://www.youtube.com/watch?v=6cz85yyVv58 
+
+**Third party Video List:** https://www.youtube.com/watch?v=6cz85yyVv58&list=PLXbcghgSZDrr2loEsuHEHNy_0iEj6zeso
+
+**Presentation:**  https://docs.google.com/presentation/d/1HseNT2OrQFIzXboOGelWQSUP-cm5qHjlO3cSuA5eUCQ/edit#slide=id.p 
+
 
 
 #### [License](#table-of-contents)
