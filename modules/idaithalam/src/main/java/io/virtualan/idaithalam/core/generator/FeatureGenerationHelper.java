@@ -449,17 +449,17 @@ public class FeatureGenerationHelper {
       item.setInputInline(getStringAsList(item.getInput()));
       item.setHasInputInline(item.getInput());
     } else if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())
-        && object.optString("contentType").toLowerCase().contains("xml")) {
+        && !object.optString("contentType").toLowerCase().contains("json")) {
       if (!ApplicationConfiguration.getInline() && item.getInput().length() > 700) {
         String fileName =
-            object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]", "-") + "_request.xml";
+            object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]", "-") + "_request.idai";
         createFile(item.getInput(), path + "/" + fileName);
         item.setInputFile(fileName);
       } else {
         item.setInputInline(getStringAsList(item.getInput()));
         item.setHasInputInline(item.getInput());
       }
-      item.setContentType("text/xml");
+      item.setContentType(object.optString("contentType"));
     } else if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())) {
       try {
         JSONTokener jsonTokener = new JSONTokener(item.getInput());
