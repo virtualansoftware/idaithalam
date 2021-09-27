@@ -565,6 +565,10 @@ public class Item {
    */
   boolean isPatch;
   /**
+   * The Is Sql select query.
+   */
+  boolean isSelect;
+  /**
    * The Url.
    */
   String url;
@@ -605,6 +609,23 @@ public class Item {
    */
   String inputFile;
 
+  /**
+   * Is select boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isSelect() {
+    return isSelect;
+  }
+
+  /**
+   * Sets select.
+   *
+   * @param select the select
+   */
+  public void setSelect(boolean select) {
+    isSelect = select;
+  }
 
   /**
    * Is no skip output boolean.
@@ -1286,6 +1307,8 @@ public class Item {
       isPut = true;
     } else if ("PATCH".equalsIgnoreCase(method)) {
       isPatch = true;
+    } else if ("SELECT".equalsIgnoreCase(method)) {
+      isSelect = true;
     }
   }
 

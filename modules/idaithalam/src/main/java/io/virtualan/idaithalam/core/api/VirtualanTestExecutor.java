@@ -23,31 +23,39 @@ public class VirtualanTestExecutor {
 
   public Integer call() {
     int status = 0;
-    try {
-      File f = new File(apiExecutorParam.getOutputDir());
-      if (!f.exists()) {
-        f.mkdirs();
+    if ((System.getenv("IDAITHALAM_EXECUTION_ENV") == null || apiExecutorParam.getEnv()== null) ||
+        (System.getenv("IDAITHALAM_EXECUTION_ENV") != null &&
+            System.getenv("IDAITHALAM_EXECUTION_ENV").equalsIgnoreCase(apiExecutorParam.getEnv()))) {
+      try {
+        File f = new File(apiExecutorParam.getOutputDir());
+        if (!f.exists()) {
+          f.mkdirs();
+        }
+
+        if ((System.getenv("IDAITHALAM") == null
+            || !"PROD".equalsIgnoreCase(System.getenv("IDAITHALAM"))
+            && apiExecutorParam.getInputExcel() != null)) {
+          ExcelToCollectionGenerator.createCollection(apiExecutorParam);
+        }
+
+        buildProperties("cucumblan.properties", apiExecutorParam.getCucumblanProperties());
+        buildProperties("cucumblan-env.properties", apiExecutorParam.getCucumblanEnvProperties());
+        buildProperties("exclude-response.properties", apiExecutorParam.getExcludeProperties());
+
+        //Generate feature and summary page html report for the selected testcase from the excel
+        String title = apiExecutorParam.getEnv() != null ? apiExecutorParam.getReportTitle() + "("
+            + apiExecutorParam.getEnv() + ")" : apiExecutorParam.getReportTitle();
+        status = IdaithalamExecutor.validateContract(title, apiExecutorParam);
+
+      } catch (Exception e) {
+        log.warn(apiExecutorParam.getEnv() + " : " + apiExecutorParam.getReportTitle() + " : " + e
+            .getMessage());
+        status = 1;
       }
-
-      if ((System.getenv("IDAITHALAM") == null
-              || !"PROD".equalsIgnoreCase(System.getenv("IDAITHALAM"))
-              && apiExecutorParam.getInputExcel() != null)) {
-        ExcelToCollectionGenerator.createCollection(apiExecutorParam);
-      }
-
-      buildProperties("cucumblan.properties", apiExecutorParam.getCucumblanProperties());
-      buildProperties("cucumblan-env.properties", apiExecutorParam.getCucumblanEnvProperties());
-      buildProperties("exclude-response.properties", apiExecutorParam.getExcludeProperties());
-
-      //Generate feature and summary page html report for the selected testcase from the excel
-      String title = apiExecutorParam.getEnv() != null ? apiExecutorParam.getReportTitle() + "(" + apiExecutorParam.getEnv() + ")" : apiExecutorParam.getReportTitle();
-      status = IdaithalamExecutor.validateContract(title, apiExecutorParam);
-
-    } catch (Exception e) {
-      log.warn(apiExecutorParam.getEnv() + " : " + apiExecutorParam.getReportTitle() + " : " + e.getMessage());
-      status = 1;
+      log.info(
+          apiExecutorParam.getEnv() + " : " + apiExecutorParam.getReportTitle() + " : status : "
+              + status);
     }
-    log.info(apiExecutorParam.getEnv() + " : " + apiExecutorParam.getReportTitle() + " : status : " + status);
     return status;
   }
 

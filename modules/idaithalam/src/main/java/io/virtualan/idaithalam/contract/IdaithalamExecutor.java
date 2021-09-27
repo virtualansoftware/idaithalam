@@ -241,7 +241,6 @@ public class IdaithalamExecutor {
         Properties properties = readCucumblan(classloader);
         List<List<Item>> items = FeatureFileGenerator.generateFeatureFile(properties, apiExecutorParam);
 
-        String okta = properties.getProperty("service.api.okta");
         String featureTitle = properties.getProperty("virtualan.data.heading");
 
         for(int i=0; i< items.size(); i++){
@@ -259,7 +258,11 @@ public class IdaithalamExecutor {
             return arrayTitle.split(";")[index];
         }catch (Exception e){
             String featureTitle = ApplicationConfiguration.getProperty("virtualan.data.load");
-            return featureTitle.split(";")[index];
+            return removeFileName(featureTitle.split(";")[index]);
         }
+    }
+
+    private static String removeFileName(String featureTitle) {
+        return featureTitle != null? featureTitle.replace(".json", "") :  featureTitle;
     }
 }
