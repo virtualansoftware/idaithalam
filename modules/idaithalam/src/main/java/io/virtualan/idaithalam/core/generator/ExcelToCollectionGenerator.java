@@ -351,8 +351,6 @@ public class ExcelToCollectionGenerator {
       virtualanObj.put("scenario", dataMap.get("TestCaseNameDesc"));
       virtualanObj.put("resource", dataMap.get("Resource"));
       createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
-      //createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
-      //createProcessingType(dataMap, paramsArray, "CookieVariables", "COOKIE_PARAM");
       if (dataMap.get("SkipScenario") != null) {
         virtualanObj.put("skipScenario", dataMap.get("SkipScenario"));
       }
@@ -366,7 +364,6 @@ public class ExcelToCollectionGenerator {
       }
       virtualanObj.put("method", dataMap.get("Action").toUpperCase());
 
-      //getSecurityValue(dataMap, virtualanObj);
       if (dataMap.get("RequestFile") != null || dataMap.get("RequestContent") != null) {
         virtualanObj.put("input", buildObjectRequest(basePath, dataMap));
       }

@@ -56,7 +56,12 @@ Feature: {{feature}}
     {{/tags}}
     Scenario: {{scenario}} - database action
       Given As a user perform sql {{stepInfo}} action
+      {{#isSelect}}
+      When Select details with the given sql {{stepInfo}} on {{resource}}
+      {{/isSelect}}
+      {{^isSelect}}
       When Execute {{method}} for the given sql {{stepInfo}} on {{resource}}
+      {{/isSelect}}
       {{#inputInline}}
         | {{{.}}} |
       {{/inputInline}}
