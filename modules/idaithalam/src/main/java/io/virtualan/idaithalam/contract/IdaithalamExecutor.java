@@ -243,10 +243,6 @@ public class IdaithalamExecutor {
 
         String featureTitle = properties.getProperty("virtualan.data.heading");
 
-        if(featureTitle.endsWith(".json")){
-            featureTitle = featureTitle.replace(".json", "");
-        }
-
         for(int i=0; i< items.size(); i++){
             MustacheFactory mf = new DefaultMustacheFactory();
             Mustache mustache = mf.compile("virtualan-contract.mustache");
@@ -262,7 +258,11 @@ public class IdaithalamExecutor {
             return arrayTitle.split(";")[index];
         }catch (Exception e){
             String featureTitle = ApplicationConfiguration.getProperty("virtualan.data.load");
-            return featureTitle.split(";")[index];
+            return removeFileName(featureTitle.split(";")[index]);
         }
+    }
+
+    private static String removeFileName(String featureTitle) {
+        return featureTitle != null? featureTitle.replace(".json", "") :  featureTitle;
     }
 }
