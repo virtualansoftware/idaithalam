@@ -135,6 +135,9 @@ Feature: {{feature}}
       {{#isPatch}}
       And Update api with given input
       {{/isPatch}}
+      {{#isDelete}}
+      And Delete api with given input
+      {{/isDelete}}
       {{#inputJsonMap}}
         | {{{key}}}                   |  {{{value}}}                        |
       {{/inputJsonMap}}
