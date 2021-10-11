@@ -54,6 +54,8 @@ import net.masterthought.cucumber.presentation.PresentationMode;
  * <p>
  * - Used for API testing. - Used for Contract testing. - Used for Production Checkout. - Used for
  * Agile sprint end regression testing.
+ * 
+ * boolean isSuccess = VirtualanTestPlanExecutor.invoke("apiexecution.yaml");
  */
 public class IdaithalamExecutor {
     private final static Logger LOGGER = Logger.getLogger(IdaithalamExecutor.class.getName());

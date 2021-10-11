@@ -1,0 +1,14 @@
+parallelExecution: 4
+timeout:  30000
+apiExecutor:
+  - reportTitle: "X-API-KEY Testing POSTMAN Collection Idaiserver."
+    env: dev
+    outputDir: target/dev/apikeyreport
+    cucumblanProperties:
+      service.api: http://5.22.250.180:8080
+      virtualan.data.load: idaithalamserver_withoutapikey.postman_collection.json;
+      virtualan.data.type: POSTMAN
+#    apiheader:
+#      X-API-KEY: abc123
+    excludeProperties:
+      .*: IGNORE
