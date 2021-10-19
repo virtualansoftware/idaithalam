@@ -47,24 +47,6 @@ public class PostmanTests {
             checkApikey = checkApikey || map.get("X-API-KEY").equals("abc123");
         }
         Assert.assertTrue(checkApikey);
-        
-        
     }
-    private InputStream getFileAsStream(String fileName) throws IOException {
-        return ExcelToCollectionGeneratorTests.class.getClassLoader().getResourceAsStream(fileName);
-    }
-
-
-    private String getFileAsString(String fileName) throws IOException {
-        return getFileAsString(ExcelToCollectionGeneratorTests.class.getClassLoader().getResourceAsStream(fileName));
-    }
-
-    private String getFileAsString(InputStream inputStream)
-            throws IOException {
-        String content = new BufferedReader(new InputStreamReader(inputStream))
-                .lines().parallel().collect(Collectors.joining("\n"));
-        return content;
-    }
-
 
 }
