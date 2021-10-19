@@ -17,6 +17,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -41,18 +42,10 @@ public class PostmanTests {
         InputStream inputStream = VirtualanTestPlanExecutor.class.getClassLoader()
                 .getResourceAsStream("work-flow-apikey.yaml");
         ExecutionPlanner executionPlanner = yaml.load(inputStream);
-        Properties expectedCucmblanProperties = new Properties();
-//        expectedCucmblanProperties.load(getFileAsStream("expected/apikeyTest/work-flow-apikey.yaml"));
+//        Properties expectedCucmblanProperties = new Properties();
+        Map<String, String> idaithalamProperties = executionPlanner.getIdaithalamProperties();
         
-//        Properties actualCucmblanProperties = new Properties();
-//        actualCucmblanProperties.load(new FileInputStream("target/1/cucumblan.properties"));
-//        Assertions.assertTrue(expectedCucmblanProperties.equals(actualCucmblanProperties));
-//
-//        Properties expectedCucmblanEnvProperties = new Properties();
-//        expectedCucmblanEnvProperties.load(getFileAsStream("expected/createCollectionTest_HappyPath/cucumblan-env.properties"));
-//        Properties actualCucmblanEnvProperties = new Properties();
-//        actualCucmblanEnvProperties.load(new FileInputStream("target/1/cucumblan-env.properties"));
-//        Assertions.assertTrue(expectedCucmblanEnvProperties.equals(actualCucmblanEnvProperties));
+
     }
     private InputStream getFileAsStream(String fileName) throws IOException {
         return ExcelToCollectionGeneratorTests.class.getClassLoader().getResourceAsStream(fileName);

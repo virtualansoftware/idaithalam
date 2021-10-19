@@ -19,7 +19,15 @@ public class ApiExecutorParam {
   private Map<String,String> cucumblanProperties;
   private Map<String,String> cucumblanEnvProperties;
   private Map<String,String> excludeProperties;
+  private Map<String, String> apiHeader;
 
+  public Map<String, String> getApiHeader() {
+    return apiHeader;
+  }
+
+  public void setApiHeader(Map<String, String> apiHeader) {
+    this.apiHeader = apiHeader;
+  }
 
   /**
    * Gets exclude properies.
