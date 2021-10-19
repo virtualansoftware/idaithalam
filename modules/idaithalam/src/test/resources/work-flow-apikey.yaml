@@ -9,6 +9,8 @@ apiExecutor:
       virtualan.data.load: idaithalamserver_withoutapikey.postman_collection.json;
       virtualan.data.type: POSTMAN
     apiHeader:
-      X-API-KEY: abc123
+    -  X-API-KEY: abc123
+    -  X-API-Test1: test1
+    -  X-API-Test2: test2
     excludeProperties:
       .*: IGNORE

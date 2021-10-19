@@ -17,6 +17,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -26,26 +27,28 @@ public class PostmanTests {
 
     @Test
     public void addApikey() throws IOException{
-        String basePath = "target";
-//        URL excelFilePath = ExcelToCollectionGeneratorTests.class.getClassLoader().getResource("customer-self-service-with-db.xlsx");
         String generatedPath = "target/1"; //TODO
         if (!new File(generatedPath).exists()) {
             new File(generatedPath).mkdirs();
         }
-        ApiExecutorParam apiExecutorParam = new ApiExecutorParam();
-        apiExecutorParam.setBasePath(basePath);
-//        apiExecutorParam.setInputExcel(excelFilePath.getPath());
-        apiExecutorParam.setInputFile("idaithalamserver_withoutapikey.postman_collection.json");
-        apiExecutorParam.setOutputDir(generatedPath);
-
         Yaml yaml = new Yaml(new Constructor(ExecutionPlanner.class));
         InputStream inputStream = VirtualanTestPlanExecutor.class.getClassLoader()
                 .getResourceAsStream("work-flow-apikey.yaml");
+        //Check reading apiHeader
         ExecutionPlanner executionPlanner = yaml.load(inputStream);
-//        Properties expectedCucmblanProperties = new Properties();
-        Map<String, String> idaithalamProperties = executionPlanner.getIdaithalamProperties();
+        List<ApiExecutorParam> apiExecutor = executionPlanner.getApiExecutor();
+        Assert.assertTrue( apiExecutor.size() > 0);
         
-
+        ApiExecutorParam apiExecutorParam1 = apiExecutor.get(0);
+        List<Map<String, String>> apiHeaderList = apiExecutorParam1.getApiHeader();
+        Assert.assertTrue(apiHeaderList.size() > 0);
+        boolean checkApikey = false;
+        for ( Map<String, String> map : apiHeaderList){
+            checkApikey = checkApikey || map.get("X-API-KEY").equals("abc123");
+        }
+        Assert.assertTrue(checkApikey);
+        
+        
     }
     private InputStream getFileAsStream(String fileName) throws IOException {
         return ExcelToCollectionGeneratorTests.class.getClassLoader().getResourceAsStream(fileName);
