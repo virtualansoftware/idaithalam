@@ -29,7 +29,7 @@ public class PostmanTests {
         
         ApiExecutorParam apiExecutorParam1 = apiExecutor.get(0);
         List<Map<String, String>> apiHeaderList = apiExecutorParam1.getApiHeader();
-        Assert.assertTrue(apiHeaderList.size() > 0);
+        Assert.assertNotNull(apiHeaderList);
         boolean checkApikey = false;
         for ( Map<String, String> map : apiHeaderList){
             checkApikey = checkApikey || map.get("X-API-KEY").equals("abc123");
@@ -37,6 +37,7 @@ public class PostmanTests {
         Assert.assertTrue(checkApikey);
 
         boolean isSuccess = VirtualanTestPlanExecutor.invoke("work-flow-apikey.yaml");
+        Assert.assertTrue(isSuccess);
     }
 
 }

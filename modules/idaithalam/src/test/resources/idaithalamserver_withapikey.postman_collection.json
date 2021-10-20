@@ -12,8 +12,8 @@
 				"method": "GET",
 				"header": [
 					{
-						"key": "X-API-KEY",
-						"value": "wrongvalue",
+						"key": "X-API-KEY-NOTUSED",
+						"value": "abc123",
 						"type": "text"
 					}
 				],
@@ -35,8 +35,8 @@
 						"method": "GET",
 						"header": [
 							{
-								"key": "X-API-KEY",
-								"value": "wrongvalue",
+								"key": "X-API-KEY-NOTUSED",
+								"value": "abc123",
 								"type": "text"
 							}
 						],

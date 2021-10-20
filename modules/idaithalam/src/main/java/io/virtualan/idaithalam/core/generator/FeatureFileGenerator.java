@@ -123,22 +123,34 @@ public class FeatureFileGenerator {
             jsonArray = getJSONArray(apiExecutorParam, fileNames[i]);
           }
           List<Item> result = FeatureGenerationHelper.createFeatureFile(excludeConfiguration, jsonArray, apiExecutorParam.getOutputDir());
-          /* Author: oglas
-           Add custom API header from configuration yaml. */
-          for ( Item item : result){
-              List<Map<String, String>> apiHeaderList = apiExecutorParam.getApiHeader();
-              for ( Map<String, String> map : apiHeaderList){
-                  for ( String key : map.keySet()){
-                      AvailableParam availableParam = new AvailableParam(key,map.get(key),"HEADER_PARAM");
-                      item.getAvailableParams().add(availableParam);
-                      item.getHeaderParams().add(availableParam);
-                  }
-              }
+          /** Author: oglas  Add custom API header from configuration yaml. */
+          if (apiExecutorParam.getApiHeader() != null && apiExecutorParam.getApiHeader().size() > 0) {
+              addCustomApiHeader(apiExecutorParam, result);
           }
-            items.add(result);
+        items.add(result);
         }
-        
         return items;
+    }
+
+    private static void addCustomApiHeader(ApiExecutorParam apiExecutorParam, List<Item> result) {
+        List<Map<String, String>> apiHeaderList = apiExecutorParam.getApiHeader();
+        for (Item item : result) {
+            List<AvailableParam> list = new ArrayList<>();
+            if (item.getAvailableParams() == null) {
+                item.setAvailableParams(list);
+            }
+            if (item.getHeaderParams() == null) {
+                item.setHeaderParams(list);
+            }
+            for (Map<String, String> map : apiHeaderList) {
+                for (String key : map.keySet()) {
+                    AvailableParam availableParam = new AvailableParam(key, map.get(key), "HEADER_PARAM");
+//                    availableParam.setString(true);
+                    item.getAvailableParams().add(availableParam);
+                    item.getHeaderParams().add(availableParam);
+                }
+            }
+        }
     }
 
 
