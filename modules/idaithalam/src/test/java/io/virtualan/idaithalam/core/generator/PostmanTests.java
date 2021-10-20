@@ -1,36 +1,24 @@
 package io.virtualan.idaithalam.core.generator;
 
-import io.virtualan.idaithalam.config.IdaithalamConfiguration;
-import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.api.VirtualanTestPlanExecutor;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.domain.ExecutionPlanner;
-import org.json.JSONArray;
 import org.junit.Assert;
-import org.junit.jupiter.api.*;
-import org.skyscreamer.jsonassert.JSONCompare;
-import org.skyscreamer.jsonassert.JSONCompareMode;
-import org.skyscreamer.jsonassert.JSONCompareResult;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
-import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import java.util.stream.Collectors;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PostmanTests {
 
     @Test
-    public void addApikey() throws IOException{
-        String generatedPath = "target/1"; //TODO
-        if (!new File(generatedPath).exists()) {
-            new File(generatedPath).mkdirs();
-        }
+    public void addApikey() throws Exception {
         Yaml yaml = new Yaml(new Constructor(ExecutionPlanner.class));
         InputStream inputStream = VirtualanTestPlanExecutor.class.getClassLoader()
                 .getResourceAsStream("work-flow-apikey.yaml");
@@ -47,6 +35,8 @@ public class PostmanTests {
             checkApikey = checkApikey || map.get("X-API-KEY").equals("abc123");
         }
         Assert.assertTrue(checkApikey);
+
+        boolean isSuccess = VirtualanTestPlanExecutor.invoke("work-flow-apikey.yaml");
     }
 
 }

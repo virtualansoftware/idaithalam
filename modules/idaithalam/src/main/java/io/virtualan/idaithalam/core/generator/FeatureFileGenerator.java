@@ -21,6 +21,7 @@ import io.virtualan.idaithalam.contract.IdaithalamExecutor;
 import io.virtualan.idaithalam.contract.VirtualanClassLoader;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
+import io.virtualan.idaithalam.core.domain.AvailableParam;
 import io.virtualan.idaithalam.core.domain.ConversionType;
 import io.virtualan.idaithalam.core.domain.Item;
 import java.io.BufferedReader;
@@ -122,8 +123,21 @@ public class FeatureFileGenerator {
             jsonArray = getJSONArray(apiExecutorParam, fileNames[i]);
           }
           List<Item> result = FeatureGenerationHelper.createFeatureFile(excludeConfiguration, jsonArray, apiExecutorParam.getOutputDir());
-          items.add(result);
+          /* Author: oglas
+           Add custom API header from configuration yaml. */
+          for ( Item item : result){
+              List<Map<String, String>> apiHeaderList = apiExecutorParam.getApiHeader();
+              for ( Map<String, String> map : apiHeaderList){
+                  for ( String key : map.keySet()){
+                      AvailableParam availableParam = new AvailableParam(key,map.get(key),"HEADER_PARAM");
+                      item.getAvailableParams().add(availableParam);
+                      item.getHeaderParams().add(availableParam);
+                  }
+              }
+          }
+            items.add(result);
         }
+        
         return items;
     }
 
