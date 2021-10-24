@@ -124,7 +124,7 @@ public class FeatureFileGenerator {
           }
           List<Item> result = FeatureGenerationHelper.createFeatureFile(excludeConfiguration, jsonArray, apiExecutorParam.getOutputDir());
           /** Author: oglas  Add custom API header from configuration yaml. */
-          if (apiExecutorParam.getApiHeader() != null && apiExecutorParam.getApiHeader().size() > 0) {
+          if (apiExecutorParam.getApiHeader() != null && apiExecutorParam.getApiHeader().getHeaderList().size() > 0) {
               addCustomApiHeader(apiExecutorParam, result);
           }
         items.add(result);
@@ -133,21 +133,39 @@ public class FeatureFileGenerator {
     }
 
     private static void addCustomApiHeader(ApiExecutorParam apiExecutorParam, List<Item> result) {
-        List<Map<String, String>> apiHeaderList = apiExecutorParam.getApiHeader();
+        List<Map<String, String>> apiHeaderList = apiExecutorParam.getApiHeader().getHeaderList();
+        boolean overwrite = true;  // Default value shall be true. 
+        if (apiExecutorParam.getApiHeader().getOverwrite() == null){
+            overwrite = true;
+        }else {
+            overwrite = Boolean.valueOf( apiExecutorParam.getApiHeader().getOverwrite());
+        }
         for (Item item : result) {
-            List<AvailableParam> list = new ArrayList<>();
+            List<AvailableParam> availableParamList = new ArrayList<>();
             if (item.getAvailableParams() == null) {
-                item.setAvailableParams(list);
+                item.setAvailableParams(availableParamList);
             }
             if (item.getHeaderParams() == null) {
-                item.setHeaderParams(list);
+                item.setHeaderParams(availableParamList);
             }
             for (Map<String, String> map : apiHeaderList) {
                 for (String key : map.keySet()) {
                     AvailableParam availableParam = new AvailableParam(key, map.get(key), "HEADER_PARAM");
+                    if ( ! item.getAvailableParams().contains(availableParam) ) {
 //                    availableParam.setString(true);
-                    item.getAvailableParams().add(availableParam);
-                    item.getHeaderParams().add(availableParam);
+                        item.getAvailableParams().add(availableParam);
+                        item.getHeaderParams().add(availableParam);
+                    }else if ( overwrite ){ //if it exists already, overwrite it
+                        for ( AvailableParam availableParam1 : item.getAvailableParams()){
+                            if (availableParam1.equals(availableParam)){
+                                availableParam1.setKey(availableParam.getKey());
+                                availableParam1.setValue(availableParam.getValue());
+                                availableParam1.setParameterType(availableParam.getParameterType());
+                            }
+                        }
+                    }else{
+                        //TODO Due to issue #121 there cannot be added a duplicate api header..
+                    }
                 }
             }
         }

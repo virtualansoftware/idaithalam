@@ -12,10 +12,9 @@
 				"method": "GET",
 				"header": [
 					{
-						"key": "",
-						"value": "",
-						"type": "text",
-						"disabled": true
+						"key": "X-API-KEYWRONG",
+						"value": "abc123",
+						"type": "text"
 					}
 				],
 				"url": {
@@ -36,8 +35,8 @@
 						"method": "GET",
 						"header": [
 							{
-								"key": "",
-								"value": "",
+								"key": "X-API-KEYWRONG",
+								"value": "abc123",
 								"type": "text"
 							}
 						],
