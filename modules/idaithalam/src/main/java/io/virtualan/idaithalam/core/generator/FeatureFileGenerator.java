@@ -132,6 +132,8 @@ public class FeatureFileGenerator {
         return items;
     }
 
+    /** Author: Oliver Glas (inss.ch) 
+     * Adding custom API header as defined in the yaml file. */
     private static void addCustomApiHeader(ApiExecutorParam apiExecutorParam, List<Item> result) {
         List<Map<String, String>> apiHeaderList = apiExecutorParam.getApiHeader().getHeaderList();
         boolean overwrite = true;  // Default value shall be true. 
@@ -152,7 +154,6 @@ public class FeatureFileGenerator {
                 for (String key : map.keySet()) {
                     AvailableParam availableParam = new AvailableParam(key, map.get(key), "HEADER_PARAM");
                     if ( ! item.getAvailableParams().contains(availableParam) ) {
-//                    availableParam.setString(true);
                         item.getAvailableParams().add(availableParam);
                         item.getHeaderParams().add(availableParam);
                     }else if ( overwrite ){ //if it exists already, overwrite it

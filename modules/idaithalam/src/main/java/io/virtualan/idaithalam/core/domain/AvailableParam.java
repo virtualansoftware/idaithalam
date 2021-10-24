@@ -151,6 +151,7 @@ public class AvailableParam {
         isCondition = condition;
     }
 
+    /** Compares the objects. */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
