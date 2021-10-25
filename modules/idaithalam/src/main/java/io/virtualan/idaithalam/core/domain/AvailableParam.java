@@ -151,16 +151,14 @@ public class AvailableParam {
         isCondition = condition;
     }
 
-    /** Compares the objects. */
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        AvailableParam that = (AvailableParam) o;
-//        boolean isEqual = false;
-//        isEqual =  this.key.equals(that.getKey());
-//        isEqual = isEqual &&  this.value.equals(that.getValue()) ;
-//        isEqual = isEqual && (this.parameterType == null ? that.getParameterType() == null : this.parameterType.equals(that.getParameterType()));
-//        return isEqual;
-//    }
+    /**
+     * Compares the objects. Needed to be able to use List.contains(o).
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AvailableParam that = (AvailableParam) o;
+        return this.key == null ? that.getKey() == null : this.key.equals(that.getKey());
+    }
 }
