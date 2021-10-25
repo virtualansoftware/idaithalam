@@ -24,23 +24,17 @@ import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.domain.AvailableParam;
 import io.virtualan.idaithalam.core.domain.ConversionType;
 import io.virtualan.idaithalam.core.domain.Item;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -152,19 +146,20 @@ public class FeatureFileGenerator {
             }
             for (Map<String, String> map : apiHeaderList) {
                 for (String key : map.keySet()) {
-                    AvailableParam availableParam = new AvailableParam(key, map.get(key), "HEADER_PARAM");
-                    if ( ! item.getAvailableParams().contains(availableParam) ) {
-                        item.getAvailableParams().add(availableParam);
-                        item.getHeaderParams().add(availableParam);
-                    }else if ( overwrite ){ //if it exists already, overwrite it
-                        for ( AvailableParam availableParam1 : item.getAvailableParams()){
-                            if (availableParam1.getKey().equals(availableParam.getKey())){
-                                availableParam1.setKey(availableParam.getKey());
-                                availableParam1.setValue(availableParam.getValue());
-                                availableParam1.setParameterType(availableParam.getParameterType());
+                    AvailableParam newAvailableParam = new AvailableParam(key, map.get(key), "HEADER_PARAM");
+                    if (!item.getAvailableParams().contains(newAvailableParam)) {
+                        item.getAvailableParams().add(newAvailableParam);
+                        item.getHeaderParams().add(newAvailableParam);
+                    } else if (overwrite) { //if it exists already, overwrite it
+                        for (AvailableParam availableParam1 : item.getAvailableParams()) {
+                            if (availableParam1.getKey().equals(newAvailableParam.getKey())) {
+                                availableParam1.setKey(newAvailableParam.getKey());
+                                availableParam1.setValue(newAvailableParam.getValue());
+                                availableParam1.setParameterType(newAvailableParam.getParameterType());
                             }
                         }
-                    }else{
+                    } else {
+                        LOGGER.warning("Due to issue #121 adding  duplicate api header can cause errors.");
                         //TODO Due to issue #121 there cannot be added a duplicate api header..
                     }
                 }
