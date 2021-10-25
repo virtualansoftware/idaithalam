@@ -158,7 +158,7 @@ public class FeatureFileGenerator {
                         item.getHeaderParams().add(availableParam);
                     }else if ( overwrite ){ //if it exists already, overwrite it
                         for ( AvailableParam availableParam1 : item.getAvailableParams()){
-                            if (availableParam1.equals(availableParam)){
+                            if (availableParam1.getKey().equals(availableParam.getKey())){
                                 availableParam1.setKey(availableParam.getKey());
                                 availableParam1.setValue(availableParam.getValue());
                                 availableParam1.setParameterType(availableParam.getParameterType());

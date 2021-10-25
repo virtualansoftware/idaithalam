@@ -35,7 +35,7 @@ public class PostmanTests {
             checkApikey = checkApikey || map.get("X-API-KEY").equals("abc123");
         }
         Assert.assertTrue(checkApikey);
-
+        
     }
 
 }
