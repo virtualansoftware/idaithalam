@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ApiHeader {
-    private List<Map<String, String>> headerList;
+    private List<Map<String, Object>> headerList;
     private String overwrite;
 
     public String getOverwrite() {
@@ -15,11 +15,11 @@ public class ApiHeader {
         this.overwrite = overwrite;
     }
 
-    public List<Map<String, String>> getHeaderList() {
+    public List<Map<String, Object>> getHeaderList() {
         return headerList;
     }
 
-    public void setHeaderList(List<Map<String, String>> headerList) {
+    public void setHeaderList(List<Map<String, Object>> headerList) {
         this.headerList = headerList;
     }
 }

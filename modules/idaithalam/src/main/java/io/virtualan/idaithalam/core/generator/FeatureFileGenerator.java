@@ -129,12 +129,10 @@ public class FeatureFileGenerator {
     /** Author: Oliver Glas (inss.ch) 
      * Adding custom API header as defined in the yaml file. */
     private static void addCustomApiHeader(ApiExecutorParam apiExecutorParam, List<Item> result) {
-        List<Map<String, String>> apiHeaderList = apiExecutorParam.getApiHeader().getHeaderList();
+        List<Map<String, Object>> apiHeaderList = apiExecutorParam.getApiHeader().getHeaderList();
         boolean overwrite = true;  // Default value shall be true. 
-        if (apiExecutorParam.getApiHeader().getOverwrite() == null){
-            overwrite = true;
-        }else {
-            overwrite = Boolean.valueOf( apiExecutorParam.getApiHeader().getOverwrite());
+        if (apiExecutorParam.getApiHeader().getOverwrite() != null) {
+            overwrite = Boolean.valueOf(apiExecutorParam.getApiHeader().getOverwrite());
         }
         for (Item item : result) {
             List<AvailableParam> availableParamList = new ArrayList<>();
@@ -144,9 +142,9 @@ public class FeatureFileGenerator {
             if (item.getHeaderParams() == null) {
                 item.setHeaderParams(availableParamList);
             }
-            for (Map<String, String> map : apiHeaderList) {
+            for (Map<String, Object> map : apiHeaderList) {
                 for (String key : map.keySet()) {
-                    AvailableParam newAvailableParam = new AvailableParam(key, map.get(key), "HEADER_PARAM");
+                    AvailableParam newAvailableParam = new AvailableParam(key, map.get(key).toString(), "HEADER_PARAM");
                     if (!item.getAvailableParams().contains(newAvailableParam)) {
                         item.getAvailableParams().add(newAvailableParam);
                         item.getHeaderParams().add(newAvailableParam);
@@ -156,10 +154,11 @@ public class FeatureFileGenerator {
                                 availableParam1.setKey(newAvailableParam.getKey());
                                 availableParam1.setValue(newAvailableParam.getValue());
                                 availableParam1.setParameterType(newAvailableParam.getParameterType());
+                                LOGGER.warning("Due to issue #121 API header " + key + " is overwritten with value from configuration. To avoid this behavior add 'overwrite: false' (default: true) to the 'apiHeader' section.");
                             }
                         }
                     } else {
-                        LOGGER.warning("Due to issue #121 adding  duplicate api header can cause errors.");
+                        LOGGER.warning("Due to issue #121 adding duplicate api header can cause errors.");
                         //TODO Due to issue #121 there cannot be added a duplicate api header..
                     }
                 }

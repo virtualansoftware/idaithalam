@@ -25,19 +25,19 @@ public class PostmanTests {
         //Check reading apiHeader
         ExecutionPlanner executionPlanner = yaml.load(inputStream);
         List<ApiExecutorParam> apiExecutor = executionPlanner.getApiExecutor();
-        Assert.assertTrue( apiExecutor.size() > 0);
+        Assert.assertTrue(apiExecutor.size() > 0);
 
         ApiExecutorParam apiExecutorParam1 = apiExecutor.get(0);
-        List<Map<String, String>> apiHeaderList = apiExecutorParam1.getApiHeader().getHeaderList();
+        List<Map<String, Object>> apiHeaderList = apiExecutorParam1.getApiHeader().getHeaderList();
         Assert.assertNotNull(apiHeaderList);
         boolean checkApikey = false;
-        for (Map<String, String> map : apiHeaderList) {
-            checkApikey = checkApikey || map.get("X-API-KEY").equals("abc123");
+        for (Map<String, Object> map : apiHeaderList) {
+            checkApikey = checkApikey || (map.get("X-API-KEY") != null && map.get("X-API-KEY").toString().equals("abc123"));
         }
         Assert.assertTrue(checkApikey);
 
-//        boolean isSuccess = VirtualanTestPlanExecutor.invoke("work-flow-apikey.yaml");
-//        Assert.assertTrue(isSuccess);
+        boolean isSuccess = VirtualanTestPlanExecutor.invoke("work-flow-apikey.yaml");
+        Assert.assertTrue(isSuccess);
     }
 
 }
