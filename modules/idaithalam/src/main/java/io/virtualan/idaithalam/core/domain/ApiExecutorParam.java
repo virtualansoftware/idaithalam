@@ -20,6 +20,7 @@ public class ApiExecutorParam {
   private Map<String,String> cucumblanEnvProperties;
   private Map<String,String> excludeProperties;
   private ApiHeader apiHeader;
+  private String execution;
 
   public ApiHeader getApiHeader() {
     return apiHeader;
@@ -27,6 +28,14 @@ public class ApiExecutorParam {
 
   public void setApiHeader(ApiHeader apiHeader) {
     this.apiHeader = apiHeader;
+  }
+
+  public String getExecution() {
+    return execution;
+  }
+
+  public void setExecution(String execution) {
+    this.execution = execution;
   }
 
   /**
