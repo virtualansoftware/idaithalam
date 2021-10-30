@@ -150,4 +150,15 @@ public class AvailableParam {
     public void setCondition(boolean condition) {
         isCondition = condition;
     }
+
+    /**
+     * Compares the objects. Needed to be able to use List.contains(o).
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AvailableParam that = (AvailableParam) o;
+        return this.key == null ? that.getKey() == null : this.key.equals(that.getKey());
+    }
 }
