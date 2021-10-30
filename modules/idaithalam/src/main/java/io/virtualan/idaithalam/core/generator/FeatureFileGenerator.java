@@ -21,25 +21,20 @@ import io.virtualan.idaithalam.contract.IdaithalamExecutor;
 import io.virtualan.idaithalam.contract.VirtualanClassLoader;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
+import io.virtualan.idaithalam.core.domain.AvailableParam;
 import io.virtualan.idaithalam.core.domain.ConversionType;
 import io.virtualan.idaithalam.core.domain.Item;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -122,9 +117,53 @@ public class FeatureFileGenerator {
             jsonArray = getJSONArray(apiExecutorParam, fileNames[i]);
           }
           List<Item> result = FeatureGenerationHelper.createFeatureFile(excludeConfiguration, jsonArray, apiExecutorParam.getOutputDir());
-          items.add(result);
+          /** Author: oglas  Add custom API header from configuration yaml. */
+          if (apiExecutorParam.getApiHeader() != null && apiExecutorParam.getApiHeader().getHeaderList().size() > 0) {
+              addCustomApiHeader(apiExecutorParam, result);
+          }
+        items.add(result);
         }
         return items;
+    }
+
+    /** Author: Oliver Glas (inss.ch) 
+     * Adding custom API header as defined in the yaml file. */
+    private static void addCustomApiHeader(ApiExecutorParam apiExecutorParam, List<Item> result) {
+        List<Map<String, Object>> apiHeaderList = apiExecutorParam.getApiHeader().getHeaderList();
+        boolean overwrite = true;  // Default value shall be true. 
+        if (apiExecutorParam.getApiHeader().getOverwrite() != null) {
+            overwrite = Boolean.valueOf(apiExecutorParam.getApiHeader().getOverwrite());
+        }
+        for (Item item : result) {
+            List<AvailableParam> availableParamList = new ArrayList<>();
+            if (item.getAvailableParams() == null) {
+                item.setAvailableParams(availableParamList);
+            }
+            if (item.getHeaderParams() == null) {
+                item.setHeaderParams(availableParamList);
+            }
+            for (Map<String, Object> map : apiHeaderList) {
+                for (String key : map.keySet()) {
+                    AvailableParam newAvailableParam = new AvailableParam(key, map.get(key).toString(), "HEADER_PARAM");
+                    if (!item.getAvailableParams().contains(newAvailableParam)) {
+                        item.getAvailableParams().add(newAvailableParam);
+                        item.getHeaderParams().add(newAvailableParam);
+                    } else if (overwrite) { //if it exists already, overwrite it
+                        for (AvailableParam availableParam1 : item.getAvailableParams()) {
+                            if (availableParam1.getKey().equals(newAvailableParam.getKey())) {
+                                availableParam1.setKey(newAvailableParam.getKey());
+                                availableParam1.setValue(newAvailableParam.getValue());
+                                availableParam1.setParameterType(newAvailableParam.getParameterType());
+                                LOGGER.warning("Due to issue #121 API header " + key + " is overwritten with value from configuration. To avoid this behavior add 'overwrite: false' (default: true) to the 'apiHeader' section.");
+                            }
+                        }
+                    } else {
+                        LOGGER.warning("Due to issue #121 adding duplicate api header can cause errors.");
+                        //TODO Due to issue #121 there cannot be added a duplicate api header..
+                    }
+                }
+            }
+        }
     }
 
 
