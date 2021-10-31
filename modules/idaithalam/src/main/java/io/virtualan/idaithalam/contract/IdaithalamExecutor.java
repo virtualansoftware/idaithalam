@@ -108,8 +108,8 @@ public class IdaithalamExecutor {
             VirtualanClassLoader classLoaderParnet = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
             ExecutionClassloader classLoader = addConfToClasspath(classLoaderParnet, apiExecutorParam.getOutputDir());
             /** @author Oliver Glas. */
-            if (apiExecutorParam.getExecution() == null || apiExecutorParam.getExecution().equalsIgnoreCase("all")
-                    || apiExecutorParam.getExecution().equalsIgnoreCase("generate")) {
+            if (apiExecutorParam.getExecution() == null || !apiExecutorParam.getExecution().equalsIgnoreCase("execute")
+            {
                 generateFeatureFile(classLoader, apiExecutorParam);
             }
             if (apiExecutorParam.getExecution() != null && apiExecutorParam.getExecution().equalsIgnoreCase("generate")) {
