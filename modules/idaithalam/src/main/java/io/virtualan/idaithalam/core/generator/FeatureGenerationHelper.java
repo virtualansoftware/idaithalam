@@ -22,25 +22,20 @@ import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.domain.AvailableParam;
 import io.virtualan.idaithalam.core.domain.Item;
 import io.virtualan.mapson.Mapson;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.*;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * The type Feature generation helper.
@@ -107,16 +102,28 @@ public class FeatureGenerationHelper {
         return virtualanArry;
       }
     }
-    LOGGER.warning("Not a valid POSTMAN Collection? check the file");
+    LOGGER.warning("Not a valid POSTMAN Collection? Check the file.");
     return virtualanArry;
   }
 
+  /* Fix for #124 by @author Oliver Glas */
+  //TODO JUnit test
   private static JSONArray checkIfItemsOfItem(JSONArray arr) {
     if (arr != null && arr.length() > 0) {
-      JSONArray array = arr.optJSONObject(0).optJSONArray("item");
-      if (array != null && array.length() > 0) {
-        return checkIfItemsOfItem(array);
+      JSONArray newJsonArray = new JSONArray();
+      for (int i = 0; i < arr.length(); i++) {
+        JSONArray itemArray = arr.optJSONObject(i).optJSONArray("item");
+        if (itemArray != null && itemArray.length() > 0) {
+          JSONArray jsonArray = checkIfItemsOfItem(itemArray);
+          for (int n = 0; n < jsonArray.length(); n++) {
+            JSONObject o = jsonArray.optJSONObject(n);
+            newJsonArray.put(o);
+          }
+        } else {
+          newJsonArray.put(arr.optJSONObject(i));
+        }
       }
+      return newJsonArray;
     }
     return arr;
   }

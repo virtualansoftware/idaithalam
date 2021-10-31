@@ -8,7 +8,8 @@ apiExecutor:
       service.api: http://5.22.250.180:8080
       #      virtualan.data.load: idaithalamserver_authheaderinparent.postman_collection.json;
       #      virtualan.data.load: idaithalamserver_withapikey.postman_collection.json;
-      virtualan.data.load: idaithalamserver_withapikeywrongvalue.postman_collection.json;
+      virtualan.data.load: idaithalamserver_issue124.postman_collection.json;
+      #      virtualan.data.load: idaithalamserver_withapikeywrongvalue.postman_collection.json;
       #      virtualan.data.load: idaithalamserver_rightheaderwrongvalue.postman_collection.json;
       #      virtualan.data.load: idaithalamserver.postman_collection.json;
       virtualan.data.type: POSTMAN
@@ -18,6 +19,6 @@ apiExecutor:
         - X-API-Test1: test1
         - X-API-Test2: test2
       overwrite: true
-    execution: all
+    execution: generate
     excludeProperties:
       .*: IGNORE
