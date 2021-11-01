@@ -104,17 +104,17 @@ public class IdaithalamExecutor {
             throws UnableToProcessException {
         byte exitStatus;
         try {
-            String fileIndex = UUID.randomUUID().toString();
             VirtualanClassLoader classLoaderParnet = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
             ExecutionClassloader classLoader = addConfToClasspath(classLoaderParnet, apiExecutorParam.getOutputDir());
             /** @author Oliver Glas. */
-            if (apiExecutorParam.getExecution() == null || !apiExecutorParam.getExecution().equalsIgnoreCase("execute")) {
+            if (apiExecutorParam.getExecution() == null || apiExecutorParam.getExecution().equalsIgnoreCase("execute") == false) {
                 generateFeatureFile(classLoader, apiExecutorParam);
             }
             if (apiExecutorParam.getExecution() != null && apiExecutorParam.getExecution().equalsIgnoreCase("generate")) {
                 LOGGER.info("Test execution stopped after feature file generation due to parameter execution=generate.");
                 return 0;
             }
+            String fileIndex = UUID.randomUUID().toString();
             String[] argv = getCucumberOptions(apiExecutorParam, fileIndex);
             exitStatus = Main.run(argv, classLoader);
             if (IdaithalamConfiguration.isReportEnabled()) {

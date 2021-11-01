@@ -36,8 +36,8 @@ public class PostmanTests {
         }
         Assert.assertTrue(checkApikey);
 
-//        boolean isSuccess = VirtualanTestPlanExecutor.invoke("work-flow-apikey.yaml");
-//        Assert.assertTrue(isSuccess);
+        boolean isSuccess = VirtualanTestPlanExecutor.invoke("work-flow-apikey.yaml");
+        Assert.assertTrue(isSuccess);
     }
 
 }
