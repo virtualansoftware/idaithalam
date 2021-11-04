@@ -24,26 +24,18 @@ import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
-import io.virtualan.idaithalam.core.generator.FeatureFileGenerator;
 import io.virtualan.idaithalam.core.domain.Item;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
-import java.util.logging.Logger;
+import io.virtualan.idaithalam.core.generator.FeatureFileGenerator;
 import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
 import net.masterthought.cucumber.json.support.Status;
 import net.masterthought.cucumber.presentation.PresentationMode;
+
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
+import java.util.logging.Logger;
 
 
 /**
@@ -109,16 +101,23 @@ public class IdaithalamExecutor {
      * @throws UnableToProcessException the unable to process exception
      */
     public static int validateContract(String featureHeading, ApiExecutorParam apiExecutorParam)
-        throws UnableToProcessException {
+            throws UnableToProcessException {
         byte exitStatus;
         try {
-            String fileIndex = UUID.randomUUID().toString();
             VirtualanClassLoader classLoaderParnet = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
             ExecutionClassloader classLoader = addConfToClasspath(classLoaderParnet, apiExecutorParam.getOutputDir());
-            generateFeatureFile(classLoader, apiExecutorParam);
+            /** @author Oliver Glas. */
+            if (apiExecutorParam.getExecution() == null || apiExecutorParam.getExecution().equalsIgnoreCase("execute") == false) {
+                generateFeatureFile(classLoader, apiExecutorParam);
+            }
+            if (apiExecutorParam.getExecution() != null && apiExecutorParam.getExecution().equalsIgnoreCase("generate")) {
+                LOGGER.info("Test execution stopped after feature file generation due to parameter execution=generate.");
+                return 0;
+            }
+            String fileIndex = UUID.randomUUID().toString();
             String[] argv = getCucumberOptions(apiExecutorParam, fileIndex);
             exitStatus = Main.run(argv, classLoader);
-            if(IdaithalamConfiguration.isReportEnabled()) {
+            if (IdaithalamConfiguration.isReportEnabled()) {
                 generateReport(featureHeading, apiExecutorParam, fileIndex);
             }
         } catch (IOException | UnableToProcessException e) {
