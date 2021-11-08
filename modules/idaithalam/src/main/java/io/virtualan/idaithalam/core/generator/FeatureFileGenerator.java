@@ -145,7 +145,7 @@ public class FeatureFileGenerator {
             for (Map<String, Object> map : apiHeaderList) {
                 for (String key : map.keySet()) {
                     AvailableParam newAvailableParam = new AvailableParam(key, map.get(key).toString(), "HEADER_PARAM");
-                    if (!item.getAvailableParams().contains(newAvailableParam)) {
+                    if (!item.getAvailableParams().contains(newAvailableParam)) { // If header key does NOT exist yet.
                         item.getAvailableParams().add(newAvailableParam);
                         item.getHeaderParams().add(newAvailableParam);
                     } else if (overwrite) { //if it exists already, overwrite it
@@ -158,8 +158,10 @@ public class FeatureFileGenerator {
                             }
                         }
                     } else {
-                        LOGGER.warning("Due to issue #121 adding duplicate api header can cause errors.");
-                        //TODO Due to issue #121 there cannot be added a duplicate api header..
+                        LOGGER.warning("Due to issue #121 adding duplicate api header can cause errors. Duplicate: " + key);
+                        item.getAvailableParams().add(newAvailableParam);
+                        item.getHeaderParams().add(newAvailableParam);
+                        //TODO issue #121 duplicate error needs to be resolved in Cucumblan. After that the warning can be removed and first if can check overwrite: false to remove this else.
                     }
                 }
             }
