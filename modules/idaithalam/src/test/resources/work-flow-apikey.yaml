@@ -3,17 +3,10 @@ timeout:  30000
 apiExecutor:
   - reportTitle: "API Testing POSTMAN Collection Idaiserver."
     env: dev
-    outputDir: target/Testreports/1
+    outputDir: target/testreports/1
     cucumblanProperties:
-      service.api: http://5.22.250.180:8080
-      #      virtualan.data.load: idaithalamserver_authheaderinparent.postman_collection.json;
-      #      virtualan.data.load: idaithalamserver_withapikey.postman_collection.json;
-#      virtualan.data.load: idaithalamserver_issue124.postman_collection.json;
-      #      virtualan.data.load: idaithalamserver_withapikeywrongvalue.postman_collection.json;
-      #      virtualan.data.load: idaithalamserver_rightheaderwrongvalue.postman_collection.json;
-      #      virtualan.data.load: idaithalamserver.postman_collection.json;
-      virtualan.data.load: idaithalamserver_healthcheck.postman_collection.json;
-      
+      service.api: http://127.0.0.1:8080
+      virtualan.data.load: idaithalamserver_withapikeywrongvalue.postman_collection.json;
       virtualan.data.type: POSTMAN
     apiHeader:
       headerList:
@@ -21,8 +14,7 @@ apiExecutor:
         - X-API-Test1: 123
         - X-API-Test2: test123
         - X-API-Test2: test456
-        - X-API-Test3: test789          
-      overwrite: true
-    execution: all
-#    excludeProperties:
-#      .*: IGNORE
+        - X-API-Test3: test789
+      overwrite: false
+    excludeProperties:
+      .*: IGNORE

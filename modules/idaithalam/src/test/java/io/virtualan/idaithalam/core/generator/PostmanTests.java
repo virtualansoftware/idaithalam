@@ -35,9 +35,6 @@ public class PostmanTests {
             checkApikey = checkApikey || (map.get("X-API-KEY") != null && map.get("X-API-KEY").toString().equals("abc123"));
         }
         Assert.assertTrue(checkApikey);
-
-        boolean isSuccess = VirtualanTestPlanExecutor.invoke("work-flow-apikey.yaml");
-        Assert.assertTrue(isSuccess);
     }
 
 }
