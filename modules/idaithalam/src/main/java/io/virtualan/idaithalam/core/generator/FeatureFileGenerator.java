@@ -130,10 +130,7 @@ public class FeatureFileGenerator {
      * Adding custom API header as defined in the yaml file. */
     private static void addCustomApiHeader(ApiExecutorParam apiExecutorParam, List<Item> result) {
         List<Map<String, Object>> apiHeaderList = apiExecutorParam.getApiHeader().getHeaderList();
-        boolean overwrite = true;  // Default value shall be true. 
-        if (apiExecutorParam.getApiHeader().getOverwrite() != null) {
-            overwrite = Boolean.valueOf(apiExecutorParam.getApiHeader().getOverwrite());
-        }
+        boolean overwrite = Boolean.valueOf(apiExecutorParam.getApiHeader().getOverwrite());
         for (Item item : result) {
             List<AvailableParam> availableParamList = new ArrayList<>();
             if (item.getAvailableParams() == null) {
@@ -145,24 +142,23 @@ public class FeatureFileGenerator {
             for (Map<String, Object> map : apiHeaderList) {
                 for (String key : map.keySet()) {
                     AvailableParam newAvailableParam = new AvailableParam(key, map.get(key).toString(), "HEADER_PARAM");
-                    if (!item.getAvailableParams().contains(newAvailableParam)) { // If header key does NOT exist yet.
+                    if (!item.getAvailableParams().contains(newAvailableParam)) { 
                         item.getAvailableParams().add(newAvailableParam);
                         item.getHeaderParams().add(newAvailableParam);
-                    } else if (overwrite) { //if it exists already, overwrite it
+                    } else { //if it exists already, add value as a value list or overwrite it depending on configuration.
                         for (AvailableParam availableParam1 : item.getAvailableParams()) {
                             if (availableParam1.getKey().equals(newAvailableParam.getKey())) {
-                                availableParam1.setKey(newAvailableParam.getKey());
-                                availableParam1.setValue(newAvailableParam.getValue());
-                                availableParam1.setParameterType(newAvailableParam.getParameterType());
-                                LOGGER.warning("Due to issue #121 API header " + key + " is overwritten with value from configuration. To avoid this behavior add 'overwrite: false' (default: true) to the 'apiHeader' section.");
+                                if (overwrite) {
+                                    availableParam1.setKey(newAvailableParam.getKey());
+                                    availableParam1.setValue(newAvailableParam.getValue());
+                                    availableParam1.setParameterType(newAvailableParam.getParameterType());
+                                    LOGGER.warning(key + " is overwritten with value from configuration. To avoid this behavior add 'overwrite: false' (default: false if not defined) to the 'apiHeader' section.");
+                                }else{
+                                    availableParam1.setValue(availableParam1.getValue().concat(",").concat(newAvailableParam.getValue()));
+                                }
                             }
                         }
-                    } else {
-                        LOGGER.warning("Due to issue #121 adding duplicate api header can cause errors. Duplicate: " + key);
-                        item.getAvailableParams().add(newAvailableParam);
-                        item.getHeaderParams().add(newAvailableParam);
-                        //TODO issue #121 duplicate error needs to be resolved in Cucumblan. After that the warning can be removed and first if can check overwrite: false to remove this else.
-                    }
+                    } 
                 }
             }
         }
