@@ -74,7 +74,7 @@ public class FeatureGenerationHelper {
    * Resolve path parameter
    * Resolve variables in path parameter from collection variables.
    */
-  private static String revolveVariables(String url, JSONArray pathParameter, JSONArray collectionVariable) {
+  private static String resolveVariables(String url, JSONArray pathParameter, JSONArray collectionVariable) {
     if ( pathParameter == null ) return url;
     for (Object o : pathParameter) {
       try {
@@ -88,7 +88,7 @@ public class FeatureGenerationHelper {
           disabled = false;
         }
         if (disabled) continue;
-        if (value.startsWith("{{") && value.endsWith("}}") && collectionVariable != null) {
+        if (collectionVariable != null && value.startsWith("{{") && value.endsWith("}}")) {
           for (Object ov : collectionVariable) {
             JSONObject jsonVariable = (JSONObject) ov;
             try {
@@ -101,7 +101,6 @@ public class FeatureGenerationHelper {
               value = jsonVariable.getString("value");
               break;
             }
-            
           }
         }
         url = url.replace(":" + key, value);
@@ -215,7 +214,7 @@ public class FeatureGenerationHelper {
                     .optString("method"));
     String url = buildEndPointURL(responseArray.optJSONObject(j).optJSONObject("originalRequest").optJSONObject("url").optJSONArray("path"));
     JSONArray pathParameter = responseArray.optJSONObject(j).optJSONObject("originalRequest").optJSONObject("url").optJSONArray("variable");
-    url = revolveVariables(url, pathParameter, collectionVariable);
+    url = resolveVariables(url, pathParameter, collectionVariable);
     virtualanObj.put("url", url);
 
     extracted(responseArray, j, virtualanObj);
