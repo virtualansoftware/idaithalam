@@ -22,6 +22,6 @@ apiExecutor:
         - X-API-Test2: test456
         - X-API-Test3: test789
       overwrite: true
-    execution: generate
-#    excludeProperties:
-#      .*: IGNORE
+    execution: all
+    excludeProperties:
+      /demotest/1: timestamp
