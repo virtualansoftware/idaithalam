@@ -74,21 +74,22 @@ public class FeatureGenerationHelper {
    * Resolve path parameter
    * Resolve variables in path parameter from collection variables.
    */
-  private static String revolveVariables(String url, JSONArray pathParameter, JSONArray collectonVariable) {
+  private static String revolveVariables(String url, JSONArray pathParameter, JSONArray collectionVariable) {
+    if ( pathParameter == null ) return url;
     for (Object o : pathParameter) {
       try {
-        JSONObject jsonObject = (JSONObject) o;
-        String key = jsonObject.getString("key");
-        String value = jsonObject.getString("value");
+        JSONObject pathParameterObject = (JSONObject) o;
+        String key = pathParameterObject.getString("key");
+        String value = pathParameterObject.getString("value");
         Boolean disabled = null;
         try {
-          disabled = jsonObject.getBoolean("disabled");
+          disabled = pathParameterObject.getBoolean("disabled");
         } catch (JSONException js) {
           disabled = false;
         }
         if (disabled) continue;
-        if (value.startsWith("{{") && value.endsWith("}}")) {
-          for (Object ov : collectonVariable) {
+        if (value.startsWith("{{") && value.endsWith("}}") && collectionVariable != null) {
+          for (Object ov : collectionVariable) {
             JSONObject jsonVariable = (JSONObject) ov;
             try {
               disabled = jsonVariable.getBoolean("disabled");
@@ -96,12 +97,16 @@ public class FeatureGenerationHelper {
               disabled = false;
             }
             if (disabled) continue;
-            value = jsonVariable.getString("value");
+            if ( key.equals(jsonVariable.getString("key"))){
+              value = jsonVariable.getString("value");
+              break;
+            }
+            
           }
         }
         url = url.replace(":" + key, value);
       } catch (Exception e) {
-        e.printStackTrace();
+        LOGGER.severe("Cannot resolve variables for URL " + url + ", " + e.getLocalizedMessage());
       }
     }
     return url;
