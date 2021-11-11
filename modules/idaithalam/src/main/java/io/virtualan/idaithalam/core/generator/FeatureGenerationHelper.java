@@ -81,7 +81,7 @@ public class FeatureGenerationHelper {
         JSONObject pathParameterObject = (JSONObject) o;
         String key = pathParameterObject.getString("key");
         String value = pathParameterObject.getString("value");
-        Boolean disabled = null;
+        Boolean disabled;
         try {
           disabled = pathParameterObject.getBoolean("disabled");
         } catch (JSONException js) {
@@ -89,19 +89,7 @@ public class FeatureGenerationHelper {
         }
         if (disabled) continue;
         if (collectionVariable != null && value.startsWith("{{") && value.endsWith("}}")) {
-          for (Object ov : collectionVariable) {
-            JSONObject jsonVariable = (JSONObject) ov;
-            try {
-              disabled = jsonVariable.getBoolean("disabled");
-            } catch (JSONException js) {
-              disabled = false;
-            }
-            if (disabled) continue;
-            if ( key.equals(jsonVariable.getString("key"))){
-              value = jsonVariable.getString("value");
-              break;
-            }
-          }
+          value = getVariableValue(collectionVariable, key, value);
         }
         url = url.replace(":" + key, value);
       } catch (Exception e) {
@@ -109,6 +97,26 @@ public class FeatureGenerationHelper {
       }
     }
     return url;
+  }
+
+  /** Author Oliver Glas to fix issues with resolving variables. */
+  private static String getVariableValue(JSONArray collectionVariableList, String key, String value) {
+    Boolean disabled;
+    if ( collectionVariableList == null || key == null) return value;
+    for (Object ov : collectionVariableList) {
+      JSONObject collectionVariable = (JSONObject) ov;
+      try {
+        disabled = collectionVariable.getBoolean("disabled");
+      } catch (JSONException js) {
+        disabled = false;
+      }
+      if (disabled) continue;
+      if ( key.equals(collectionVariable.getString("key"))){
+        value = collectionVariable.getString("value");
+        break;
+      }
+    }
+    return value;
   }
 
   private static void addParams(JSONArray inputJsonArray, JSONArray outputJsonArray, String param) {
@@ -138,10 +146,10 @@ public class FeatureGenerationHelper {
     if (object != null) {
       JSONArray arr = checkIfItemsOfItem(object.getJSONArray("item"));
       /** Author Oliver Glas Fix issue #131 & #133 */
-      JSONArray arrVariable = object.getJSONArray("variable");
+      JSONArray collectionVariableArr = object.getJSONArray("variable");
       if (arr != null && arr.length() > 0) {
         for (int i = 0; i < arr.length(); i++) {
-          buildVirtualanFromPostMan(virtualanArry, arr, i, arrVariable);
+          buildVirtualanFromPostMan(virtualanArry, arr, i, collectionVariableArr);
         }
         return virtualanArry;
       }
@@ -173,14 +181,14 @@ public class FeatureGenerationHelper {
   }
 
 
-  private static void buildVirtualanFromPostMan(JSONArray virtualanArry, JSONArray arr, int i, JSONArray arrVariable) {
+  private static void buildVirtualanFromPostMan(JSONArray virtualanArry, JSONArray arr, int i, JSONArray collectionVariableArr) {
     if (arr.optJSONObject(i) instanceof JSONObject) {
       if (arr.optJSONObject(i).optJSONArray("response") instanceof JSONArray) {
         JSONArray responseArray = arr.getJSONObject(i).getJSONArray("response");
         if (responseArray != null && responseArray.length() > 0) {
           for (int j = 0; j < responseArray.length(); j++) {
             if (responseArray.optJSONObject(j) instanceof JSONObject) {
-              JSONObject virtualanObj = buildVirtualanObject(responseArray, j, arrVariable);
+              JSONObject virtualanObj = buildVirtualanObject(responseArray, j, collectionVariableArr);
               virtualanArry.put(virtualanObj);
             }
           }
@@ -202,8 +210,8 @@ public class FeatureGenerationHelper {
     }
     return "application/json";
   }
-
-  private static JSONObject buildVirtualanObject(JSONArray responseArray, int j, JSONArray collectionVariable) {
+  /** Fix by Author Oliver Glas for resolving variables (collectionVariableArr) and url path parameter. */
+  private static JSONObject buildVirtualanObject(JSONArray responseArray, int j, JSONArray collectionVariableArr) {
     JSONObject virtualanObj = new JSONObject();
     String contentType = getContentType(
             responseArray.optJSONObject(j).optJSONObject("originalRequest"));
@@ -212,17 +220,43 @@ public class FeatureGenerationHelper {
     virtualanObj.put("method",
             responseArray.optJSONObject(j).optJSONObject("originalRequest")
                     .optString("method"));
+    JSONArray queryParameterArr = responseArray.optJSONObject(j).optJSONObject("originalRequest").optJSONObject("url").optJSONArray("query");
+    resolveParamFromCollection(collectionVariableArr, queryParameterArr);
     String url = buildEndPointURL(responseArray.optJSONObject(j).optJSONObject("originalRequest").optJSONObject("url").optJSONArray("path"));
     JSONArray pathParameter = responseArray.optJSONObject(j).optJSONObject("originalRequest").optJSONObject("url").optJSONArray("variable");
-    url = resolveVariables(url, pathParameter, collectionVariable);
+    url = resolveVariables(url, pathParameter, collectionVariableArr);
     virtualanObj.put("url", url);
 
-    extracted(responseArray, j, virtualanObj);
+    resolveParamFromCollection(responseArray, j, virtualanObj);
     virtualanObj.put("output", responseArray.optJSONObject(j).optString("body"));
     virtualanObj.put("httpStatusCode", responseArray.optJSONObject(j).optString("code"));
     JSONArray paramsArray = new JSONArray();
     extractedParams(responseArray, j, virtualanObj, paramsArray);
     return virtualanObj;
+  }
+  
+  /** Author Oliver Glas to fix issue #138. */
+  private static void resolveParamFromCollection(JSONArray collectionVariable, JSONArray queryParameterArr) {
+    if ( queryParameterArr != null){
+        int index = 0;
+        for ( Object obj : queryParameterArr){
+          JSONObject jsonObject = (JSONObject) obj;
+          Boolean disabled;
+          try{
+            disabled = jsonObject.getBoolean("disabled");
+          }catch(JSONException jsonException){
+            disabled = false;
+          }
+          if ( disabled ) continue;
+          String value = jsonObject.getString("value");
+          if ( value.startsWith("{{") && value.endsWith("}}")){
+            String tempVar = value.substring(2,value.length()-2);
+            value = getVariableValue(collectionVariable,tempVar, value);
+            queryParameterArr.optJSONObject(index).put("value",value);
+          }
+          index++;
+        }
+    }
   }
 
   private static void extractedParams(JSONArray responseArray, int j, JSONObject virtualanObj,
@@ -239,7 +273,7 @@ public class FeatureGenerationHelper {
     }
   }
 
-  private static void extracted(JSONArray responseArray, int j, JSONObject virtualanObj) {
+  private static void resolveParamFromCollection(JSONArray responseArray, int j, JSONObject virtualanObj) {
     if (responseArray.optJSONObject(j).optJSONObject("originalRequest")
         .optJSONObject("body") != null) {
       String input = responseArray.optJSONObject(j).optJSONObject("originalRequest")
