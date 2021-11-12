@@ -153,7 +153,7 @@ public class FeatureFileGenerator {
                                     availableParam1.setKey(newAvailableParam.getKey());
                                     availableParam1.setValue(newAvailableParam.getValue());
                                     availableParam1.setParameterType(newAvailableParam.getParameterType());
-                                    LOGGER.warning(key + " is overwritten with value from configuration. To avoid this behavior add 'overwrite: false' (default: false if not defined) to the 'apiHeader' section.");
+                                    LOGGER.warning(key + " for " + item.getResource() + " is overwritten with value from configuration. To avoid this behavior add 'overwrite: false' (default: false if not defined) to the 'apiHeader' section.");
                                 }else{
                                     availableParam1.setValue(availableParam1.getValue().concat(",").concat(newAvailableParam.getValue()));
                                 }
