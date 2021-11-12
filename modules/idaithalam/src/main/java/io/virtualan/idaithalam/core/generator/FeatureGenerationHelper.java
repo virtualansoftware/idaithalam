@@ -75,20 +75,20 @@ public class FeatureGenerationHelper {
    * Resolve variables in path parameter from collection variables.
    */
   private static String resolveVariables(String url, JSONArray pathParameter, JSONArray collectionVariable) {
-    if ( pathParameter == null ) return url;
+    if (pathParameter == null || collectionVariable == null) return url;
     for (Object o : pathParameter) {
       try {
         JSONObject pathParameterObject = (JSONObject) o;
         String key = pathParameterObject.getString("key");
         String value = pathParameterObject.getString("value");
-        Boolean disabled = null;
+        Boolean disabled;
         try {
           disabled = pathParameterObject.getBoolean("disabled");
         } catch (JSONException js) {
           disabled = false;
         }
         if (disabled) continue;
-        if (collectionVariable != null && value.startsWith("{{") && value.endsWith("}}")) {
+        if (value.startsWith("{{") && value.endsWith("}}")) {
           for (Object ov : collectionVariable) {
             JSONObject jsonVariable = (JSONObject) ov;
             try {
@@ -97,7 +97,7 @@ public class FeatureGenerationHelper {
               disabled = false;
             }
             if (disabled) continue;
-            if ( key.equals(jsonVariable.getString("key"))){
+            if (key.equals(jsonVariable.getString("key"))) {
               value = jsonVariable.getString("value");
               break;
             }
@@ -138,7 +138,12 @@ public class FeatureGenerationHelper {
     if (object != null) {
       JSONArray arr = checkIfItemsOfItem(object.getJSONArray("item"));
       /** Author Oliver Glas Fix issue #131 & #133 */
-      JSONArray arrVariable = object.getJSONArray("variable");
+      JSONArray arrVariable = null;
+      try {
+        arrVariable = object.getJSONArray("variable");
+      } catch (JSONException jsonException) {
+        arrVariable = null;
+      }
       if (arr != null && arr.length() > 0) {
         for (int i = 0; i < arr.length(); i++) {
           buildVirtualanFromPostMan(virtualanArry, arr, i, arrVariable);
