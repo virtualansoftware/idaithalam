@@ -138,10 +138,16 @@ public class FeatureGenerationHelper {
     if (object != null) {
       JSONArray arr = checkIfItemsOfItem(object.getJSONArray("item"));
       /** Author Oliver Glas Fix issue #131 & #133 */
-      JSONArray arrVariable = object.getJSONArray("variable");
+      JSONArray arrVariable = null;
+      JSONObject authCollection = null;
+      try {
+        arrVariable = object.getJSONArray("variable");
+        authCollection = object.getJSONObject("auth");
+      } catch (JSONException jsonException) {
+      }
       if (arr != null && arr.length() > 0) {
         for (int i = 0; i < arr.length(); i++) {
-          buildVirtualanFromPostMan(virtualanArry, arr, i, arrVariable);
+          buildVirtualanFromPostMan(virtualanArry, arr, i, arrVariable, authCollection);
         }
         return virtualanArry;
       }
@@ -173,14 +179,14 @@ public class FeatureGenerationHelper {
   }
 
 
-  private static void buildVirtualanFromPostMan(JSONArray virtualanArry, JSONArray arr, int i, JSONArray arrVariable) {
+  private static void buildVirtualanFromPostMan(JSONArray virtualanArry, JSONArray arr, int i, JSONArray arrVariable, JSONObject authCollection) {
     if (arr.optJSONObject(i) instanceof JSONObject) {
       if (arr.optJSONObject(i).optJSONArray("response") instanceof JSONArray) {
         JSONArray responseArray = arr.getJSONObject(i).getJSONArray("response");
         if (responseArray != null && responseArray.length() > 0) {
           for (int j = 0; j < responseArray.length(); j++) {
             if (responseArray.optJSONObject(j) instanceof JSONObject) {
-              JSONObject virtualanObj = buildVirtualanObject(responseArray, j, arrVariable);
+              JSONObject virtualanObj = buildVirtualanObject(responseArray, j, arrVariable, authCollection);
               virtualanArry.put(virtualanObj);
             }
           }
@@ -203,7 +209,7 @@ public class FeatureGenerationHelper {
     return "application/json";
   }
 
-  private static JSONObject buildVirtualanObject(JSONArray responseArray, int j, JSONArray collectionVariable) {
+  private static JSONObject buildVirtualanObject(JSONArray responseArray, int j, JSONArray collectionVariable, JSONObject authCollection) {
     JSONObject virtualanObj = new JSONObject();
     String contentType = getContentType(
             responseArray.optJSONObject(j).optJSONObject("originalRequest"));
@@ -216,12 +222,33 @@ public class FeatureGenerationHelper {
     JSONArray pathParameter = responseArray.optJSONObject(j).optJSONObject("originalRequest").optJSONObject("url").optJSONArray("variable");
     url = resolveVariables(url, pathParameter, collectionVariable);
     virtualanObj.put("url", url);
+    JSONObject jsonAuth = new JSONObject();
+//    JSONObject authValue = null;
+    JSONArray apikey = null;
+    if ( authCollection != null){
+      apikey = authCollection.getJSONArray("apikey");
+      if ( apikey != null){
+        for (Object o : apikey){
+          JSONObject apikeyObject = (JSONObject) o;
+          String type = apikeyObject.getString("key");
+          if ( type.equals("key")){
+            jsonAuth.put("key",apikeyObject.getString("value"));
+          }else if ( type.equals("value")){
+            jsonAuth.put("value", apikeyObject.getString("value"));
+          }
+        }
+      }
+    }
+    JSONArray authArr = new JSONArray();
+    authArr.put(jsonAuth);
 
     extracted(responseArray, j, virtualanObj);
     virtualanObj.put("output", responseArray.optJSONObject(j).optString("body"));
     virtualanObj.put("httpStatusCode", responseArray.optJSONObject(j).optString("code"));
-    JSONArray paramsArray = new JSONArray();
-    extractedParams(responseArray, j, virtualanObj, paramsArray);
+//    JSONArray paramsArray = new JSONArray();
+    extractedParams(responseArray, j, virtualanObj, authArr);
+//    extractedParams(responseArray, j, virtualanObj, paramsArray);
+
     return virtualanObj;
   }
 
@@ -234,7 +261,7 @@ public class FeatureGenerationHelper {
     virtualanObj
         .put("resource", getResource(responseArray.optJSONObject(j).optJSONObject("originalRequest")
             .optJSONObject("url").optJSONArray("path")));
-    if (paramsArray.length() > 0) {
+    if (paramsArray != null && paramsArray.length() > 0) {
       virtualanObj.put("availableParams", paramsArray);
     }
   }
