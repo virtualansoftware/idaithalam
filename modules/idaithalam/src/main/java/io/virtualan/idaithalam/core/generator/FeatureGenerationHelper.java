@@ -110,7 +110,7 @@ public class FeatureGenerationHelper {
     }
     return url;
   }
-
+  //TODO check if key exists already to avoid key kollisions.
   private static void addParams(JSONArray inputJsonArray, JSONArray outputJsonArray, String param) {
     if (inputJsonArray != null && inputJsonArray.length() > 0) {
       for (int j = 0; j < inputJsonArray.length(); j++) {
@@ -222,12 +222,15 @@ public class FeatureGenerationHelper {
     JSONArray pathParameter = responseArray.optJSONObject(j).optJSONObject("originalRequest").optJSONObject("url").optJSONArray("variable");
     url = resolveVariables(url, pathParameter, collectionVariable);
     virtualanObj.put("url", url);
-    JSONObject jsonAuth = new JSONObject();
-//    JSONObject authValue = null;
+
+    JSONObject jsonAuth = null;
     JSONArray apikey = null;
     if ( authCollection != null){
       apikey = authCollection.getJSONArray("apikey");
       if ( apikey != null){
+        jsonAuth = new JSONObject();
+        jsonAuth.put("parameterType","HEADER_PARAM");
+        
         for (Object o : apikey){
           JSONObject apikeyObject = (JSONObject) o;
           String type = apikeyObject.getString("key");
@@ -239,14 +242,15 @@ public class FeatureGenerationHelper {
         }
       }
     }
-    JSONArray authArr = new JSONArray();
-    authArr.put(jsonAuth);
 
     extracted(responseArray, j, virtualanObj);
     virtualanObj.put("output", responseArray.optJSONObject(j).optString("body"));
     virtualanObj.put("httpStatusCode", responseArray.optJSONObject(j).optString("code"));
-//    JSONArray paramsArray = new JSONArray();
-    extractedParams(responseArray, j, virtualanObj, authArr);
+    JSONArray paramsArray = new JSONArray();
+    if ( jsonAuth != null){
+      paramsArray.put(jsonAuth);
+    }
+    extractedParams(responseArray, j, virtualanObj, paramsArray);
 //    extractedParams(responseArray, j, virtualanObj, paramsArray);
 
     return virtualanObj;
