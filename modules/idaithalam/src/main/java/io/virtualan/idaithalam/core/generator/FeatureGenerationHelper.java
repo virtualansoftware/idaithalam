@@ -221,7 +221,7 @@ public class FeatureGenerationHelper {
             responseArray.optJSONObject(j).optJSONObject("originalRequest")
                     .optString("method"));
     JSONArray queryParameterArr = responseArray.optJSONObject(j).optJSONObject("originalRequest").optJSONObject("url").optJSONArray("query");
-    resolveParamFromCollection(collectionVariableArr, queryParameterArr);
+    resolveParamValues(collectionVariableArr, queryParameterArr);
     String url = buildEndPointURL(responseArray.optJSONObject(j).optJSONObject("originalRequest").optJSONObject("url").optJSONArray("path"));
     JSONArray pathParameter = responseArray.optJSONObject(j).optJSONObject("originalRequest").optJSONObject("url").optJSONArray("variable");
     url = resolveVariables(url, pathParameter, collectionVariableArr);
@@ -234,55 +234,60 @@ public class FeatureGenerationHelper {
     extractedParams(responseArray, j, virtualanObj, paramsArray);
     return virtualanObj;
   }
-  
-  /** Author Oliver Glas to fix issue #138. */
-  private static void resolveParamFromCollection(JSONArray collectionVariable, JSONArray queryParameterArr) {
-    if ( queryParameterArr != null){
-        int index = 0;
-        for ( Object obj : queryParameterArr){
-          JSONObject jsonObject = (JSONObject) obj;
-          Boolean disabled;
-          try{
-            disabled = jsonObject.getBoolean("disabled");
-          }catch(JSONException jsonException){
-            disabled = false;
-          }
-          if ( disabled ) continue;
-          String value = jsonObject.getString("value");
-          if ( value.startsWith("{{") && value.endsWith("}}")){
-            String tempVar = value.substring(2,value.length()-2);
-            value = getVariableValue(collectionVariable,tempVar, value);
-            queryParameterArr.optJSONObject(index).put("value",value);
-          }
-          index++;
-        }
-    }
-  }
 
-  private static void extractedParams(JSONArray responseArray, int j, JSONObject virtualanObj,
-      JSONArray paramsArray) {
-    addParams(responseArray.optJSONObject(j).optJSONObject("originalRequest")
-        .optJSONArray("header"), paramsArray, "HEADER_PARAM");
-    addParams(responseArray.optJSONObject(j).optJSONObject("originalRequest")
-        .optJSONObject("url").optJSONArray("query"), paramsArray, "QUERY_PARAM");
-    virtualanObj
-        .put("resource", getResource(responseArray.optJSONObject(j).optJSONObject("originalRequest")
-            .optJSONObject("url").optJSONArray("path")));
-    if (paramsArray.length() > 0) {
-      virtualanObj.put("availableParams", paramsArray);
+  /**
+   * Author Oliver Glas to fix issue #138.
+   * Replace request query variables like {{testId}} with their actual value from the collection variable list.
+   */
+  private static void resolveParamValues(JSONArray collectionVariable, JSONArray queryParameterArr) {
+    if (queryParameterArr != null) {
+      int index = 0;
+      for (Object obj : queryParameterArr) {
+        JSONObject jsonObject = (JSONObject) obj;
+        Boolean disabled;
+        try {
+          disabled = jsonObject.getBoolean("disabled");
+        } catch (JSONException jsonException) {
+          disabled = false;
+        }
+        if ( disabled) continue;
+        String value = jsonObject.getString("value");
+        if (value.startsWith("{{") && value.endsWith("}}")) {
+          String tempVar = value.substring(2, value.length() - 2);
+          value = getVariableValue(collectionVariable, tempVar, value);
+          queryParameterArr.optJSONObject(index).put("value", value);
+        }
+        index++;
+      }
     }
   }
 
   private static void resolveParamFromCollection(JSONArray responseArray, int j, JSONObject virtualanObj) {
     if (responseArray.optJSONObject(j).optJSONObject("originalRequest")
-        .optJSONObject("body") != null) {
+            .optJSONObject("body") != null) {
       String input = responseArray.optJSONObject(j).optJSONObject("originalRequest")
-          .optJSONObject("body").optString("raw");
+              .optJSONObject("body").optString("raw");
       if (!"".equalsIgnoreCase(input)) {
         virtualanObj.put("input", input);
       }
     }
   }
+
+  private static void extractedParams(JSONArray responseArray, int j, JSONObject virtualanObj,
+                                      JSONArray paramsArray) {
+    addParams(responseArray.optJSONObject(j).optJSONObject("originalRequest")
+            .optJSONArray("header"), paramsArray, "HEADER_PARAM");
+    addParams(responseArray.optJSONObject(j).optJSONObject("originalRequest")
+            .optJSONObject("url").optJSONArray("query"), paramsArray, "QUERY_PARAM");
+    virtualanObj
+            .put("resource", getResource(responseArray.optJSONObject(j).optJSONObject("originalRequest")
+                    .optJSONObject("url").optJSONArray("path")));
+    if (paramsArray.length() > 0) {
+      virtualanObj.put("availableParams", paramsArray);
+    }
+  }
+
+
 
 
   /**
