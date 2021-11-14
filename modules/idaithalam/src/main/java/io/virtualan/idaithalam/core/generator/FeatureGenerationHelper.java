@@ -43,14 +43,13 @@ import java.util.stream.IntStream;
 @Slf4j
 public class FeatureGenerationHelper {
 
-
     final private static Logger LOGGER = Logger.getLogger(FeatureGenerationHelper.class.getName());
     
-    /** Defines whether header or query parameter will be overwritten in case or a duplicate or not.
+    /** Defines whether header or query parameter will be overwritten in case of a duplicate.
      *  If the header key exists, and overwrite is false (default), it will add the value as a comma separated list. 
      *  If the header key exists, and overwrite is true, it will instead take the new value.
      *    If true and duplicate comes from yaml configuration, yaml wins.
-     *    If true and duplicate is within collection like an api header key in authorization and in request, new value wins. */
+     *    If true and duplicate is within collection like an api header key in authorization and second in request, the request value wins. */
     private static Boolean headerOverwrite = false;
 
     private FeatureGenerationHelper() {
@@ -127,6 +126,11 @@ public class FeatureGenerationHelper {
 
     /**
      * Author Oliver Glas. Check if a duplicate key exists already. 
+     * headerOverwrite defines whether header or query parameter will be overwritten in case of a duplicate.
+     * If the header key exists, and overwrite is false (default), it will add the value as a comma separated list. 
+     * If the header key exists, and overwrite is true, it will instead take the new value.
+     *    If true and duplicate comes from yaml configuration, yaml wins.
+     *    If true and duplicate is within collection like an api header key in authorization and second in request, the request value wins. 
      */
     private static void handleDuplicates(JSONArray outputJsonArray, JSONObject virtualanObjParam) {
         String check = virtualanObjParam.getString("key");
