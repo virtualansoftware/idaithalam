@@ -74,34 +74,33 @@ public class FeatureGenerationHelper {
    * Resolve path parameter
    * Resolve variables in path parameter from collection variables.
    */
-  private static String resolveVariables(String url, JSONArray pathParameter, JSONArray collectionVariable) {
-    if ( pathParameter == null ) return url;
+  private static String resolvePathVariables(String url, JSONArray pathParameter, JSONArray collectionVariable) {
+    if ( pathParameter == null || collectionVariable == null) return url;
     for (Object o : pathParameter) {
       try {
         JSONObject pathParameterObject = (JSONObject) o;
         String key = pathParameterObject.getString("key");
         String value = pathParameterObject.getString("value");
-        Boolean disabled = null;
+        Boolean disabled = false;
         try {
           disabled = pathParameterObject.getBoolean("disabled");
-        } catch (JSONException js) {
-          disabled = false;
-        }
+        } catch (JSONException js) {}
         if (disabled) continue;
-        if (collectionVariable != null && value.startsWith("{{") && value.endsWith("}}")) {
-          for (Object ov : collectionVariable) {
-            JSONObject jsonVariable = (JSONObject) ov;
-            try {
-              disabled = jsonVariable.getBoolean("disabled");
-            } catch (JSONException js) {
-              disabled = false;
-            }
-            if (disabled) continue;
-            if ( key.equals(jsonVariable.getString("key"))){
-              value = jsonVariable.getString("value");
-              break;
-            }
-          }
+        if (value.startsWith("{{") && value.endsWith("}}")) {
+          value = replaceWithCollectionValues(collectionVariable, key, value);
+//          for (Object ov : collectionVariable) {
+//            JSONObject jsonVariable = (JSONObject) ov;
+//            try {
+//              disabled = jsonVariable.getBoolean("disabled");
+//            } catch (JSONException js) {
+//              disabled = false;
+//            }
+//            if (disabled) continue;
+//            if ( key.equals(jsonVariable.getString("key"))){
+//              value = jsonVariable.getString("value");
+//              break;
+//            }
+//          }
         }
         url = url.replace(":" + key, value);
       } catch (Exception e) {
@@ -110,6 +109,7 @@ public class FeatureGenerationHelper {
     }
     return url;
   }
+  
   //TODO check if key exists already to avoid key kollisions.
   private static void addParams(JSONArray inputJsonArray, JSONArray outputJsonArray, String param) {
     if (inputJsonArray != null && inputJsonArray.length() > 0) {
@@ -208,7 +208,27 @@ public class FeatureGenerationHelper {
     }
     return "application/json";
   }
+  
+  /** Author Oliver Glas. Resolve variables and replace with values from collection defined values. */
+  private static String replaceWithCollectionValues(JSONArray variable, String key, String value){
+    if ( variable == null || key == null) return value;
+    Boolean disabled = null;
+    for ( Object ov : variable){
+      JSONObject jsonVariable = (JSONObject) ov;
+      try{
+        disabled = jsonVariable.getBoolean("disabled");
+      }catch(JSONException je){
+        disabled = Boolean.FALSE;
+      }
+      if (disabled) continue;
+      if (key.equals(jsonVariable.getString("key"))){
+        return jsonVariable.getString("value");
+      }
+    }
+    return value;
+  }
 
+  /* Fixes Oliver Glas added some fixes for path parameter, authorization (api key) and variables for both path and query parameter. */
   private static JSONObject buildVirtualanObject(JSONArray responseArray, int j, JSONArray collectionVariable, JSONObject authCollection) {
     JSONObject virtualanObj = new JSONObject();
     String contentType = getContentType(
@@ -220,40 +240,69 @@ public class FeatureGenerationHelper {
                     .optString("method"));
     String url = buildEndPointURL(responseArray.optJSONObject(j).optJSONObject("originalRequest").optJSONObject("url").optJSONArray("path"));
     JSONArray pathParameter = responseArray.optJSONObject(j).optJSONObject("originalRequest").optJSONObject("url").optJSONArray("variable");
-    url = resolveVariables(url, pathParameter, collectionVariable);
+    url = resolvePathVariables(url, pathParameter, collectionVariable);
     virtualanObj.put("url", url);
+    
+    //Take care ofthe query parameter variables.
+    JSONArray queryParameterArr = responseArray.optJSONObject(j).optJSONObject("originalRequest").optJSONObject("url").optJSONArray("query");
+    replaceQueryVariableValues(collectionVariable, queryParameterArr);
 
-    JSONObject jsonAuth = null;
-    JSONArray apikey = null;
-    if ( authCollection != null){
-      apikey = authCollection.getJSONArray("apikey");
-      if ( apikey != null){
-        jsonAuth = new JSONObject();
-        jsonAuth.put("parameterType","HEADER_PARAM");
-        
-        for (Object o : apikey){
-          JSONObject apikeyObject = (JSONObject) o;
-          String type = apikeyObject.getString("key");
-          if ( type.equals("key")){
-            jsonAuth.put("key",apikeyObject.getString("value"));
-          }else if ( type.equals("value")){
-            jsonAuth.put("value", apikeyObject.getString("value"));
-          }
-        }
-      }
-    }
+    //Get Api key from Authorization of the colleciton.
+    JSONObject jsonAuth = getJsonObject(authCollection);
 
     extracted(responseArray, j, virtualanObj);
     virtualanObj.put("output", responseArray.optJSONObject(j).optString("body"));
     virtualanObj.put("httpStatusCode", responseArray.optJSONObject(j).optString("code"));
     JSONArray paramsArray = new JSONArray();
-    if ( jsonAuth != null){
-      paramsArray.put(jsonAuth);
-    }
+    if ( jsonAuth != null)  paramsArray.put(jsonAuth);
     extractedParams(responseArray, j, virtualanObj, paramsArray);
-//    extractedParams(responseArray, j, virtualanObj, paramsArray);
-
     return virtualanObj;
+  }
+
+  /** Author Oliver Glas. Create JSONObject for the Postman collection authorization. */
+  private static JSONObject getJsonObject(JSONObject authCollection) {
+    JSONObject jsonAuth = null;
+    if ( authCollection != null ){
+      try {
+        jsonAuth = new JSONObject();
+        JSONArray apikey = authCollection.getJSONArray("apikey");
+        jsonAuth.put("parameterType", "HEADER_PARAM");
+        for (Object o : apikey) {
+          JSONObject apikeyObject = (JSONObject) o;
+          String type = apikeyObject.getString("key");
+          if (type.equals("key")) {
+            jsonAuth.put("key", apikeyObject.getString("value"));
+          } else if (type.equals("value")) {
+            jsonAuth.put("value", apikeyObject.getString("value"));
+          }
+        }
+      }catch (JSONException je) {
+      }
+    }
+    return jsonAuth;
+  }
+
+  /** Author Oliver Glas.
+   *  Replace all variables in the query parameters with values from Collection values. */
+  private static void replaceQueryVariableValues(JSONArray collectionVariable, JSONArray queryParameterArr) {
+    if ( queryParameterArr != null ){
+      int count = 0;
+      for ( Object o : queryParameterArr){
+        JSONObject jsonObject = (JSONObject) o;
+        String value = jsonObject.getString("value");
+        Boolean disabled = false;
+        try{
+          disabled = jsonObject.getBoolean("disabled");
+        }catch (JSONException je){}
+        if ( disabled)  continue;
+        if (value.startsWith("{{") && value.endsWith("}}")){
+          String varKey = value.substring(2,value.length() -2);
+          value = replaceWithCollectionValues(collectionVariable, varKey, value);
+          queryParameterArr.optJSONObject(count).put("value", value);
+        }
+        count++;
+      }
+    }
   }
 
   private static void extractedParams(JSONArray responseArray, int j, JSONObject virtualanObj,
