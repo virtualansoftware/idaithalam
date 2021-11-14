@@ -3,7 +3,7 @@ package io.virtualan.idaithalam.core.generator;
 import io.virtualan.idaithalam.core.api.VirtualanTestPlanExecutor;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.domain.ExecutionPlanner;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -25,18 +25,19 @@ public class PostmanTests {
         //Check reading apiHeader
         ExecutionPlanner executionPlanner = yaml.load(inputStream);
         List<ApiExecutorParam> apiExecutor = executionPlanner.getApiExecutor();
-        Assert.assertTrue(apiExecutor.size() > 0);
+        Assertions.assertTrue(apiExecutor.size() > 0);
 
-        ApiExecutorParam apiExecutorParam1 = apiExecutor.get(0);
-        List<Map<String, Object>> apiHeaderList = apiExecutorParam1.getApiHeader().getHeaderList();
-        Assert.assertNotNull(apiHeaderList);
-        boolean checkApikey = false;
-        for (Map<String, Object> map : apiHeaderList) {
-            checkApikey = checkApikey || (map.get("X-API-KEY") != null && map.get("X-API-KEY").toString().equals("abc123"));
-        }
-        Assert.assertTrue(checkApikey);
+//        ApiExecutorParam apiExecutorParam1 = apiExecutor.get(0);
+//        List<Map<String, Object>> apiHeaderList = apiExecutorParam1.getApiHeader().getHeaderList();
+//        Assertions.assertNotNull(apiHeaderList);
+//        boolean checkApikey = false;
+//        for (Map<String, Object> map : apiHeaderList) {
+//            checkApikey = checkApikey || (map.get("X-API-KEY") != null && map.get("X-API-KEY").toString().equals("abc123"));
+//        }
+//        Assertions.assertTrue(checkApikey);
 
-
+        boolean isSuccess = VirtualanTestPlanExecutor.invoke("work-flow-apikey.yaml");
+        Assertions.assertTrue(isSuccess);
     }
 
 }
