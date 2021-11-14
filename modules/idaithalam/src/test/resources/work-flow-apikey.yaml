@@ -15,14 +15,14 @@ apiExecutor:
 #      virtualan.data.load: idaithalamserverRemotetest.postman_collection.json;
       virtualan.data.load: idaithalamserver_Issue141.postman_collection.json;
       virtualan.data.type: POSTMAN
-#    apiHeader:
-#      headerList:
+    apiHeader:
+      headerList:
 #        - X-API-KEY: abc123
 #        - X-API-Test1: 123
 #        - X-API-Test2: test123
 #        - X-API-Test2: test456
 #        - X-API-Test3: test789
-#      overwrite: true
-    execution: all
+      overwrite: true
+    execution: generate
     excludeProperties:
       /demotest/1: timestamp

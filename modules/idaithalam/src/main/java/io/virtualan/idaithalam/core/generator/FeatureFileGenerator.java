@@ -118,9 +118,7 @@ public class FeatureFileGenerator {
           }
           List<Item> result = FeatureGenerationHelper.createFeatureFile(excludeConfiguration, jsonArray, apiExecutorParam.getOutputDir());
           /** Author: oglas  Add custom API header from configuration yaml. */
-          if (apiExecutorParam.getApiHeader() != null && apiExecutorParam.getApiHeader().getHeaderList().size() > 0) {
-              addCustomApiHeader(apiExecutorParam, result);
-          }
+          addCustomApiHeader(apiExecutorParam, result);
         items.add(result);
         }
         return items;
@@ -129,6 +127,7 @@ public class FeatureFileGenerator {
     /** Author: Oliver Glas (inss.ch) 
      * Adding custom API header as defined in the yaml file. */
     private static void addCustomApiHeader(ApiExecutorParam apiExecutorParam, List<Item> result) {
+        if (apiExecutorParam.getApiHeader() == null || apiExecutorParam.getApiHeader().getHeaderList() == null || apiExecutorParam.getApiHeader().getHeaderList().size() == 0) return;
         List<Map<String, Object>> apiHeaderList = apiExecutorParam.getApiHeader().getHeaderList();
         boolean overwrite = Boolean.valueOf(apiExecutorParam.getApiHeader().getOverwrite());
         for (Item item : result) {

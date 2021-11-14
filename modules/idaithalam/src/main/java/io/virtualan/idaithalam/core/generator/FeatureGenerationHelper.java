@@ -111,6 +111,7 @@ public class FeatureGenerationHelper {
     }
     return url;
   }
+  
   //TODO check if key exists already to avoid key kollisions.
   private static void addParams(JSONArray inputJsonArray, JSONArray outputJsonArray, String param) {
     if (inputJsonArray != null && inputJsonArray.length() > 0) {

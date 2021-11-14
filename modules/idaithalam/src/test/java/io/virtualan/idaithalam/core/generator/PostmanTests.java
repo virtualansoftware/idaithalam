@@ -19,9 +19,10 @@ public class PostmanTests {
 
     @Test
     public void addApikey() throws Exception {
+        final String yamlFile = "work-flow-apikey.yaml";
         Yaml yaml = new Yaml(new Constructor(ExecutionPlanner.class));
         InputStream inputStream = VirtualanTestPlanExecutor.class.getClassLoader()
-                .getResourceAsStream("work-flow-apikey.yaml");
+                .getResourceAsStream(yamlFile);
         //Check reading apiHeader
         ExecutionPlanner executionPlanner = yaml.load(inputStream);
         List<ApiExecutorParam> apiExecutor = executionPlanner.getApiExecutor();
@@ -36,7 +37,7 @@ public class PostmanTests {
 //        }
 //        Assertions.assertTrue(checkApikey);
 
-        boolean isSuccess = VirtualanTestPlanExecutor.invoke("work-flow-apikey.yaml");
+        boolean isSuccess = VirtualanTestPlanExecutor.invoke(yamlFile);
         Assertions.assertTrue(isSuccess);
     }
 
