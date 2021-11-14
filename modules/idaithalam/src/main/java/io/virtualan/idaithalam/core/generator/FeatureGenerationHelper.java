@@ -46,6 +46,11 @@ public class FeatureGenerationHelper {
 
     final private static Logger LOGGER = Logger.getLogger(FeatureGenerationHelper.class.getName());
     
+    /** Defines whether header or query parameter will be overwritten in case or a duplicate or not.
+     *  If the header key exists, and overwrite is false (default), it will add the value as a comma separated list. 
+     *  If the header key exists, and overwrite is true, it will instead take the new value.
+     *    If true and duplicate comes from yaml configuration, yaml wins.
+     *    If true and duplicate is within collection like an api header key in authorization and in request, new value wins. */
     private static Boolean headerOverwrite = false;
 
     private FeatureGenerationHelper() {
@@ -101,7 +106,6 @@ public class FeatureGenerationHelper {
     }
 
     //TODO check if key exists already to avoid key kollisions.
-
     /**
      * Fix Oliver Glas to avoid duplicate header keys.
      */
@@ -132,7 +136,7 @@ public class FeatureGenerationHelper {
             String key = jsonObject.getString("key");
             if (key.equals(check)) {
                 if (outputJsonArray.optJSONObject(j) instanceof JSONObject) {
-                    String newValue = jsonObject.getString("value");
+                    String newValue = virtualanObjParam.getString("value");
                     if (headerOverwrite == false) {
                         newValue = newValue.concat(",").concat(outputJsonArray.optJSONObject(j).getString("value"));
                     }

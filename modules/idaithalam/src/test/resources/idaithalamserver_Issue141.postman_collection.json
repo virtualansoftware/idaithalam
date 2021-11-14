@@ -467,7 +467,7 @@
 		"apikey": [
 			{
 				"key": "value",
-				"value": "abc123",
+				"value": "auth123",
 				"type": "string"
 			},
 			{
