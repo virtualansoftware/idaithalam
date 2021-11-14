@@ -260,8 +260,8 @@ public class FeatureGenerationHelper {
           String varKey = value.substring(2,value.length() -2);
           value = replaceWithCollectionValues(collectionVariable, varKey, value);
           queryParameterArr.optJSONObject(count).put("value", value);
-          count++;
         }
+        count++;
       }
     }
     
