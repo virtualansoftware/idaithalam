@@ -117,7 +117,7 @@ public class FeatureFileGenerator {
             jsonArray = getJSONArray(apiExecutorParam, fileNames[i]);
           }
           List<Item> result = FeatureGenerationHelper.createFeatureFile(excludeConfiguration, jsonArray, apiExecutorParam.getOutputDir());
-          /** Author: oglas  Add custom API header from configuration yaml. */
+          /* Add custom API header from configuration yaml. */
           addCustomApiHeader(apiExecutorParam, result);
         items.add(result);
         }
