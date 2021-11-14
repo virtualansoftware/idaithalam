@@ -45,6 +45,8 @@ public class FeatureGenerationHelper {
 
 
     final private static Logger LOGGER = Logger.getLogger(FeatureGenerationHelper.class.getName());
+    
+    private static Boolean headerOverwrite = false;
 
     private FeatureGenerationHelper() {
     }
@@ -112,7 +114,7 @@ public class FeatureGenerationHelper {
                     virtualanObjParam.put("key", inputJsonArray.getJSONObject(j).optString("key"));
                     virtualanObjParam.put("value", inputJsonArray.getJSONObject(j).optString("value"));
                     virtualanObjParam.put("parameterType", param);
-                    handleDuplicates(outputJsonArray, virtualanObjParam, false);
+                    handleDuplicates(outputJsonArray, virtualanObjParam);
 //            outputJsonArray.put(virtualanObjParam, true);
                 }
             }
@@ -122,7 +124,7 @@ public class FeatureGenerationHelper {
     /**
      * Author Oliver Glas. Check if a duplicate key exists already. 
      */
-    private static void handleDuplicates(JSONArray outputJsonArray, JSONObject virtualanObjParam, boolean overwrite) {
+    private static void handleDuplicates(JSONArray outputJsonArray, JSONObject virtualanObjParam) {
         String check = virtualanObjParam.getString("key");
         for (int j = 0; j < outputJsonArray.length(); j++) {
             Object o = outputJsonArray.get(j);
@@ -131,7 +133,7 @@ public class FeatureGenerationHelper {
             if (key.equals(check)) {
                 if (outputJsonArray.optJSONObject(j) instanceof JSONObject) {
                     String newValue = jsonObject.getString("value");
-                    if (overwrite == false) {
+                    if (headerOverwrite == false) {
                         newValue = newValue.concat(",").concat(outputJsonArray.optJSONObject(j).getString("value"));
                     }
                     outputJsonArray.optJSONObject(j).put("value", newValue);
@@ -147,7 +149,8 @@ public class FeatureGenerationHelper {
      * @param object the object
      * @return the json array
      */
-    public static JSONArray createPostManToVirtualan(JSONObject object) {
+    public static JSONArray createPostManToVirtualan(JSONObject object, Boolean overwrite) {
+        headerOverwrite = overwrite;
         JSONArray virtualanArry = new JSONArray();
         if (object != null) {
             JSONArray arr = checkIfItemsOfItem(object.getJSONArray("item"));
