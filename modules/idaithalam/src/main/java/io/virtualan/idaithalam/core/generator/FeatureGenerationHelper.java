@@ -75,20 +75,18 @@ public class FeatureGenerationHelper {
    * Resolve variables in path parameter from collection variables.
    */
   private static String resolvePathVariables(String url, JSONArray pathParameter, JSONArray collectionVariable) {
-    if ( pathParameter == null ) return url;
+    if ( pathParameter == null || collectionVariable == null) return url;
     for (Object o : pathParameter) {
       try {
         JSONObject pathParameterObject = (JSONObject) o;
         String key = pathParameterObject.getString("key");
         String value = pathParameterObject.getString("value");
-        Boolean disabled = null;
+        Boolean disabled = false;
         try {
           disabled = pathParameterObject.getBoolean("disabled");
-        } catch (JSONException js) {
-          disabled = false;
-        }
+        } catch (JSONException js) {}
         if (disabled) continue;
-        if (collectionVariable != null && value.startsWith("{{") && value.endsWith("}}")) {
+        if (value.startsWith("{{") && value.endsWith("}}")) {
           value = replaceWithCollectionValues(collectionVariable, key, value);
 //          for (Object ov : collectionVariable) {
 //            JSONObject jsonVariable = (JSONObject) ov;
@@ -230,6 +228,7 @@ public class FeatureGenerationHelper {
     return value;
   }
 
+  /* Fixes Oliver Glas added some fixes for path parameter, authorization (api key) and variables for both path and query parameter. */
   private static JSONObject buildVirtualanObject(JSONArray responseArray, int j, JSONArray collectionVariable, JSONObject authCollection) {
     JSONObject virtualanObj = new JSONObject();
     String contentType = getContentType(
@@ -246,9 +245,49 @@ public class FeatureGenerationHelper {
     
     //Take care ofthe query parameter variables.
     JSONArray queryParameterArr = responseArray.optJSONObject(j).optJSONObject("originalRequest").optJSONObject("url").optJSONArray("query");
+    replaceQueryVariableValues(collectionVariable, queryParameterArr);
+
+    //Get Api key from Authorization of the colleciton.
+    JSONObject jsonAuth = getJsonObject(authCollection);
+
+    extracted(responseArray, j, virtualanObj);
+    virtualanObj.put("output", responseArray.optJSONObject(j).optString("body"));
+    virtualanObj.put("httpStatusCode", responseArray.optJSONObject(j).optString("code"));
+    JSONArray paramsArray = new JSONArray();
+    if ( jsonAuth != null)  paramsArray.put(jsonAuth);
+    extractedParams(responseArray, j, virtualanObj, paramsArray);
+    return virtualanObj;
+  }
+
+  /** Author Oliver Glas. Create JSONObject for the Postman collection authorization. */
+  private static JSONObject getJsonObject(JSONObject authCollection) {
+    JSONObject jsonAuth = null;
+    if ( authCollection != null ){
+      try {
+        jsonAuth = new JSONObject();
+        JSONArray apikey = authCollection.getJSONArray("apikey");
+        jsonAuth.put("parameterType", "HEADER_PARAM");
+        for (Object o : apikey) {
+          JSONObject apikeyObject = (JSONObject) o;
+          String type = apikeyObject.getString("key");
+          if (type.equals("key")) {
+            jsonAuth.put("key", apikeyObject.getString("value"));
+          } else if (type.equals("value")) {
+            jsonAuth.put("value", apikeyObject.getString("value"));
+          }
+        }
+      }catch (JSONException je) {
+      }
+    }
+    return jsonAuth;
+  }
+
+  /** Author Oliver Glas.
+   *  Replace all variables in the query parameters with values from Collection values. */
+  private static void replaceQueryVariableValues(JSONArray collectionVariable, JSONArray queryParameterArr) {
     if ( queryParameterArr != null ){
       int count = 0;
-      for ( Object o : queryParameterArr ){
+      for ( Object o : queryParameterArr){
         JSONObject jsonObject = (JSONObject) o;
         String value = jsonObject.getString("value");
         Boolean disabled = false;
@@ -264,39 +303,6 @@ public class FeatureGenerationHelper {
         count++;
       }
     }
-    
-    //Get Api key from Authorization of the colleciton.
-    JSONObject jsonAuth = null;
-    if ( authCollection != null ){
-      try {
-        JSONArray apikey = authCollection.getJSONArray("apikey");
-        jsonAuth = new JSONObject();
-        jsonAuth.put("parameterType", "HEADER_PARAM");
-
-        for (Object o : apikey) {
-          JSONObject apikeyObject = (JSONObject) o;
-          String type = apikeyObject.getString("key");
-          if (type.equals("key")) {
-            jsonAuth.put("key", apikeyObject.getString("value"));
-          } else if (type.equals("value")) {
-            jsonAuth.put("value", apikeyObject.getString("value"));
-          }
-        }
-      }catch (JSONException je) {
-      }
-    }
-
-    extracted(responseArray, j, virtualanObj);
-    virtualanObj.put("output", responseArray.optJSONObject(j).optString("body"));
-    virtualanObj.put("httpStatusCode", responseArray.optJSONObject(j).optString("code"));
-    JSONArray paramsArray = new JSONArray();
-    if ( jsonAuth != null){
-      paramsArray.put(jsonAuth);
-    }
-    extractedParams(responseArray, j, virtualanObj, paramsArray);
-//    extractedParams(responseArray, j, virtualanObj, paramsArray);
-
-    return virtualanObj;
   }
 
   private static void extractedParams(JSONArray responseArray, int j, JSONObject virtualanObj,
