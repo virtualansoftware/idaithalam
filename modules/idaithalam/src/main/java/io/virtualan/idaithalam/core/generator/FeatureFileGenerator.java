@@ -105,11 +105,15 @@ public class FeatureFileGenerator {
             throw new UnableToProcessException("provide appropriate virtualan.data.type for the input data?");
         }
         String[] fileNames = contractFileName.split(";");
+        Boolean overwriteHeader = false;
+        if ( apiExecutorParam.getApiHeader() != null){
+             overwriteHeader = Boolean.parseBoolean(apiExecutorParam.getApiHeader().getOverwrite());
+        }
 
         for(int i=0; i < fileNames.length; i++) {
           if (ConversionType.POSTMAN.name().equalsIgnoreCase(contractFileType)) {
             jsonArray = FeatureGenerationHelper
-                .createPostManToVirtualan(getJSONObject(classLoader, fileNames[i]));
+                .createPostManToVirtualan(getJSONObject(classLoader, fileNames[i]), overwriteHeader);
           } else if (ConversionType.OPENAPI.name().equalsIgnoreCase(contractFileType)) {
             jsonArray = OpenApiFeatureFileGenerator
                 .generateOpenApiContractForVirtualan(fileNames[i]);
@@ -117,9 +121,9 @@ public class FeatureFileGenerator {
             jsonArray = getJSONArray(apiExecutorParam, fileNames[i]);
           }
           List<Item> result = FeatureGenerationHelper.createFeatureFile(excludeConfiguration, jsonArray, apiExecutorParam.getOutputDir());
-          /** Author: oglas  Add custom API header from configuration yaml. */
+          /* Add custom API header from configuration yaml. */
           addCustomApiHeader(apiExecutorParam, result);
-        items.add(result);
+          items.add(result);
         }
         return items;
     }
