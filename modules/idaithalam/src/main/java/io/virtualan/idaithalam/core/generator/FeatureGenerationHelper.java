@@ -226,20 +226,21 @@ public class FeatureGenerationHelper {
     JSONObject jsonAuth = null;
     JSONArray apikey = null;
     if ( authCollection != null){
-      apikey = authCollection.getJSONArray("apikey");
-      if ( apikey != null){
+      try {
+        apikey = authCollection.getJSONArray("apikey");
         jsonAuth = new JSONObject();
-        jsonAuth.put("parameterType","HEADER_PARAM");
-        
-        for (Object o : apikey){
+        jsonAuth.put("parameterType", "HEADER_PARAM");
+
+        for (Object o : apikey) {
           JSONObject apikeyObject = (JSONObject) o;
           String type = apikeyObject.getString("key");
-          if ( type.equals("key")){
-            jsonAuth.put("key",apikeyObject.getString("value"));
-          }else if ( type.equals("value")){
+          if (type.equals("key")) {
+            jsonAuth.put("key", apikeyObject.getString("value"));
+          } else if (type.equals("value")) {
             jsonAuth.put("value", apikeyObject.getString("value"));
           }
         }
+      }catch (JSONException je) {
       }
     }
 
