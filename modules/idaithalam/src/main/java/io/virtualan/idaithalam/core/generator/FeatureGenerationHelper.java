@@ -219,7 +219,9 @@ public class FeatureGenerationHelper {
       JSONObject jsonVariable = (JSONObject) ov;
       try{
         disabled = jsonVariable.getBoolean("disabled");
-      }catch(JSONException je){}
+      }catch(JSONException je){
+        disabled = Boolean.FALSE;
+      }
       if (disabled) continue;
       if (key.equals(jsonVariable.getString("key"))){
         return jsonVariable.getString("value");
@@ -258,9 +260,9 @@ public class FeatureGenerationHelper {
           String varKey = value.substring(2,value.length() -2);
           value = replaceWithCollectionValues(collectionVariable, varKey, value);
           queryParameterArr.optJSONObject(count).put("value", value);
+          count++;
         }
       }
-      
     }
     
     //Get Api key from Authorization of the colleciton.
