@@ -152,6 +152,7 @@ public class FeatureGenerationHelper {
                 }
             }
         }
+        outputJsonArray.put(virtualanObjParam);
     }
 
     /**
