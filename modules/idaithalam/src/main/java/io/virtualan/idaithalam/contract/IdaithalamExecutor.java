@@ -109,7 +109,7 @@ public class IdaithalamExecutor {
             /** @author Oliver Glas */
             if (apiExecutorParam.getExecution() == null || apiExecutorParam.getExecution().equalsIgnoreCase("execute") == false) {
                 generateFeatureFile(classLoader, apiExecutorParam);
-                if (apiExecutorParam.getExecution().equalsIgnoreCase("generate")) {
+                if (apiExecutorParam.getExecution() != null && apiExecutorParam.getExecution().equalsIgnoreCase("generate")) {
                     LOGGER.info("Test execution stopped after feature file generation due to parameter execution=generate.");
                     return 0;
                 }
