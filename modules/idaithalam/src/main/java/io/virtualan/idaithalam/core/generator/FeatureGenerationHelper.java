@@ -234,7 +234,7 @@ public class FeatureGenerationHelper {
                 }
             }
         }
-        return "application/json";
+        return ""; //if not defined, leave empty as default. Any other default value like application/json would cause 406 status in case that application/json is wrong.
     }
 
     /**
@@ -272,7 +272,7 @@ public class FeatureGenerationHelper {
         url = resolvePathVariables(url, pathParameter, collectionVariable);
         virtualanObj.put("url", url);
 
-        //Take care ofthe query parameter variables.
+        //Take care of the query parameter variables.
         JSONArray queryParameterArr = responseArray.optJSONObject(j).optJSONObject("originalRequest").optJSONObject("url").optJSONArray("query");
         replaceQueryVariableValues(collectionVariable, queryParameterArr);
 
@@ -283,7 +283,7 @@ public class FeatureGenerationHelper {
         virtualanObj.put("output", responseArray.optJSONObject(j).optString("body"));
         virtualanObj.put("httpStatusCode", responseArray.optJSONObject(j).optString("code"));
         JSONArray paramsArray = new JSONArray();
-        if (jsonAuth != null) paramsArray.put(jsonAuth);
+        if (jsonAuth != null && jsonAuth.isEmpty() == false) paramsArray.put(jsonAuth);
         extractedParams(responseArray, j, virtualanObj, paramsArray);
         return virtualanObj;
     }
