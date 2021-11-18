@@ -137,7 +137,10 @@ public class FeatureGenerationHelper {
         for (int j = 0; j < outputJsonArray.length(); j++) {
             Object o = outputJsonArray.get(j);
             JSONObject jsonObject = (JSONObject) o;
-            String key = jsonObject.getString("key");
+            String key = null;
+            if ( jsonObject.has("key")){
+                key = jsonObject.getString("key");
+            }else continue;
             if (key.equals(check)) {
                 if (outputJsonArray.optJSONObject(j) instanceof JSONObject) {
                     String newValue = virtualanObjParam.getString("value");
@@ -149,6 +152,7 @@ public class FeatureGenerationHelper {
                 }
             }
         }
+        outputJsonArray.put(virtualanObjParam);
     }
 
     /**
@@ -169,7 +173,7 @@ public class FeatureGenerationHelper {
                 arrVariable = object.getJSONArray("variable");
                 authCollection = object.getJSONObject("auth");
             } catch (JSONException jsonException) {
-                //methods using those object take care of null.
+                //methods using those objects take care of null.
             }
             if (arr != null && arr.length() > 0) {
                 for (int i = 0; i < arr.length(); i++) {
@@ -204,7 +208,6 @@ public class FeatureGenerationHelper {
         return arr;
     }
 
-
     private static void buildVirtualanFromPostMan(JSONArray virtualanArry, JSONArray arr, int i, JSONArray arrVariable, JSONObject authCollection) {
         if (arr.optJSONObject(i) instanceof JSONObject) {
             if (arr.optJSONObject(i).optJSONArray("response") instanceof JSONArray) {
@@ -220,7 +223,6 @@ public class FeatureGenerationHelper {
             }
         }
     }
-
 
     private static String getContentType(JSONObject jsonObject) {
         JSONArray arrayObject = jsonObject.optJSONArray("header");
