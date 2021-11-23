@@ -6,14 +6,13 @@ apiExecutor:
     outputDir: target/TESTREPORTS/1
     cucumblanProperties:
       service.api: http://5.22.250.180:8080
-      virtualan.data.load: idaithalamserver_Issue141.postman_collection.json;
+      virtualan.data.load: idaithalamserver_healthcheck.postman_collection.json;
       virtualan.data.type: POSTMAN
     apiHeader:
       headerList:
+        - X-API-KEY: abc123
       overwrite: true
     execution: all
-    excludeProperties:
-      /demotest/1: timestamp
   - reportTitle: "API Testing Nr 2 POSTMAN Collection Idaiserver."
     env: dev
     outputDir: target/TESTREPORTS/2
@@ -23,7 +22,7 @@ apiExecutor:
       virtualan.data.type: POSTMAN
     apiHeader:
       headerList:
-        - X-API-KEY: abc1235
+        - X-API-KEY: abc123
         - X-API-Test1: 123
         - X-API-Test2: test123
         - X-API-Test2: test456
@@ -32,3 +31,4 @@ apiExecutor:
     execution: all
     excludeProperties:
       /demotest/2: justanotherfield
+      /demotest/1: timestamp
