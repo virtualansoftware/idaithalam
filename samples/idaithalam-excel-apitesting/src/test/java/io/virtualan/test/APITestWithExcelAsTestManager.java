@@ -37,11 +37,102 @@ public class APITestWithExcelAsTestManager {
    * <p>
    * 8: Multiple spreadsheet support
    */
-  @Test
+  //@Test
   public void excelFieldExamples_1() {
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
           .invoke("api_workflow_example_1.yml");
+      if (!isSuccess) {
+        Assert.assertTrue(false);
+      }
+      Assert.assertTrue(true);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+    }
+  }
+
+
+
+  //Exlude column testing
+  @Test
+  public void virtualan_collection_testcase_5() {
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/virtualan_collection_testcase_5.yml");
+      // We are expecting date comparison should be failed. that's why we are asserting as false.
+      Assert.assertFalse(isSuccess);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+    }
+  }
+
+  @Test
+  public void virtualan_collection_testcase_8() {
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/virtualan_collection_testcase_8.yml");
+      if (!isSuccess) {
+        Assert.assertTrue(false);
+      }
+      Assert.assertTrue(true);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+    }
+  }
+
+  @Test
+  public void virtualan_collection_testcase_4() {
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/virtualan_collection_testcase_4.yml");
+      if (!isSuccess) {
+        Assert.assertTrue(false);
+      }
+      Assert.assertTrue(true);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+    }
+  }
+
+  @Test
+  public void virtualan_collection_testcase_01() {
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/virtualan_collection_testcase_01.yml");
+      if (!isSuccess) {
+        Assert.assertTrue(false);
+      }
+      Assert.assertTrue(true);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+    }
+  }
+
+  @Test
+  public void virtualan_collection_testcase_02() {
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/virtualan_collection_testcase_02.yml");
+      if (!isSuccess) {
+        Assert.assertTrue(false);
+      }
+      Assert.assertTrue(true);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+    }
+  }
+
+  @Test
+  public void virtualan_bdd_testcase_run_manager() {
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/virtualan_bdd_testcase_run_manager.yml");
       if (!isSuccess) {
         Assert.assertTrue(false);
       }
@@ -58,7 +149,7 @@ public class APITestWithExcelAsTestManager {
    *
    */
 
-  @Test
+ // @Test
   public void excelFieldExamples_2() {
     try {
       boolean isSuccess = VirtualanTestPlanExecutor

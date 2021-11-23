@@ -1,0 +1,9 @@
+parallelExecution: 1
+timeout:  30000
+idaithalamProperties:
+  workflow: Enabled
+apiExecutor:
+  - reportTitle: "Pet 01 API EXCEL based api testing"
+    env: dev
+    outputDir: target/excel/virtualan_bdd_testcase_run_manager
+    inputExcel: virtualan_bdd_testcase_run_manager.xlsx
