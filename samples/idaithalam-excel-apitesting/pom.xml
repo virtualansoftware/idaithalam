@@ -37,10 +37,23 @@
 			<version>${idaithalam.version}</version>
 		</dependency>
     <dependency>
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-      <version>${testng.ver}</version>
-    </dependency>
+		<groupId>org.testng</groupId>
+		<artifactId>testng</artifactId>
+		<version>${testng.ver}</version>
+		<exclusions>
+			<exclusion>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+			</exclusion>
+		</exclusions>
+	</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13.1</version>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>

@@ -37,8 +37,7 @@ public class PostmanTests {
         }
         Assertions.assertTrue(checkApikey);
 
-        boolean isSuccess = VirtualanTestPlanExecutor.invoke(yamlFile);
-        Assertions.assertTrue(isSuccess);
+
     }
 
 }
