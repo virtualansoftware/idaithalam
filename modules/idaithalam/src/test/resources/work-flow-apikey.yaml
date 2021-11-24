@@ -3,7 +3,7 @@ timeout:  30000
 apiExecutor:
   - reportTitle: "API Testing POSTMAN Collection Idaiserver."
     env: dev
-    outputDir: target/testreports/1
+    outputDir: target/TESTREPORTS/1
     cucumblanProperties:
       service.api: http://127.0.0.1:8080
       virtualan.data.load: idaithalamserver_withapikeywrongvalue.postman_collection.json;
