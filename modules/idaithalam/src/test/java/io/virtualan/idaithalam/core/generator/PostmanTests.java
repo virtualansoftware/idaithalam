@@ -28,14 +28,14 @@ public class PostmanTests {
         List<ApiExecutorParam> apiExecutor = executionPlanner.getApiExecutor();
         Assertions.assertTrue(apiExecutor.size() > 0);
 
-//        ApiExecutorParam apiExecutorParam1 = apiExecutor.get(0);
-//        List<Map<String, Object>> apiHeaderList = apiExecutorParam1.getApiHeader().getHeaderList();
-//        Assertions.assertNotNull(apiHeaderList);
-//        boolean checkApikey = false;
-//        for (Map<String, Object> map : apiHeaderList) {
-//            checkApikey = checkApikey || (map.get("X-API-KEY") != null && map.get("X-API-KEY").toString().equals("abc123"));
-//        }
-//        Assertions.assertTrue(checkApikey);
+        ApiExecutorParam apiExecutorParam1 = apiExecutor.get(0);
+        List<Map<String, Object>> apiHeaderList = apiExecutorParam1.getApiHeader().getHeaderList();
+        Assertions.assertNotNull(apiHeaderList);
+        boolean checkApikey = false;
+        for (Map<String, Object> map : apiHeaderList) {
+            checkApikey = checkApikey || (map.get("X-API-KEY") != null && map.get("X-API-KEY").toString().equals("abc123"));
+        }
+        Assertions.assertTrue(checkApikey);
 
         boolean isSuccess = VirtualanTestPlanExecutor.invoke(yamlFile);
         Assertions.assertTrue(isSuccess);
