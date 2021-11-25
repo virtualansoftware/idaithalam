@@ -7,7 +7,7 @@
 
 </div>
 
-   > Idaithalam is a #lowcode/#nocode automation framework for API, Database and Kafka/Event message Testing. We developed a #codeless or #scriptless automation framework using Excel(by Tester/Non-Technical), Postman and UI(Coming Soon).
+   > Idaithalam is a #lowcode/#nocode automation framework for API, Database and Kafka/Event message Testing. We developed a #codeless or #scriptless automation framework using **Excel with REST, Graphql, RDBMS and Kafka**, Postman(Minimal support) and UI(REST, DB).
 
 **Product page:** https://www.linkedin.com/products/virtualan-software-idaithalam/
 
