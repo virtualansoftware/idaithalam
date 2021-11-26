@@ -99,6 +99,17 @@ public class Item {
   boolean dbInput;
 
   /**
+   * The amq output.
+   */
+  boolean amqOutput;
+
+  /**
+   * The amq input.
+   */
+  boolean amqInput;
+
+
+  /**
    * The Kafka output.
    */
   boolean kafkaOutput;
@@ -112,6 +123,11 @@ public class Item {
    * The Std type.
    */
   boolean isRest;
+
+  /**
+   * The amq type.
+   */
+  boolean isAMQ;
 
   /**
    * The Is kafka.
@@ -251,6 +267,30 @@ public class Item {
    * The Step info.
    */
   String stepInfo;
+
+  public boolean isAmqOutput() {
+    return amqOutput;
+  }
+
+  public void setAmqOutput(boolean amqOutput) {
+    this.amqOutput = amqOutput;
+  }
+
+  public boolean isAmqInput() {
+    return amqInput;
+  }
+
+  public void setAmqInput(boolean amqInput) {
+    this.amqInput = amqInput;
+  }
+
+  public boolean isAMQ() {
+    return isAMQ;
+  }
+
+  public void setAMQ(boolean AMQ) {
+    isAMQ = AMQ;
+  }
 
   /**
    * Gets step info.

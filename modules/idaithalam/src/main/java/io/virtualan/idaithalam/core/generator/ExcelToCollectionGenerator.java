@@ -206,7 +206,8 @@ public class ExcelToCollectionGenerator {
           if (!finalRow.isEmpty() && (generatedTestCaseList == null || generatedTestCaseList
               .isEmpty()
               || generatedTestCaseList.contains(testcaseName))) {
-            if (finalRow.get("Type") == null || "REST".equalsIgnoreCase(finalRow.get("Type"))) {
+            if (finalRow.get("Type") == null || "REST".equalsIgnoreCase(finalRow.get("Type")) ||
+                    "GRAPHQL".equalsIgnoreCase(finalRow.get("Type"))) {
               JSONObject object = buildRESTVirtualanCollection(sheetObject.getBasePath(),
                   finalRow);
               populateConfigMaps(finalRow, sheetObject.getCucumblanMap(),
@@ -351,6 +352,7 @@ public class ExcelToCollectionGenerator {
       virtualanObj.put("scenario", dataMap.get("TestCaseNameDesc"));
       virtualanObj.put("resource", dataMap.get("Resource"));
       createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
+      createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
       if (dataMap.get("SkipScenario") != null) {
         virtualanObj.put("skipScenario", dataMap.get("SkipScenario"));
       }
@@ -430,9 +432,8 @@ public class ExcelToCollectionGenerator {
       if (dataMap.get("StepInfo") != null && !dataMap.get("StepInfo").isEmpty()) {
         virtualanObj.put("stepInfo", dataMap.get("StepInfo"));
       }
-      //createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
-      //createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
-      //createProcessingType(dataMap, paramsArray, "CookieVariables", "COOKIE_PARAM");
+      createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
+      createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
       if (dataMap.get("SkipScenario") != null) {
         virtualanObj.put("skipScenario", dataMap.get("SkipScenario"));
       }

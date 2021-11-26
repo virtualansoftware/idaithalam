@@ -257,6 +257,10 @@ public class FeatureGenerationHelper {
       item.setDatabase(true);
       item.setDbInput(item.getInput() != null && !item.getInput().isEmpty());
       item.setDbOutput(hasOutput(item));
+    } else if ("AMQ".equalsIgnoreCase(object.optString("requestType"))) {
+      item.setAMQ(true);
+      item.setAmqInput(item.getInput() != null && !item.getInput().isEmpty());
+      item.setAmqOutput(hasOutput(item));
     } else {
       item.setRest(true);
     }
@@ -445,7 +449,8 @@ public class FeatureGenerationHelper {
       IOException {
     item.setContentType(object.optString("contentType"));
     item.setInput(replaceSpecialChar(object.optString("input")));
-    if ("DB".equalsIgnoreCase(object.optString("type"))) {
+    if ("DB".equalsIgnoreCase(object.optString("type"))
+            || "AMQ".equalsIgnoreCase(object.optString("type"))) {
       item.setInputInline(getStringAsList(item.getInput()));
       item.setHasInputInline(item.getInput());
     } else if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())
