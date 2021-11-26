@@ -172,22 +172,36 @@
       <groupId>io.virtualan</groupId>
       <artifactId>cucumblan-api</artifactId>
       <version>${cucumblan-api.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.reflections</groupId>
+          <artifactId>reflections</artifactId>
+        </exclusion></exclusions>
     </dependency>
     <dependency>
       <groupId>org.reflections</groupId>
       <artifactId>reflections</artifactId>
       <version>0.9.12</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>io.virtualan</groupId>
       <artifactId>cucumblan-db</artifactId>
       <version>${cucumblan-db.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.reflections</groupId>
+          <artifactId>reflections</artifactId>
+        </exclusion></exclusions>
     </dependency>
     <dependency>
       <groupId>io.virtualan</groupId>
       <artifactId>cucumblan-message</artifactId>
       <version>${cucumblan-message.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.reflections</groupId>
+          <artifactId>reflections</artifactId>
+        </exclusion></exclusions>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
