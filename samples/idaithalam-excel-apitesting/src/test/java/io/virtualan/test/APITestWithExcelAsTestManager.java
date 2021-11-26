@@ -37,7 +37,7 @@ public class APITestWithExcelAsTestManager {
    * <p>
    * 8: Multiple spreadsheet support
    */
-  //@Test
+  @Test
   public void excelFieldExamples_1() {
     try {
       boolean isSuccess = VirtualanTestPlanExecutor

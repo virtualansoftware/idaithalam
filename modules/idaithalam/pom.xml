@@ -4,7 +4,7 @@
   <artifactId>idaithalam</artifactId>
   <packaging>jar</packaging>
   <name>idaithalam-platform-testing</name>
-  <version>1.4.3-SNAPSHOT</version>
+  <version>1.4.2-SNAPSHOT</version>
   <properties>
     <cucumblan-api.version>1.3.17</cucumblan-api.version>
     <cucumblan-db.version>1.2.17</cucumblan-db.version>
@@ -172,6 +172,12 @@
       <groupId>io.virtualan</groupId>
       <artifactId>cucumblan-api</artifactId>
       <version>${cucumblan-api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.reflections</groupId>
+      <artifactId>reflections</artifactId>
+      <version>0.9.12</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>io.virtualan</groupId>
