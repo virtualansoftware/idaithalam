@@ -24,6 +24,7 @@ import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
+import io.virtualan.idaithalam.core.domain.FeatureFileMapper;
 import io.virtualan.idaithalam.core.generator.FeatureFileGenerator;
 import io.virtualan.idaithalam.core.domain.Item;
 import java.io.File;
@@ -34,6 +35,10 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -137,13 +142,33 @@ public class IdaithalamExecutor {
             }
             jsonPath = apiExecutorParam.getOutputJsonDir();
         }
-        return new String[]{
-            "-p", "pretty",
-            "-p", "io.virtualan.cucumblan.props.hook.FeatureScope",
-            "-p", path == null ? "json:target/cucumber-"+build+".json" : "json:"+jsonPath+"/cucumber-"+build+".json",
-            "-p", path == null ? "html:target/cucumber-html-report.html" : "html:"+jsonPath+"/cucumber-html-report.html",
-            "--glue", "io.virtualan.cucumblan.core", "", path == null ? "conf/feature/" : path+"/feature/",
+        String[] pluginOptions  = new String[]{
+                "-p", "pretty",
+                "-p", "io.virtualan.cucumblan.props.hook.FeatureScope",
+                "-p", path == null ? "json:target/cucumber-"+build+".json" : "json:"+jsonPath+"/cucumber-"+build+".json",
+                "-p", path == null ? "html:target/cucumber-html-report.html" : "html:"+jsonPath+"/cucumber-html-report.html",
+                "--glue", "io.virtualan.cucumblan.core", "", path == null ? "conf/feature/" : path+"/feature/",
         };
+        String external =  null;
+        try {
+            Path pluginPath = Paths.get(IdaithalamExecutor.class.getClass().getResource("virtualan-cucumber-plugin.txt").toURI());
+            if(Files.exists(pluginPath)) {
+                List<String> pluginExternalOptionList = Files.readAllLines(pluginPath, Charset.defaultCharset());
+                if (pluginExternalOptionList != null && pluginExternalOptionList.size() == 1) {
+                    external = pluginExternalOptionList.get(0);
+                    String[] pluginExternalOptions = external.split(",");
+                    String[] result = new String[pluginOptions.length + pluginExternalOptions.length];
+                    System.arraycopy(pluginOptions, 0, result, 0, pluginOptions.length);
+                    System.arraycopy(pluginExternalOptions, 0, result, pluginOptions.length, pluginExternalOptions.length);
+                    return result;
+                } else {
+                    LOGGER.warning("Unable to add the given external plugin option for cucumber " + external);
+                }
+            }
+        }catch (Exception e){
+            LOGGER.warning("Unable to add the given external plugin option for cucumber("+e.getMessage()+") " + external);
+        }
+        return pluginOptions;
     }
 
 
@@ -241,16 +266,17 @@ public class IdaithalamExecutor {
             new File(path+"/feature").mkdir();
         }
         Properties properties = readCucumblan(classloader);
-        List<List<Item>> items = FeatureFileGenerator.generateFeatureFile(properties, apiExecutorParam);
+        List<FeatureFileMapper> items = FeatureFileGenerator.generateFeatureFile(properties, apiExecutorParam);
 
         String featureTitle = properties.getProperty("virtualan.data.heading");
 
         for(int i=0; i< items.size(); i++){
             MustacheFactory mf = new DefaultMustacheFactory();
             Mustache mustache = mf.compile("virtualan-contract.mustache");
-            FileOutputStream outputStream = new FileOutputStream(path+"/feature/virtualan-contract."+i+".feature");
+            //FileOutputStream outputStream = new FileOutputStream(path+"/feature/virtualan-contract."+i+".feature");
+            FileOutputStream outputStream = new FileOutputStream(path+"/feature/" + removeFileName(items.get(i).getJsonFileName()));
             Writer writer = new OutputStreamWriter(outputStream);
-            mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i))).flush();
+            mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i).getWorkflowItems())).flush();
             writer.close();
         }
     }
