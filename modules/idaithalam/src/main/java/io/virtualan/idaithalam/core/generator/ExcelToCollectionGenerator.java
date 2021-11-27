@@ -167,7 +167,7 @@ public class ExcelToCollectionGenerator {
         createFileInfo.setVirtualanArray(virtualanSingle);
         createFileInfo
             .setTestcaseName(
-                "Workflow-mini-" + sheet + "-" + scenarioId);
+                scenarioId+"-"+sheet);
         createFileInfo.setScenario(scenarioId);
         createIdaithalamProcessingFile(createFileInfo);
       }
@@ -867,7 +867,7 @@ public class ExcelToCollectionGenerator {
           createFileInfo.setCucumblanMap(sheetObject.getCucumblanMap());
           createFileInfo.setVirtualanArray(virtualanArray);
           createFileInfo.setTestcaseName(
-              "Workflow-" + sheet + "-" + firstSheet.getSheetName().replaceAll(" ", "_"));
+               firstSheet.getSheetName().replaceAll(" ", "_")+"-"+sheet);
           createFileInfo.setScenario(firstSheet.getSheetName() + " - Workflow");
           createIdaithalamProcessingFile(createFileInfo);
         } else {
