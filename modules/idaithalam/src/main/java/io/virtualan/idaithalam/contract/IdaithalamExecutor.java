@@ -24,6 +24,7 @@ import io.virtualan.cucumblan.props.ApplicationConfiguration;
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
+import io.virtualan.idaithalam.core.domain.Execution;
 import io.virtualan.idaithalam.core.domain.FeatureFileMapper;
 import io.virtualan.idaithalam.core.generator.FeatureFileGenerator;
 import io.virtualan.idaithalam.core.domain.Item;
@@ -113,16 +114,24 @@ public class IdaithalamExecutor {
      */
     public static int validateContract(String featureHeading, ApiExecutorParam apiExecutorParam)
         throws UnableToProcessException {
-        byte exitStatus;
+        byte exitStatus  = 0 ;
         try {
             String fileIndex = UUID.randomUUID().toString();
-            VirtualanClassLoader classLoaderParnet = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
-            ExecutionClassloader classLoader = addConfToClasspath(classLoaderParnet, apiExecutorParam.getOutputDir());
-            generateFeatureFile(classLoader, apiExecutorParam);
-            String[] argv = getCucumberOptions(apiExecutorParam, fileIndex);
-            exitStatus = Main.run(argv, classLoader);
-            if(IdaithalamConfiguration.isReportEnabled()) {
-                generateReport(featureHeading, apiExecutorParam, fileIndex);
+            VirtualanClassLoader classLoaderParent = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
+            ExecutionClassloader classLoader = addConfToClasspath(classLoaderParent, apiExecutorParam.getOutputDir());
+            if((apiExecutorParam.getExecution() == null) ||
+                    (Execution.ALL.name().equalsIgnoreCase(apiExecutorParam.getExecution().name())
+                    || Execution.GENERATE.name().equalsIgnoreCase(apiExecutorParam.getExecution().name()))) {
+                generateFeatureFile(classLoader, apiExecutorParam);
+            }
+            if((apiExecutorParam.getExecution() == null) ||
+                    (Execution.ALL.name().equalsIgnoreCase(apiExecutorParam.getExecution().name())
+                    || Execution.EXECUTE.name().equalsIgnoreCase(apiExecutorParam.getExecution().name()))) {
+                String[] argv = getCucumberOptions(apiExecutorParam, fileIndex);
+                exitStatus = Main.run(argv, classLoader);
+                if (IdaithalamConfiguration.isReportEnabled()) {
+                    generateReport(featureHeading, apiExecutorParam, fileIndex);
+                }
             }
         } catch (IOException | UnableToProcessException e) {
             LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
@@ -276,9 +285,7 @@ public class IdaithalamExecutor {
             StringWriter writer = new StringWriter();
             mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i).getWorkflowItems())).flush();
             PrettyFormatter formatter = new PrettyFormatter();
-            System.out.println(writer.toString());
             String formattedFeature = formatter.format(writer.toString());
-            System.out.println(formattedFeature);
             writer.close();
             outputStream.write(formattedFeature.getBytes(Charset.forName("UTF-8")));
             outputStream.close();
