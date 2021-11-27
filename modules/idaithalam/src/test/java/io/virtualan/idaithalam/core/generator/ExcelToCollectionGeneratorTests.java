@@ -55,7 +55,7 @@ public class ExcelToCollectionGeneratorTests {
         boolean actual = ExcelToCollectionGenerator.createCollection(apiExecutorParam);
         Assertions.assertTrue(actual);
         JSONArray expectedSheet_0 = new JSONArray(getFileAsString("expected/createCollectionTest_HappyPath/Virtualan_0_CSS-Accept-DB_WORKFLOW_0.json"));
-        JSONArray actualSheet_0 = new JSONArray(getFileAsString(new FileInputStream("target/1/Virtualan_0_CSS-Accept-DB_WORKFLOW_0.json")));
+        JSONArray actualSheet_0 = new JSONArray(getFileAsString(new FileInputStream("target/1/Workflow-0-CSS-Accept-DB.json")));
 
         JSONCompareResult result = JSONCompare.compareJSON(expectedSheet_0, actualSheet_0, JSONCompareMode.STRICT);
         if(result.failed()) {
@@ -63,7 +63,7 @@ public class ExcelToCollectionGeneratorTests {
         }
 
         JSONArray expectedSheet_1 = new JSONArray(getFileAsString("expected/createCollectionTest_HappyPath/Virtualan_1_CSS-Reject-DB_WORKFLOW_1.json"));
-        JSONArray actualSheet_1 = new JSONArray(getFileAsString(new FileInputStream("target/1/Virtualan_1_CSS-Reject-DB_WORKFLOW_1.json")));
+        JSONArray actualSheet_1 = new JSONArray(getFileAsString(new FileInputStream("target/1/Workflow-1-CSS-Reject-DB.json")));
         result = JSONCompare.compareJSON(expectedSheet_1, actualSheet_1, JSONCompareMode.STRICT);
         if(result.failed()) {
             Assert.assertTrue(result.getMessage(), result.passed());
@@ -118,7 +118,7 @@ public class ExcelToCollectionGeneratorTests {
         Assertions.assertTrue(actual);
 
         JSONArray expectedSheet_0 = new JSONArray(getFileAsString("expected/createCollectionTest_With_Kafka/Virtualan_0_API-Testing_WORKFLOW_0.json"));
-        JSONArray actualSheet_0 = new JSONArray(getFileAsString(new FileInputStream("target/2/Virtualan_0_API-Testing_WORKFLOW_0.json")));
+        JSONArray actualSheet_0 = new JSONArray(getFileAsString(new FileInputStream("target/2/Workflow-0-API-Testing.json")));
 
         JSONCompareResult result = JSONCompare.compareJSON(expectedSheet_0, actualSheet_0, JSONCompareMode.STRICT);
         if(result.failed()) {
@@ -158,7 +158,7 @@ public class ExcelToCollectionGeneratorTests {
         Assertions.assertTrue(actual);
 
         JSONArray expectedSheet_0 = new JSONArray(getFileAsString("expected/createCollectionTest_Multirun/Virtualan_0_API-Testing_WORKFLOW_0.json"));
-        JSONArray actualSheet_0 = new JSONArray(getFileAsString(new FileInputStream("target/4/Virtualan_0_API-Testing_WORKFLOW_0.json")));
+        JSONArray actualSheet_0 = new JSONArray(getFileAsString(new FileInputStream("target/4/Workflow-0-API-Testing.json")));
 
         JSONCompareResult result = JSONCompare.compareJSON(expectedSheet_0, actualSheet_0, JSONCompareMode.STRICT);
         if(result.failed()) {
@@ -199,7 +199,7 @@ public class ExcelToCollectionGeneratorTests {
         Assertions.assertTrue(actual);
 
         JSONArray expectedSheet_0 = new JSONArray(getFileAsString("expected/createCollectionTest_Single_Workflow/Virtualan_0_PetGet.json"));
-        JSONArray actualSheet_0 = new JSONArray(getFileAsString(new FileInputStream("target/3/Virtualan_0_PetGet.json")));
+        JSONArray actualSheet_0 = new JSONArray(getFileAsString(new FileInputStream("target/3/Workflow-mini-0-PetGet.json")));
 
         JSONCompareResult result = JSONCompare.compareJSON(expectedSheet_0, actualSheet_0, JSONCompareMode.STRICT);
         if(result.failed()) {
@@ -207,7 +207,7 @@ public class ExcelToCollectionGeneratorTests {
         }
 
         JSONArray expectedSheet = new JSONArray(getFileAsString("expected/createCollectionTest_Single_Workflow/Virtualan_1_PetGet.json"));
-        JSONArray actualSheet = new JSONArray(getFileAsString(new FileInputStream("target/3/Virtualan_1_PetGet.json")));
+        JSONArray actualSheet = new JSONArray(getFileAsString(new FileInputStream("target/3/Workflow-mini-1-PetGet.json")));
         result = JSONCompare.compareJSON(expectedSheet, actualSheet, JSONCompareMode.STRICT);
         if(result.failed()) {
             Assert.assertTrue(result.getMessage(), result.passed());
