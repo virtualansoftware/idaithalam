@@ -27,12 +27,8 @@ import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.domain.FeatureFileMapper;
 import io.virtualan.idaithalam.core.generator.FeatureFileGenerator;
 import io.virtualan.idaithalam.core.domain.Item;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -45,6 +41,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Logger;
+
+import me.jvt.cucumber.gherkinformatter.PrettyFormatter;
 import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
 import net.masterthought.cucumber.json.support.Status;
@@ -274,10 +272,16 @@ public class IdaithalamExecutor {
             MustacheFactory mf = new DefaultMustacheFactory();
             Mustache mustache = mf.compile("virtualan-contract.mustache");
             //FileOutputStream outputStream = new FileOutputStream(path+"/feature/virtualan-contract."+i+".feature");
-            FileOutputStream outputStream = new FileOutputStream(path+"/feature/" + removeFileName(items.get(i).getJsonFileName()));
-            Writer writer = new OutputStreamWriter(outputStream);
+            FileOutputStream outputStream = new FileOutputStream(path+"/feature/" + removeFileName(items.get(i).getJsonFileName())+".feature");
+            StringWriter writer = new StringWriter();
             mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i).getWorkflowItems())).flush();
+            PrettyFormatter formatter = new PrettyFormatter();
+            System.out.println(writer.toString());
+            String formattedFeature = formatter.format(writer.toString());
+            System.out.println(formattedFeature);
             writer.close();
+            outputStream.write(formattedFeature.getBytes(Charset.forName("UTF-8")));
+            outputStream.close();
         }
     }
 
