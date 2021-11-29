@@ -2,6 +2,7 @@ package io.virtualan.idaithalam.core.api;
 
 import io.virtualan.idaithalam.contract.IdaithalamExecutor;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
+import io.virtualan.idaithalam.core.domain.Execution;
 import io.virtualan.idaithalam.core.generator.ExcelToCollectionGenerator;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,7 +35,8 @@ public class VirtualanTestExecutor {
 
         if ((System.getenv("IDAITHALAM") == null
             || !"PROD".equalsIgnoreCase(System.getenv("IDAITHALAM"))
-            && apiExecutorParam.getInputExcel() != null)) {
+            && apiExecutorParam.getInputExcel() != null)
+                && !Execution.EXECUTE.name().equalsIgnoreCase(apiExecutorParam.getExecution().name())) {
           ExcelToCollectionGenerator.createCollection(apiExecutorParam);
         }
 

@@ -4,11 +4,11 @@
   <artifactId>idaithalam</artifactId>
   <packaging>jar</packaging>
   <name>idaithalam-platform-testing</name>
-  <version>1.4.3-SNAPSHOT</version>
+  <version>1.4.4-SNAPSHOT</version>
   <properties>
-    <cucumblan-api.version>1.3.17</cucumblan-api.version>
-    <cucumblan-db.version>1.2.17</cucumblan-db.version>
-    <cucumblan-message.version>1.2.17</cucumblan-message.version>
+    <cucumblan-api.version>1.3.18</cucumblan-api.version>
+    <cucumblan-db.version>1.2.18</cucumblan-db.version>
+    <cucumblan-message.version>1.2.18</cucumblan-message.version>
     <java.version>1.8</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -172,36 +172,16 @@
       <groupId>io.virtualan</groupId>
       <artifactId>cucumblan-api</artifactId>
       <version>${cucumblan-api.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.reflections</groupId>
-          <artifactId>reflections</artifactId>
-        </exclusion></exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.reflections</groupId>
-      <artifactId>reflections</artifactId>
-      <version>0.9.12</version>
     </dependency>
     <dependency>
       <groupId>io.virtualan</groupId>
       <artifactId>cucumblan-db</artifactId>
       <version>${cucumblan-db.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.reflections</groupId>
-          <artifactId>reflections</artifactId>
-        </exclusion></exclusions>
     </dependency>
     <dependency>
       <groupId>io.virtualan</groupId>
       <artifactId>cucumblan-message</artifactId>
       <version>${cucumblan-message.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.reflections</groupId>
-          <artifactId>reflections</artifactId>
-        </exclusion></exclusions>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -227,6 +207,11 @@
       <groupId>com.github.spullara.mustache.java</groupId>
       <artifactId>compiler</artifactId>
       <version>0.9.10</version>
+    </dependency>
+    <dependency>
+      <groupId>me.jvt.cucumber</groupId>
+      <artifactId>gherkin-formatter</artifactId>
+      <version>1.3.0</version>
     </dependency>
   </dependencies>
 

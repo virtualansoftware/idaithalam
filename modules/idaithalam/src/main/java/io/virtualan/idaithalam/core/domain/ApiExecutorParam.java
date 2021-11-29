@@ -8,6 +8,7 @@ import java.util.Map;
  */
 public class ApiExecutorParam {
 
+
   private  String reportTitle;
   private  String env;
   private  String basePath;
@@ -20,6 +21,15 @@ public class ApiExecutorParam {
   private Map<String,String> cucumblanEnvProperties;
   private Map<String,String> excludeProperties;
   private ApiHeader apiHeader;
+  private Execution execution = Execution.ALL;
+
+  public Execution getExecution() {
+    return execution;
+  }
+
+  public void setExecution(Execution execution) {
+    this.execution = execution;
+  }
 
   public ApiHeader getApiHeader() {
     return apiHeader;

@@ -20,7 +20,7 @@ Feature: {{feature}}
     {{^tags}}
     @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
     {{/tags}}
-    Scenario: {{scenario}} - {{method}} api call
+    Scenario: {{scenario}} - api call
     {{/isRest}}
     {{#isKafka}}
     {{#kafkaInput}}
