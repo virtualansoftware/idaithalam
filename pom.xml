@@ -76,7 +76,7 @@
       <modules>
         <module>samples/idaithalam-massapibatch-testing</module>
         <module>samples/idaithalam-excel-apitesting</module>
-        <module>samples/idaithalam-openapi-contract</module>
+<!--        <module>samples/idaithalam-openapi-contract</module>-->
       </modules>
     </profile>
     <profile>
