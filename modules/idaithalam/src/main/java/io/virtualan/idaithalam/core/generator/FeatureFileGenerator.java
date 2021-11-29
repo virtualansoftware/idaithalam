@@ -20,10 +20,7 @@ import io.virtualan.idaithalam.contract.ExecutionClassloader;
 import io.virtualan.idaithalam.contract.IdaithalamExecutor;
 import io.virtualan.idaithalam.contract.VirtualanClassLoader;
 import io.virtualan.idaithalam.core.UnableToProcessException;
-import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
-import io.virtualan.idaithalam.core.domain.AvailableParam;
-import io.virtualan.idaithalam.core.domain.ConversionType;
-import io.virtualan.idaithalam.core.domain.Item;
+import io.virtualan.idaithalam.core.domain.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -90,9 +87,9 @@ public class FeatureFileGenerator {
      * @throws UnableToProcessException the unable to process exception
      * @throws IOException              the io exception
      */
-    public static List<List<Item>> generateFeatureFile(Properties properties, ApiExecutorParam apiExecutorParam)
+    public static List<FeatureFileMapper> generateFeatureFile(Properties properties, ApiExecutorParam apiExecutorParam)
         throws UnableToProcessException, IOException {
-        List<List<Item>> items = new ArrayList<>();
+        List<FeatureFileMapper> items = new ArrayList<>();
         VirtualanClassLoader classLoaderParnet = new VirtualanClassLoader(
             IdaithalamExecutor.class.getClassLoader());
         ExecutionClassloader classLoader = addConfToClasspath(classLoaderParnet, apiExecutorParam.getOutputDir());
@@ -121,7 +118,8 @@ public class FeatureFileGenerator {
           if (apiExecutorParam.getApiHeader() != null && apiExecutorParam.getApiHeader().getHeaderList().size() > 0) {
               addCustomApiHeader(apiExecutorParam, result);
           }
-        items.add(result);
+          FeatureFileMapper featureFileMapper = new  FeatureFileMapper(fileNames[i], result);
+          items.add(featureFileMapper);
         }
         return items;
     }
