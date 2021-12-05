@@ -1,7 +1,7 @@
 parallelExecution: 1
 timeout:  30000
 idaithalamProperties:
-  workflow: Enabled
+  workflow: Disabled
 apiExecutor:
   - reportTitle: "Pet 02 API EXCEL based api testing"
     env: dev
