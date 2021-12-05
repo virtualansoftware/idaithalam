@@ -27,6 +27,7 @@ import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.domain.Execution;
 import io.virtualan.idaithalam.core.domain.FeatureFileMapper;
 import io.virtualan.idaithalam.core.generator.FeatureFileGenerator;
+import lombok.extern.slf4j.Slf4j;
 import io.virtualan.idaithalam.core.domain.Item;
 
 import java.io.*;
@@ -41,7 +42,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import me.jvt.cucumber.gherkinformatter.PrettyFormatter;
 import net.masterthought.cucumber.Configuration;
@@ -61,8 +61,8 @@ import net.masterthought.cucumber.presentation.PresentationMode;
  * 
  * boolean isSuccess = VirtualanTestPlanExecutor.invoke("apiexecution.yaml");
  */
+@Slf4j
 public class IdaithalamExecutor {
-    private final static Logger LOGGER = Logger.getLogger(IdaithalamExecutor.class.getName());
 
     /**
      * The Feature.
@@ -134,7 +134,7 @@ public class IdaithalamExecutor {
                 }
             }
         } catch (IOException | UnableToProcessException e) {
-            LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
+            log.warn("Provide appropriate input data? : " + e.getMessage());
             throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
         }
         return exitStatus;
@@ -169,11 +169,11 @@ public class IdaithalamExecutor {
                     System.arraycopy(pluginExternalOptions, 0, result, pluginOptions.length, pluginExternalOptions.length);
                     return result;
                 } else {
-                    LOGGER.warning("Unable to add the given external plugin option for cucumber " + external);
+                    log.warn("Unable to add the given external plugin option for cucumber " + external);
                 }
             }
         }catch (Exception e){
-            LOGGER.warning("Unable to add the given external plugin option for cucumber("+e.getMessage()+") " + external);
+            log.warn("Unable to add the given external plugin option for cucumber("+e.getMessage()+") " + external);
         }
         return pluginOptions;
     }
@@ -246,10 +246,10 @@ public class IdaithalamExecutor {
             if (stream != null) {
                 propertiesForInstance.load(stream);
             } else {
-                LOGGER.warning("unable to load cucumblan.properties");
+                log.warn("unable to load cucumblan.properties");
             }
         } catch (Exception var3) {
-            LOGGER.warning("cucumblan.properties not found");
+            log.warn("cucumblan.properties not found");
         }
 
         return propertiesForInstance;

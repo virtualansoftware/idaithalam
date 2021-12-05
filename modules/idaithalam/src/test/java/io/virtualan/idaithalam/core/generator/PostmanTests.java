@@ -4,9 +4,7 @@ import io.virtualan.idaithalam.core.api.VirtualanTestPlanExecutor;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.domain.ExecutionPlanner;
 import org.junit.Assert;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -14,7 +12,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PostmanTests {
 
     @Test

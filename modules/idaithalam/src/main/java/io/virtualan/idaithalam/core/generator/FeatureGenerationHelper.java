@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +48,6 @@ import org.json.JSONTokener;
 public class FeatureGenerationHelper {
 
 
-  final private static Logger LOGGER = Logger.getLogger(FeatureGenerationHelper.class.getName());
 
   private FeatureGenerationHelper() {
   }
@@ -107,7 +105,7 @@ public class FeatureGenerationHelper {
         return virtualanArry;
       }
     }
-    LOGGER.warning("Not a valid POSTMAN Collection? check the file");
+    log.warn("Not a valid POSTMAN Collection? check the file");
     return virtualanArry;
   }
 

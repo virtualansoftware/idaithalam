@@ -1,0 +1,107 @@
+[
+    {
+        "output": "<soap:envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:body>\n    <request>\n      ISA*00*Authorizat*00*Security I*ZZ*Interchange Sen*ZZ*Interchange Rec*141001*1037*^*00501*000031033*0*T*:~\n      GS*HS*Sample Sen*Sample Rec*20141001*1037*123456*X*005010X279A1~\n      ST*270*1234*005010X279A1~\n      BHT*0022*13*10001234*20141001*1319~\n      HL*1**20*1~\n      NM1*PR*2*ABC COMPANY*****PI*842610001~\n      HL*2*1*21*1~\n      NM1*1P*2*BONE AND JOINT CLINIC*****XX*1234567893~\n      HL*3*2*22*0~\n      TRN*1*93175-0001*9877281234~\n      NM1*IL*1*SMITH*ROBERT****MI*11122333301~\n      DMG*D8*19430519~\n      DTP*291*D8*20141001~\n      EQ*30~\n      SE*13*1234~\n      GE*1*123456~\n      IEA*1*000031033~\n    <\/request>\n  <\/soap:body>\n<\/soap:envelope>",
+        "input": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <request>\n      ISA*00*Authorizat*00*Security I*ZZ*Interchange Sen*ZZ*Interchange\n      Rec*141001*1037*^*00501*000031033*0*T*:~\n      GS*HS*Sample Sen*Sample Rec*20141001*1037*123456*X*005010X279A1~\n      ST*270*1234*005010X279A1~\n      BHT*0022*13*10001234*20141001*1319~\n      HL*1**20*1~\n      NM1*PR*2*ABC COMPANY*****PI*842610001~\n      HL*2*1*21*1~\n      NM1*1P*2*BONE AND JOINT CLINIC*****XX*1234567893~\n      HL*3*2*22*0~\n      TRN*1*93175-0001*9877281234~\n      NM1*IL*1*SMITH*ROBERT****MI*11122333301~\n      DMG*D8*19430519~\n      DTP*291*D8*20141001~\n      EQ*30~\n      SE*13*1234~\n      GE*1*123456~\n      IEA*1*000031033~\n    <\/request>\n  <\/soap:Body>\n<\/soap:Envelope>",
+        "requestType": "REST",
+        "method": "POST",
+        "scenario": "EDI-271 API test sheet 2",
+        "resource": "bin",
+        "availableParams": [
+            {
+                "parameterType": "HEADER_PARAM",
+                "value": "application/xml",
+                "key": "contentType"
+            },
+            {
+                "parameterType": "HEADER_PARAM",
+                "value": "EDI-271",
+                "key": "VirtualanStdType"
+            },
+            {
+                "parameterType": "ADDIFY_PARAM",
+                "value": "grey",
+                "key": "tag"
+            }
+        ],
+        "contentType": "application/xml",
+        "scenarioId": "EDI271_1",
+        "url": "/bin/3f64e65d-c657-42d5-bcc9-5b13e71ca493",
+        "tags": "@elan @test",
+        "httpStatusCode": "200"
+    },
+    {
+        "output": "{\n  \"category\": {\n    \"id\": 200,\n    \"name\": \"Bulldog\"\n  },\n  \"id\": 201,\n  \"name\": \"Butch\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 201,\n      \"name\": \"grey\"\n    }\n  ]\n}",
+        "security": "basicAuth",
+        "requestType": "REST",
+        "method": "GET",
+        "scenario": "get API testing",
+        "resource": "api",
+        "availableParams": [
+            {
+                "parameterType": "HEADER_PARAM",
+                "value": "application/json",
+                "key": "contentType"
+            },
+            {
+                "parameterType": "STORAGE_PARAM",
+                "value": "id",
+                "key": "petId"
+            },
+            {
+                "parameterType": "STORAGE_PARAM",
+                "value": "name",
+                "key": "petName"
+            },
+            {
+                "parameterType": "STORAGE_PARAM",
+                "value": "category.name",
+                "key": "category_name"
+            },
+            {
+                "parameterType": "ADDIFY_PARAM",
+                "value": "grey",
+                "key": "tag"
+            },
+            {
+                "parameterType": "QUERY_PARAM",
+                "value": "[tag]",
+                "key": "tags"
+            }
+        ],
+        "contentType": "application/json",
+        "scenarioId": "PetGet_2",
+        "url": "/api/pets/findByTags",
+        "tags": "@pet @test",
+        "httpStatusCode": "200"
+    },
+    {
+        "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+        "input": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"[petName]\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+        "requestType": "REST",
+        "method": "POST",
+        "scenario": "post API Testing",
+        "resource": "api",
+        "availableParams": [
+            {
+                "parameterType": "HEADER_PARAM",
+                "value": "application/json",
+                "key": "contentType"
+            },
+            {
+                "parameterType": "ADDIFY_PARAM",
+                "value": "[petId]",
+                "key": "Id"
+            },
+            {
+                "parameterType": "ADDIFY_PARAM",
+                "value": "doggie",
+                "key": "petName"
+            }
+        ],
+        "contentType": "application/json",
+        "scenarioId": "PetPost_3",
+        "url": "/api/pets",
+        "tags": "@pet @test",
+        "httpStatusCode": "200"
+    }
+]
