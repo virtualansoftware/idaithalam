@@ -1,0 +1,74 @@
+[
+    {
+        "outputFields": {"code": "MISSING_MOCK_DATA"},
+        "requestType": "REST",
+        "method": "GET",
+        "scenario": "Read petId and Not Found",
+        "resource": "api",
+        "availableParams": [{
+            "parameterType": "HEADER_PARAM",
+            "value": "application/json",
+            "key": "contentType"
+        }],
+        "contentType": "application/json",
+        "scenarioId": "PetGetById",
+        "url": "/api/pets/1000",
+        "httpStatusCode": "500"
+    },
+    {
+        "output": "{\n  \"category\": {\n    \"id\": 200,\n    \"name\": \"Bulldog\"\n  },\n  \"id\": 201,\n  \"name\": \"Butch\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 201,\n      \"name\": \"grey\"\n    }\n  ]\n}",
+        "requestType": "REST",
+        "method": "GET",
+        "scenario": "Read petId by Tag",
+        "resource": "api",
+        "availableParams": [
+            {
+                "parameterType": "HEADER_PARAM",
+                "value": "application/json",
+                "key": "contentType"
+            },
+            {
+                "parameterType": "STORAGE_PARAM",
+                "value": "status",
+                "key": "status"
+            },
+            {
+                "parameterType": "EVAL_PARAM",
+                "value": "EXACT(\"available\",\"[status]\")",
+                "key": "success"
+            },
+            {
+                "parameterType": "QUERY_PARAM",
+                "value": "grey",
+                "key": "tags"
+            }
+        ],
+        "contentType": "application/json",
+        "scenarioId": "PetGetByTag",
+        "url": "/api/pets/findByTags",
+        "httpStatusCode": "200"
+    },
+    {
+        "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+        "input": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"[status]\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+        "requestType": "REST",
+        "method": "POST",
+        "scenario": "Create Pet for Given Input",
+        "resource": "api",
+        "availableParams": [{
+            "parameterType": "HEADER_PARAM",
+            "value": "application/json",
+            "key": "contentType"
+        }],
+        "contentType": "application/json",
+        "scenarioId": "CreatePet",
+        "outputPaths": [
+            "id",
+            "name",
+            "category.id",
+            "category.name"
+        ],
+        "url": "/api/pets",
+        "httpStatusCode": "200"
+    }
+]

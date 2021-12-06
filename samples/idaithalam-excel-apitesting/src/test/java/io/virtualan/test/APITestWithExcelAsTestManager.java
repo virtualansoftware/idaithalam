@@ -6,12 +6,15 @@ import io.virtualan.idaithalam.core.api.VirtualanTestPlanExecutor;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class APITestWithExcelAsTestManager {
+
+
 
   @BeforeClass
   public void testBeforeClass() {
@@ -25,31 +28,6 @@ public class APITestWithExcelAsTestManager {
     System.out.println("------------------------------------------");
     System.out.println("---- END Test : ------");
     System.out.println("-------------------------------------------");
-  }
-
-
-  /**
-   * 4: Example include RequestFile, ResponseFile, AddifyVariables  and StoreResponseVariables
-   * features
-   * <p>
-   * 5:	RequestFile, ResponseByFields, ResponseFile, ResponseProcessingType,
-   * ExcludeFields,	StoreResponseVariables, and AddifyVariables example
-   * <p>
-   * 8: Multiple spreadsheet support
-   */
-  @Test
-  public void excelFieldExamples_1() {
-    try {
-      boolean isSuccess = VirtualanTestPlanExecutor
-          .invoke("api_workflow_example_1.yml");
-      if (!isSuccess) {
-        Assert.assertTrue(false);
-      }
-      Assert.assertTrue(true);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-      Assert.assertTrue(false);
-    }
   }
 
 
@@ -145,25 +123,7 @@ public class APITestWithExcelAsTestManager {
   }
 
 
-  /*
-   *  01: Multi Run and Skip the test
-   *
-   */
 
- // @Test
-  public void excelFieldExamples_2() {
-    try {
-      boolean isSuccess = VirtualanTestPlanExecutor
-          .invoke("api_workflow_example_2.yml");
-      if (!isSuccess) {
-        Assert.assertTrue(false);
-      }
-      Assert.assertTrue(true);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-      Assert.assertTrue(false);
-    }
-  }
 
   /****
    *
@@ -201,6 +161,113 @@ public class APITestWithExcelAsTestManager {
     } catch (Exception e) {
       System.out.println(e.getMessage());
       Assert.assertTrue(true);
+    }
+  }
+
+  @Test
+  public void testvirtualan_collection_pet_empty(){
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/virtualan_collection_pet_empty.yml");
+      if (!isSuccess) {
+        Assert.assertTrue(false);
+      }
+      Assert.assertTrue(true);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+    }
+  }
+
+  @Test
+  public void virtualan_collection_pet_sheet_2(){
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/virtualan_collection_pet_sheet_2.yml");
+
+      if (!isSuccess) {
+        Assert.assertTrue(false);
+      }
+      Assert.assertTrue(true);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+    }
+  }
+
+  @Test
+  public void virtualan_collection_testcase_0() {
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/virtualan_collection_testcase_0.yml");
+      if (!isSuccess) {
+        Assert.assertTrue(false);
+      }
+      Assert.assertTrue(true);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+    }
+  }
+
+//Negative scenario - Scenario id is missing
+  @Test
+  public void virtualan_collection_testcase_2() {
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/virtualan_collection_testcase_2.yml");
+      if (!isSuccess) {
+        Assert.assertFalse(false);
+      }
+      Assert.assertTrue(true);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+    }
+  }
+
+  @Test
+  public void virtualan_collection_testcase_3() {
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/virtualan_collection_testcase_3.yml");
+      if (!isSuccess) {
+        Assert.assertTrue(false);
+      }
+      Assert.assertTrue(true);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+    }
+  }
+
+  @Test
+  public void virtualan_collection_testcase_6() {
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/virtualan_collection_testcase_6.yml");
+      if (!isSuccess) {
+        Assert.assertTrue(false);
+      }
+      Assert.assertTrue(true);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+    }
+  }
+
+  @Test
+  public void virtualan_collection_testcase_7() {
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/virtualan_collection_testcase_7.yml");
+      if (!isSuccess) {
+        Assert.assertTrue(false);
+      }
+      Assert.assertTrue(true);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
     }
   }
 

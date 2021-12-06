@@ -1,0 +1,18 @@
+{
+  "category": {
+    "id": 200,
+    "name": "Bulldog  \r\n Testing \r\n again"
+  },
+  "id": 201,
+  "name": "",
+  "photoUrls": [
+    "string"
+  ],
+  "status": "available",
+  "tags": [
+    {
+      "id": 201,
+      "name": "red"
+    }
+  ]
+}
