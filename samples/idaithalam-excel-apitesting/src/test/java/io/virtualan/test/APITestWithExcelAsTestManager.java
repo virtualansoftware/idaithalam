@@ -7,11 +7,13 @@ import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+@Slf4j
 public class APITestWithExcelAsTestManager {
 
 
@@ -35,6 +37,7 @@ public class APITestWithExcelAsTestManager {
   //Exlude column testing
   @Test
   public void virtualan_collection_testcase_5() {
+    log.info("Start - virtualan_collection_testcase_5");
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/virtualan_collection_testcase_5.yml");
@@ -45,10 +48,12 @@ public class APITestWithExcelAsTestManager {
       e.printStackTrace();
       Assert.assertTrue(false);
     }
+    log.info("End - virtualan_collection_testcase_5");
   }
 
   @Test
   public void virtualan_collection_testcase_8() {
+    log.info("Start - virtualan_collection_testcase_8");
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/virtualan_collection_testcase_8.yml");
@@ -60,10 +65,12 @@ public class APITestWithExcelAsTestManager {
       e.printStackTrace();
       Assert.assertTrue(false);
     }
+    log.info("End - virtualan_collection_testcase_8");
   }
 
   @Test
   public void virtualan_collection_testcase_4() {
+    log.info("Start - virtualan_collection_testcase_4");
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/virtualan_collection_testcase_4.yml");
@@ -75,10 +82,12 @@ public class APITestWithExcelAsTestManager {
       e.printStackTrace();
       Assert.assertTrue(false);
     }
+    log.info("End - virtualan_collection_testcase_4");
   }
 
   @Test
   public void virtualan_collection_testcase_01() {
+    log.info("Start - virtualan_collection_testcase_01");
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/virtualan_collection_testcase_01.yml");
@@ -90,10 +99,12 @@ public class APITestWithExcelAsTestManager {
       e.printStackTrace();
       Assert.assertTrue(false);
     }
+    log.info("End - virtualan_collection_testcase_01");
   }
 
   @Test
   public void virtualan_collection_testcase_02() {
+    log.info("Start - virtualan_collection_testcase_02");
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/virtualan_collection_testcase_02.yml");
@@ -105,10 +116,12 @@ public class APITestWithExcelAsTestManager {
       e.printStackTrace();
       Assert.assertTrue(false);
     }
+    log.info("End - virtualan_collection_testcase_02");
   }
 
   @Test
   public void virtualan_bdd_testcase_run_manager() {
+    log.info("Start - virtualan_bdd_testcase_run_manager");
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/virtualan_bdd_testcase_run_manager.yml");
@@ -120,6 +133,7 @@ public class APITestWithExcelAsTestManager {
       e.printStackTrace();
       Assert.assertTrue(false);
     }
+    log.info("End - virtualan_bdd_testcase_run_manager");
   }
 
 
@@ -133,6 +147,7 @@ public class APITestWithExcelAsTestManager {
 
   @Test
   public void excelFieldExamples_3() {
+    log.info("Start - excelFieldExamples_3");
     int status = 0;
     try {
       IdaithalamConfiguration.setProperty("workflow", "Enabled");
@@ -162,10 +177,12 @@ public class APITestWithExcelAsTestManager {
       System.out.println(e.getMessage());
       Assert.assertTrue(true);
     }
+    log.info("End - excelFieldExamples_3");
   }
 
   @Test
   public void testvirtualan_collection_pet_empty(){
+    log.info("Start - testvirtualan_collection_pet_empty");
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/virtualan_collection_pet_empty.yml");
@@ -177,10 +194,12 @@ public class APITestWithExcelAsTestManager {
       e.printStackTrace();
       Assert.assertTrue(false);
     }
+    log.info("End - testvirtualan_collection_pet_empty");
   }
 
   @Test
   public void virtualan_collection_pet_sheet_2(){
+    log.info("Start - virtualan_collection_pet_sheet_2");
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/virtualan_collection_pet_sheet_2.yml");
@@ -193,10 +212,12 @@ public class APITestWithExcelAsTestManager {
       e.printStackTrace();
       Assert.assertTrue(false);
     }
+    log.info("End - virtualan_collection_pet_sheet_2");
   }
 
   @Test
   public void virtualan_collection_testcase_0() {
+    log.info("Start - virtualan_collection_testcase_0");
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/virtualan_collection_testcase_0.yml");
@@ -208,11 +229,13 @@ public class APITestWithExcelAsTestManager {
       e.printStackTrace();
       Assert.assertTrue(false);
     }
+    log.info("End - virtualan_collection_testcase_0");
   }
 
 //Negative scenario - Scenario id is missing
   @Test
   public void virtualan_collection_testcase_2() {
+    log.info("Start - virtualan_collection_testcase_2");
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/virtualan_collection_testcase_2.yml");
@@ -224,10 +247,12 @@ public class APITestWithExcelAsTestManager {
       e.printStackTrace();
       Assert.assertTrue(false);
     }
+    log.info("End - virtualan_collection_testcase_2");
   }
 
   @Test
   public void virtualan_collection_testcase_3() {
+    log.info("Start - virtualan_collection_testcase_3");
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/virtualan_collection_testcase_3.yml");
@@ -239,10 +264,12 @@ public class APITestWithExcelAsTestManager {
       e.printStackTrace();
       Assert.assertTrue(false);
     }
+    log.info("End - virtualan_collection_testcase_3");
   }
 
   @Test
   public void virtualan_collection_testcase_6() {
+    log.info("Start - virtualan_collection_testcase_6");
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/virtualan_collection_testcase_6.yml");
@@ -254,10 +281,12 @@ public class APITestWithExcelAsTestManager {
       e.printStackTrace();
       Assert.assertTrue(false);
     }
+    log.info("End - virtualan_collection_testcase_6");
   }
 
   @Test
   public void virtualan_collection_testcase_7() {
+    log.info("Start - virtualan_collection_testcase_7");
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/virtualan_collection_testcase_7.yml");
@@ -269,6 +298,7 @@ public class APITestWithExcelAsTestManager {
       e.printStackTrace();
       Assert.assertTrue(false);
     }
+    log.info("End - virtualan_collection_testcase_7");
   }
 
 }
