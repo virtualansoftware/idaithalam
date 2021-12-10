@@ -32,7 +32,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -125,12 +131,12 @@ public class FeatureGenerationHelper {
     }
 
     /**
-     * Author Oliver Glas. Check if a duplicate key exists already. 
+     * Author Oliver Glas. Check if a duplicate key exists already.
      * headerOverwrite defines whether header or query parameter will be overwritten in case of a duplicate.
-     * If the header key exists, and overwrite is false (default), it will add the value as a comma separated list. 
+     * If the header key exists, and overwrite is false (default), it will add the value as a comma separated list.
      * If the header key exists, and overwrite is true, it will instead take the new value.
-     *    If true and duplicate comes from yaml configuration, yaml wins.
-     *    If true and duplicate is within collection like an api header key in authorization and second in request, the request value wins. 
+     * If true and duplicate comes from yaml configuration, yaml wins.
+     * If true and duplicate is within collection like an api header key in authorization and second in request, the request value wins.
      */
     private static void handleDuplicates(JSONArray outputJsonArray, JSONObject virtualanObjParam) {
         String check = virtualanObjParam.getString("key");
@@ -138,9 +144,9 @@ public class FeatureGenerationHelper {
             Object o = outputJsonArray.get(j);
             JSONObject jsonObject = (JSONObject) o;
             String key = null;
-            if ( jsonObject.has("key")){
+            if (jsonObject.has("key")) {
                 key = jsonObject.getString("key");
-            }else continue;
+            } else continue;
             if (key.equals(check)) {
                 if (outputJsonArray.optJSONObject(j) instanceof JSONObject) {
                     String newValue = virtualanObjParam.getString("value");
@@ -422,6 +428,10 @@ public class FeatureGenerationHelper {
             item.setDatabase(true);
             item.setDbInput(item.getInput() != null && !item.getInput().isEmpty());
             item.setDbOutput(hasOutput(item));
+        } else if ("AMQ".equalsIgnoreCase(object.optString("requestType"))) {
+            item.setAMQ(true);
+            item.setAmqInput(item.getInput() != null && !item.getInput().isEmpty());
+            item.setAmqOutput(hasOutput(item));
         } else {
             item.setRest(true);
         }
@@ -610,7 +620,8 @@ public class FeatureGenerationHelper {
             IOException {
         item.setContentType(object.optString("contentType"));
         item.setInput(replaceSpecialChar(object.optString("input")));
-        if ("DB".equalsIgnoreCase(object.optString("type"))) {
+        if ("DB".equalsIgnoreCase(object.optString("type"))
+                || "AMQ".equalsIgnoreCase(object.optString("type"))) {
             item.setInputInline(getStringAsList(item.getInput()));
             item.setHasInputInline(item.getInput());
         } else if (item.getInput() != null && !"".equalsIgnoreCase(item.getInput())

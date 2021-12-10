@@ -1,0 +1,14 @@
+parallelExecution: 4
+timeout:  30000
+idaithalamProperties:
+  workflow: Disabled
+apiExecutor:
+  - reportTitle: "Pet 8 API EXCEL based api testing"
+    env: dev
+    outputDir: target/excel/virtualan_collection_testcase_8
+    inputExcel: virtualan_collection_testcase_8.xlsx
+    generatedTestList:
+      - PetPost
+      - PetGet
+      - PetGet_2
+      - PetPost_3

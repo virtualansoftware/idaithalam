@@ -32,6 +32,14 @@ Feature: {{feature}}
     {{/tags}}
     Scenario: {{scenario}} - {{method}} kafka message
       Given As a user perform message {{scenario}} action
+      {{#hasCreateParams}}
+      {{#createParams}}
+      And Add the {{{value}}} value of the key as {{{key}}}
+      {{/createParams}}
+      {{/hasCreateParams}}
+      {{#skipScenario}}
+      And perform-message the {{{skipScenario}}} condition to skip scenario
+      {{/skipScenario}}
       {{#hasInputJsonMap}}
       When Send mapson message {{stepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
       {{#inputJsonMap}}
@@ -43,7 +51,7 @@ Feature: {{feature}}
       {{#inputInline}}
         | {{{.}}} |
       {{/inputInline}}
-    {{/hasInputInline}}
+      {{/hasInputInline}}
     {{/kafkaInput}}
     {{/isKafka}}
     {{#isDatabase}}
@@ -56,6 +64,14 @@ Feature: {{feature}}
     {{/tags}}
     Scenario: {{scenario}} - database action
       Given As a user perform sql {{stepInfo}} action
+      {{#hasCreateParams}}
+      {{#createParams}}
+      And Add the {{{value}}} value of the key as {{{key}}}
+      {{/createParams}}
+      {{/hasCreateParams}}
+      {{#skipScenario}}
+      And perform-db the {{{skipScenario}}} condition to skip scenario
+      {{/skipScenario}}
       {{#isSelect}}
       When Select details with the given sql {{stepInfo}} on {{resource}}
       {{/isSelect}}
@@ -67,7 +83,31 @@ Feature: {{feature}}
       {{/inputInline}}
     {{/dbInput}}
     {{/isDatabase}}
-      {{#isRest}}
+    {{#isAMQ}}
+    {{#amqInput}}
+    {{#tags}}
+    {{{tags}}} @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
+    {{/tags}}
+    {{^tags}}
+    @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
+    {{/tags}}
+    Scenario: {{scenario}} - amq action
+      Given As a user post message {{stepInfo}} action
+      {{#hasCreateParams}}
+      {{#createParams}}
+      And Add the {{{value}}} value of the key as {{{key}}}
+      {{/createParams}}
+      {{/hasCreateParams}}
+      {{#skipScenario}}
+      And perform-message the {{{skipScenario}}} condition to skip scenario
+      {{/skipScenario}}
+      When Send inline message {{stepInfo}} for messageQ {{event}} on {{resource}} with type AMQ
+      {{#inputInline}}
+        | {{{.}}} |
+       {{/inputInline}}
+    {{/amqInput}}
+    {{/isAMQ}}
+    {{#isRest}}
       Given a user perform a api action
       {{#hasCreateParams}}
       {{#createParams}}
@@ -252,6 +292,11 @@ Feature: {{feature}}
       {{/csvson}}
       {{/hasCsvson}}
       {{/kafkaOutput}}
+      {{#hasStorageParams}}
+      {{#storageParams}}
+      And Store-message's {{{value}}} value of the key as {{{key}}}
+      {{/storageParams}}
+      {{/hasStorageParams}}
       {{/isKafka}}
       {{#isDatabase}}
       {{#dbOutput}}
@@ -273,6 +318,26 @@ Feature: {{feature}}
       {{/storageParams}}
       {{/hasStorageParams}}
       {{/isDatabase}}
+      {{#isAMQ}}
+      {{#amqOutput}}
+      {{#hasCsvson}}
+      {{#amqInput}}
+      Then Verify {{stepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
+      {{/amqInput}}
+      {{^amqInput}}
+      And Verify {{stepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
+      {{/amqInput}}
+      {{#csvson}}
+        | {{{.}}} |
+      {{/csvson}}
+      {{/hasCsvson}}
+      {{/amqOutput}}
+      {{#hasStorageParams}}
+      {{#storageParams}}
+      And Store-message's {{{value}}} value of the key as {{{key}}}
+      {{/storageParams}}
+      {{/hasStorageParams}}
+      {{/isAMQ}}
       {{#hasMultiRun}}
   Examples:
       {{#multiRun}}
