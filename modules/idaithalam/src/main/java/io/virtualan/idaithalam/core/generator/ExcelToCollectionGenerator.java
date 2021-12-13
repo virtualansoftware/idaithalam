@@ -3,6 +3,7 @@ package io.virtualan.idaithalam.core.generator;
 import static org.apache.poi.ss.usermodel.CellType.BLANK;
 import static org.apache.poi.ss.usermodel.CellType.FORMULA;
 
+import com.sun.istack.logging.Logger;
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
@@ -31,18 +32,15 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * The type Excel to collection generator.
  */
-@Slf4j
 public class ExcelToCollectionGenerator {
 
-  private ExcelToCollectionGenerator() {
-  }
-
-
+  private static org.slf4j.Logger log = LoggerFactory.getLogger(ExcelToCollectionGenerator.class);
   /**
    * Convert stream to string string.
    *

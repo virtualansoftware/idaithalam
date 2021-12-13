@@ -1,22 +1,23 @@
 package io.virtualan.idaithalam.core.generator;
 
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.api.VirtualanTestPlanExecutor;
@@ -26,6 +27,10 @@ import io.virtualan.idaithalam.core.domain.Item;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.spi.ErrorHandler;
+import org.apache.log4j.spi.Filter;
+import org.apache.log4j.spi.LoggingEvent;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -37,12 +42,16 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.skyscreamer.jsonassert.JSONCompare;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.skyscreamer.jsonassert.JSONCompareResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -230,12 +239,114 @@ public class ExcelToCollectionGeneratorTests {
     
     
     @Test
-    public void testvirtualan_collection_testcase_8() {
-    	IdaithalamConfiguration.setProperty("workflow", "Disabled");
+    public void testvirtualan_collection_testcase_8() throws IOException {
+        IdaithalamConfiguration.setProperty("workflow", "Disabled");
     	 String basePath = "src/test/resources/Excels";
          File inputFile = new File("src/test/resources/Excels/virtualan_collection_testcase_8.xlsx");
          createCollection(inputFile, basePath);
     }
+
+    @Test
+    public void testFileNotFoundSecenario() throws NoSuchFieldException, IllegalAccessException {
+        String fileMissingMsg = "File is missing(src/test/resources/Excels) : virtualan_collection_testcase_8-filenotthere.xlsx";
+        List<String> logMessages = injectMockLogger();
+        IdaithalamConfiguration.setProperty("workflow", "Disabled");
+        String basePath = "src/test/resources/Excels";
+        File inputFile = new File("src/test/resources/Excels/virtualan_collection_testcase_8-filenotthere.xlsx");
+       createCollection(inputFile, basePath);
+       System.out.println("Log Message "+logMessages);
+        removeMockLogger();
+        Assert.assertTrue(logMessages.contains(fileMissingMsg));
+    }
+
+
+    @Test
+    public void testInvalidOutputDirectory() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException {
+        String unableToGenerateCucumbalamProperties = "Unable to generate cucumblan.properties properties  E:\\cucumblan.properties (The system cannot find the path specified)";
+        String unableToGenerateCucumbalamEnvProperties = "Unable to generate cucumblan-env.properties properties  E:\\cucumblan-env.properties (The system cannot find the path specified)";
+        List<String> logMsgs = injectMockLogger();
+        IdaithalamConfiguration.setProperty("workflow", "Disabled");
+        String basePath = "src/test/resources/Excels";
+        File inputFile = new File("src/test/resources/Excels/TestCaseColumnHeaderIsMissing.xlsx");
+        String generatedPath = "E:/";
+        if (!new File(generatedPath).exists()) {
+            new File(generatedPath).mkdirs();
+        }
+        ApiExecutorParam apiExecutorParam = new ApiExecutorParam();
+        apiExecutorParam.setBasePath(basePath);
+        apiExecutorParam.setInputExcel(inputFile.getName());
+        apiExecutorParam.setOutputDir(generatedPath);
+
+        boolean actual = ExcelToCollectionGenerator.createCollection(apiExecutorParam);
+        removeMockLogger();
+        Assert.assertTrue(logMsgs.contains(unableToGenerateCucumbalamEnvProperties));
+        Assert.assertTrue(logMsgs.contains(unableToGenerateCucumbalamProperties));
+    }
+
+    @Test
+    public void testBuildCollectionsCreateColectionMethod() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
+        List<String> logMsgs = injectMockLogger();
+        IdaithalamConfiguration.setProperty("workflow", "Disabled");
+        String basePath = "src/test/resources/Excels";
+        File inputFile = new File("src/test/resources/Excels/TestBuildCollectionsExcel.xlsx");
+        String generatedPath = OUTPUT_FOLDER_NAME+inputFile.getName();
+        if (!new File(generatedPath).exists()) {
+            new File(generatedPath).mkdirs();
+        }
+        ApiExecutorParam apiExecutorParam = new ApiExecutorParam();
+        apiExecutorParam.setBasePath(basePath);
+        apiExecutorParam.setInputExcel(inputFile.getName());
+        apiExecutorParam.setOutputDir(generatedPath);
+
+
+
+        ExcelToCollectionGenerator excelToCollectionGenerator = new ExcelToCollectionGenerator();
+        Constructor constructor = ExcelToCollectionGenerator.class.getDeclaredClasses()[0].getDeclaredConstructor();
+        constructor.setAccessible(true);
+        Object object = constructor.newInstance();
+        Method method = ExcelToCollectionGenerator.class.getDeclaredClasses()[0].getDeclaredMethod("createCollection" , ApiExecutorParam.class);
+        method.setAccessible(true);
+        Map<String, Map<String, String>> map = (Map<String, Map<String, String>>) method.invoke(object, apiExecutorParam);
+        System.out.println("Map "+map);
+
+        List<String> sheetNames = getExcelSheetNames(inputFile);
+        Map<String, String> cucumbalamMap = map.get("cucumblan");
+        String virtualanDataHeading = cucumbalamMap.get("virtualan.data.heading");
+        sheetNames.forEach(sheetName->{
+            Assert.assertTrue(virtualanDataHeading.contains(sheetName));
+        });
+        removeMockLogger();
+    }
+
+    private List<String> injectMockLogger() throws NoSuchFieldException, IllegalAccessException {
+        Logger log = Mockito.mock(Logger.class);
+        List<String> logMessages = new ArrayList<>();
+        doAnswer(invocation -> {
+            String arg0 = invocation.getArgumentAt(0, String.class);
+            logMessages.add(arg0.trim());
+            return null;
+        }).when(log).error(anyString());
+
+        doAnswer(invocation -> {
+            String arg0 = invocation.getArgumentAt(0, String.class);
+            logMessages.add(arg0.trim());
+            return null;
+        }).when(log).warn(anyString());
+        Field field = ExcelToCollectionGenerator.class.getDeclaredField("log");
+        field.setAccessible(true);
+        field.set(ExcelToCollectionGenerator.class, log);
+        return logMessages;
+    }
+
+    private void removeMockLogger() throws NoSuchFieldException, IllegalAccessException {
+        Logger log = LoggerFactory.getLogger(ExcelToCollectionGenerator.class);
+        Field field = ExcelToCollectionGenerator.class.getDeclaredField("log");
+        field.setAccessible(true);
+        field.set(ExcelToCollectionGenerator.class, log);
+    }
+
+
+
     private void createCollection(File inputFile, String basePath){
 
         try {
@@ -248,6 +359,9 @@ public class ExcelToCollectionGeneratorTests {
             apiExecutorParam.setInputExcel(inputFile.getName());
             apiExecutorParam.setOutputDir(generatedPath);
             boolean actual = ExcelToCollectionGenerator.createCollection(apiExecutorParam);
+            if(!actual){
+                return ;
+            }
             Assert.assertTrue(actual);
 
             File expectedFileFolder = new File("src/test/resources/expected/"+inputFile.getName());
@@ -305,6 +419,7 @@ public class ExcelToCollectionGeneratorTests {
 	
     }
 
+
     private void extractExcelInfo(ApiExecutorParam apiExecutorParam) throws IOException {
        
         InputStream stream = new FileInputStream(new File(apiExecutorParam.getBasePath()+"\\"+
@@ -314,32 +429,54 @@ public class ExcelToCollectionGeneratorTests {
 
         for (int sheet = 0; sheet < workbook.getNumberOfSheets(); sheet++) {
             Sheet firstSheet = workbook.getSheetAt(sheet);
+            int testCaseNameHeaderIndex = getTestCaseNameColumnIndex(firstSheet);
+            for(String fileName : fileNames){
+                if(fileName.equals(firstSheet.getSheetName()+"-"+sheet+".json")) {
+                    log.info("File  Name : "+fileName +" Sheet Name "+firstSheet.getSheetName());
+                    try {
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        String fileContent =  FileUtils.readFileToString(new File(apiExecutorParam.getOutputDir()+"/"+fileName));
+                        List<HashMap<String, Object>> itemLists = objectMapper.readValue(fileContent,List.class);
+                        Assert.assertEquals(firstSheet.getLastRowNum(), itemLists.size());
 
-            fileNames.forEach(e->{
-                if(e.contains(firstSheet.getSheetName())) {
-//                    try {
-
-//                        Gson gson = new GsonBuilder().create();
-//                        JSONArray jsonArray = new JSONArray(Files.readString(Paths.get(apiExecutorParam.getOutputDir()+"/"+e)));
-//                        //Assert.assertEquals(jsonArray.length(), firstSheet.getLastRowNum()-1);
-//                        for(int i=0; i<jsonArray.length();i++) {
-//                            Item item = gson.fromJson(jsonArray.get(i).toString(), Item.class);
-//                            Row row = firstSheet.getRow(i+1);
-//                            System.out.println("Item Scenario "+item.getScenario() +" : Excels Scenarion "+ row.getCell(3));
-//                            Assert.assertEquals(item.getScenario().toString(), row.getCell(3).toString());
-//                            System.out.println("Tyep "+item.isRest()+ "-"+item.isDatabase());
-//                            Assert.assertEquals(item.isRest()==true?"REST":"DB", row.getCell(1).toString());
-//                        }
-
-
-
-//                    } catch (JSONException | IOException e1) {
-//                        // TODO Auto-generated catch block
-//                        e1.printStackTrace();
-//                    }
+                        for(int i=0;i<itemLists.size();i++){
+                            if(firstSheet.getRow(i+1).getCell(testCaseNameHeaderIndex) != null &&
+                                    StringUtils.isNotEmpty(firstSheet.getRow(i+1).getCell(testCaseNameHeaderIndex).getStringCellValue() ) ) {
+                                Assert.assertEquals(firstSheet.getRow(i + 1).getCell(testCaseNameHeaderIndex).getStringCellValue(), itemLists.get(i).get("scenarioId"));
+                            }
+                        }
+                    } catch (JSONException | IOException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
                 }
-            });
+            }
         }
+    }
+
+    private List<String>  getExcelSheetNames(File inputExcelFile) throws IOException {
+
+        List<String> sheetNames = new ArrayList<>();
+        InputStream stream = new FileInputStream(inputExcelFile);
+        Workbook workbook = new XSSFWorkbook(stream);
+
+        for (int sheet = 0; sheet < workbook.getNumberOfSheets(); sheet++) {
+            Sheet firstSheet = workbook.getSheetAt(sheet);
+            sheetNames.add(firstSheet.getSheetName());
+        }
+        return sheetNames;
+    }
+
+    private int getTestCaseNameColumnIndex(Sheet firstSheet) {
+        int testCaseNameColumnIndex = -1;
+        String TEST_CASE_NAME_HEADER="TestCaseName";
+        for(int i=0; i<firstSheet.getRow(0).getLastCellNum();i++){
+            if(firstSheet.getRow(0).getCell(i).getStringCellValue().equals(TEST_CASE_NAME_HEADER)) {
+                testCaseNameColumnIndex = i;
+                break;
+            }
+        }
+        return testCaseNameColumnIndex;
     }
 
     
