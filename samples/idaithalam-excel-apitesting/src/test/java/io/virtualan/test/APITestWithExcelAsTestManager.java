@@ -313,7 +313,7 @@ public class APITestWithExcelAsTestManager {
 
   @Test
   public void testCaseNameHeaderMissing() throws NoSuchFieldException, IllegalAccessException {
-    String  scenarioIdMissigMsg= "Unable to create collection for the given excel file testCaseNameHeaderMissing.xlsx <<< JSONObject[\"scenarioId\"] not found.";
+    String  scenarioIdMissigMsg= "Mandatory headers [TestCaseName] are missing";
     log.info("Start - testTestCaseNameHeaderMissing");
     try {
       List<String> logMessages = injectMockLogger();
@@ -332,7 +332,7 @@ public class APITestWithExcelAsTestManager {
 
   @Test
   public void testURLMandatoryHeaderMissing(){
-    String  scenarioIdMissigMsg= "URL IS MANDATORY!!! for PetGet";
+    String  scenarioIdMissigMsg= "Mandatory headers [TestCaseNameDesc, URL] are missing";
     log.info("Start - testURLMandatoryHeaderMissing");
     try {
       List<String> logMessages = injectMockLogger();
@@ -353,12 +353,14 @@ public class APITestWithExcelAsTestManager {
   public void testCaseNameDescHeaderMissing() throws NoSuchFieldException, IllegalAccessException {
     log.info("Start - testCaseNameDescHeaderMissing");
     try {
+      String assertMessage  = "Mandatory headers [TestCaseNameDesc] are missing";
       List<String> logMessages = injectMockLogger();
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/testCaseNameDescHeaderMissing.yml");
       log.info("LogMessage "+logMessages);
       removeMockLogger();
-      Assert.assertTrue(isSuccess);
+      Assert.assertTrue(logMessages.contains(assertMessage));
+      Assert.assertFalse(isSuccess);
     } catch (InterruptedException e) {
       e.printStackTrace();
       Assert.assertTrue(false);
@@ -369,9 +371,14 @@ public class APITestWithExcelAsTestManager {
   @Test
   public void testContentTypeHeaderMissing() throws NoSuchFieldException, IllegalAccessException {
     log.info("Start - testContentTypeHeaderMissing");
+    String assertMessage  = "Mandatory headers [ContentType] are missing";
     try {
+      List<String> logMessages = injectMockLogger();
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/testContentTypeHeaderMissing.yml");
+      log.info("LogMessage "+logMessages);
+      removeMockLogger();
+      Assert.assertTrue(logMessages.contains(assertMessage));
       Assert.assertFalse(isSuccess);
     } catch (InterruptedException e) {
      log.info("Content Type "+e.getMessage());
@@ -383,9 +390,14 @@ public class APITestWithExcelAsTestManager {
   @Test
   public void testActionHeaderMissing() throws NoSuchFieldException, IllegalAccessException {
     log.info("Start - testActionHeaderMissing");
+    String assertMessage  = "Mandatory headers [Action] are missing";
+    List<String> logMessages = injectMockLogger();
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/testActionHeaderMissing.yml");
+      log.info("LogMessage "+logMessages);
+      removeMockLogger();
+      Assert.assertTrue(logMessages.contains(assertMessage));
       Assert.assertFalse(isSuccess);
     } catch (InterruptedException e) {
       log.info("Content Type "+e.getMessage());
@@ -397,9 +409,14 @@ public class APITestWithExcelAsTestManager {
   @Test
   public void testStatusCodeHeaderMissing() throws NoSuchFieldException, IllegalAccessException {
     log.info("Start - testStatusCodeHeaderMissing");
+    String assertMessage = "Mandatory headers [StatusCode] are missing";
+    List<String> logMessages = injectMockLogger();
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/testStatusCodeHeaderMissing.yml");
+      log.info("LogMessage "+logMessages);
+      removeMockLogger();
+      Assert.assertTrue(logMessages.contains(assertMessage));
       Assert.assertFalse(isSuccess);
     } catch (InterruptedException e) {
       log.info("Content Type "+e.getMessage());

@@ -25,6 +25,7 @@ public class ParallelExecutor implements Callable<Integer> {
 
   @Override
   public Integer call() {
+    boolean flag  =  false;
     int status = 0;
     if ((System.getenv("IDAITHALAM_EXECUTION_ENV") == null || apiExecutorParam.getEnv()== null ) ||
         (System.getenv("IDAITHALAM_EXECUTION_ENV") != null &&
@@ -39,18 +40,22 @@ public class ParallelExecutor implements Callable<Integer> {
             && apiExecutorParam.getInputExcel() != null)
             && !Execution.EXECUTE.name().equalsIgnoreCase(apiExecutorParam.getExecution().name()))
          {
-          ExcelToCollectionGenerator.createCollection(apiExecutorParam);
+       flag=   ExcelToCollectionGenerator.createCollection(apiExecutorParam);
         }
-        buildProperties("cucumblan.properties", apiExecutorParam.getCucumblanProperties());
-        buildProperties("cucumblan-env.properties", apiExecutorParam.getCucumblanEnvProperties());
-        buildProperties("exclude-response.properties", apiExecutorParam.getExcludeProperties());
+        if(flag) {
+          buildProperties("cucumblan.properties", apiExecutorParam.getCucumblanProperties());
+          buildProperties("cucumblan-env.properties", apiExecutorParam.getCucumblanEnvProperties());
+          buildProperties("exclude-response.properties", apiExecutorParam.getExcludeProperties());
 
-        //Generate feature and summary page html report for the selected testcase from the excel
-        String title = apiExecutorParam.getEnv() != null ? apiExecutorParam.getReportTitle() + "("
-            + apiExecutorParam.getEnv() + ")" : apiExecutorParam.getReportTitle();
-        status = IdaithalamExecutor
-            .validateContract(title,
-                apiExecutorParam);
+          //Generate feature and summary page html report for the selected testcase from the excel
+          String title = apiExecutorParam.getEnv() != null ? apiExecutorParam.getReportTitle() + "("
+                  + apiExecutorParam.getEnv() + ")" : apiExecutorParam.getReportTitle();
+          status = IdaithalamExecutor
+                  .validateContract(title,
+                          apiExecutorParam);
+        } else {
+          status = 1;
+        }
       } catch (Exception e) {
         log.warn(apiExecutorParam.getEnv() + " : " + apiExecutorParam.getReportTitle() + " : " + e
             .getMessage());

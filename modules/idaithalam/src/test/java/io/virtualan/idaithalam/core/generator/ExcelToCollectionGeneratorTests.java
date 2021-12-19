@@ -1,57 +1,53 @@
 package io.virtualan.idaithalam.core.generator;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
-
-import java.io.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
-import io.virtualan.idaithalam.core.api.VirtualanTestPlanExecutor;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
-import io.virtualan.idaithalam.core.domain.ExecutionPlanner;
-import io.virtualan.idaithalam.core.domain.Item;
-
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.spi.ErrorHandler;
-import org.apache.log4j.spi.Filter;
-import org.apache.log4j.spi.LoggingEvent;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-import org.junit.*;
-import org.junit.runner.RunWith;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.skyscreamer.jsonassert.JSONCompare;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.skyscreamer.jsonassert.JSONCompareResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doAnswer;
 
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -267,7 +263,7 @@ public class ExcelToCollectionGeneratorTests {
         List<String> logMsgs = injectMockLogger();
         IdaithalamConfiguration.setProperty("workflow", "Disabled");
         String basePath = "src/test/resources/Excels";
-        File inputFile = new File("src/test/resources/Excels/TestCaseColumnHeaderIsMissing.xlsx");
+        File inputFile = new File("src/test/resources/Excels/virtualan_collection_testcase_0.xlsx");
         String generatedPath = "E:/";
         if (!new File(generatedPath).exists()) {
             new File(generatedPath).mkdirs();
@@ -317,7 +313,28 @@ public class ExcelToCollectionGeneratorTests {
         });
         removeMockLogger();
     }
+    @Test
+   public void testMissingMandatoryHeaderException() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException {
+        String missingMandatoryHeaderErrorMessage = "Mandatory headers [TestCaseName] are missing";
+        List<String> logMsgs = injectMockLogger();
+        IdaithalamConfiguration.setProperty("workflow", "Disabled");
+        String basePath = "src/test/resources/Excels";
+        File inputFile = new File("src/test/resources/Excels/TestCaseColumnHeaderIsMissing.xlsx");
+        String generatedPath = OUTPUT_FOLDER_NAME+inputFile.getName();
+        if (!new File(generatedPath).exists()) {
+            new File(generatedPath).mkdirs();
+        }
+        ApiExecutorParam apiExecutorParam = new ApiExecutorParam();
+        apiExecutorParam.setBasePath(basePath);
+        apiExecutorParam.setInputExcel(inputFile.getName());
+        apiExecutorParam.setOutputDir(generatedPath);
 
+        boolean actual = ExcelToCollectionGenerator.createCollection(apiExecutorParam);
+        removeMockLogger();
+
+        Assert.assertTrue(logMsgs.contains(missingMandatoryHeaderErrorMessage));
+
+   }
     private List<String> injectMockLogger() throws NoSuchFieldException, IllegalAccessException {
         Logger log = Mockito.mock(Logger.class);
         List<String> logMessages = new ArrayList<>();

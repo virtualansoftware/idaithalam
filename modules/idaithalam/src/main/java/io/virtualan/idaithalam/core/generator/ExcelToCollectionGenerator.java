@@ -3,8 +3,8 @@ package io.virtualan.idaithalam.core.generator;
 import static org.apache.poi.ss.usermodel.CellType.BLANK;
 import static org.apache.poi.ss.usermodel.CellType.FORMULA;
 
-import com.sun.istack.logging.Logger;
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
+import io.virtualan.idaithalam.core.IdaithalamConstants;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.domain.CreateFileInfo;
@@ -23,7 +23,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
-import lombok.extern.slf4j.Slf4j;
+import io.virtualan.idaithalam.exception.MandatoryHeaderException;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -41,6 +42,10 @@ import org.slf4j.LoggerFactory;
 public class ExcelToCollectionGenerator {
 
   private static org.slf4j.Logger log = LoggerFactory.getLogger(ExcelToCollectionGenerator.class);
+
+  private static List<String> mandatoryHeaders = Arrays.asList(IdaithalamConstants.TESTCASE_NAME_HEADER, IdaithalamConstants.TESTCASE_NAME_DESC_HEADER, IdaithalamConstants.ACTION_HEADER, IdaithalamConstants.URL_HEADER, IdaithalamConstants.CONTENT_TYPE_HEADER, IdaithalamConstants.STATUS_CODE_HEADER);
+
+
   /**
    * Convert stream to string string.
    *
@@ -184,14 +189,23 @@ public class ExcelToCollectionGenerator {
     return arrayMap;
   }
 
+  private static void mandatoryHeaderValidation(final List<String> headers) throws MandatoryHeaderException {
+   Collection<String> missingHeaders = CollectionUtils.subtract(mandatoryHeaders, headers);
+   if(!missingHeaders.isEmpty()){
+     log.error(String.format("Mandatory headers %s are missing ",missingHeaders.toString()));
+      throw new MandatoryHeaderException(String.format("Mandatory headers %s are missing ",missingHeaders.toString()));
+   }
+  }
+
   private static JSONArray getObjectSheet(int sheet, List<String> generatedTestCaseList,
-      SheetObject sheetObject) throws UnableToProcessException {
+      SheetObject sheetObject) throws UnableToProcessException, MandatoryHeaderException {
     Map<Integer, String> headers = new HashMap<>();
     JSONArray virtualanArray = new JSONArray();
     for (int i = 0; i <= sheetObject.getFirstSheet().getLastRowNum(); i++) {
       Row nextRow = sheetObject.getFirstSheet().getRow(i);
       if (headers.isEmpty()) {
         headers = getHeader(nextRow);
+        mandatoryHeaderValidation(new ArrayList<>(headers.values()));
       } else {
         String testcaseName = null;
         try {
@@ -816,7 +830,7 @@ public class ExcelToCollectionGenerator {
      * @throws UnableToProcessException the unable to process exception
      */
     Map<String, Map<String, String>> createCollection(ApiExecutorParam apiExecutorParam)
-        throws IOException, UnableToProcessException {
+            throws IOException, UnableToProcessException, MandatoryHeaderException {
       Map<String, String> excludeResponseMap;
       Map<String, String> cucumblanMap;
 
@@ -836,7 +850,10 @@ public class ExcelToCollectionGenerator {
           sheetObject.setFirstSheet(firstSheet);
           createCollections(apiExecutorParam, sheet, firstSheet, sheetObject);
         }
-      } catch (Exception e) {
+      } catch (MandatoryHeaderException e){
+        throw e;
+      }
+      catch (Exception e) {
         log.error(
             "Unable to create collection for the given excel file " + apiExecutorParam
                 .getInputExcel() + " <<< " + e
@@ -857,7 +874,7 @@ public class ExcelToCollectionGenerator {
 
     private void createCollections(ApiExecutorParam apiExecutorParam, int sheet, Sheet firstSheet,
         SheetObject sheetObject)
-        throws MalformedURLException, UnableToProcessException {
+            throws MalformedURLException, UnableToProcessException, MandatoryHeaderException {
       JSONArray virtualanArray = getObjectSheet(sheet, apiExecutorParam.getGeneratedTestList(),
           sheetObject);
       log.info("Sheet no " + sheet + " build out" + virtualanArray.toString());
