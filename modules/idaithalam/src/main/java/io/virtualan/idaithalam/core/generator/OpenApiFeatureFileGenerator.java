@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.virtualan.idaithalam.core.domain.OperationBuilder;
@@ -29,7 +28,6 @@ import org.json.JSONObject;
  */
 @Slf4j
 public class OpenApiFeatureFileGenerator {
-    private final static Logger LOGGER = Logger.getLogger(OpenApiFeatureFileGenerator.class.getName());
 
     /**
      * Generate open api contract for virtualan json array.
@@ -83,7 +81,7 @@ public class OpenApiFeatureFileGenerator {
             writer.append(cs);
             writer.close();
         } catch (IOException e) {
-            LOGGER.warning(" Unable to generate Virtualan Provider JSON : " + e.getMessage());
+            log.warn(" Unable to generate Virtualan Provider JSON : " + e.getMessage());
         }
     }
 

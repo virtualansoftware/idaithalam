@@ -1,0 +1,138 @@
+[
+  {
+    "requestType": "REST",
+    "method": "GET",
+    "scenario": "Read Customer infos - Example-case1",
+    "resource": "api",
+    "csvson": [
+      "match=exact-match",
+      "dateOfBirth,firstName,lastName,lastTimeOnline,spokenLanguages/additionalProp1:additionalProp3:additionalProp2,username",
+      "1955-10-28,Bill,Gates,2020-08-30T20:28:36.267Z,Tamil:Spanish:English,bgates"
+    ],
+    "availableParams": [{
+      "parameterType": "HEADER_PARAM",
+      "value": "application/json",
+      "key": "contentType"
+    }],
+    "contentType": "application/json",
+    "scenarioId": "ReadCustomers",
+    "url": "/api/persons/bgates",
+    "httpStatusCode": "200"
+  },
+  {
+    "requestType": "REST",
+    "method": "GET",
+    "scenario": "Read Customer infos - Example-case2",
+    "resource": "api",
+    "csvson": [
+      "match=exact-order-match",
+      "dateOfBirth,lastName,firstName,lastTimeOnline,spokenLanguages/additionalProp1:additionalProp3:additionalProp2",
+      "1955-10-28,Gates,Bill,2020-08-30T20:28:36.267Z,Tamil:Spanish:English"
+    ],
+    "availableParams": [{
+      "parameterType": "HEADER_PARAM",
+      "value": "application/json",
+      "key": "contentType"
+    }],
+    "contentType": "application/json",
+    "scenarioId": "ReadCustomers-EOM",
+    "url": "/api/persons/bgates",
+    "httpStatusCode": "200"
+  },
+  {
+    "requestType": "REST",
+    "method": "GET",
+    "scenario": "Read Customer infos - Example-case3",
+    "resource": "api",
+    "csvson": [
+      "dateOfBirth,firstName,lastName,lastTimeOnline,spokenLanguages/additionalProp1:additionalProp2:additionalProp3,username",
+      "1955-10-28,Bill,Gates,2020-08-30T20:28:36.267Z,Tamil:English:Spanish,bgates"
+    ],
+    "availableParams": [{
+      "parameterType": "HEADER_PARAM",
+      "value": "application/json",
+      "key": "contentType"
+    }],
+    "contentType": "application/json",
+    "scenarioId": "ReadCustomers-Simple",
+    "url": "/api/persons/bgates",
+    "httpStatusCode": "200"
+  },
+  {
+    "outputFields": {
+      "customers.find { it.firstname == 'Ado' }.postalCode": "6500",
+      "customers.find { it.customerId == 'bunlo9vk5f' }.firstname": "Ado",
+      "customers.find { it.customerId == 'f2m0v9b73c' }.email": "blangman14@example.com"
+    },
+    "requestType": "REST",
+    "method": "GET",
+    "scenario": "Read Customer infos - Exact-Order-Match",
+    "resource": "quote",
+    "csvson": [
+      "jsonpath=customers;match=exact-order-match",
+      "customerId,firstname,lastname,postalCode,streetAddress",
+      "bunlo9vk5f,Ado,Kinnett,6500,2 Autumn Leaf Lane"
+    ],
+    "availableParams": [{
+      "parameterType": "HEADER_PARAM",
+      "value": "application/json",
+      "key": "contentType"
+    }],
+    "contentType": "application/json",
+    "scenarioId": "ReadCustomers-EOM",
+    "url": "/customers",
+    "httpStatusCode": "200"
+  },
+  {
+    "output": "65",
+    "input": "{\n  \"birthday\" : \"1918-10-24\",\n  \"postalCode\" : \"60563\"\n}",
+    "requestType": "REST",
+    "method": "POST",
+    "scenario": "RiskFactor-DirtectResponse",
+    "resource": "api",
+    "availableParams": [
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/json",
+        "key": "contentType"
+      },
+      {
+        "parameterType": "STORAGE_PARAM",
+        "value": ".",
+        "key": "riskFactor"
+      },
+      {
+        "parameterType": "EVAL_PARAM",
+        "value": "c~[riskFactor]=65",
+        "key": "success"
+      }
+    ],
+    "contentType": "application/json",
+    "scenarioId": "RiskFactor-DirtectResponse",
+    "url": "/api/riskfactor/compute",
+    "httpStatusCode": "200"
+  },
+  {
+    "requestType": "REST",
+    "method": "GET",
+    "scenario": "Read Customer infos - Find last element",
+    "resource": "quote",
+    "availableParams": [
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/json",
+        "key": "contentType"
+      },
+      {
+        "parameterType": "STORAGE_PARAM",
+        "value": "customers[-1].customerId",
+        "key": "id"
+      }
+    ],
+    "contentType": "application/json",
+    "scenarioId": "ReadCustomers-FindLast",
+    "url": "/customers",
+    "tags": "@examples",
+    "httpStatusCode": "200"
+  }
+]

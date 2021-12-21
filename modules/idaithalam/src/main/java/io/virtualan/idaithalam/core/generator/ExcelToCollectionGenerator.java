@@ -20,12 +20,8 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -167,7 +163,7 @@ public class ExcelToCollectionGenerator {
         createFileInfo.setVirtualanArray(virtualanSingle);
         createFileInfo
             .setTestcaseName(
-                "Virtualan_" + sheet + "_" + scenarioId);
+                scenarioId+"-"+sheet);
         createFileInfo.setScenario(scenarioId);
         createIdaithalamProcessingFile(createFileInfo);
       }
@@ -191,7 +187,7 @@ public class ExcelToCollectionGenerator {
   }
 
   private static JSONArray getObjectSheet(int sheet, List<String> generatedTestCaseList,
-      SheetObject sheetObject) {
+      SheetObject sheetObject) throws UnableToProcessException {
     Map<Integer, String> headers = new HashMap<>();
     JSONArray virtualanArray = new JSONArray();
     for (int i = 0; i <= sheetObject.getFirstSheet().getLastRowNum(); i++) {
@@ -227,6 +223,9 @@ public class ExcelToCollectionGenerator {
         } catch (Exception e) {
           log.warn(
               "Spread sheet (" + testcaseName + ") " + (sheet + 1) + " with row number " + (i + 1)
+                  + " is unable to process for the reason >> "
+                  + e.getMessage());
+          throw new UnableToProcessException("Spread sheet (" + testcaseName + ") " + (sheet + 1) + " with row number " + (i + 1)
                   + " is unable to process for the reason >> "
                   + e.getMessage());
         }
@@ -364,8 +363,10 @@ public class ExcelToCollectionGenerator {
       if (dataMap.get("StepInfo") != null && !dataMap.get("StepInfo").isEmpty()) {
         virtualanObj.put("stepInfo", dataMap.get("StepInfo"));
       }
-      virtualanObj.put("method", dataMap.get("Action").toUpperCase());
 
+      if(Objects.nonNull(dataMap.get("Action"))) {
+        virtualanObj.put("method", dataMap.get("Action").toUpperCase());
+      }
       if (dataMap.get("RequestFile") != null || dataMap.get("RequestContent") != null) {
         virtualanObj.put("input", buildObjectRequest(basePath, dataMap));
       }
@@ -387,9 +388,11 @@ public class ExcelToCollectionGenerator {
         virtualanObj.put("availableParams", paramsArray);
       }
     } catch (Exception e) {
+      e.printStackTrace();
       throw new UnableToProcessException(
           "Unable to build collection object for Kafka " + dataMap.get("TestCaseName") + " :: " + e
               .getMessage());
+
     }
     return virtualanObj;
   }
@@ -856,7 +859,7 @@ public class ExcelToCollectionGenerator {
 
     private void createCollections(ApiExecutorParam apiExecutorParam, int sheet, Sheet firstSheet,
         SheetObject sheetObject)
-        throws MalformedURLException {
+        throws MalformedURLException, UnableToProcessException {
       JSONArray virtualanArray = getObjectSheet(sheet, apiExecutorParam.getGeneratedTestList(),
           sheetObject);
       log.info("Sheet no " + sheet + " build out" + virtualanArray.toString());
@@ -867,8 +870,7 @@ public class ExcelToCollectionGenerator {
           createFileInfo.setCucumblanMap(sheetObject.getCucumblanMap());
           createFileInfo.setVirtualanArray(virtualanArray);
           createFileInfo.setTestcaseName(
-              "Virtualan_" + sheet + "_" + firstSheet.getSheetName().replaceAll(" ", "_")
-                  + "_WORKFLOW_" + sheet);
+               firstSheet.getSheetName().replaceAll(" ", "_")+"-"+sheet);
           createFileInfo.setScenario(firstSheet.getSheetName() + " - Workflow");
           createIdaithalamProcessingFile(createFileInfo);
         } else {

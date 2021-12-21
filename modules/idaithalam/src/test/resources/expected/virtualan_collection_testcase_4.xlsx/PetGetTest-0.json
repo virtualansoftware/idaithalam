@@ -1,0 +1,23 @@
+[{
+    "output": "{\n  \"category\": {\n    \"id\": 200,\n    \"name\": \"Bulldog  \\r\\n Testing \\r\\n again\"\n  },\n  \"id\": 201,\n  \"name\": \"\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 201,\n      \"name\": \"red\"\n    }\n  ]\n}",
+    "requestType": "REST",
+    "method": "GET",
+    "scenario": "Testing Empty",
+    "resource": "api",
+    "availableParams": [
+        {
+            "parameterType": "HEADER_PARAM",
+            "value": "application/json",
+            "key": "contentType"
+        },
+        {
+            "parameterType": "QUERY_PARAM",
+            "value": "light-grey",
+            "key": "tags"
+        }
+    ],
+    "contentType": "application/json",
+    "scenarioId": "PetGetTest",
+    "url": "/api/pets/findByTags",
+    "httpStatusCode": "200"
+}]
