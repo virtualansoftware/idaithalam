@@ -1,4 +1,5 @@
 Feature: {{feature}}
+Feature: {{feature}}
     Scenario: Load initial set of data
       Given Provided all the feature level parameters from file
 {{#items}}
@@ -8,7 +9,7 @@ Feature: {{feature}}
       Given a user perform a api action
       And basic authentication with [okta_user_id.{{{resource}}}] and [okta_user_password.{{{resource}}}]
       When a user post application/json in api_token resource on okta_token.{{{resource}}}
-      Then Verify the status code is 200
+      Then the status code is 200
       And Store the access_token value of the key as AccessToken.{{{resource}}}
   {{/okta}}
 {{/items}}
@@ -183,7 +184,7 @@ Feature: {{feature}}
       {{/inputJsonMap}}
       {{/hasInputJsonMap}}
       When a user {{action}} {{contentType}} in {{url}} resource on {{resource}}
-      Then Verify the status code is {{httpStatusCode}}
+      Then the status code is {{httpStatusCode}}
       {{#noSkipOutput}}
       {{#hasCsvson}}
       {{#matchPattern}}
