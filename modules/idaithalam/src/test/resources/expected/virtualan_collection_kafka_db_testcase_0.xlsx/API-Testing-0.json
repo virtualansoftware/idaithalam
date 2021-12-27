@@ -134,17 +134,5 @@
         "resource": "pet",
         "stepInfo": "to insert employee record",
         "scenarioId": "Pet-DB-21"
-    },
-    {
-        "requestType": "DB",
-        "method": "VERIFY",
-        "resource": "pet",
-        "csvson": [
-            "select * from employees where emp_no = 1 ",
-            "EMP_NO,BIRTH_DATE,FIRST_NAME,LAST_NAME,GENDER,HIRE_DATE",
-            "i~1,l~253087200000,ELan,Thangamani,Male,l~1191992400000"
-        ],
-        "stepInfo": "verify record",
-        "scenarioId": "Pet-DB-22"
     }
 ]

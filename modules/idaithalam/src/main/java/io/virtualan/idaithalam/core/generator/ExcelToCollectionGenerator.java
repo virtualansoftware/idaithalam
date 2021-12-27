@@ -23,8 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
-import io.virtualan.idaithalam.exception.MandatoryHeaderException;
-import org.apache.commons.collections.CollectionUtils;
+import io.virtualan.idaithalam.exception.IdaithalamException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -43,7 +42,6 @@ public class ExcelToCollectionGenerator {
 
   private static org.slf4j.Logger log = LoggerFactory.getLogger(ExcelToCollectionGenerator.class);
 
-  private static List<String> mandatoryHeaders = Arrays.asList(IdaithalamConstants.TESTCASE_NAME_HEADER, IdaithalamConstants.TESTCASE_NAME_DESC_HEADER, IdaithalamConstants.ACTION_HEADER, IdaithalamConstants.URL_HEADER, IdaithalamConstants.CONTENT_TYPE_HEADER, IdaithalamConstants.STATUS_CODE_HEADER);
 
 
   /**
@@ -189,23 +187,15 @@ public class ExcelToCollectionGenerator {
     return arrayMap;
   }
 
-  private static void mandatoryHeaderValidation(final List<String> headers) throws MandatoryHeaderException {
-   Collection<String> missingHeaders = CollectionUtils.subtract(mandatoryHeaders, headers);
-   if(!missingHeaders.isEmpty()){
-     log.error(String.format("Mandatory headers %s are missing ",missingHeaders.toString()));
-      throw new MandatoryHeaderException(String.format("Mandatory headers %s are missing ",missingHeaders.toString()));
-   }
-  }
 
   private static JSONArray getObjectSheet(int sheet, List<String> generatedTestCaseList,
-      SheetObject sheetObject) throws UnableToProcessException, MandatoryHeaderException {
+      SheetObject sheetObject) throws UnableToProcessException {
     Map<Integer, String> headers = new HashMap<>();
     JSONArray virtualanArray = new JSONArray();
     for (int i = 0; i <= sheetObject.getFirstSheet().getLastRowNum(); i++) {
       Row nextRow = sheetObject.getFirstSheet().getRow(i);
       if (headers.isEmpty()) {
         headers = getHeader(nextRow);
-        mandatoryHeaderValidation(new ArrayList<>(headers.values()));
       } else {
         String testcaseName = null;
         try {
@@ -216,6 +206,11 @@ public class ExcelToCollectionGenerator {
               || generatedTestCaseList.contains(testcaseName))) {
             if (finalRow.get("Type") == null || "REST".equalsIgnoreCase(finalRow.get("Type")) ||
                     "GRAPHQL".equalsIgnoreCase(finalRow.get("Type"))) {
+             List<String> missingData =  restTypeInputDataValidation(finalRow);
+             if(!missingData.isEmpty()){
+               log.info(String.format("Sheet Name : %s - Row : %s - Type : REST - %s mandatory data's are missing ",sheetObject.getFirstSheet().getSheetName(),(i+1),missingData.toString()));
+               continue;
+             }
               JSONObject object = buildRESTVirtualanCollection(sheetObject.getBasePath(),
                   finalRow);
               populateConfigMaps(finalRow, sheetObject.getCucumblanMap(),
@@ -227,12 +222,18 @@ public class ExcelToCollectionGenerator {
               virtualanArray.put(object);
 
             } else if ("DB".equalsIgnoreCase(finalRow.get("Type"))) {
+              List<String> missingData =  dbTypeInputDataValidation(finalRow);
+              if(!missingData.isEmpty()){
+                log.info(String.format("Sheet Name : %s - Row : %s - Type : DB - %s mandatory data's are missing ",sheetObject.getFirstSheet().getSheetName(),(i+1),missingData.toString()));
+                continue;
+              }
               JSONObject object = buildDataBaseVirtualanCollection(sheetObject.getBasePath(),
                   finalRow);
               virtualanArray.put(object);
             }
           }
         } catch (Exception e) {
+          
           log.warn(
               "Spread sheet (" + testcaseName + ") " + (sheet + 1) + " with row number " + (i + 1)
                   + " is unable to process for the reason >> "
@@ -486,17 +487,18 @@ public class ExcelToCollectionGenerator {
       Map<String, String> dataMap)
       throws UnableToProcessException {
     JSONObject virtualanObj = new JSONObject();
+
     try {
       virtualanObj.put("requestType", "REST");
       JSONArray paramsArray = new JSONArray();
       getMultiRunValue(dataMap, virtualanObj, paramsArray);
-      virtualanObj.put("contentType", dataMap.get("ContentType"));
-      buildParam("contentType", dataMap.get("ContentType"), paramsArray, "HEADER_PARAM");
+      virtualanObj.put("contentType", dataMap.get(IdaithalamConstants.CONTENT_TYPE_HEADER));
+      buildParam("contentType", dataMap.get(IdaithalamConstants.CONTENT_TYPE_HEADER), paramsArray, "HEADER_PARAM");
       createProcessingType(dataMap, paramsArray, "FormParams", "FORM_PARAM");
       createProcessingType(dataMap, paramsArray, "RequestHeaders", "HEADER_PARAM");
       createProcessingType(dataMap, paramsArray, "ResponseProcessingType", "HEADER_PARAM");
-      virtualanObj.put("scenarioId", dataMap.get("TestCaseName"));
-      virtualanObj.put("scenario", dataMap.get("TestCaseNameDesc"));
+      virtualanObj.put("scenarioId", dataMap.get(IdaithalamConstants.TESTCASE_NAME_HEADER));
+      virtualanObj.put("scenario", dataMap.get(IdaithalamConstants.TESTCASE_NAME_DESC_HEADER));
       createProcessingType(dataMap, paramsArray, "StoreResponseVariables", "STORAGE_PARAM");
       createProcessingType(dataMap, paramsArray, "EvaluateFunctionVariables", "EVAL_PARAM");
       createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
@@ -555,6 +557,47 @@ public class ExcelToCollectionGenerator {
     }
     return virtualanObj;
   }
+
+  private static List<String> restTypeInputDataValidation(Map<String, String> dataMap){
+    List<String> missingDatas = new ArrayList<>();
+
+    if(!dataMap.containsKey(IdaithalamConstants.TESTCASE_NAME_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.TESTCASE_NAME_HEADER))){
+      missingDatas.add(IdaithalamConstants.TESTCASE_NAME_HEADER);
+    }
+    if(!dataMap.containsKey(IdaithalamConstants.TESTCASE_NAME_DESC_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.TESTCASE_NAME_DESC_HEADER))){
+      missingDatas.add(IdaithalamConstants.TESTCASE_NAME_DESC_HEADER);
+    }
+    if(!dataMap.containsKey(IdaithalamConstants.CONTENT_TYPE_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.CONTENT_TYPE_HEADER))){
+      missingDatas.add(IdaithalamConstants.CONTENT_TYPE_HEADER);
+    }
+    if(!dataMap.containsKey(IdaithalamConstants.URL_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.URL_HEADER))){
+      missingDatas.add(IdaithalamConstants.URL_HEADER);
+    }
+    if(!dataMap.containsKey(IdaithalamConstants.ACTION_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.ACTION_HEADER))){
+      missingDatas.add(IdaithalamConstants.ACTION_HEADER);
+    }
+    if(!dataMap.containsKey(IdaithalamConstants.STATUS_CODE_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.STATUS_CODE_HEADER))){
+      missingDatas.add(IdaithalamConstants.STATUS_CODE_HEADER);
+    }
+    return missingDatas;
+  }
+
+  private static List<String> dbTypeInputDataValidation(Map<String, String> dataMap){
+    List<String> missingDatas = new ArrayList<>();
+
+    if(!dataMap.containsKey(IdaithalamConstants.TESTCASE_NAME_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.TESTCASE_NAME_HEADER))){
+      missingDatas.add(IdaithalamConstants.TESTCASE_NAME_HEADER);
+    }
+    if(!dataMap.containsKey(IdaithalamConstants.TESTCASE_NAME_DESC_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.TESTCASE_NAME_DESC_HEADER))){
+      missingDatas.add(IdaithalamConstants.TESTCASE_NAME_DESC_HEADER);
+    }
+    if(!dataMap.containsKey(IdaithalamConstants.RESOURCE_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.RESOURCE_HEADER))){
+      missingDatas.add(IdaithalamConstants.RESOURCE_HEADER);
+    }
+    return missingDatas;
+  }
+
+
 
   private static void buildCSVSON(Map<String, String> dataMap, JSONObject virtualanObj) {
     List<String> cvson = new ArrayList<String>(Arrays.asList(dataMap.get("Csvson").split("\n")));
@@ -779,10 +822,10 @@ public class ExcelToCollectionGenerator {
   private static void populateConfigMaps(
       Map<String, String> dataMap, Map<String, String> cucumblanMap,
       Map<String, String> excludeResponseMap) throws MalformedURLException {
-    URL aURL = new URL(dataMap.get("URL"));
+    URL aURL = new URL(dataMap.get(IdaithalamConstants.URL_HEADER));
     String resource = getResource(aURL.getPath());
-    if (dataMap.get("Resource") != null) {
-      cucumblanMap.put("service.api." + dataMap.get("Resource"),
+    if (dataMap.get(IdaithalamConstants.RESOURCE_HEADER) != null) {
+      cucumblanMap.put("service.api." + dataMap.get(IdaithalamConstants.RESOURCE_HEADER),
           aURL.getProtocol() + "://" + aURL.getAuthority());
     } else {
       cucumblanMap.put("service.api." + resource,
@@ -830,8 +873,8 @@ public class ExcelToCollectionGenerator {
      * @throws UnableToProcessException the unable to process exception
      */
     Map<String, Map<String, String>> createCollection(ApiExecutorParam apiExecutorParam)
-            throws IOException, UnableToProcessException, MandatoryHeaderException {
-      Map<String, String> excludeResponseMap;
+            throws IOException, UnableToProcessException, IdaithalamException {
+      Map<String, String> excludeResponseMap = new HashMap<>();
       Map<String, String> cucumblanMap;
 
       excludeResponseMap = new HashMap<>();
@@ -839,6 +882,7 @@ public class ExcelToCollectionGenerator {
       InputStream stream = getInputStream(apiExecutorParam.getBasePath(),
           apiExecutorParam.getInputExcel());
       Workbook workbook = null;
+      boolean anyValidDataSheet = false;
       try {
         workbook = new XSSFWorkbook(stream);
         for (int sheet = 0; sheet < workbook.getNumberOfSheets(); sheet++) {
@@ -848,12 +892,15 @@ public class ExcelToCollectionGenerator {
           sheetObject.setExcludeResponseMap(excludeResponseMap);
           sheetObject.setCucumblanMap(cucumblanMap);
           sheetObject.setFirstSheet(firstSheet);
-          createCollections(apiExecutorParam, sheet, firstSheet, sheetObject);
+          try {
+            createCollections(apiExecutorParam, sheet, firstSheet, sheetObject);
+            anyValidDataSheet = true;
+          }catch (IdaithalamException idaithalamException){
+            log.warn(idaithalamException.getMessage());
+          }
+
         }
-      } catch (MandatoryHeaderException e){
-        throw e;
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         log.error(
             "Unable to create collection for the given excel file " + apiExecutorParam
                 .getInputExcel() + " <<< " + e
@@ -866,6 +913,9 @@ public class ExcelToCollectionGenerator {
           stream.close();
         }
       }
+      if(!anyValidDataSheet){
+        throw new IdaithalamException(String.format("% is invalid ",apiExecutorParam.getInputExcel()));
+      }
       Map<String, Map<String, String>> response = new HashMap<>();
       response.put("cucumblan", cucumblanMap);
       response.put("exclude", excludeResponseMap);
@@ -874,7 +924,7 @@ public class ExcelToCollectionGenerator {
 
     private void createCollections(ApiExecutorParam apiExecutorParam, int sheet, Sheet firstSheet,
         SheetObject sheetObject)
-            throws MalformedURLException, UnableToProcessException, MandatoryHeaderException {
+            throws MalformedURLException, UnableToProcessException, IdaithalamException {
       JSONArray virtualanArray = getObjectSheet(sheet, apiExecutorParam.getGeneratedTestList(),
           sheetObject);
       log.info("Sheet no " + sheet + " build out" + virtualanArray.toString());
@@ -892,6 +942,8 @@ public class ExcelToCollectionGenerator {
           getAsSingleFile(apiExecutorParam, sheet, sheetObject.getCucumblanMap(),
               virtualanArray);
         }
+      } else {
+        throw new IdaithalamException(String.format("Sheet Name : %s - Number : %s is invalid ",firstSheet.getSheetName(), (sheet+1)));
       }
     }
   }

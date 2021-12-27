@@ -1,5 +1,6 @@
 package io.virtualan.test;
 
+import io.restassured.RestAssured;
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.api.VirtualanTestExecutor;
 import io.virtualan.idaithalam.core.api.VirtualanTestPlanExecutor;
@@ -31,7 +32,14 @@ public class APITestWithExcelAsTestManager {
     System.out.println("----------------------------------------");
     System.out.println("--- Start Test -------");
     System.out.println("------------------------------------------");
+    try {
+      RestAssured.useRelaxedHTTPSValidation();
+    } catch (Exception ex) {
+    }
   }
+
+
+
 
   @AfterClass
   public void testAfterClass() {
@@ -313,7 +321,7 @@ public class APITestWithExcelAsTestManager {
 
   @Test
   public void testCaseNameHeaderMissing() throws NoSuchFieldException, IllegalAccessException {
-    String  scenarioIdMissigMsg= "Mandatory headers [TestCaseName] are missing";
+    String  scenarioIdMissigMsg= "Sheet Name : API-Testing - Row : 2 - Type : REST - [TestCaseName] mandatory data's are missing";
     log.info("Start - testTestCaseNameHeaderMissing");
     try {
       List<String> logMessages = injectMockLogger();
@@ -332,7 +340,7 @@ public class APITestWithExcelAsTestManager {
 
   @Test
   public void testURLMandatoryHeaderMissing(){
-    String  scenarioIdMissigMsg= "Mandatory headers [TestCaseNameDesc, URL] are missing";
+    String  scenarioIdMissigMsg= "Sheet Name : API-Testing - Row : 2 - Type : REST - [TestCaseNameDesc, URL] mandatory data's are missing";
     log.info("Start - testURLMandatoryHeaderMissing");
     try {
       List<String> logMessages = injectMockLogger();
@@ -353,7 +361,7 @@ public class APITestWithExcelAsTestManager {
   public void testCaseNameDescHeaderMissing() throws NoSuchFieldException, IllegalAccessException {
     log.info("Start - testCaseNameDescHeaderMissing");
     try {
-      String assertMessage  = "Mandatory headers [TestCaseNameDesc] are missing";
+      String assertMessage  = "Sheet Name : API-Testing - Row : 2 - Type : REST - [TestCaseNameDesc] mandatory data's are missing";
       List<String> logMessages = injectMockLogger();
       boolean isSuccess = VirtualanTestPlanExecutor
               .invoke("config-yml/testCaseNameDescHeaderMissing.yml");
@@ -371,7 +379,7 @@ public class APITestWithExcelAsTestManager {
   @Test
   public void testContentTypeHeaderMissing() throws NoSuchFieldException, IllegalAccessException {
     log.info("Start - testContentTypeHeaderMissing");
-    String assertMessage  = "Mandatory headers [ContentType] are missing";
+    String assertMessage  = "Sheet Name : API-Testing - Row : 2 - Type : REST - [ContentType] mandatory data's are missing";
     try {
       List<String> logMessages = injectMockLogger();
       boolean isSuccess = VirtualanTestPlanExecutor
@@ -390,7 +398,7 @@ public class APITestWithExcelAsTestManager {
   @Test
   public void testActionHeaderMissing() throws NoSuchFieldException, IllegalAccessException {
     log.info("Start - testActionHeaderMissing");
-    String assertMessage  = "Mandatory headers [Action] are missing";
+    String assertMessage  = "Sheet Name : API-Testing - Row : 2 - Type : REST - [Action] mandatory data's are missing";
     List<String> logMessages = injectMockLogger();
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
@@ -409,7 +417,7 @@ public class APITestWithExcelAsTestManager {
   @Test
   public void testStatusCodeHeaderMissing() throws NoSuchFieldException, IllegalAccessException {
     log.info("Start - testStatusCodeHeaderMissing");
-    String assertMessage = "Mandatory headers [StatusCode] are missing";
+    String assertMessage = "Sheet Name : API-Testing - Row : 2 - Type : REST - [StatusCode] mandatory data's are missing";
     List<String> logMessages = injectMockLogger();
     try {
       boolean isSuccess = VirtualanTestPlanExecutor
@@ -485,6 +493,18 @@ public class APITestWithExcelAsTestManager {
       logMessages.add(arg0.trim());
       return null;
     }).when(log).error(Mockito.anyString());
+
+    doAnswer(invocation -> {
+      String arg0 = invocation.getArgumentAt(0, String.class);
+      logMessages.add(arg0.trim());
+      return null;
+    }).when(log).info(Mockito.anyString());
+
+    doAnswer(invocation -> {
+      String arg0 = invocation.getArgumentAt(0, String.class);
+      logMessages.add(arg0.trim());
+      return null;
+    }).when(log).warn(Mockito.anyString());
 
     doAnswer(invocation -> {
       String arg0 = invocation.getArgumentAt(0, String.class);

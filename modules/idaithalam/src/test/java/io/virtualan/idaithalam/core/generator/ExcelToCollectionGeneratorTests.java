@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
+import io.virtualan.idaithalam.core.domain.SheetObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -315,7 +317,8 @@ public class ExcelToCollectionGeneratorTests {
     }
     @Test
    public void testMissingMandatoryHeaderException() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException {
-        String missingMandatoryHeaderErrorMessage = "Mandatory headers [TestCaseName] are missing";
+        String missingMandatoryHeaderErrorMessage = "Sheet Name : CSS-Reject-DB - Row : 4 - Type : REST - [TestCaseName] mandatory data's are missing";
+        String invalidSheetMessage = "Sheet Name : CSS-Reject-DB - Number : 2 is invalid";
         List<String> logMsgs = injectMockLogger();
         IdaithalamConfiguration.setProperty("workflow", "Disabled");
         String basePath = "src/test/resources/Excels";
@@ -331,8 +334,8 @@ public class ExcelToCollectionGeneratorTests {
 
         boolean actual = ExcelToCollectionGenerator.createCollection(apiExecutorParam);
         removeMockLogger();
-
         Assert.assertTrue(logMsgs.contains(missingMandatoryHeaderErrorMessage));
+        Assert.assertTrue(logMsgs.contains(invalidSheetMessage));
 
    }
     private List<String> injectMockLogger() throws NoSuchFieldException, IllegalAccessException {
@@ -343,6 +346,12 @@ public class ExcelToCollectionGeneratorTests {
             logMessages.add(arg0.trim());
             return null;
         }).when(log).error(anyString());
+
+        doAnswer(invocation -> {
+            String arg0 = invocation.getArgumentAt(0, String.class);
+            logMessages.add(arg0.trim());
+            return null;
+        }).when(log).info(anyString());
 
         doAnswer(invocation -> {
             String arg0 = invocation.getArgumentAt(0, String.class);
@@ -454,7 +463,6 @@ public class ExcelToCollectionGeneratorTests {
                         ObjectMapper objectMapper = new ObjectMapper();
                         String fileContent =  FileUtils.readFileToString(new File(apiExecutorParam.getOutputDir()+"/"+fileName));
                         List<HashMap<String, Object>> itemLists = objectMapper.readValue(fileContent,List.class);
-                        Assert.assertEquals(firstSheet.getLastRowNum(), itemLists.size());
 
                         for(int i=0;i<itemLists.size();i++){
                             if(firstSheet.getRow(i+1).getCell(testCaseNameHeaderIndex) != null &&
@@ -496,5 +504,78 @@ public class ExcelToCollectionGeneratorTests {
         return testCaseNameColumnIndex;
     }
 
+    @Test
+    public void testgetObjectSheetMissingMandatoryHeaderRest() throws IOException, InvalidFormatException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException {
+       List<String> logMsgs = injectMockLogger();
+       String testCaseNameMissingMsg = "Sheet Name : REST - Row : 2 - Type : REST - [TestCaseName] mandatory data's are missing";
+        String testCaseDescNameMissingMsg = "Sheet Name : REST - Row : 3 - Type : REST - [TestCaseNameDesc] mandatory data's are missing";
+        String urlMissingMsg = "Sheet Name : REST - Row : 4 - Type : REST - [URL] mandatory data's are missing";
+        String actionMissingMsg = "Sheet Name : REST - Row : 5 - Type : REST - [Action] mandatory data's are missing";
+        String statusCodeMissingMsg = "Sheet Name : REST - Row : 6 - Type : REST - [StatusCode] mandatory data's are missing";
+        String basePath = "src/test/resources/Excels";
+        File inputFile = new File("src/test/resources/Excels/testgetObjectSheetMissingMandatoryHeaderRest.xlsx");
+        Workbook workbook = new XSSFWorkbook(inputFile);
+        Sheet restSheet = workbook.getSheet("REST");
+        Method method = ExcelToCollectionGenerator.class.getDeclaredMethod("getObjectSheet", int.class, List.class, SheetObject.class);
+        method.setAccessible(true);
+        ExcelToCollectionGenerator excelToCollectionGenerator = new ExcelToCollectionGenerator();
+        SheetObject sheetObject = new SheetObject();
+        sheetObject.setFirstSheet(restSheet);
+        sheetObject.setBasePath(basePath);
+
+        Map<String, String> excludeResponseMap = new HashMap<>();
+
+
+        Map<String, String> cucumblanMap = new HashMap<>();
+        cucumblanMap.put("virtualan.data.load", "");
+        cucumblanMap.put("virtualan.data.heading", "");
+        cucumblanMap.put("virtualan.data.type", "VIRTUALAN");
+        sheetObject.setCucumblanMap(cucumblanMap);
+        sheetObject.setExcludeResponseMap(excludeResponseMap);
+            JSONArray jsonArray = (JSONArray) method.invoke(excelToCollectionGenerator, 1, new ArrayList<String>(), sheetObject);
+          removeMockLogger();
+            Assert.assertTrue(!jsonArray.isEmpty());
+    Assert.assertTrue(logMsgs.contains(testCaseNameMissingMsg));
+        Assert.assertTrue(logMsgs.contains(testCaseDescNameMissingMsg));
+        Assert.assertTrue(logMsgs.contains(urlMissingMsg));
+        Assert.assertTrue(logMsgs.contains(actionMissingMsg));
+        Assert.assertTrue(logMsgs.contains(statusCodeMissingMsg));
+
+    }
+
+    @Test
+    public void testgetObjectSheetMissingMandatoryHeaderDB() throws IOException, InvalidFormatException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException {
+       List<String> logMsgs = injectMockLogger();
+        String testCaseNameMissingMsg = "Sheet Name : DB - Row : 2 - Type : DB - [TestCaseName] mandatory data's are missing";
+        String testCaseDescNameMissingMsg = "Sheet Name : DB - Row : 3 - Type : DB - [TestCaseNameDesc] mandatory data's are missing";
+        String resourceMissingMsg = "Sheet Name : DB - Row : 4 - Type : DB - [Resource] mandatory data's are missing";
+        String basePath = "src/test/resources/Excels";
+        File inputFile = new File("src/test/resources/Excels/testgetObjectSheetMissingMandatoryHeaderRest.xlsx");
+        Workbook workbook = new XSSFWorkbook(inputFile);
+        Sheet restSheet = workbook.getSheet("DB");
+        Method method = ExcelToCollectionGenerator.class.getDeclaredMethod("getObjectSheet", int.class, List.class, SheetObject.class);
+        method.setAccessible(true);
+        ExcelToCollectionGenerator excelToCollectionGenerator = new ExcelToCollectionGenerator();
+        SheetObject sheetObject = new SheetObject();
+        sheetObject.setFirstSheet(restSheet);
+        sheetObject.setBasePath(basePath);
+
+        Map<String, String> excludeResponseMap = new HashMap<>();
+
+
+        Map<String, String> cucumblanMap = new HashMap<>();
+        cucumblanMap.put("virtualan.data.load", "");
+        cucumblanMap.put("virtualan.data.heading", "");
+        cucumblanMap.put("virtualan.data.type", "VIRTUALAN");
+        sheetObject.setCucumblanMap(cucumblanMap);
+        sheetObject.setExcludeResponseMap(excludeResponseMap);
+        JSONArray jsonArray = (JSONArray) method.invoke(excelToCollectionGenerator, 1, new ArrayList<String>(), sheetObject);
+        removeMockLogger();
+        Assert.assertTrue(!jsonArray.isEmpty());
+        Assert.assertTrue(logMsgs.contains(testCaseNameMissingMsg));
+        Assert.assertTrue(logMsgs.contains(testCaseDescNameMissingMsg));
+        Assert.assertTrue(logMsgs.contains(resourceMissingMsg));
+
+    }
     
 }
