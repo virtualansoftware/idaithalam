@@ -75,14 +75,12 @@ public class EDI270And271Parser implements StandardProcessing {
             .range(0, contents.length)
             .filter(i -> !codes[i].isEmpty())
             .mapToObj(i -> {
-              //System.out.println(codes[i] + " : " + contents[i]);
               childObject.put(codes[i], contents[i]);
               return childObject;
             }).collect(Collectors.toList());
         newObject.put(contents[0] + "::" + index, childObject);
       }
     }
-    //System.out.println(newObject);
     return newObject;
   }
 

@@ -325,9 +325,7 @@ public class ExcelToCollectionGeneratorTests {
 //                        for(int i=0; i<jsonArray.length();i++) {
 //                            Item item = gson.fromJson(jsonArray.get(i).toString(), Item.class);
 //                            Row row = firstSheet.getRow(i+1);
-//                            System.out.println("Item Scenario "+item.getScenario() +" : Excels Scenarion "+ row.getCell(3));
 //                            Assert.assertEquals(item.getScenario().toString(), row.getCell(3).toString());
-//                            System.out.println("Tyep "+item.isRest()+ "-"+item.isDatabase());
 //                            Assert.assertEquals(item.isRest()==true?"REST":"DB", row.getCell(1).toString());
 //                        }
 

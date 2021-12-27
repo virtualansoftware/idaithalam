@@ -302,6 +302,6 @@ public class IdaithalamExecutor {
     }
 
     private static String removeFileName(String featureTitle) {
-        return featureTitle != null? featureTitle.replace(".json", "") :  featureTitle;
+        return featureTitle != null? featureTitle.replace(".json", "").replace(".yaml", "") :  featureTitle;
     }
 }

@@ -110,7 +110,7 @@ public class FeatureFileGenerator {
                 .createPostManToVirtualan(getJSONObject(classLoader, fileNames[i]));
           } else if (ConversionType.OPENAPI.name().equalsIgnoreCase(contractFileType)) {
             jsonArray = OpenApiFeatureFileGenerator
-                .generateOpenApiContractForVirtualan(fileNames[i]);
+                .generateOpenApiContractForVirtualan(fileNames[i] , apiExecutorParam);
           } else {
             jsonArray = getJSONArray(apiExecutorParam, fileNames[i]);
           }
