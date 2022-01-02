@@ -8,18 +8,13 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 public class APITestWithExcelAsTestManager {
 
+
     @BeforeClass
     public void testBeforeClass(){
-        System.out.println("----------------------------------------");
-        System.out.println("--- Start Test -------");
-        System.out.println("------------------------------------------");
     }
 
     @AfterClass
     public  void testAfterClass(){
-        System.out.println("------------------------------------------");
-        System.out.println("---- END Test : ------");
-        System.out.println("-------------------------------------------");
     }
 
 

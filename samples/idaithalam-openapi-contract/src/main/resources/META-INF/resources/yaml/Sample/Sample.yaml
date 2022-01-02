@@ -1,134 +1,66 @@
-openapi: 3.0.3
+openapi: "3.0.0"
 info:
-  contact:
-    email: info@inss.ch
-    name: Oliver Glas
-    url: http://api.example.com
-  description: Sample API
+  version: 1.0.0
+  title: riskfactor
   license:
-    name: No license
-  title: INSS Sample specification
-  version: 0.0.2
+    name: MIT
 servers:
-- url: /
+  - url: http://localhost:8080/api/
+tags:
+  - name: messages
+    description: Messages API
 paths:
-  /sample:
-    post:
-      description: Create a new sample object.
-      operationId: createSample
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Sample'
-      responses:
-        "201":
-         description: Sample created
-        "400":
-          description: Sample exists already. Choose another name.
-        "405":
-          description: Invalid input.
-        default:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-          description: unexpected error
-      summary: Create a sample
-      tags:
-      - sample
-      x-contentType: application/json
-      x-accepts: application/json
-      x-tags:
-      - tag: sample
-  /sample/validate/{sampleId}:
+  '/messages/{id}':
     get:
-      description: Sample path
-      operationId: validateById
-      parameters:
-      - description: The id of the sample
-        explode: false
-        in: path
-        name: sampleId
-        required: true
-        schema:
-          type: string
-        style: simple
-        example: sampleId
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Validation'
-          description: Validation result
-        "400":
-          description: Invalid ID
-        "404":
-          description: Sample not found
-        default:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-          description: unexpected error
-      summary: The GET sample
+      summary: Returns the message with the given ID
+      description: Returns the message with the given ID
+      operationId: getMessageById
       tags:
-      - sample
-      x-accepts: application/json
-      x-tags:
-      - tag: sample
+        - messages
+      parameters:
+        - name: id
+          in: path
+          description: ID of the message
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/MessageResponse'
+        '500':
+          description: Error response
 components:
-  schemas:
-    Sample:
-      example:
-        filename: Sample.yaml
-        name: Sample
-        version: 0.0.1
-      properties:
-        name:
-          example: Sample
-          type: string
-        filename:
-          example: Sample.yaml
-          type: string
-        version:
-          example: 0.0.1
-          type: string
-      required:
-      - name
-    Validation:
-      example:
-        sample1: one
-        id: 1
-        sample3: three
-        sample2: two
-      properties:
-        id:
-          example: 1
-          format: int64
-          type: integer
-        sample1:
-          description: Sample one
-          example: one
-          type: string
-        sample2:
-          description: Sample two
-          example: two
-          type: string
-        sample3:
-          description: Sample three
-          example: three
-          type: string
-    Error:
-      properties:
-        code:
-          example: 404
-          format: int32
-          type: integer
-        message:
-          example: Unexpected error.
-          type: string
-      required:
-      - code
-      - message
+  responses:
+    MessageResponse:
+      description: Successful response with the message
+      content:
+        application/json:
+          schema:
+            title: MessageResponse
+            description: Representation of a message
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  id:
+                    type: string
+                  attributes:
+                    type: object
+                    properties:
+                      text:
+                        type: string
+                      lastModified:
+                        type: string
+                        format: date-time
+                    required:
+                      - text
+                      - lastModified
+                required:
+                  - type
+                  - id
+                  - attributes
+            required:
+              - data

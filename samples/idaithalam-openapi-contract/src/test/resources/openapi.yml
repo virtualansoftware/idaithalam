@@ -1,0 +1,13 @@
+parallelExecution: 1
+timeout:  30000
+idaithalamProperties:
+  workflow: Enabled
+apiExecutor:
+  - reportTitle: "Pet 01 API EXCEL based api testing"
+    env: dev
+    outputDir: target/dev/1
+    cucumblanProperties:
+      service.api: http://localhost:8800/api
+      pet.cucumblan.jdbc.driver-class-name: org.hsqldb.jdbc.JDBCDriver
+      virtualan.data.load: Sample.yaml
+      virtualan.data.type: OPENAPI

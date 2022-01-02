@@ -537,7 +537,6 @@ public class ExcelToCollectionGeneratorTests {
     }
 
     private List<String>  getExcelSheetNames(File inputExcelFile) throws IOException {
-
         List<String> sheetNames = new ArrayList<>();
         InputStream stream = new FileInputStream(inputExcelFile);
         Workbook workbook = new XSSFWorkbook(stream);

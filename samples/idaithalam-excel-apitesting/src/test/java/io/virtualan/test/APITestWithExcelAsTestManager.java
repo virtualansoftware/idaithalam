@@ -29,9 +29,6 @@ public class APITestWithExcelAsTestManager {
 
   @BeforeClass
   public void testBeforeClass() {
-    System.out.println("----------------------------------------");
-    System.out.println("--- Start Test -------");
-    System.out.println("------------------------------------------");
     try {
       RestAssured.useRelaxedHTTPSValidation();
     } catch (Exception ex) {
@@ -43,10 +40,6 @@ public class APITestWithExcelAsTestManager {
 
   @AfterClass
   public void testAfterClass() {
-    System.out.println("------------------------------------------");
-    
-    System.out.println("---- END Test : ------");
-    System.out.println("-------------------------------------------");
   }
 
 
@@ -183,7 +176,6 @@ public class APITestWithExcelAsTestManager {
       apiExecutorParam.setReportTitle("Via code - API EXCEL based api testing");
       VirtualanTestExecutor testExecutor = new VirtualanTestExecutor(apiExecutorParam);
       status = testExecutor.call();
-      System.out.println(status);
       if (status != 0) {
         //actual it will fail but it made as pass
         //purposefully passed to show case okta and basic auth demo
@@ -192,7 +184,6 @@ public class APITestWithExcelAsTestManager {
         Assert.assertTrue(true);
       }
     } catch (Exception e) {
-      System.out.println(e.getMessage());
       Assert.assertTrue(true);
     }
     log.info("End - excelFieldExamples_3");
