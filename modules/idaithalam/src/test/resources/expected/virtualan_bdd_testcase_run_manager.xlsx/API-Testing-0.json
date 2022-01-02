@@ -4,7 +4,7 @@
         "requestType": "REST",
         "method": "GET",
         "scenario": "Read petId and Not Found",
-        "resource": "api",
+        "resource": "pet",
         "availableParams": [{
             "parameterType": "HEADER_PARAM",
             "value": "application/json",
@@ -20,7 +20,7 @@
         "requestType": "REST",
         "method": "GET",
         "scenario": "Read petId by Tag",
-        "resource": "api",
+        "resource": "pet",
         "availableParams": [
             {
                 "parameterType": "HEADER_PARAM",
@@ -54,7 +54,7 @@
         "requestType": "REST",
         "method": "POST",
         "scenario": "Create Pet for Given Input",
-        "resource": "api",
+        "resource": "pet",
         "availableParams": [{
             "parameterType": "HEADER_PARAM",
             "value": "application/json",

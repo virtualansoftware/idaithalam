@@ -7,7 +7,8 @@
 	<version>1.0.1-SNAPSHOT</version>
 	<properties>
 		<slf4j.version>1.7.32</slf4j.version>
-		<idaithalam.version>1.4.3</idaithalam.version>
+		
+		<idaithalam.version>1.4.5-SNAPSHOT</idaithalam.version>
     <testng.ver>7.4.0</testng.ver>
     <java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
@@ -60,6 +61,20 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.13.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>2.0.9</version>
+			<scope>test</scope>
+
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>1.7.4</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

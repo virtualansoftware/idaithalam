@@ -1,17 +1,26 @@
 package io.virtualan.test;
 
+import io.restassured.RestAssured;
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.api.VirtualanTestExecutor;
 import io.virtualan.idaithalam.core.api.VirtualanTestPlanExecutor;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
+
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.virtualan.idaithalam.core.generator.ExcelToCollectionGenerator;
 import lombok.extern.slf4j.Slf4j;
+import org.mockito.Mockito;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.doAnswer;
 
 @Slf4j
 public class APITestWithExcelAsTestManager {
@@ -20,7 +29,14 @@ public class APITestWithExcelAsTestManager {
 
   @BeforeClass
   public void testBeforeClass() {
+    try {
+      RestAssured.useRelaxedHTTPSValidation();
+    } catch (Exception ex) {
+    }
   }
+
+
+
 
   @AfterClass
   public void testAfterClass() {
@@ -129,6 +145,7 @@ public class APITestWithExcelAsTestManager {
     }
     log.info("End - virtualan_bdd_testcase_run_manager");
   }
+  
 
 
 
@@ -292,5 +309,181 @@ public class APITestWithExcelAsTestManager {
     }
     log.info("End - virtualan_collection_testcase_7");
   }
+
+  @Test
+  public void testCaseNameHeaderMissing() throws NoSuchFieldException, IllegalAccessException {
+    String  scenarioIdMissigMsg= "Sheet Name : API-Testing - Row : 2 - Type : REST - [TestCaseName] mandatory data's are missing";
+    log.info("Start - testTestCaseNameHeaderMissing");
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/testCaseNameHeaderMissing.yml");
+      Assert.assertFalse(isSuccess);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+    }
+    log.info("End - testTestCaseNameHeaderMissing");
+  }
+
+  @Test
+  public void testURLMandatoryHeaderMissing(){
+    String  scenarioIdMissigMsg= "Sheet Name : API-Testing - Row : 2 - Type : REST - [TestCaseNameDesc, URL] mandatory data's are missing";
+    log.info("Start - testURLMandatoryHeaderMissing");
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/testURLMandatoryHeaderMissing.yml");
+      Assert.assertFalse(isSuccess);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+    }
+    log.info("End - testURLMandatoryHeaderMissing");
+  }
+
+  @Test
+  public void testCaseNameDescHeaderMissing() throws NoSuchFieldException, IllegalAccessException {
+    log.info("Start - testCaseNameDescHeaderMissing");
+    try {
+      String assertMessage  = "Sheet Name : API-Testing - Row : 2 - Type : REST - [TestCaseNameDesc] mandatory data's are missing";
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/testCaseNameDescHeaderMissing.yml");
+      Assert.assertFalse(isSuccess);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      Assert.assertTrue(false);
+    }
+    log.info("End - testCaseNameDescHeaderMissing");
+  }
+
+  @Test
+  public void testContentTypeHeaderMissing() throws NoSuchFieldException, IllegalAccessException {
+    log.info("Start - testContentTypeHeaderMissing");
+    String assertMessage  = "Sheet Name : API-Testing - Row : 2 - Type : REST - [ContentType] mandatory data's are missing";
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/testContentTypeHeaderMissing.yml");
+      Assert.assertFalse(isSuccess);
+    } catch (InterruptedException e) {
+     log.info("Content Type "+e.getMessage());
+     Assert.assertTrue(false);
+    }
+    log.info("End - testContentTypeHeaderMissing");
+  }
+
+  @Test
+  public void testActionHeaderMissing() throws NoSuchFieldException, IllegalAccessException {
+    log.info("Start - testActionHeaderMissing");
+    String assertMessage  = "Sheet Name : API-Testing - Row : 2 - Type : REST - [Action] mandatory data's are missing";
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/testActionHeaderMissing.yml");
+      Assert.assertFalse(isSuccess);
+    } catch (InterruptedException e) {
+      log.info("Content Type "+e.getMessage());
+      Assert.assertTrue(false);
+    }
+    log.info("End - testActionHeaderMissing");
+  }
+
+  @Test
+  public void testStatusCodeHeaderMissing() throws NoSuchFieldException, IllegalAccessException {
+    log.info("Start - testStatusCodeHeaderMissing");
+    String assertMessage = "Sheet Name : API-Testing - Row : 2 - Type : REST - [StatusCode] mandatory data's are missing";
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/testStatusCodeHeaderMissing.yml");
+      Assert.assertFalse(isSuccess);
+    } catch (InterruptedException e) {
+      log.info("Content Type "+e.getMessage());
+      Assert.assertTrue(false);
+    }
+    log.info("End - testStatusCodeHeaderMissing");
+  }
+
+  @Test
+  public void testEmptySheet() throws NoSuchFieldException, IllegalAccessException {
+    log.info("Start - testEmptySheet");
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/testEmptySheet.yml");
+      Assert.assertFalse(isSuccess);
+    } catch (InterruptedException e) {
+      log.info("Content Type "+e.getMessage());
+      Assert.assertTrue(false);
+    }
+    log.info("End - testEmptySheet");
+  }
+
+  @Test
+  public void testExcelFileNotFound() throws NoSuchFieldException, IllegalAccessException {
+    log.info("Start - testExcelFileNotFound");
+    String assertMessage = "File is missing(null) : testExcelFileNotFound.xlsx";
+    try {
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/testExcelFileNotFound.yml");
+      Assert.assertFalse(isSuccess);
+    } catch (InterruptedException e) {
+      log.info("Content Type "+e.getMessage());
+      Assert.assertTrue(false);
+    }
+    log.info("End - testExcelFileNotFound");
+  }
+
+  @Test
+  public void testInvalidOutputPath() throws NoSuchFieldException, IllegalAccessException {
+    log.info("Start - testInvalidOutputPath");
+    String assertMessage = "Unable to generate Virtualan  JSON  PetPost-0 : E:\\target\\excel\\virtualan_collection_testcase_0\\PetPost-0.json (The system cannot find the path specified)";
+    try {
+
+      boolean isSuccess = VirtualanTestPlanExecutor
+              .invoke("config-yml/testInvalidOutputPath.yml");
+      Assert.assertFalse(isSuccess);
+     // Assert.assertTrue(logMessages.contains(assertMessage));
+    } catch (InterruptedException e) {
+      log.info("Content Type "+e.getMessage());
+      Assert.assertTrue(false);
+    }
+    log.info("End - testInvalidOutputPath");
+  }
+
+  private List<String> injectMockLogger() throws NoSuchFieldException, IllegalAccessException {
+    Logger log = Mockito.mock(Logger.class);
+    List<String> logMessages = new ArrayList<>();
+    doAnswer(invocation -> {
+      String arg0 = invocation.getArgumentAt(0, String.class);
+      logMessages.add(arg0.trim());
+      return null;
+    }).when(log).error(Mockito.anyString());
+
+    doAnswer(invocation -> {
+      String arg0 = invocation.getArgumentAt(0, String.class);
+      logMessages.add(arg0.trim());
+      return null;
+    }).when(log).info(Mockito.anyString());
+
+    doAnswer(invocation -> {
+      String arg0 = invocation.getArgumentAt(0, String.class);
+      logMessages.add(arg0.trim());
+      return null;
+    }).when(log).warn(Mockito.anyString());
+
+    doAnswer(invocation -> {
+      String arg0 = invocation.getArgumentAt(0, String.class);
+      logMessages.add(arg0.trim());
+      return null;
+    }).when(log).warn(Mockito.anyString());
+    Field field = ExcelToCollectionGenerator.class.getDeclaredField("log");
+    field.setAccessible(true);
+    field.set(ExcelToCollectionGenerator.class, log);
+    return logMessages;
+  }
+
+  private void removeMockLogger() throws NoSuchFieldException, IllegalAccessException {
+    Logger log = LoggerFactory.getLogger(ExcelToCollectionGenerator.class);
+    Field field = ExcelToCollectionGenerator.class.getDeclaredField("log");
+    field.setAccessible(true);
+    field.set(ExcelToCollectionGenerator.class, log);
+  }
+
 
 }

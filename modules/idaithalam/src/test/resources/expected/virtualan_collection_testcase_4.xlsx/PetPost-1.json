@@ -4,7 +4,7 @@
     "requestType": "REST",
     "method": "POST",
     "scenario": "post API Testing",
-    "resource": "api",
+    "resource": "post",
     "availableParams": [
         {
             "parameterType": "HEADER_PARAM",
