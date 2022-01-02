@@ -2,7 +2,7 @@
     "requestType": "REST",
     "method": "POST",
     "scenario": "post API Testing",
-    "resource": "api",
+    "resource": "pet",
     "availableParams": [
         {
             "parameterType": "HEADER_PARAM",

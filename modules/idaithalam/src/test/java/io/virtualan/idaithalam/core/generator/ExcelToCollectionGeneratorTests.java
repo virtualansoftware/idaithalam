@@ -5,6 +5,8 @@ import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.domain.SheetObject;
+import io.virtualan.idaithalam.exception.IdaithalamException;
+import io.virtualan.idaithalam.exception.MandatoryFieldMissingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
@@ -19,6 +21,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runners.MethodSorters;
 import org.mockito.Mockito;
 import org.skyscreamer.jsonassert.JSONCompare;
@@ -147,7 +150,7 @@ public class ExcelToCollectionGeneratorTests {
     
     
     @Test
-    public void testvirtualan_bdd_testcase_run_manager() {
+    public void testvirtualan_bdd_testcase_run_manager() throws UnableToProcessException {
     	IdaithalamConfiguration.setProperty("workflow", "Disabled");
     	 String basePath = "src/test/resources/Excels";
          File inputFile = new File("src/test/resources/Excels/virtualan_bdd_testcase_run_manager.xlsx");
@@ -155,7 +158,7 @@ public class ExcelToCollectionGeneratorTests {
     }
     
     @Test
-    public void testvirtualan_collection_pet_empty() {
+    public void testvirtualan_collection_pet_empty() throws UnableToProcessException {
     	IdaithalamConfiguration.setProperty("workflow", "Disabled");
     	 String basePath = "src/test/resources/Excels";
          File inputFile = new File("src/test/resources/Excels/virtualan_collection_pet_empty.xlsx");
@@ -163,7 +166,7 @@ public class ExcelToCollectionGeneratorTests {
     }
     
     @Test
-    public void testvirtualan_collection_pet_sheet_2() {
+    public void testvirtualan_collection_pet_sheet_2() throws UnableToProcessException {
     	IdaithalamConfiguration.setProperty("workflow", "Disabled");
     	 String basePath = "src/test/resources/Excels";
          File inputFile = new File("src/test/resources/Excels/virtualan_collection_pet_sheet_2.xlsx");
@@ -171,7 +174,7 @@ public class ExcelToCollectionGeneratorTests {
     }
     
     @Test
-    public void testvirtualan_collection_testcase_0() {
+    public void testvirtualan_collection_testcase_0() throws UnableToProcessException {
     	IdaithalamConfiguration.setProperty("workflow", "Disabled");
     	 String basePath = "src/test/resources/Excels";
          File inputFile = new File("src/test/resources/Excels/virtualan_collection_testcase_0.xlsx");
@@ -179,7 +182,7 @@ public class ExcelToCollectionGeneratorTests {
     }
     
     @Test
-    public void testvirtualan_collection_testcase_01() {
+    public void testvirtualan_collection_testcase_01() throws UnableToProcessException {
     	IdaithalamConfiguration.setProperty("workflow", "Disabled");
     	 String basePath = "src/test/resources/Excels";
          File inputFile = new File("src/test/resources/Excels/virtualan_collection_testcase_01.xlsx");
@@ -187,7 +190,7 @@ public class ExcelToCollectionGeneratorTests {
     }
     
     @Test
-    public void testvirtualan_collection_testcase_02() {
+    public void testvirtualan_collection_testcase_02() throws UnableToProcessException {
     	IdaithalamConfiguration.setProperty("workflow", "Disabled");
     	 String basePath = "src/test/resources/Excels";
          File inputFile = new File("src/test/resources/Excels/virtualan_collection_testcase_02.xlsx");
@@ -195,7 +198,7 @@ public class ExcelToCollectionGeneratorTests {
     }
     
     @Test
-    public void testvirtualan_collection_testcase_2() {
+    public void testvirtualan_collection_testcase_2() throws UnableToProcessException {
     	IdaithalamConfiguration.setProperty("workflow", "Disabled");
     	 String basePath = "src/test/resources/Excels";
          File inputFile = new File("src/test/resources/Excels/virtualan_collection_testcase_2.xlsx");
@@ -203,7 +206,7 @@ public class ExcelToCollectionGeneratorTests {
     }
     
     @Test
-    public void testvirtualan_collection_testcase_3() {
+    public void testvirtualan_collection_testcase_3() throws UnableToProcessException {
     	IdaithalamConfiguration.setProperty("workflow", "Disabled");
     	 String basePath = "src/test/resources/Excels";
          File inputFile = new File("src/test/resources/Excels/virtualan_collection_testcase_3.xlsx");
@@ -212,7 +215,7 @@ public class ExcelToCollectionGeneratorTests {
     
 
     @Test
-    public void testvirtualan_collection_testcase_5() {
+    public void testvirtualan_collection_testcase_5() throws UnableToProcessException {
     	IdaithalamConfiguration.setProperty("workflow", "Disabled");
     	 String basePath = "src/test/resources/Excels";
          File inputFile = new File("src/test/resources/Excels/virtualan_collection_testcase_5.xlsx");
@@ -220,7 +223,7 @@ public class ExcelToCollectionGeneratorTests {
     }
     
     @Test
-    public void testvirtualan_collection_testcase_6() {
+    public void testvirtualan_collection_testcase_6() throws UnableToProcessException {
     	IdaithalamConfiguration.setProperty("workflow", "Disabled");
     	 String basePath = "src/test/resources/Excels";
          File inputFile = new File("src/test/resources/Excels/virtualan_collection_testcase_6.xlsx");
@@ -228,7 +231,7 @@ public class ExcelToCollectionGeneratorTests {
     }
     
     @Test
-    public void testvirtualan_collection_testcase_7() {
+    public void testvirtualan_collection_testcase_7() throws UnableToProcessException {
     	IdaithalamConfiguration.setProperty("workflow", "Disabled");
     	 String basePath = "src/test/resources/Excels";
          File inputFile = new File("src/test/resources/Excels/virtualan_collection_testcase_7.xlsx");
@@ -237,7 +240,7 @@ public class ExcelToCollectionGeneratorTests {
     
     
     @Test
-    public void testvirtualan_collection_testcase_8() throws IOException {
+    public void testvirtualan_collection_testcase_8() throws IOException, UnableToProcessException {
         IdaithalamConfiguration.setProperty("workflow", "Disabled");
     	 String basePath = "src/test/resources/Excels";
          File inputFile = new File("src/test/resources/Excels/virtualan_collection_testcase_8.xlsx");
@@ -247,22 +250,20 @@ public class ExcelToCollectionGeneratorTests {
     @Test
     public void testFileNotFoundSecenario() throws NoSuchFieldException, IllegalAccessException {
         String fileMissingMsg = "File is missing(src/test/resources/Excels) : virtualan_collection_testcase_8-filenotthere.xlsx";
-        List<String> logMessages = injectMockLogger();
         IdaithalamConfiguration.setProperty("workflow", "Disabled");
         String basePath = "src/test/resources/Excels";
         File inputFile = new File("src/test/resources/Excels/virtualan_collection_testcase_8-filenotthere.xlsx");
-       createCollection(inputFile, basePath);
-       System.out.println("Log Message "+logMessages);
-        removeMockLogger();
-        Assert.assertTrue(logMessages.contains(fileMissingMsg));
+        try {
+            createCollection(inputFile, basePath);
+        }catch (UnableToProcessException unableToProcessException){
+            Assert.assertEquals(fileMissingMsg.trim(), unableToProcessException.getMessage().trim());
+        }
     }
 
 
     @Test
-    public void testInvalidOutputDirectory() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException {
-        String unableToGenerateCucumbalamProperties = "Unable to generate cucumblan.properties properties  E:\\cucumblan.properties (The system cannot find the path specified)";
-        String unableToGenerateCucumbalamEnvProperties = "Unable to generate cucumblan-env.properties properties  E:\\cucumblan-env.properties (The system cannot find the path specified)";
-        List<String> logMsgs = injectMockLogger();
+    public void testInvalidOutputDirectory() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException, IdaithalamException {
+        String assertMessage = "Unable to generate Virtualan  JSON  API-Testing-0 : E:\\API-Testing-0.json (The system cannot find the path specified)";
         IdaithalamConfiguration.setProperty("workflow", "Disabled");
         String basePath = "src/test/resources/Excels";
         File inputFile = new File("src/test/resources/Excels/virtualan_collection_testcase_0.xlsx");
@@ -275,15 +276,15 @@ public class ExcelToCollectionGeneratorTests {
         apiExecutorParam.setInputExcel(inputFile.getName());
         apiExecutorParam.setOutputDir(generatedPath);
 
-        boolean actual = ExcelToCollectionGenerator.createCollection(apiExecutorParam);
-        removeMockLogger();
-        Assert.assertTrue(logMsgs.contains(unableToGenerateCucumbalamEnvProperties));
-        Assert.assertTrue(logMsgs.contains(unableToGenerateCucumbalamProperties));
+        try {
+            boolean actual = ExcelToCollectionGenerator.createCollection(apiExecutorParam);
+        }catch (UnableToProcessException unableToProcessException){
+            Assert.assertEquals(assertMessage.trim(), unableToProcessException.getMessage().trim());
+        }
     }
 
     @Test
     public void testBuildCollectionsCreateColectionMethod() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
-        List<String> logMsgs = injectMockLogger();
         IdaithalamConfiguration.setProperty("workflow", "Disabled");
         String basePath = "src/test/resources/Excels";
         File inputFile = new File("src/test/resources/Excels/TestBuildCollectionsExcel.xlsx");
@@ -313,16 +314,69 @@ public class ExcelToCollectionGeneratorTests {
         sheetNames.forEach(sheetName->{
             Assert.assertTrue(virtualanDataHeading.contains(sheetName));
         });
-        removeMockLogger();
     }
-    @Test
-   public void testMissingMandatoryHeaderException() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException {
-        String missingMandatoryHeaderErrorMessage = "Sheet Name : CSS-Reject-DB - Row : 4 - Type : REST - [TestCaseName] mandatory data's are missing";
-        String invalidSheetMessage = "Sheet Name : CSS-Reject-DB - Number : 2 is invalid";
-        List<String> logMsgs = injectMockLogger();
+    @Test(expected = MandatoryFieldMissingException.class)
+   public void testTestCaseFieldMissing() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException, IdaithalamException {
+        String missingMandatoryHeaderErrorMessage = "Sheet Name : API-Testing - Row : 2 - Type : REST - [TestCaseName] mandatory fields are missing";
+        assertMandatoryFieldMissingMessage(missingMandatoryHeaderErrorMessage, "src/test/resources/Excels/REST-TestCaseNameMissing.xlsx");
+   }
+    @Test(expected = MandatoryFieldMissingException.class)
+    public void testTestCaseNameDescFieldMissing() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException, IdaithalamException {
+        String missingMandatoryHeaderErrorMessage = "Sheet Name : API-Testing - Row : 3 - Type : REST - [TestCaseNameDesc] mandatory fields are missing";
+        assertMandatoryFieldMissingMessage(missingMandatoryHeaderErrorMessage, "src/test/resources/Excels/REST-TestCaseNameDescMissing.xlsx");
+    }
+    @Test(expected = MandatoryFieldMissingException.class)
+    public void testActionFieldMissing() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException, IdaithalamException {
+        String missingMandatoryHeaderErrorMessage = "Sheet Name : API-Testing - Row : 3 - Type : REST - [Action] mandatory fields are missing";
+        assertMandatoryFieldMissingMessage(missingMandatoryHeaderErrorMessage, "src/test/resources/Excels/REST-ActionMissing.xlsx");
+    }
+
+    @Test(expected = MandatoryFieldMissingException.class)
+    public void testStatusCodeFieldMissing() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException, IdaithalamException {
+        String missingMandatoryHeaderErrorMessage = "Sheet Name : API-Testing - Row : 3 - Type : REST - [StatusCode] mandatory fields are missing";
+        assertMandatoryFieldMissingMessage(missingMandatoryHeaderErrorMessage, "src/test/resources/Excels/REST-StatusCodeMissing.xlsx");
+    }
+
+    @Test(expected = MandatoryFieldMissingException.class)
+    public void testURLFieldMissing() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException, IdaithalamException {
+        String missingMandatoryHeaderErrorMessage = "Sheet Name : API-Testing - Row : 3 - Type : REST - [URL] mandatory fields are missing";
+        assertMandatoryFieldMissingMessage(missingMandatoryHeaderErrorMessage, "src/test/resources/Excels/REST-URLMissing.xlsx");
+    }
+
+    @Test(expected = MandatoryFieldMissingException.class)
+    public void testContentTypeFieldMissing() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException, IdaithalamException {
+        String missingMandatoryHeaderErrorMessage = "Sheet Name : API-Testing - Row : 3 - Type : REST - [ContentType] mandatory fields are missing";
+        assertMandatoryFieldMissingMessage(missingMandatoryHeaderErrorMessage, "src/test/resources/Excels/REST-ContentTypeMissing.xlsx");
+    }
+
+    @Test(expected = MandatoryFieldMissingException.class)
+    public void testResourceFieldMissing() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException, IdaithalamException {
+        String missingMandatoryHeaderErrorMessage = "Sheet Name : API-Testing - Row : 3 - Type : REST - [Resource] mandatory fields are missing";
+        assertMandatoryFieldMissingMessage(missingMandatoryHeaderErrorMessage, "src/test/resources/Excels/REST-ResourceMissing.xlsx");
+    }
+
+    @Test(expected = MandatoryFieldMissingException.class)
+    public void testDBResourceFieldMissing() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException, IdaithalamException {
+        String missingMandatoryHeaderErrorMessage = "Sheet Name : API-Testing - Row : 3 - Type : DB - [Resource] mandatory fields are missing";
+        assertMandatoryFieldMissingMessage(missingMandatoryHeaderErrorMessage, "src/test/resources/Excels/DB-ResourceMissing.xlsx");
+    }
+
+
+    @Test(expected = MandatoryFieldMissingException.class)
+    public void testDBTestCaseFieldMissing() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException, IdaithalamException {
+        String missingMandatoryHeaderErrorMessage = "Sheet Name : API-Testing - Row : 2 - Type : DB - [TestCaseName] mandatory fields are missing";
+        assertMandatoryFieldMissingMessage(missingMandatoryHeaderErrorMessage, "src/test/resources/Excels/DB-TestCaseNameMissing.xlsx");
+    }
+    @Test(expected = MandatoryFieldMissingException.class)
+    public void testDBTestCaseNameDescFieldMissing() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException, IdaithalamException {
+        String missingMandatoryHeaderErrorMessage = "Sheet Name : API-Testing - Row : 3 - Type : DB - [TestCaseNameDesc] mandatory fields are missing";
+        assertMandatoryFieldMissingMessage(missingMandatoryHeaderErrorMessage, "src/test/resources/Excels/DB-TestCaseNameDescMissing.xlsx");
+    }
+    private void assertMandatoryFieldMissingMessage(String missingMandatoryHeaderErrorMessage, String fileName) throws IOException, UnableToProcessException, IdaithalamException {
+
         IdaithalamConfiguration.setProperty("workflow", "Disabled");
         String basePath = "src/test/resources/Excels";
-        File inputFile = new File("src/test/resources/Excels/TestCaseColumnHeaderIsMissing.xlsx");
+        File inputFile = new File(fileName);
         String generatedPath = OUTPUT_FOLDER_NAME+inputFile.getName();
         if (!new File(generatedPath).exists()) {
             new File(generatedPath).mkdirs();
@@ -331,13 +385,13 @@ public class ExcelToCollectionGeneratorTests {
         apiExecutorParam.setBasePath(basePath);
         apiExecutorParam.setInputExcel(inputFile.getName());
         apiExecutorParam.setOutputDir(generatedPath);
-
-        boolean actual = ExcelToCollectionGenerator.createCollection(apiExecutorParam);
-        removeMockLogger();
-        Assert.assertTrue(logMsgs.contains(missingMandatoryHeaderErrorMessage));
-        Assert.assertTrue(logMsgs.contains(invalidSheetMessage));
-
-   }
+        try {
+            boolean actual = ExcelToCollectionGenerator.createCollection(apiExecutorParam);
+        }catch (MandatoryFieldMissingException mandatoryFieldMissingException){
+            Assert.assertTrue(mandatoryFieldMissingException.getMessage().contains(missingMandatoryHeaderErrorMessage));
+            throw mandatoryFieldMissingException;
+        }
+    }
     private List<String> injectMockLogger() throws NoSuchFieldException, IllegalAccessException {
         Logger log = Mockito.mock(Logger.class);
         List<String> logMessages = new ArrayList<>();
@@ -373,7 +427,7 @@ public class ExcelToCollectionGeneratorTests {
 
 
 
-    private void createCollection(File inputFile, String basePath){
+    private void createCollection(File inputFile, String basePath) throws UnableToProcessException {
 
         try {
             String generatedPath = OUTPUT_FOLDER_NAME+inputFile.getName();
@@ -438,7 +492,10 @@ public class ExcelToCollectionGeneratorTests {
 
 
             extractExcelInfo(apiExecutorParam);
-        }catch (Exception e) {
+        }catch (UnableToProcessException exception){
+            throw exception;
+        }
+        catch (Exception e) {
             log.error("Exception occured : "+e.getMessage(),e);
             Assert.assertTrue(false);
         }
@@ -506,17 +563,16 @@ public class ExcelToCollectionGeneratorTests {
 
     @Test
     public void testgetObjectSheetMissingMandatoryHeaderRest() throws IOException, InvalidFormatException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException {
-       List<String> logMsgs = injectMockLogger();
-       String testCaseNameMissingMsg = "Sheet Name : REST - Row : 2 - Type : REST - [TestCaseName] mandatory data's are missing";
-        String testCaseDescNameMissingMsg = "Sheet Name : REST - Row : 3 - Type : REST - [TestCaseNameDesc] mandatory data's are missing";
-        String urlMissingMsg = "Sheet Name : REST - Row : 4 - Type : REST - [URL] mandatory data's are missing";
-        String actionMissingMsg = "Sheet Name : REST - Row : 5 - Type : REST - [Action] mandatory data's are missing";
-        String statusCodeMissingMsg = "Sheet Name : REST - Row : 6 - Type : REST - [StatusCode] mandatory data's are missing";
+       String testCaseNameMissingMsg = "Sheet Name : REST - Row : 2 - Type : REST - [TestCaseName] mandatory fields are missing";
+        String testCaseDescNameMissingMsg = "Sheet Name : REST - Row : 3 - Type : REST - [TestCaseNameDesc] mandatory fields are missing";
+        String urlMissingMsg = "Sheet Name : REST - Row : 4 - Type : REST - [URL] mandatory fields are missing";
+        String actionMissingMsg = "Sheet Name : REST - Row : 5 - Type : REST - [Action] mandatory fields are missing";
+        String statusCodeMissingMsg = "Sheet Name : REST - Row : 6 - Type : REST - [StatusCode] mandatory fields are missing";
         String basePath = "src/test/resources/Excels";
         File inputFile = new File("src/test/resources/Excels/testgetObjectSheetMissingMandatoryHeaderRest.xlsx");
         Workbook workbook = new XSSFWorkbook(inputFile);
         Sheet restSheet = workbook.getSheet("REST");
-        Method method = ExcelToCollectionGenerator.class.getDeclaredMethod("getObjectSheet", int.class, List.class, SheetObject.class);
+        Method method = ExcelToCollectionGenerator.class.getDeclaredMethod("getObjectSheet", int.class, List.class, SheetObject.class, List.class);
         method.setAccessible(true);
         ExcelToCollectionGenerator excelToCollectionGenerator = new ExcelToCollectionGenerator();
         SheetObject sheetObject = new SheetObject();
@@ -532,28 +588,28 @@ public class ExcelToCollectionGeneratorTests {
         cucumblanMap.put("virtualan.data.type", "VIRTUALAN");
         sheetObject.setCucumblanMap(cucumblanMap);
         sheetObject.setExcludeResponseMap(excludeResponseMap);
-            JSONArray jsonArray = (JSONArray) method.invoke(excelToCollectionGenerator, 1, new ArrayList<String>(), sheetObject);
-          removeMockLogger();
-            Assert.assertTrue(!jsonArray.isEmpty());
-    Assert.assertTrue(logMsgs.contains(testCaseNameMissingMsg));
-        Assert.assertTrue(logMsgs.contains(testCaseDescNameMissingMsg));
-        Assert.assertTrue(logMsgs.contains(urlMissingMsg));
-        Assert.assertTrue(logMsgs.contains(actionMissingMsg));
-        Assert.assertTrue(logMsgs.contains(statusCodeMissingMsg));
+        List<String> logMessages = new ArrayList<>();
+        JSONArray jsonArray = (JSONArray) method.invoke(excelToCollectionGenerator, 1, new ArrayList<String>(), sheetObject, logMessages);
+        Assert.assertTrue(!jsonArray.isEmpty());
+        Assert.assertTrue(logMessages.contains(testCaseNameMissingMsg));
+        Assert.assertTrue(logMessages.contains(testCaseDescNameMissingMsg));
+        Assert.assertTrue(logMessages.contains(urlMissingMsg));
+        Assert.assertTrue(logMessages.contains(actionMissingMsg));
+        Assert.assertTrue(logMessages.contains(statusCodeMissingMsg));
 
     }
 
     @Test
     public void testgetObjectSheetMissingMandatoryHeaderDB() throws IOException, InvalidFormatException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException {
-       List<String> logMsgs = injectMockLogger();
-        String testCaseNameMissingMsg = "Sheet Name : DB - Row : 2 - Type : DB - [TestCaseName] mandatory data's are missing";
-        String testCaseDescNameMissingMsg = "Sheet Name : DB - Row : 3 - Type : DB - [TestCaseNameDesc] mandatory data's are missing";
-        String resourceMissingMsg = "Sheet Name : DB - Row : 4 - Type : DB - [Resource] mandatory data's are missing";
+       List<String> logMsgs = new ArrayList<>();
+        String testCaseNameMissingMsg = "Sheet Name : DB - Row : 2 - Type : DB - [TestCaseName] mandatory fields are missing";
+        String testCaseDescNameMissingMsg = "Sheet Name : DB - Row : 3 - Type : DB - [TestCaseNameDesc] mandatory fields are missing";
+        String resourceMissingMsg = "Sheet Name : DB - Row : 4 - Type : DB - [Resource] mandatory fields are missing";
         String basePath = "src/test/resources/Excels";
         File inputFile = new File("src/test/resources/Excels/testgetObjectSheetMissingMandatoryHeaderRest.xlsx");
         Workbook workbook = new XSSFWorkbook(inputFile);
         Sheet restSheet = workbook.getSheet("DB");
-        Method method = ExcelToCollectionGenerator.class.getDeclaredMethod("getObjectSheet", int.class, List.class, SheetObject.class);
+        Method method = ExcelToCollectionGenerator.class.getDeclaredMethod("getObjectSheet", int.class, List.class, SheetObject.class, List.class);
         method.setAccessible(true);
         ExcelToCollectionGenerator excelToCollectionGenerator = new ExcelToCollectionGenerator();
         SheetObject sheetObject = new SheetObject();
@@ -569,9 +625,9 @@ public class ExcelToCollectionGeneratorTests {
         cucumblanMap.put("virtualan.data.type", "VIRTUALAN");
         sheetObject.setCucumblanMap(cucumblanMap);
         sheetObject.setExcludeResponseMap(excludeResponseMap);
-        JSONArray jsonArray = (JSONArray) method.invoke(excelToCollectionGenerator, 1, new ArrayList<String>(), sheetObject);
-        removeMockLogger();
+        JSONArray jsonArray = (JSONArray) method.invoke(excelToCollectionGenerator, 1, new ArrayList<String>(), sheetObject, logMsgs);
         Assert.assertTrue(!jsonArray.isEmpty());
+        log.info(logMsgs.toString());
         Assert.assertTrue(logMsgs.contains(testCaseNameMissingMsg));
         Assert.assertTrue(logMsgs.contains(testCaseDescNameMissingMsg));
         Assert.assertTrue(logMsgs.contains(resourceMissingMsg));

@@ -28,7 +28,7 @@
         "requestType": "REST",
         "method": "GET",
         "scenario": "get By Id",
-        "resource": "api",
+        "resource": "pet",
         "csvson": [
             "id,name, category/id:name,status",
             "i~101,Rockey,i~100:german shepherd,available"
@@ -55,7 +55,7 @@
         "requestType": "REST",
         "method": "GET",
         "scenario": "get API testing",
-        "resource": "api",
+        "resource": "pet",
         "availableParams": [
             {
                 "parameterType": "HEADER_PARAM",
@@ -84,7 +84,7 @@
         "requestType": "REST",
         "method": "POST",
         "scenario": "post API Testing",
-        "resource": "api",
+        "resource": "pet",
         "availableParams": [{
             "parameterType": "HEADER_PARAM",
             "value": "application/json",
@@ -104,6 +104,7 @@
         "identifier": "100",
         "requestType": "KAFKA",
         "messageType": "JSON",
+        "scenario": "Validate pet Response",
         "resource": "pet",
         "csvson": [
             "id,name, category/id:name,status",
@@ -134,5 +135,18 @@
         "resource": "pet",
         "stepInfo": "to insert employee record",
         "scenarioId": "Pet-DB-21"
+    },
+    {
+        "requestType": "DB",
+        "method": "VERIFY",
+        "scenario": "fetch employee records",
+        "resource": "pet",
+        "csvson": [
+            "select * from employees where emp_no = 1 ",
+            "EMP_NO,BIRTH_DATE,FIRST_NAME,LAST_NAME,GENDER,HIRE_DATE",
+            "i~1,l~253087200000,ELan,Thangamani,Male,l~1191992400000"
+        ],
+        "stepInfo": "verify record",
+        "scenarioId": "Pet-DB-22"
     }
 ]

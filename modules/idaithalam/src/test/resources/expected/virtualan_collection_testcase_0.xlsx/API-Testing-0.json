@@ -4,7 +4,7 @@
         "requestType": "REST",
         "method": "GET",
         "scenario": "get API testing",
-        "resource": "api",
+        "resource": "get",
         "availableParams": [
             {
                 "parameterType": "HEADER_PARAM",
@@ -28,7 +28,7 @@
         "requestType": "REST",
         "method": "POST",
         "scenario": "post API Testing",
-        "resource": "api",
+        "resource": "post",
         "availableParams": [{
             "parameterType": "HEADER_PARAM",
             "value": "application/json",

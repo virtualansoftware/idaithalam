@@ -5,7 +5,7 @@
         "requestType": "REST",
         "method": "POST",
         "scenario": "EDI-271 API test sheet 2",
-        "resource": "bin",
+        "resource": "Pet",
         "availableParams": [
             {
                 "parameterType": "HEADER_PARAM",
@@ -35,7 +35,7 @@
         "requestType": "REST",
         "method": "GET",
         "scenario": "get API testing",
-        "resource": "api",
+        "resource": "Pet",
         "availableParams": [
             {
                 "parameterType": "HEADER_PARAM",
@@ -80,7 +80,7 @@
         "requestType": "REST",
         "method": "POST",
         "scenario": "post API Testing",
-        "resource": "api",
+        "resource": "Pet",
         "availableParams": [
             {
                 "parameterType": "HEADER_PARAM",

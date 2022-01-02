@@ -22,8 +22,11 @@ import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import io.virtualan.idaithalam.exception.IdaithalamException;
+import io.virtualan.idaithalam.exception.MandatoryFieldMissingException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -38,9 +41,21 @@ import org.slf4j.LoggerFactory;
 /**
  * The type Excel to collection generator.
  */
+@Slf4j
 public class ExcelToCollectionGenerator {
 
-  private static org.slf4j.Logger log = LoggerFactory.getLogger(ExcelToCollectionGenerator.class);
+   private static final List<String> REST_MANDATORY_FIELDS = new ArrayList<>(Arrays.asList(IdaithalamConstants.TESTCASE_NAME_HEADER,
+          IdaithalamConstants.TESTCASE_NAME_DESC_HEADER,
+          IdaithalamConstants.ACTION_HEADER,
+          IdaithalamConstants.STATUS_CODE_HEADER,
+          IdaithalamConstants.URL_HEADER,
+          IdaithalamConstants.CONTENT_TYPE_HEADER,
+          IdaithalamConstants.RESOURCE_HEADER));
+  private static final List<String> DB_MANDATORY_FIELDS = new ArrayList<>(Arrays.asList(IdaithalamConstants.TESTCASE_NAME_HEADER,
+          IdaithalamConstants.TESTCASE_NAME_DESC_HEADER, IdaithalamConstants.RESOURCE_HEADER));
+  private static final List<String> KAFKA_MANDATORY_FIELDS = new ArrayList<>(Arrays.asList(IdaithalamConstants.TESTCASE_NAME_HEADER,
+          IdaithalamConstants.TESTCASE_NAME_DESC_HEADER));
+
 
 
 
@@ -123,8 +138,7 @@ public class ExcelToCollectionGenerator {
    * @throws UnableToProcessException the unable to process exception
    */
   public static boolean createCollection(ApiExecutorParam apiExecutorParam)
-      throws IOException, UnableToProcessException {
-    try {
+          throws IOException, UnableToProcessException, MandatoryFieldMissingException, IdaithalamException {
       Map<String, Map<String, String>> buildCollections = new BuildCollections()
           .createCollection(apiExecutorParam);
       Map<String, String> excludeResponseMap = buildCollections.get("exclude");
@@ -139,20 +153,11 @@ public class ExcelToCollectionGenerator {
         createPrpos(apiExecutorParam.getOutputDir(), excludeResponseMap,
             "exclude-response.properties");
       }
-    } catch (Exception e) {
-      log.error(
-          "Unable to create collection for the given excel file " + apiExecutorParam.getInputExcel()
-              + " >>> " + e
-              .getMessage());
-      return false;
-    }
-
     return true;
-
   }
 
   private static void getAsSingleFile(ApiExecutorParam apiExecutorParam, int sheet,
-      Map<String, String> cucumblanMap, JSONArray virtualanArray) {
+      Map<String, String> cucumblanMap, JSONArray virtualanArray) throws UnableToProcessException {
     Map<String, JSONArray> arrayMap = buildByMiniCategory(virtualanArray);
     for (Map.Entry<String, JSONArray> entry : arrayMap.entrySet()) {
       JSONArray virtualanSingle = entry.getValue();
@@ -189,7 +194,7 @@ public class ExcelToCollectionGenerator {
 
 
   private static JSONArray getObjectSheet(int sheet, List<String> generatedTestCaseList,
-      SheetObject sheetObject) throws UnableToProcessException {
+      SheetObject sheetObject,  List<String> missingFieldsLogMessages ) throws UnableToProcessException {
     Map<Integer, String> headers = new HashMap<>();
     JSONArray virtualanArray = new JSONArray();
     for (int i = 0; i <= sheetObject.getFirstSheet().getLastRowNum(); i++) {
@@ -208,7 +213,7 @@ public class ExcelToCollectionGenerator {
                     "GRAPHQL".equalsIgnoreCase(finalRow.get("Type"))) {
              List<String> missingData =  restTypeInputDataValidation(finalRow);
              if(!missingData.isEmpty()){
-               log.info(String.format("Sheet Name : %s - Row : %s - Type : REST - %s mandatory data's are missing ",sheetObject.getFirstSheet().getSheetName(),(i+1),missingData.toString()));
+               missingFieldsLogMessages.add(String.format("Sheet Name : %s - Row : %s - Type : REST - %s mandatory fields are missing",sheetObject.getFirstSheet().getSheetName(),(i+1),missingData.toString()));
                continue;
              }
               JSONObject object = buildRESTVirtualanCollection(sheetObject.getBasePath(),
@@ -217,6 +222,11 @@ public class ExcelToCollectionGenerator {
                   sheetObject.getExcludeResponseMap());
               virtualanArray.put(object);
             } else if ("KAFKA".equalsIgnoreCase(finalRow.get("Type"))) {
+              List<String> missingData =  kafkaTypeInputDataValidation(finalRow);
+              if(!missingData.isEmpty()){
+                missingFieldsLogMessages.add(String.format("Sheet Name : %s - Row : %s - Type : KAFKA - %s mandatory fields are missing",sheetObject.getFirstSheet().getSheetName(),(i+1),missingData.toString()));
+                continue;
+              }
               JSONObject object = buildKAFKAVirtualanCollection(sheetObject.getBasePath(),
                   finalRow);
               virtualanArray.put(object);
@@ -224,7 +234,7 @@ public class ExcelToCollectionGenerator {
             } else if ("DB".equalsIgnoreCase(finalRow.get("Type"))) {
               List<String> missingData =  dbTypeInputDataValidation(finalRow);
               if(!missingData.isEmpty()){
-                log.info(String.format("Sheet Name : %s - Row : %s - Type : DB - %s mandatory data's are missing ",sheetObject.getFirstSheet().getSheetName(),(i+1),missingData.toString()));
+                missingFieldsLogMessages.add(String.format("Sheet Name : %s - Row : %s - Type : DB - %s mandatory fields are missing",sheetObject.getFirstSheet().getSheetName(),(i+1),missingData.toString()));
                 continue;
               }
               JSONObject object = buildDataBaseVirtualanCollection(sheetObject.getBasePath(),
@@ -559,42 +569,15 @@ public class ExcelToCollectionGenerator {
   }
 
   private static List<String> restTypeInputDataValidation(Map<String, String> dataMap){
-    List<String> missingDatas = new ArrayList<>();
-
-    if(!dataMap.containsKey(IdaithalamConstants.TESTCASE_NAME_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.TESTCASE_NAME_HEADER))){
-      missingDatas.add(IdaithalamConstants.TESTCASE_NAME_HEADER);
-    }
-    if(!dataMap.containsKey(IdaithalamConstants.TESTCASE_NAME_DESC_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.TESTCASE_NAME_DESC_HEADER))){
-      missingDatas.add(IdaithalamConstants.TESTCASE_NAME_DESC_HEADER);
-    }
-    if(!dataMap.containsKey(IdaithalamConstants.CONTENT_TYPE_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.CONTENT_TYPE_HEADER))){
-      missingDatas.add(IdaithalamConstants.CONTENT_TYPE_HEADER);
-    }
-    if(!dataMap.containsKey(IdaithalamConstants.URL_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.URL_HEADER))){
-      missingDatas.add(IdaithalamConstants.URL_HEADER);
-    }
-    if(!dataMap.containsKey(IdaithalamConstants.ACTION_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.ACTION_HEADER))){
-      missingDatas.add(IdaithalamConstants.ACTION_HEADER);
-    }
-    if(!dataMap.containsKey(IdaithalamConstants.STATUS_CODE_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.STATUS_CODE_HEADER))){
-      missingDatas.add(IdaithalamConstants.STATUS_CODE_HEADER);
-    }
-    return missingDatas;
+   return REST_MANDATORY_FIELDS.stream().filter(field->!dataMap.containsKey(field) || Objects.isNull(dataMap.get(field))).collect(Collectors.toList());
   }
 
   private static List<String> dbTypeInputDataValidation(Map<String, String> dataMap){
-    List<String> missingDatas = new ArrayList<>();
+    return DB_MANDATORY_FIELDS.stream().filter(field->!dataMap.containsKey(field) || Objects.isNull(dataMap.get(field))).collect(Collectors.toList());
+  }
 
-    if(!dataMap.containsKey(IdaithalamConstants.TESTCASE_NAME_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.TESTCASE_NAME_HEADER))){
-      missingDatas.add(IdaithalamConstants.TESTCASE_NAME_HEADER);
-    }
-    if(!dataMap.containsKey(IdaithalamConstants.TESTCASE_NAME_DESC_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.TESTCASE_NAME_DESC_HEADER))){
-      missingDatas.add(IdaithalamConstants.TESTCASE_NAME_DESC_HEADER);
-    }
-    if(!dataMap.containsKey(IdaithalamConstants.RESOURCE_HEADER) || org.apache.commons.lang.StringUtils.isEmpty(dataMap.get(IdaithalamConstants.RESOURCE_HEADER))){
-      missingDatas.add(IdaithalamConstants.RESOURCE_HEADER);
-    }
-    return missingDatas;
+  private static List<String> kafkaTypeInputDataValidation(Map<String, String> dataMap){
+    return KAFKA_MANDATORY_FIELDS.stream().filter(field->!dataMap.containsKey(field) || Objects.isNull(dataMap.get(field))).collect(Collectors.toList());
   }
 
 
@@ -706,7 +689,7 @@ public class ExcelToCollectionGenerator {
   }
 
   private static void createIdaithalamProcessingFile(
-      CreateFileInfo createFileInfo) {
+      CreateFileInfo createFileInfo) throws UnableToProcessException {
     String fileCreated = generateExcelJson(createFileInfo.getGeneratedPath(),
         createFileInfo.getVirtualanArray(),
         createFileInfo.getTestcaseName());
@@ -726,7 +709,7 @@ public class ExcelToCollectionGenerator {
     return "default";
   }
 
-  private static void createPrpos(String path, InputStream stream, String fileName) {
+  private static void createPrpos(String path, InputStream stream, String fileName) throws UnableToProcessException {
     try {
       Properties props = new Properties();
       //Populating the properties file
@@ -740,7 +723,9 @@ public class ExcelToCollectionGenerator {
       }
 
     } catch (IOException e) {
+
       log.warn(" Unable to generate " + fileName + " properties  " + e.getMessage());
+      throw new UnableToProcessException(" Unable to generate " + fileName + " properties  " + e.getMessage());
     }
   }
 
@@ -751,7 +736,7 @@ public class ExcelToCollectionGenerator {
    * @param propsMap the props map
    * @param fileName the file name
    */
-  public static void createPrpos(String path, Map<String, String> propsMap, String fileName) {
+  public static void createPrpos(String path, Map<String, String> propsMap, String fileName) throws UnableToProcessException {
     try {
       Properties props = new Properties();
       //Populating the properties file
@@ -766,11 +751,12 @@ public class ExcelToCollectionGenerator {
 
     } catch (IOException e) {
       log.warn(" Unable to generate " + fileName + " properties  " + e.getMessage());
+      throw new UnableToProcessException(" Unable to generate " + fileName + " properties  " + e.getMessage());
     }
   }
 
   private static String generateExcelJson(ApiExecutorParam apiExecutorParam, JSONArray excelArray,
-      String fileName) {
+      String fileName) throws UnableToProcessException {
     String fileCreated = null;
     try {
       FileOutputStream outputStream = null;
@@ -789,6 +775,7 @@ public class ExcelToCollectionGenerator {
       fileCreated = fileName + ".json";
     } catch (IOException e) {
       log.warn(" Unable to generate Virtualan  JSON  " + fileName + " : " + e.getMessage());
+      throw new UnableToProcessException(" Unable to generate Virtualan  JSON  " + fileName + " : " + e.getMessage());
     }
     return fileCreated;
   }
@@ -874,48 +861,39 @@ public class ExcelToCollectionGenerator {
      */
     Map<String, Map<String, String>> createCollection(ApiExecutorParam apiExecutorParam)
             throws IOException, UnableToProcessException, IdaithalamException {
+      List<String> missingFieldsLogMessages = new ArrayList<>();
       Map<String, String> excludeResponseMap = new HashMap<>();
-      Map<String, String> cucumblanMap;
+      Map<String, String> cucumblanMap= getCucumblan();
 
-      excludeResponseMap = new HashMap<>();
-      cucumblanMap = getCucumblan();
-      InputStream stream = getInputStream(apiExecutorParam.getBasePath(),
-          apiExecutorParam.getInputExcel());
-      Workbook workbook = null;
-      boolean anyValidDataSheet = false;
-      try {
-        workbook = new XSSFWorkbook(stream);
-        for (int sheet = 0; sheet < workbook.getNumberOfSheets(); sheet++) {
-          Sheet firstSheet = workbook.getSheetAt(sheet);
-          SheetObject sheetObject = new SheetObject();
-          sheetObject.setBasePath(apiExecutorParam.getBasePath());
-          sheetObject.setExcludeResponseMap(excludeResponseMap);
-          sheetObject.setCucumblanMap(cucumblanMap);
-          sheetObject.setFirstSheet(firstSheet);
-          try {
-            createCollections(apiExecutorParam, sheet, firstSheet, sheetObject);
-            anyValidDataSheet = true;
-          }catch (IdaithalamException idaithalamException){
-            log.warn(idaithalamException.getMessage());
-          }
-
-        }
-      } catch (Exception e) {
-        log.error(
-            "Unable to create collection for the given excel file " + apiExecutorParam
-                .getInputExcel() + " <<< " + e
-                .getMessage());
-      } finally {
-        if (workbook != null) {
-          workbook.close();
-        }
-        if (stream != null) {
-          stream.close();
-        }
-      }
-      if(!anyValidDataSheet){
-        throw new IdaithalamException(String.format("% is invalid ",apiExecutorParam.getInputExcel()));
-      }
+     try( InputStream stream = getInputStream(apiExecutorParam.getBasePath(),
+          apiExecutorParam.getInputExcel())) {
+       try (Workbook workbook = new XSSFWorkbook(stream)) {
+         for (int sheet = 0; sheet < workbook.getNumberOfSheets(); sheet++) {
+           Sheet firstSheet = workbook.getSheetAt(sheet);
+           SheetObject sheetObject = new SheetObject();
+           sheetObject.setBasePath(apiExecutorParam.getBasePath());
+           sheetObject.setExcludeResponseMap(excludeResponseMap);
+           sheetObject.setCucumblanMap(cucumblanMap);
+           sheetObject.setFirstSheet(firstSheet);
+           createCollections(apiExecutorParam, sheet, firstSheet, sheetObject, missingFieldsLogMessages);
+         }
+       }catch (UnableToProcessException unableToProcessException){
+         throw unableToProcessException;
+       }
+       catch (Exception e) {
+         log.error(
+                 "Unable to create collection for the given excel file " + apiExecutorParam
+                         .getInputExcel() + " <<< " + e
+                         .getMessage(), e);
+         throw new IdaithalamException("Unable to create collection for the given excel file " + apiExecutorParam
+                 .getInputExcel() + " <<< " + e
+                 .getMessage());
+       }
+     }
+     if(!missingFieldsLogMessages.isEmpty()){
+       log.error(missingFieldsLogMessages.toString());
+       throw new MandatoryFieldMissingException(missingFieldsLogMessages.toString());
+     }
       Map<String, Map<String, String>> response = new HashMap<>();
       response.put("cucumblan", cucumblanMap);
       response.put("exclude", excludeResponseMap);
@@ -923,12 +901,11 @@ public class ExcelToCollectionGenerator {
     }
 
     private void createCollections(ApiExecutorParam apiExecutorParam, int sheet, Sheet firstSheet,
-        SheetObject sheetObject)
-            throws MalformedURLException, UnableToProcessException, IdaithalamException {
+        SheetObject sheetObject,  List<String> missingFieldsLogMessages )
+            throws MalformedURLException, UnableToProcessException {
       JSONArray virtualanArray = getObjectSheet(sheet, apiExecutorParam.getGeneratedTestList(),
-          sheetObject);
+          sheetObject, missingFieldsLogMessages);
       log.info("Sheet no " + sheet + " build out" + virtualanArray.toString());
-      if (virtualanArray.length() > 0) {
         if (IdaithalamConfiguration.isWorkFlow()) {
           CreateFileInfo createFileInfo = new CreateFileInfo();
           createFileInfo.setGeneratedPath(apiExecutorParam);
@@ -942,9 +919,6 @@ public class ExcelToCollectionGenerator {
           getAsSingleFile(apiExecutorParam, sheet, sheetObject.getCucumblanMap(),
               virtualanArray);
         }
-      } else {
-        throw new IdaithalamException(String.format("Sheet Name : %s - Number : %s is invalid ",firstSheet.getSheetName(), (sheet+1)));
-      }
     }
   }
 }

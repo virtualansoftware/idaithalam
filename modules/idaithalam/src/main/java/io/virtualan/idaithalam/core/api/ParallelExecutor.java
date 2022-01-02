@@ -1,6 +1,7 @@
 package io.virtualan.idaithalam.core.api;
 
 import io.virtualan.idaithalam.contract.IdaithalamExecutor;
+import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.domain.Execution;
 import io.virtualan.idaithalam.core.generator.ExcelToCollectionGenerator;
@@ -11,6 +12,8 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Callable;
+
+import io.virtualan.idaithalam.exception.IdaithalamException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -24,7 +27,7 @@ public class ParallelExecutor implements Callable<Integer> {
 
 
   @Override
-  public Integer call() {
+  public Integer call() throws IdaithalamException, IOException, UnableToProcessException {
     boolean flag  =  false;
     int status = 0;
     if ((System.getenv("IDAITHALAM_EXECUTION_ENV") == null || apiExecutorParam.getEnv()== null ) ||
@@ -40,9 +43,8 @@ public class ParallelExecutor implements Callable<Integer> {
             && apiExecutorParam.getInputExcel() != null)
             && !Execution.EXECUTE.name().equalsIgnoreCase(apiExecutorParam.getExecution().name()))
          {
-       flag=   ExcelToCollectionGenerator.createCollection(apiExecutorParam);
+         ExcelToCollectionGenerator.createCollection(apiExecutorParam);
         }
-        if(flag) {
           buildProperties("cucumblan.properties", apiExecutorParam.getCucumblanProperties());
           buildProperties("cucumblan-env.properties", apiExecutorParam.getCucumblanEnvProperties());
           buildProperties("exclude-response.properties", apiExecutorParam.getExcludeProperties());
@@ -53,13 +55,11 @@ public class ParallelExecutor implements Callable<Integer> {
           status = IdaithalamExecutor
                   .validateContract(title,
                           apiExecutorParam);
-        } else {
-          status = 1;
-        }
-      } catch (Exception e) {
+
+      } catch (UnableToProcessException | IOException e) {
         log.warn(apiExecutorParam.getEnv() + " : " + apiExecutorParam.getReportTitle() + " : " + e
             .getMessage());
-        status = 1;
+        throw e;
       }
 
       log.info(
@@ -70,7 +70,7 @@ public class ParallelExecutor implements Callable<Integer> {
   }
 
   private void buildProperties(String fileName, Map<String, String> existingProperties)
-      throws IOException {
+          throws IOException, UnableToProcessException {
     if (existingProperties != null && !existingProperties.isEmpty()) {
       File file = new File(apiExecutorParam.getOutputDir() + File.separator + fileName);
       boolean isFileCreated = file.exists();
