@@ -8,13 +8,13 @@
 	<name>idaithalam-opeapi-contract</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<properties>
-		<idaithalam.version>1.4.5-SNAPSHOT</idaithalam.version>
+		<idaithalam.version>1.4.5</idaithalam.version>
 		<java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<virtualan.version>2.3.3</virtualan.version>
 		<hsqldb.version>2.5.1</hsqldb.version>
-		<spring.boot.version>2.5.1</spring.boot.version>
+		<spring.boot.version>2.5.6</spring.boot.version>
 		<springfox.version>2.9.2</springfox.version>
 		<groovy.version>2.4.7</groovy.version>
 		<json.version>20190722</json.version>
