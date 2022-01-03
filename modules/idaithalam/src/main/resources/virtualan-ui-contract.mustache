@@ -1,0 +1,21 @@
+Feature: {{feature}}
+{{#uiItems}}
+    {{#tags}}
+    {{{tags}}} @{{{resource}}}
+    {{/tags}}
+    {{#scenario}}
+    Scenario: {{scenario}}
+      Given Load driver CHROME and url on {{{resource}}}
+    {{/scenario}}
+ {{#uiItems}}
+    {{#scenario}}
+      When {{{stepInfo}}} the {{{page}}} page on {{{resource}}}
+    {{/scenario}}
+    {{^scenario}}
+      And {{{stepInfo}}} the {{{page}}} page on {{{resource}}}
+    {{/scenario}}
+      {{#inputParams}}
+        | {{{key}}}                   |  {{{value}}}                        |
+      {{/inputParams}}
+ {{/uiItems}}
+{{/uiItems}}

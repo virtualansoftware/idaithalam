@@ -1,0 +1,11 @@
+parallelExecution: 4
+timeout:  30000
+uiExecutor:
+  - reportTitle: "UI testing"
+    env: dev
+    outputDir: target/ui/1
+    inputExcel: idaithalam-uitesting.xlsx
+    cucumblanProperties:
+      service.ui.css-lakeside: http://microservices.virtualandemo.com:3000/login
+      action-package: io.virtualan.cucumblan.ui.actionimpl
+      prod-mode: true

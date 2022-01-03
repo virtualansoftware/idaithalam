@@ -21,13 +21,13 @@ import io.virtualan.cucumblan.props.ExcludeConfiguration;
 import io.virtualan.idaithalam.config.IdaithalamConfiguration;
 import io.virtualan.idaithalam.core.domain.AvailableParam;
 import io.virtualan.idaithalam.core.domain.Item;
+import io.virtualan.idaithalam.core.domain.UiItem;
 import io.virtualan.mapson.Mapson;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -205,6 +205,49 @@ public class FeatureGenerationHelper {
    * @return the list
    * @throws IOException the io exception
    */
+  public static List<UiItem> createUIFeatureFile(Map<String, String> excludeConfiguration,
+                                                 JSONArray arr, String path) throws IOException {
+    List<UiItem> result = new ArrayList<>();
+    if (arr != null && arr.length() > 0) {
+      for (int i = 0; i < arr.length(); i++) {
+        UiItem item = getUIItem(excludeConfiguration, arr.optJSONObject(i), path);
+        result.add(item);
+      }
+    }
+    return result;
+  }
+
+  private static UiItem getUIItem(Map<String, String> excludeConfiguration, JSONObject object,
+                                  String path) throws IOException {
+    UiItem item = new UiItem();
+    item.setStepInfo(getValueMapping("stepInfo", object));
+    item.setTags(object.optString("tags"));
+    item.setResource(object.optString("resource"));
+    item.setPage(object.getString("page"));
+    item.setScenario(object.optString("scenario"));
+    if (object.optJSONObject("inputFields") != null && object.optJSONObject("inputFields").length() != 0) {
+      item.setHasInputParams(true);
+      Map<String, String> inputFieldMap = new HashMap(object.optJSONObject("inputFields").toMap());
+      item.setInputParams(inputFieldMap.entrySet());
+    }
+    if ("UI".equalsIgnoreCase(object.optString("requestType"))) {
+      item.setUI(true);
+    } else {
+      item.setUI(true);
+    }
+    return item;
+  }
+
+
+  /**
+   * Create feature file list.
+   *
+   * @param excludeConfiguration the exclude configuration
+   * @param arr                  the arr
+   * @param path                 the path
+   * @return the list
+   * @throws IOException the io exception
+   */
   public static List<Item> createFeatureFile(Map<String, String> excludeConfiguration,
       JSONArray arr, String path) throws IOException {
     List<Item> result = new ArrayList<>();
@@ -220,12 +263,12 @@ public class FeatureGenerationHelper {
   private static Item getItem(Map<String, String> excludeConfiguration, JSONObject object,
       String path) throws IOException {
     Item item = new Item();
-    item.setMessageType(getValueMapping("messageType", object, item));
-    item.setIdentifier(getValueMapping("identifier", object, item));
-    item.setEvent(getValueMapping("event", object, item));
-    item.setStepInfo(getValueMapping("stepInfo", object, item));
+    item.setMessageType(getValueMapping("messageType", object));
+    item.setIdentifier(getValueMapping("identifier", object));
+    item.setEvent(getValueMapping("event", object));
+    item.setStepInfo(getValueMapping("stepInfo", object));
     extractedInput(object, item, path);
-    item.setSkipScenario(getValueMapping("skipScenario", object, item));
+    item.setSkipScenario(getValueMapping("skipScenario", object));
     extractedMultiRun(object, item);
     item.setTags(object.optString("tags"));
     item.setHttpStatusCode(object.optString("httpStatusCode"));
@@ -298,7 +341,7 @@ public class FeatureGenerationHelper {
     return buffer.toString();
   }
 
-  private static String getValueMapping(String mapping, JSONObject object, Item item) {
+  private static String getValueMapping(String mapping, JSONObject object) {
     if (object.optString(mapping) != null && !object.optString(mapping).isEmpty()) {
       return object.optString(mapping);
     }

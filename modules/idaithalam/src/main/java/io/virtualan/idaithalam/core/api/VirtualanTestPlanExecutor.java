@@ -33,12 +33,24 @@ public class VirtualanTestPlanExecutor {
         IdaithalamConfiguration.setProperties(executionPlanner.getIdaithalamProperties());
       }
       List<Future<Integer>> futures = new ArrayList<>();
-      executionPlanner.getApiExecutor().stream().forEach(
-              x -> {
-                Callable worker = new ParallelExecutor(x);
-                Future future = executor.submit(worker);
-                futures.add(future);
-              });
+      if(executionPlanner.getApiExecutor() != null && !executionPlanner.getApiExecutor().isEmpty()) {
+        executionPlanner.getApiExecutor().stream().forEach(
+                x -> {
+                  Callable worker = new ParallelExecutor(x);
+                  Future future = executor.submit(worker);
+                  futures.add(future);
+                });
+      } else if(executionPlanner.getUiExecutor() != null && !executionPlanner.getUiExecutor().isEmpty()) {
+
+        executionPlanner.getUiExecutor().stream().forEach(
+                x -> {
+                  Callable worker = new UIParallelExecutor(x);
+                  Future future = executor.submit(worker);
+                  futures.add(future);
+                });
+      } else {
+        return false;
+      }
 
       // This will make the executor accept no new threads
       // and finish all existing threads in the queue

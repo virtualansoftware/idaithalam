@@ -17,11 +17,22 @@ public class ExecutionPlanner {
     }
 
     private int parallelExecution;
+
     private List<ApiExecutorParam> apiExecutor;
+
+    private List<UIExecutorParam> uiExecutor;
+
     private int timeout;
 
     private Map<String,String> idaithalamProperties;
 
+    public List<UIExecutorParam> getUiExecutor() {
+        return uiExecutor;
+    }
+
+    public void setUiExecutor(List<UIExecutorParam> uiExecutor) {
+        this.uiExecutor = uiExecutor;
+    }
 
     /**
      * Gets idaithalam properies.

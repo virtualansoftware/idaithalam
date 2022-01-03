@@ -1,0 +1,5 @@
+1=StartDate<~~>SET_TEXT<~~>//input[@type='date']<~~>BY_X_PATH<~~>DATA
+2=InsuranceType<~~>DROP_DOWN<~~>//*[@id="root"]/div/div[2]/form/div[2]/div/div[1]<~~>BY_X_PATH<~~>DATA
+3=Deductible<~~>DROP_DOWN<~~>//*[@id="root"]/div/div[2]/form/div[3]/div<~~>BY_X_PATH<~~>DATA
+4=Next<~~>CLICK<~~>//button[text()='Next']<~~>BY_X_PATH<~~>NAVIGATION
+5=RequestQuote<~~>CLICK<~~>//button[text()='Request a Quote']<~~>BY_X_PATH<~~>NAVIGATION

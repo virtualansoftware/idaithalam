@@ -112,7 +112,7 @@ public class FeatureFileGenerator {
             jsonArray = OpenApiFeatureFileGenerator
                 .generateOpenApiContractForVirtualan(fileNames[i] , apiExecutorParam);
           } else {
-            jsonArray = getJSONArray(apiExecutorParam, fileNames[i]);
+            jsonArray = getJSONArray(apiExecutorParam.getVirtualanSpecPath(), fileNames[i]);
           }
           List<Item> result = FeatureGenerationHelper.createFeatureFile(excludeConfiguration, jsonArray, apiExecutorParam.getOutputDir());
           /** Author: oglas  Add custom API header from configuration yaml. */
@@ -124,6 +124,43 @@ public class FeatureFileGenerator {
         }
         return items;
     }
+
+
+    /**
+     * Generate feature file list.
+     *
+     * @param properties       the properties
+     * @param apiExecutorParam the api executor param
+     * @return the list
+     * @throws UnableToProcessException the unable to process exception
+     * @throws IOException              the io exception
+     */
+    public static List<UIFeatureFileMapper> generateUIFeatureFile(Properties properties, UIExecutorParam apiExecutorParam)
+            throws UnableToProcessException, IOException {
+        List<UIFeatureFileMapper> items = new ArrayList<>();
+        VirtualanClassLoader classLoaderParnet = new VirtualanClassLoader(
+                IdaithalamExecutor.class.getClassLoader());
+        ExecutionClassloader classLoader = addConfToClasspath(classLoaderParnet, apiExecutorParam.getOutputDir());
+        Map<String, String> excludeConfiguration = (Map)readPropsFromClasspath(classLoader, "exclude-response.properties");
+        String contractFileName = properties.getProperty("virtualan.data.load");
+        String contractFileType = properties.getProperty("virtualan.data.type");
+        JSONArray jsonArray = null;
+        if (contractFileType == null) {
+            log.warn("provide appropriate virtualan.data.type for the input data?");
+            throw new UnableToProcessException("provide appropriate virtualan.data.type for the input data?");
+        }
+        String[] fileNames = contractFileName.split(";");
+
+        for(int i=0; i < fileNames.length; i++) {
+
+            jsonArray = getJSONArray(apiExecutorParam.getVirtualanSpecPath(), fileNames[i]);
+            List<UiItem> result = FeatureGenerationHelper.createUIFeatureFile(excludeConfiguration, jsonArray, apiExecutorParam.getOutputDir());
+            UIFeatureFileMapper featureFileMapper = new  UIFeatureFileMapper(fileNames[i], result);
+            items.add(featureFileMapper);
+        }
+        return items;
+    }
+
 
     /** Author: Oliver Glas (inss.ch) 
      * Adding custom API header as defined in the yaml file. */
@@ -222,11 +259,11 @@ public class FeatureFileGenerator {
      * @return the json array
      * @throws UnableToProcessException the unable to process exception
      */
-    public static JSONArray getJSONArray(ApiExecutorParam apiExecutorParam, String contractFileName)
+    public static JSONArray getJSONArray(String virtualanSpecPath, String contractFileName)
         throws UnableToProcessException {
         JSONArray jsonArray = null;
         try {
-            String jsonArrayStr = getFileAsString(apiExecutorParam, contractFileName);
+            String jsonArrayStr = getFileAsString(virtualanSpecPath, contractFileName);
             jsonArray = new JSONArray(jsonArrayStr);
         } catch (IOException e) {
             log.warn("Unable to process the input file(" + contractFileName + ")" + e.getMessage());
@@ -235,12 +272,12 @@ public class FeatureFileGenerator {
         return jsonArray;
     }
 
-    private static String getFileAsString(ApiExecutorParam apiExecutorParam, String filePath)
+    private static String getFileAsString(String virtualanSpecPath, String filePath)
         throws IOException {
         InputStream stream  = null;
         File file = new File(filePath);
-        if (apiExecutorParam.getVirtualanSpecPath() != null) {
-            stream = new FileInputStream(apiExecutorParam.getVirtualanSpecPath() +File.separator+ filePath);
+        if (virtualanSpecPath != null) {
+            stream = new FileInputStream(virtualanSpecPath +File.separator+ filePath);
         }
         if(stream == null && file.exists()){
             stream = new FileInputStream(file);

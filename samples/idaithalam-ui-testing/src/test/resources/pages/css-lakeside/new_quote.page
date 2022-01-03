@@ -1,0 +1,5 @@
+1=QuoteRequest<~~>CLICK<~~>//a[text()='New Insurance Quote Request']<~~>BY_X_PATH<~~>NAVIGATION
+2=Address<~~>SET_TEXT<~~>//input[@name='contactAddressStreetAddress']<~~>BY_X_PATH<~~>DATA
+3=PostalCode<~~>SET_TEXT<~~>//input[@name='contactAddressPostalCode']<~~>BY_X_PATH<~~>DATA
+4=City<~~>SET_TEXT<~~>//input[@name='contactAddressCity']<~~>BY_X_PATH<~~>DATA
+5=Next<~~>CLICK<~~>//button[text()='Next']<~~>BY_X_PATH<~~>NAVIGATION

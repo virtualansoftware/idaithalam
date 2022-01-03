@@ -1,6 +1,8 @@
 package io.virtualan.idaithalam.core.domain;
 
 import java.util.Map;
+
+import io.virtualan.idaithalam.core.api.UIParallelExecutor;
 import org.json.JSONArray;
 
 /**
@@ -9,22 +11,28 @@ import org.json.JSONArray;
 public class CreateFileInfo {
 
   private  ApiExecutorParam generatedPath;
+  private UIExecutorParam uiExecutorParam;
   private  Map<String, String> cucumblanMap;
   private  JSONArray virtualanArray;
   private  String testcaseName;
   private  String scenario;
-  @Override
-  public String toString() {
-    return "CreateFileInfo{" +
-        "generatedPath='" + generatedPath + '\'' +
-        ", cucumblanMap=" + cucumblanMap +
-        ", virtualanArray=" + virtualanArray +
-        ", testcaseName='" + testcaseName + '\'' +
-        ", scenario='" + scenario + '\'' +
-        '}';
+
+  public UIExecutorParam getUiExecutorParam() {
+    return uiExecutorParam;
   }
 
+  public void setUiExecutorParam(UIExecutorParam uiExecutorParam) {
+    this.uiExecutorParam = uiExecutorParam;
+  }
 
+  /**
+   * Sets generated path.
+   *
+   * @param generatedPath the generated path
+   */
+  public void setGeneratedPath(UIExecutorParam generatedPath) {
+    this.uiExecutorParam = generatedPath;
+  }
 
   /**
    * Sets generated path.
@@ -114,5 +122,17 @@ public class CreateFileInfo {
    */
   public String getScenario() {
     return scenario;
+  }
+
+  @Override
+  public String toString() {
+    return "CreateFileInfo{" +
+            "generatedPath=" + generatedPath +
+            ", uiExecutorParam=" + uiExecutorParam +
+            ", cucumblanMap=" + cucumblanMap +
+            ", virtualanArray=" + virtualanArray +
+            ", testcaseName='" + testcaseName + '\'' +
+            ", scenario='" + scenario + '\'' +
+            '}';
   }
 }
