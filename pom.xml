@@ -9,14 +9,14 @@
   <artifactId>idaithalam-project</artifactId>
   <packaging>pom</packaging>
   <name>idaithalam-project</name>
-  <version>1.4.6-SNAPSHOT</version>
+  <version>1.4.6</version>
   <url>https://virtualan.io</url>
   <scm>
     <connection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git
     </developerConnection>
     <url>https://github.com/virtualansoftware/idaithalam.git</url>
-    <tag>V1.4.0_apiheader</tag>
+    <tag>idaithalam-project-1.4.6</tag>
   </scm>
   <developers>
     <developer>
