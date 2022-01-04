@@ -481,6 +481,7 @@ public class ExcelToCollectionGenerator {
       virtualanObj.put("contentType", dataMap.get("ContentType"));
       buildParam("contentType", dataMap.get("ContentType"), paramsArray, "HEADER_PARAM");
       createProcessingType(dataMap, paramsArray, "FormParams", "FORM_PARAM");
+      createProcessingType(dataMap, paramsArray, "MultiFormParams", "MULTI_FORM_PARAM");
       createProcessingType(dataMap, paramsArray, "RequestHeaders", "HEADER_PARAM");
       createProcessingType(dataMap, paramsArray, "ResponseProcessingType", "HEADER_PARAM");
       virtualanObj.put("scenarioId", dataMap.get("TestCaseName"));

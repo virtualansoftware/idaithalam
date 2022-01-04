@@ -134,7 +134,6 @@ public class IdaithalamExecutor {
                 }
             }
         } catch (IOException | UnableToProcessException e) {
-            log.warn("Provide appropriate input data? : " + e.getMessage());
             throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
         }
         return exitStatus;
