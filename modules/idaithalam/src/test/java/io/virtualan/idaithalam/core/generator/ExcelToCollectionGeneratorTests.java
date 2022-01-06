@@ -261,7 +261,7 @@ public class ExcelToCollectionGeneratorTests {
     }
 
 
-    @Test
+    //TODO @Test
     public void testInvalidOutputDirectory() throws IOException, UnableToProcessException, NoSuchFieldException, IllegalAccessException, IdaithalamException {
         String assertMessage = "Unable to generate Virtualan  JSON  API-Testing-0 : E:\\API-Testing-0.json (The system cannot find the path specified)";
         IdaithalamConfiguration.setProperty("workflow", "Disabled");
