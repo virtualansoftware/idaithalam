@@ -540,6 +540,8 @@ public class FeatureGenerationHelper {
           } else {
             param.setString(true);
           }
+        } else if ("MULTI_FORM_PARAM".equalsIgnoreCase(param.getParameterType())) {
+            param.setMultiPart(true);
         }
         availableParams.add(param);
       }
