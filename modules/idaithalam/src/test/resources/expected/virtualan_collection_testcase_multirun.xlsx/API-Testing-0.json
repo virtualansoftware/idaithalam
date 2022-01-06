@@ -2,7 +2,7 @@
     {
         "requestType": "REST",
         "method": "POST",
-        "resource": "api",
+        "resource": "Pet",
         "rule": [
             {
                 "petName": "Test1",
@@ -44,7 +44,7 @@
         "requestType": "REST",
         "method": "GET",
         "scenario": "get by Id",
-        "resource": "api",
+        "resource": "Pet",
         "csvson": [
             "id,name, category/id:name,status",
             "i~101,Rockey,i~100:german shepherd,available"

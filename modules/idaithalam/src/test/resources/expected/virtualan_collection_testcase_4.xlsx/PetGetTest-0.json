@@ -3,7 +3,7 @@
     "requestType": "REST",
     "method": "GET",
     "scenario": "Testing Empty",
-    "resource": "api",
+    "resource": "pet",
     "availableParams": [
         {
             "parameterType": "HEADER_PARAM",
