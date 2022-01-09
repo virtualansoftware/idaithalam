@@ -3,21 +3,24 @@ package io.virtualan.idaithalam.core.generator;
 import io.virtualan.idaithalam.core.api.VirtualanTestPlanExecutor;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.domain.ExecutionPlanner;
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+
 public class PostmanTests {
-    
-    private final String WORKFLOWYAML = "postman/work-flow-postman.yaml";
 
     @Test
     public void addApikey() throws Exception {
+        final String WORKFLOWYAML = "postman/folders/folders.yaml";
         Yaml yaml = new Yaml(new Constructor(ExecutionPlanner.class));
         InputStream inputStream = VirtualanTestPlanExecutor.class.getClassLoader()
                 .getResourceAsStream(WORKFLOWYAML);
@@ -36,10 +39,20 @@ public class PostmanTests {
         Assert.assertTrue(checkApikey);
     }
 
+    /** Issue 121: Multiple API key values must be a list if overwrite: false. 
+     * */
     @Test
     public void duplicateApikey() throws Exception {
-        boolean isSuccess = VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
-        Assert.assertTrue(isSuccess);
+        final String WORKFLOWYAML = "postman/duplicateheader/duplicateheader.yaml"; //Only generate
+        VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
+        File file1 = new File("src/test/resources/postman/duplicateheader/apiheaderreference.feature");
+        File file2 = new File("target/POSTMANTESTREPORTS/feature/virtualan-contract.0.feature");
+        Assert.assertTrue(file1.isFile());
+        Assert.assertTrue(file1.isFile());
+        assertEquals("There is a breaking change in the Feature file!",
+                FileUtils.readFileToString(file1, "utf-8"),
+                FileUtils.readFileToString(file2, "utf-8"));
+
     }
 
 }

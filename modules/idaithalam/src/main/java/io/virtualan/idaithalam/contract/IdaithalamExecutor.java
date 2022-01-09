@@ -26,6 +26,7 @@ import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.domain.Execution;
 import io.virtualan.idaithalam.core.domain.FeatureFileMapper;
+import io.virtualan.idaithalam.core.domain.Item;
 import io.virtualan.idaithalam.core.generator.FeatureFileGenerator;
 import lombok.extern.slf4j.Slf4j;
 
@@ -136,33 +137,6 @@ public class IdaithalamExecutor {
                 }
             }
         } catch (IOException | UnableToProcessException e) {
-            throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
-        }
-        return exitStatus;
-    }
-    public static int validateContractx(String featureHeading, ApiExecutorParam apiExecutorParam)
-            throws UnableToProcessException {
-        byte exitStatus;
-        try {
-            VirtualanClassLoader classLoaderParnet = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
-            ExecutionClassloader classLoader = addConfToClasspath(classLoaderParnet, apiExecutorParam.getOutputDir());
-            /** @author Oliver Glas */
-            if (apiExecutorParam.getExecution() == null || apiExecutorParam.getExecution() != Execution.EXECUTE) {
-                generateFeatureFile(classLoader, apiExecutorParam);
-                if (apiExecutorParam.getExecution() != null && apiExecutorParam.getExecution() == Execution.EXECUTE) {
-                    LOGGER.info("Test execution stopped after feature file generation due to parameter execution=generate.");
-                    return 0;
-                }
-            }
-
-            String fileIndex = UUID.randomUUID().toString();
-            String[] argv = getCucumberOptions(apiExecutorParam, fileIndex);
-            exitStatus = Main.run(argv, classLoader);
-            if (IdaithalamConfiguration.isReportEnabled()) {
-                generateReport(featureHeading, apiExecutorParam, fileIndex);
-            }
-        } catch (IOException | UnableToProcessException e) {
-            LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
             throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
         }
         return exitStatus;
@@ -310,6 +284,7 @@ public class IdaithalamExecutor {
         for(int i=0; i< items.size(); i++){
             MustacheFactory mf = new DefaultMustacheFactory();
             Mustache mustache = mf.compile("virtualan-contract.mustache");
+            items.get(i).getWorkflowItems().get(0).setHasHeaderParams(true);
             FileOutputStream outputStream = new FileOutputStream(path+"/feature/virtualan-contract."+i+".feature"); //TODO oglas uncommented this, please check. Line below does not work.
 //            FileOutputStream outputStream = new FileOutputStream(path+"/feature/" + removeFileName(items.get(i).getJsonFileName())+".feature");
             StringWriter writer = new StringWriter();
@@ -321,6 +296,7 @@ public class IdaithalamExecutor {
             outputStream.close();
         }
     }
+   
 
     private static String getTitle(String arrayTitle, int index , String defaultString){
         try{

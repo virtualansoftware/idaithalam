@@ -1,12 +1,12 @@
 parallelExecution: 1
 timeout:  30000
 apiExecutor:
-  - reportTitle: "API Testing POSTMAN Collection Idaiserver."
+  - reportTitle: "API Testing POSTMAN Collection folder structure."
     env: dev
-    outputDir: target/POSTMANTESTREPORTS
+    outputDir: target/POSTMANTESTFOLDERS
     cucumblanProperties:
       service.api: https://live.virtualandemo.com/api
-      virtualan.data.load: postman/OpenAPIVirtualanPetstore.postman_collection.json;
+      virtualan.data.load: postman/folders/folders.json;
       virtualan.data.type: POSTMAN
     apiHeader:
       headerList:
@@ -14,3 +14,4 @@ apiExecutor:
         - X-API-Test1: 123
         - X-API-Test2: test2
       overwrite: true
+    execution: GENERATE
