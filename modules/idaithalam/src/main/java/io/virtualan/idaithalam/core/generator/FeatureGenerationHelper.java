@@ -108,8 +108,7 @@ public class FeatureGenerationHelper {
     return virtualanArry;
   }
 
-  /* Fix for #124 by @author Oliver Glas */
-  //TODO JUnit test
+  /** Fix for #124 by @author Oliver Glas */
   private static JSONArray checkIfItemsOfItem(JSONArray arr) {
     if (arr != null && arr.length() > 0) {
       JSONArray newJsonArray = new JSONArray();
