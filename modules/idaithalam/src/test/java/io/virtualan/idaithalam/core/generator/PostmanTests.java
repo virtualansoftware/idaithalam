@@ -46,10 +46,26 @@ public class PostmanTests {
         final String WORKFLOWYAML = "postman/duplicateheader/duplicateheader.yaml"; //Only generate
         VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
         File file1 = new File("src/test/resources/postman/duplicateheader/apiheaderreference.feature");
-        File file2 = new File("target/POSTMANTESTREPORTS/feature/virtualan-contract.0.feature");
+        File file2 = new File("target/POSTMANTESTREPORTSAPIHEADER/feature/virtualan-contract.0.feature");
         Assert.assertTrue(file1.isFile());
         Assert.assertTrue(file1.isFile());
-        assertEquals("There is a breaking change in the Feature file!",
+        assertEquals("There is a breaking change in the Feature file fpr multiple API header keys!",
+                FileUtils.readFileToString(file1, "utf-8"),
+                FileUtils.readFileToString(file2, "utf-8"));
+
+    }
+
+    /** Issue 124: Tests after the first folder were lost. 
+     * */
+    @Test
+    public void folderStructure() throws Exception {
+        final String WORKFLOWYAML = "postman/folders/folders.yaml"; //Only generate
+        VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
+        File file1 = new File("src/test/resources/postman/folders/foldersreference.feature");
+        File file2 = new File("target/POSTMANTESTFOLDERS/feature/virtualan-contract.0.feature");
+        Assert.assertTrue(file1.isFile());
+        Assert.assertTrue(file1.isFile());
+        assertEquals("There is a breaking change in the Feature file for the Postman folder structure!",
                 FileUtils.readFileToString(file1, "utf-8"),
                 FileUtils.readFileToString(file2, "utf-8"));
 

@@ -6,8 +6,9 @@ apiExecutor:
     outputDir: target/POSTMANTESTFOLDERS
     cucumblanProperties:
       service.api: https://live.virtualandemo.com/api
-      virtualan.data.load: postman/folders/folders.json;
+      virtualan.data.load: postman/folders/folders_postman.json;
       virtualan.data.type: POSTMAN
+      virtualan.data.heading: Test processing multiple folder in Postman collection.
     apiHeader:
       headerList:
         - X-API-KEY: 'abc123'

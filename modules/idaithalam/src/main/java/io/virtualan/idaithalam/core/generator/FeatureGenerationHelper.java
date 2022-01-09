@@ -108,12 +108,24 @@ public class FeatureGenerationHelper {
     return virtualanArry;
   }
 
+  /* Fix for #124 by @author Oliver Glas */
+  //TODO JUnit test
   private static JSONArray checkIfItemsOfItem(JSONArray arr) {
     if (arr != null && arr.length() > 0) {
-      JSONArray array = arr.optJSONObject(0).optJSONArray("item");
-      if (array != null && array.length() > 0) {
-        return checkIfItemsOfItem(array);
+      JSONArray newJsonArray = new JSONArray();
+      for (int i = 0; i < arr.length(); i++) {
+        JSONArray itemArray = arr.optJSONObject(i).optJSONArray("item");
+        if (itemArray != null && itemArray.length() > 0) {
+          JSONArray jsonArray = checkIfItemsOfItem(itemArray);
+          for (int n = 0; n < jsonArray.length(); n++) {
+            JSONObject o = jsonArray.optJSONObject(n);
+            newJsonArray.put(o);
+          }
+        } else {
+          newJsonArray.put(arr.optJSONObject(i));
+        }
       }
+      return newJsonArray;
     }
     return arr;
   }
