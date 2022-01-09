@@ -13,22 +13,19 @@ import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.media.*;
+import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.parser.OpenAPIV3Parser;
+import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
+import io.virtualan.idaithalam.core.domain.OperationBuilder;
+import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-
-import io.swagger.v3.oas.models.parameters.Parameter;
-import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
-import io.virtualan.idaithalam.core.domain.OperationBuilder;
-import jdk.nashorn.internal.scripts.JS;
-import lombok.extern.slf4j.Slf4j;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  * The type Open api feature file generator.

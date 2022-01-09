@@ -41,6 +41,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import me.jvt.cucumber.gherkinformatter.PrettyFormatter;
 import net.masterthought.cucumber.Configuration;
@@ -62,6 +63,8 @@ import net.masterthought.cucumber.presentation.PresentationMode;
  */
 @Slf4j
 public class IdaithalamExecutor {
+
+    private final static Logger LOGGER = Logger.getLogger(IdaithalamExecutor.class.getName());
 
     /**
      * The Feature.
@@ -112,7 +115,7 @@ public class IdaithalamExecutor {
      * @throws UnableToProcessException the unable to process exception
      */
     public static int validateContract(String featureHeading, ApiExecutorParam apiExecutorParam)
-        throws UnableToProcessException {
+            throws UnableToProcessException {
         byte exitStatus  = 0 ;
         try {
             String fileIndex = UUID.randomUUID().toString();
@@ -120,12 +123,12 @@ public class IdaithalamExecutor {
             ExecutionClassloader classLoader = addConfToClasspath(classLoaderParent, apiExecutorParam.getOutputDir());
             if((apiExecutorParam.getExecution() == null) ||
                     (Execution.ALL.name().equalsIgnoreCase(apiExecutorParam.getExecution().name())
-                    || Execution.GENERATE.name().equalsIgnoreCase(apiExecutorParam.getExecution().name()))) {
+                            || Execution.GENERATE.name().equalsIgnoreCase(apiExecutorParam.getExecution().name()))) {
                 generateFeatureFile(classLoader, apiExecutorParam);
             }
             if((apiExecutorParam.getExecution() == null) ||
                     (Execution.ALL.name().equalsIgnoreCase(apiExecutorParam.getExecution().name())
-                    || Execution.EXECUTE.name().equalsIgnoreCase(apiExecutorParam.getExecution().name()))) {
+                            || Execution.EXECUTE.name().equalsIgnoreCase(apiExecutorParam.getExecution().name()))) {
                 String[] argv = getCucumberOptions(apiExecutorParam, fileIndex);
                 exitStatus = Main.run(argv, classLoader);
                 if (IdaithalamConfiguration.isReportEnabled()) {
@@ -133,6 +136,33 @@ public class IdaithalamExecutor {
                 }
             }
         } catch (IOException | UnableToProcessException e) {
+            throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
+        }
+        return exitStatus;
+    }
+    public static int validateContractx(String featureHeading, ApiExecutorParam apiExecutorParam)
+            throws UnableToProcessException {
+        byte exitStatus;
+        try {
+            VirtualanClassLoader classLoaderParnet = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
+            ExecutionClassloader classLoader = addConfToClasspath(classLoaderParnet, apiExecutorParam.getOutputDir());
+            /** @author Oliver Glas */
+            if (apiExecutorParam.getExecution() == null || apiExecutorParam.getExecution() != Execution.EXECUTE) {
+                generateFeatureFile(classLoader, apiExecutorParam);
+                if (apiExecutorParam.getExecution() != null && apiExecutorParam.getExecution() == Execution.EXECUTE) {
+                    LOGGER.info("Test execution stopped after feature file generation due to parameter execution=generate.");
+                    return 0;
+                }
+            }
+
+            String fileIndex = UUID.randomUUID().toString();
+            String[] argv = getCucumberOptions(apiExecutorParam, fileIndex);
+            exitStatus = Main.run(argv, classLoader);
+            if (IdaithalamConfiguration.isReportEnabled()) {
+                generateReport(featureHeading, apiExecutorParam, fileIndex);
+            }
+        } catch (IOException | UnableToProcessException e) {
+            LOGGER.severe("Provide appropriate input data? : " + e.getMessage());
             throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
         }
         return exitStatus;
@@ -280,8 +310,8 @@ public class IdaithalamExecutor {
         for(int i=0; i< items.size(); i++){
             MustacheFactory mf = new DefaultMustacheFactory();
             Mustache mustache = mf.compile("virtualan-contract.mustache");
-            //FileOutputStream outputStream = new FileOutputStream(path+"/feature/virtualan-contract."+i+".feature");
-            FileOutputStream outputStream = new FileOutputStream(path+"/feature/" + removeFileName(items.get(i).getJsonFileName())+".feature");
+            FileOutputStream outputStream = new FileOutputStream(path+"/feature/virtualan-contract."+i+".feature"); //TODO oglas uncommented this, please check. Line below does not work.
+//            FileOutputStream outputStream = new FileOutputStream(path+"/feature/" + removeFileName(items.get(i).getJsonFileName())+".feature");
             StringWriter writer = new StringWriter();
             mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i).getWorkflowItems())).flush();
             PrettyFormatter formatter = new PrettyFormatter();

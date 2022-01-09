@@ -13,12 +13,14 @@ import java.util.List;
 import java.util.Map;
 
 public class PostmanTests {
+    
+    private final String WORKFLOWYAML = "postman/work-flow-postman.yaml";
 
     @Test
     public void addApikey() throws Exception {
         Yaml yaml = new Yaml(new Constructor(ExecutionPlanner.class));
         InputStream inputStream = VirtualanTestPlanExecutor.class.getClassLoader()
-                .getResourceAsStream("work-flow-apikey.yaml");
+                .getResourceAsStream(WORKFLOWYAML);
         //Check reading apiHeader
         ExecutionPlanner executionPlanner = yaml.load(inputStream);
         List<ApiExecutorParam> apiExecutor = executionPlanner.getApiExecutor();
@@ -32,9 +34,12 @@ public class PostmanTests {
             checkApikey = checkApikey || (map.get("X-API-KEY") != null && map.get("X-API-KEY").toString().equals("abc123"));
         }
         Assert.assertTrue(checkApikey);
+    }
 
-//        boolean isSuccess = VirtualanTestPlanExecutor.invoke("work-flow-apikey.yaml");
-//        Assert.assertTrue(isSuccess);
+    @Test
+    public void duplicateApikey() throws Exception {
+        boolean isSuccess = VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
+        Assert.assertTrue(isSuccess);
     }
 
 }
