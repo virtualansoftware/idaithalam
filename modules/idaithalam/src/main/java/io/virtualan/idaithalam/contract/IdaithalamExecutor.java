@@ -44,6 +44,7 @@ import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import me.jvt.cucumber.gherkinformatter.CouldNotParseException;
 import me.jvt.cucumber.gherkinformatter.PrettyFormatter;
 import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
@@ -284,16 +285,27 @@ public class IdaithalamExecutor {
         for(int i=0; i< items.size(); i++){
             MustacheFactory mf = new DefaultMustacheFactory();
             Mustache mustache = mf.compile("virtualan-contract.mustache");
-            items.get(i).getWorkflowItems().get(0).setHasHeaderParams(true);
+//            items.get(i).getWorkflowItems().get(0).setHasHeaderParams(true);
             FileOutputStream outputStream = new FileOutputStream(path+"/feature/virtualan-contract."+i+".feature"); //TODO oglas uncommented this, please check. Line below does not work.
 //            FileOutputStream outputStream = new FileOutputStream(path+"/feature/" + removeFileName(items.get(i).getJsonFileName())+".feature");
             StringWriter writer = new StringWriter();
             mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i).getWorkflowItems())).flush();
             PrettyFormatter formatter = new PrettyFormatter();
-            String formattedFeature = formatter.format(writer.toString());
-            writer.close();
-            outputStream.write(formattedFeature.getBytes(Charset.forName("UTF-8")));
-            outputStream.close();
+            String formattedFeature = null;
+            try {
+                formattedFeature = formatter.format(writer.toString());
+                outputStream.write(formattedFeature.getBytes(Charset.forName("UTF-8")));
+            }catch(CouldNotParseException cnpe){
+                cnpe.printStackTrace();
+            }finally{
+                try {
+                    Writer w = new OutputStreamWriter(outputStream);
+                    w.write(writer.toString());
+                    writer.close();
+                }catch(Exception e){}
+                writer.close();
+                outputStream.close();
+            }
         }
     }
    

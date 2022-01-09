@@ -1,0 +1,12 @@
+parallelExecution: 1
+timeout:  30000
+apiExecutor:
+  - reportTitle: "API Testing POSTMAN Collection folder structure."
+    env: dev
+    outputDir: target/POSTMANTESTAUTHORIZATIONHEADER
+    cucumblanProperties:
+      service.api: https://live.virtualandemo.com/api
+      virtualan.data.load: postman/folders/folders_postman.json;
+      virtualan.data.type: POSTMAN
+      virtualan.data.heading: Test processing multiple folder in Postman collection.
+    execution: GENERATE

@@ -4,7 +4,7 @@
     "operationId": "getPetById",
     "httpStatusCode": "200",
     "url": "/pets/{petId}",
-    "usageCount": 0,
+    "usageCount": 3,
     "priority": 0,
     "method": "GET",
     "output": "{\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"id\": 101,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
@@ -19,7 +19,7 @@
     ],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2021-12-20T00:11:30.062+00:00"
+    "lastUsedDateTime": "2022-01-09T10:13:44.557+00:00"
   },
   {
     "id": 2,
@@ -47,7 +47,7 @@
     ],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2021-12-20T00:11:30.062+00:00",
+    "lastUsedDateTime": "2022-01-06T20:59:07.450+00:00",
     "contentType": "JSON"
   },
   {
@@ -56,7 +56,7 @@
     "httpStatusCode": "200",
     "url": "/pets",
     "type": "Response",
-    "usageCount": 989,
+    "usageCount": 48,
     "priority": 0,
     "method": "POST",
     "input": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
@@ -64,7 +64,7 @@
     "availableParams": [],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2022-01-04T05:55:36.229+00:00"
+    "lastUsedDateTime": "2022-01-09T10:06:08.779+00:00"
   },
   {
     "id": 4,
@@ -113,7 +113,7 @@
     "availableParams": [],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2021-12-20T00:11:30.062+00:00",
+    "lastUsedDateTime": "2022-01-06T20:59:07.450+00:00",
     "contentType": "JSON"
   },
   {
@@ -163,7 +163,7 @@
     "availableParams": [],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2021-12-20T00:11:30.062+00:00",
+    "lastUsedDateTime": "2022-01-06T20:59:07.450+00:00",
     "contentType": "JSON"
   },
   {
@@ -181,7 +181,7 @@
     "availableParams": [],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2021-12-20T00:11:30.062+00:00"
+    "lastUsedDateTime": "2022-01-06T20:59:07.451+00:00"
   },
   {
     "id": 7,
@@ -189,7 +189,7 @@
     "httpStatusCode": "200",
     "url": "/riskfactor/compute",
     "type": "Script",
-    "usageCount": 202,
+    "usageCount": 109,
     "priority": 0,
     "method": "POST",
     "input": "{\n  \"birthday\" : \"1918-10-24\",\n  \"postalCode\" : \"60563\"\n}",
@@ -198,7 +198,7 @@
     "availableParams": [],
     "headerParams": [],
     "resource": "riskfactor",
-    "lastUsedDateTime": "2022-01-04T05:56:22.253+00:00"
+    "lastUsedDateTime": "2022-01-09T10:06:04.146+00:00"
   },
   {
     "id": 8,
@@ -215,7 +215,7 @@
     "availableParams": [],
     "headerParams": [],
     "resource": "persons",
-    "lastUsedDateTime": "2021-12-20T00:11:30.063+00:00"
+    "lastUsedDateTime": "2022-01-06T20:59:07.451+00:00"
   },
   {
     "id": 9,
@@ -224,7 +224,7 @@
     "url": "/persons/{username}",
     "type": "Script",
     "requestType": "REST",
-    "usageCount": 219,
+    "usageCount": 119,
     "priority": 0,
     "method": "GET",
     "rule": "def executeScript(mockServiceRequest, responseObject) { \n    String userName = mockServiceRequest.getParam(\"username\").get(); \n    responseObject.setHttpStatusCode('200'); \n    responseObject.setOutput( \"{   \\\"dateOfBirth\\\": \\\"1955-10-28\\\",   \\\"firstName\\\": \\\"Bill\\\",   \\\"lastName\\\": \\\"Gates\\\",   \\\"lastTimeOnline\\\": \\\"2020-08-30T20:28:36.267Z\\\",   \\\"spokenLanguages\\\": {     \\\"additionalProp1\\\": \\\"Tamil\\\",     \\\"additionalProp2\\\": \\\"English\\\",     \\\"additionalProp3\\\": \\\"Spanish\\\"   },   \\\"username\\\": \\\"bgates\\\" }\"); \n    return responseObject.builder(); \n }",
@@ -240,7 +240,7 @@
     ],
     "headerParams": [],
     "resource": "persons",
-    "lastUsedDateTime": "2022-01-05T06:34:05.280+00:00"
+    "lastUsedDateTime": "2022-01-09T10:13:27.941+00:00"
   },
   {
     "id": 10,
@@ -257,7 +257,7 @@
     "availableParams": [],
     "headerParams": [],
     "resource": "persons",
-    "lastUsedDateTime": "2021-12-20T00:11:30.063+00:00"
+    "lastUsedDateTime": "2022-01-06T20:59:07.451+00:00"
   },
   {
     "id": 11,
@@ -274,7 +274,7 @@
     "availableParams": [],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2021-12-20T00:11:30.063+00:00"
+    "lastUsedDateTime": "2022-01-06T20:59:07.451+00:00"
   },
   {
     "id": 12,
@@ -291,7 +291,7 @@
     "availableParams": [],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2021-12-20T00:11:30.063+00:00"
+    "lastUsedDateTime": "2022-01-06T20:59:07.451+00:00"
   },
   {
     "id": 13,
@@ -316,7 +316,7 @@
     ],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2021-12-20T00:11:30.063+00:00"
+    "lastUsedDateTime": "2022-01-06T20:59:07.451+00:00"
   },
   {
     "id": 14,
@@ -340,7 +340,7 @@
     ],
     "headerParams": [],
     "resource": "user",
-    "lastUsedDateTime": "2021-12-20T00:11:30.064+00:00"
+    "lastUsedDateTime": "2022-01-06T20:59:07.452+00:00"
   },
   {
     "id": 15,
@@ -364,7 +364,7 @@
     ],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2021-12-20T00:11:30.064+00:00"
+    "lastUsedDateTime": "2022-01-06T20:59:07.452+00:00"
   },
   {
     "id": 16,
@@ -389,7 +389,7 @@
     ],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2021-12-20T00:11:30.069+00:00"
+    "lastUsedDateTime": "2022-01-06T20:59:07.458+00:00"
   },
   {
     "id": 17,
@@ -398,7 +398,7 @@
     "url": "/pets",
     "type": "Response",
     "requestType": "REST",
-    "usageCount": 131,
+    "usageCount": 12,
     "priority": 0,
     "method": "POST",
     "input": "{\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"id\": 1000,\n  \"name\": \"Test1\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ],\n  \"type\": \"DOGS\"\n}",
@@ -406,7 +406,7 @@
     "availableParams": [],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2022-01-04T05:55:19.425+00:00"
+    "lastUsedDateTime": "2022-01-09T10:06:04.301+00:00"
   },
   {
     "id": 18,
@@ -415,7 +415,7 @@
     "url": "/pets",
     "type": "Response",
     "requestType": "REST",
-    "usageCount": 59,
+    "usageCount": 6,
     "priority": 0,
     "method": "POST",
     "input": "{\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"id\": 2000,\n  \"name\": \"Test2\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ],\n  \"type\": \"DOGS\"\n}",
@@ -423,7 +423,7 @@
     "availableParams": [],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2022-01-04T05:55:21.916+00:00"
+    "lastUsedDateTime": "2022-01-09T10:06:04.470+00:00"
   },
   {
     "id": 19,
@@ -432,7 +432,7 @@
     "url": "/pets/findByTags",
     "type": "Response",
     "requestType": "REST",
-    "usageCount": 195,
+    "usageCount": 38,
     "priority": 0,
     "method": "GET",
     "output": "{\n  \"category\": {\n    \"id\": 200,\n    \"name\": \"Bulldog  \\r\\n Testing \\r\\n again\"\n  },\n  \"id\": 201,\n  \"name\": \"\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 201,\n      \"name\": \"red\"\n    }\n  ]\n}",
@@ -447,7 +447,7 @@
     ],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2022-01-04T05:55:38.563+00:00"
+    "lastUsedDateTime": "2022-01-09T10:05:57.673+00:00"
   },
   {
     "id": 20,
@@ -464,7 +464,7 @@
     "availableParams": [],
     "headerParams": [],
     "resource": "riskfactor",
-    "lastUsedDateTime": "2021-12-20T00:11:30.069+00:00"
+    "lastUsedDateTime": "2022-01-06T20:59:07.458+00:00"
   },
   {
     "id": 21,
@@ -473,7 +473,7 @@
     "url": "/pets/{petId}",
     "type": "Response",
     "requestType": "REST",
-    "usageCount": 67,
+    "usageCount": 6,
     "priority": 0,
     "method": "GET",
     "output": "{\n  \"id\": 1000,\n  \"category\": {\n    \"id\": 1000,\n    \"name\": \"Rocky\"\n  },\n  \"name\": \"doggie\",\n  \"type\": \"DOGS\",\n  \"photoUrls\": [\n    \"null\"\n  ],\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"Dogs\"\n    }\n  ],\n  \"status\": \"available\"\n}",
@@ -488,7 +488,7 @@
     ],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2022-01-04T05:55:06.860+00:00"
+    "lastUsedDateTime": "2022-01-09T10:06:03.151+00:00"
   },
   {
     "id": 22,
@@ -497,7 +497,7 @@
     "url": "/pets/findByTags",
     "type": "Response",
     "requestType": "REST",
-    "usageCount": 792,
+    "usageCount": 36,
     "priority": 0,
     "method": "GET",
     "output": "{\n  \"category\": {\n    \"id\": 200,\n    \"name\": \"Bulldog\"\n  },\n  \"id\": 201,\n  \"name\": \"Butch\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 201,\n      \"name\": \"grey\"\n    }\n  ]\n}",
@@ -512,7 +512,7 @@
     ],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2022-01-04T05:55:35.484+00:00"
+    "lastUsedDateTime": "2022-01-09T10:06:08.452+00:00"
   },
   {
     "id": 23,
@@ -528,7 +528,7 @@
     "availableParams": [],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2021-12-20T00:11:30.069+00:00"
+    "lastUsedDateTime": "2022-01-06T20:59:07.458+00:00"
   },
   {
     "id": 24,
@@ -545,7 +545,7 @@
     "availableParams": [],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2021-12-20T00:11:30.070+00:00"
+    "lastUsedDateTime": "2022-01-06T20:59:07.459+00:00"
   },
   {
     "id": 25,
@@ -562,7 +562,7 @@
     "availableParams": [],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2021-12-20T00:11:30.070+00:00"
+    "lastUsedDateTime": "2022-01-06T20:59:07.459+00:00"
   },
   {
     "id": 26,
@@ -579,7 +579,7 @@
     "availableParams": [],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2021-12-20T00:11:30.070+00:00"
+    "lastUsedDateTime": "2022-01-06T20:59:07.459+00:00"
   },
   {
     "id": 27,
@@ -603,47 +603,16 @@
     ],
     "headerParams": [],
     "resource": "pets",
-    "lastUsedDateTime": "2021-12-20T00:11:30.070+00:00"
+    "lastUsedDateTime": "2022-01-06T20:59:07.459+00:00"
   },
   {
-    "id": 29,
+    "id": 28,
     "operationId": "personsGet",
     "httpStatusCode": "200",
     "url": "/persons",
     "type": "Response",
     "requestType": "REST",
-    "usageCount": 1,
-    "priority": 0,
-    "method": "GET",
-    "output": "{\n    \"items\": [\n        {\n            \"dateOfBirth\": \"2021-11-10\",\n            \"firstName\": \"Max\",\n            \"lastName\": \"Mustermann\",\n            \"lastTimeOnline\": \"2021-12-10T01:46:26.189Z\",\n            \"spokenLanguages\": {\n                \"additionalProp1\": \"English\",\n                \"additionalProp2\": \"French\",\n                \"additionalProp3\": \"Spain\"\n            },\n            \"username\": \"mmustermann\"\n        }\n    ]\n}",
-    "availableParams": [
-      {
-        "key": "pageSize",
-        "value": "2",
-        "type": null,
-        "serviceType": null,
-        "parameterType": null
-      },
-      {
-        "key": "pageNumber",
-        "value": "50",
-        "type": null,
-        "serviceType": null,
-        "parameterType": null
-      }
-    ],
-    "headerParams": [],
-    "resource": "persons",
-    "lastUsedDateTime": "2022-01-05T15:04:09.647+00:00"
-  },
-  {
-    "id": 31,
-    "operationId": "personsGet",
-    "httpStatusCode": "200",
-    "url": "/persons",
-    "type": "Response",
-    "requestType": "REST",
-    "usageCount": 2,
+    "usageCount": 27,
     "priority": 0,
     "method": "GET",
     "output": "{\n    \"items\": [\n        {\n            \"dateOfBirth\": \"2021-11-10\",\n            \"firstName\": \"Max\",\n            \"lastName\": \"Mustermann\",\n            \"lastTimeOnline\": \"2021-12-10T01:46:26.189Z\",\n            \"spokenLanguages\": {\n                \"additionalProp1\": \"English\",\n                \"additionalProp2\": \"French\",\n                \"additionalProp3\": \"Spain\"\n            },\n            \"username\": \"mmustermann\"\n        }\n    ]\n}",
@@ -665,6 +634,6 @@
     ],
     "headerParams": [],
     "resource": "persons",
-    "lastUsedDateTime": "2022-01-05T17:25:44.193+00:00"
+    "lastUsedDateTime": "2022-01-09T10:13:32.652+00:00"
   }
 ]

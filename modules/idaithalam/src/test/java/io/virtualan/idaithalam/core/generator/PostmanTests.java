@@ -44,7 +44,9 @@ public class PostmanTests {
     @Test
     public void duplicateApikey() throws Exception {
         final String WORKFLOWYAML = "postman/duplicateheader/duplicateheader.yaml"; //Only generate
-        VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
+        boolean success = VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
+        Assert.assertTrue(success);
+        
         File file1 = new File("src/test/resources/postman/duplicateheader/apiheaderreference.feature");
         File file2 = new File("target/POSTMANTESTREPORTSAPIHEADER/feature/virtualan-contract.0.feature");
         Assert.assertTrue(file1.isFile());
@@ -69,10 +71,9 @@ public class PostmanTests {
         assertEquals("There is a breaking change in the Feature file for the Postman folder structure!",
                 FileUtils.readFileToString(file1, "utf-8"),
                 FileUtils.readFileToString(file2, "utf-8"));
-
     }
 
-    /** Issue 122, 131, 133
+    /** Issue 122, 131
      * */
     @Test
     public void authorizationHeader() throws Exception {
@@ -85,7 +86,14 @@ public class PostmanTests {
         assertEquals("There is a breaking change in the Feature file for the Postman folder structure!",
                 FileUtils.readFileToString(file1, "utf-8"),
                 FileUtils.readFileToString(file2, "utf-8"));
-
     }
 
+    /** Issue 131, 133, 138
+     * */
+    @Test
+    public void variables() throws Exception {
+        final String WORKFLOWYAML = "postman/variables/variables.yaml"; //Online test with variables.
+        boolean success = VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
+        Assert.assertTrue(success);
+    }
 }
