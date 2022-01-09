@@ -55,7 +55,8 @@ public class PostmanTests {
 
     }
 
-    /** Issue 124: Tests after the first folder were lost. 
+    /** Issue 124: The Postman collection tests after the first folder were lost. 
+     *  Also issue 131, 133
      * */
     @Test
     public void folderStructure() throws Exception {
@@ -63,6 +64,22 @@ public class PostmanTests {
         VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
         File file1 = new File("src/test/resources/postman/folders/foldersreference.feature");
         File file2 = new File("target/POSTMANTESTFOLDERS/feature/virtualan-contract.0.feature");
+        Assert.assertTrue(file1.isFile());
+        Assert.assertTrue(file1.isFile());
+        assertEquals("There is a breaking change in the Feature file for the Postman folder structure!",
+                FileUtils.readFileToString(file1, "utf-8"),
+                FileUtils.readFileToString(file2, "utf-8"));
+
+    }
+
+    /** Issue 122, 131, 133
+     * */
+    @Test
+    public void authorizationHeader() throws Exception {
+        final String WORKFLOWYAML = "postman/folders/authorizationheader.yaml"; //Only generate, uses also folders_postman.json
+        VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
+        File file1 = new File("src/test/resources/postman/folders/authorizationheader_reference.feature");
+        File file2 = new File("target/POSTMANTESTAUTHORIZATIONHEADER/feature/virtualan-contract.0.feature");
         Assert.assertTrue(file1.isFile());
         Assert.assertTrue(file1.isFile());
         assertEquals("There is a breaking change in the Feature file for the Postman folder structure!",
