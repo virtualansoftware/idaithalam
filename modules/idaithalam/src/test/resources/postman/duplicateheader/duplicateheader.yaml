@@ -1,0 +1,19 @@
+parallelExecution: 1
+timeout:  30000
+apiExecutor:
+  - reportTitle: "API Testing POSTMAN Collection duplicate header."
+    env: dev
+    outputDir: target/POSTMANTESTREPORTSAPIHEADER
+    cucumblanProperties:
+      service.api: https://live.virtualandemo.com/api
+      virtualan.data.load: postman/duplicateheader/basic_postman.json;
+      virtualan.data.type: POSTMAN
+      virtualan.data.heading: Test processing multiple headers.
+    apiHeader:
+      headerList:
+        - X-API-KEY: 'abc123'
+        - X-API-KEY: 'abc789'
+        - X-API-Test1: 123
+        - X-API-Test2: test2
+      overwrite: false
+    execution: ALL
