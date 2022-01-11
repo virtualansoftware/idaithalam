@@ -16,4 +16,4 @@ apiExecutor:
         - X-API-Test1: 123
         - X-API-Test2: test2
       overwrite: false
-    execution: ALL
+    execution: GENERATE
