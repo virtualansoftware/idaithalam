@@ -39,7 +39,7 @@ public class ParallelExecutor implements Callable<Integer> {
           f.mkdirs();
         }
         if (((System.getenv("IDAITHALAM") == null
-                || !"PROD".equalsIgnoreCase(System.getenv("IDAITHALAM")))
+            || !"PROD".equalsIgnoreCase(System.getenv("IDAITHALAM")))
             && apiExecutorParam.getInputExcel() != null)
             && !Execution.EXECUTE.name().equalsIgnoreCase(apiExecutorParam.getExecution().name()))
          {
