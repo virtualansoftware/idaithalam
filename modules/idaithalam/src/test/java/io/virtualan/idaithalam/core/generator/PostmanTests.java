@@ -46,7 +46,7 @@ public class PostmanTests {
         final String WORKFLOWYAML = "postman/duplicateheader/duplicateheader.yaml"; 
         VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
         File file1 = new File("src/test/resources/postman/duplicateheader/apiheaderreference.feature");
-        File file2 = new File("target/POSTMANTESTREPORTSAPIHEADER/feature/virtualan-contract.0.feature");
+        File file2 = new File("target/POSTMANTESTREPORTSAPIHEADER/feature/postman/duplicateheader/basic_postman.feature");
         Assert.assertTrue(file1.isFile());
         Assert.assertTrue(file1.isFile());
         assertEquals("There is a breaking change in the Feature file!",
