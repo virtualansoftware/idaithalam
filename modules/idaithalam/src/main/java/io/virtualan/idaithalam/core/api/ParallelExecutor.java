@@ -38,8 +38,8 @@ public class ParallelExecutor implements Callable<Integer> {
         if (!f.exists()) {
           f.mkdirs();
         }
-        if ((System.getenv("IDAITHALAM") == null
-            || !"PROD".equalsIgnoreCase(System.getenv("IDAITHALAM"))
+                if (((System.getenv("IDAITHALAM") == null
+                        || !"PROD".equalsIgnoreCase(System.getenv("IDAITHALAM")))
             && apiExecutorParam.getInputExcel() != null)
             && !Execution.EXECUTE.name().equalsIgnoreCase(apiExecutorParam.getExecution().name()))
          {

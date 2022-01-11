@@ -25,7 +25,6 @@ import java.util.Properties;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.domain.OperationBuilder;
-import jdk.nashorn.internal.scripts.JS;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
