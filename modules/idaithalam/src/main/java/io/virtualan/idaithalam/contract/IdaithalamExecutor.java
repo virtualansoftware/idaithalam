@@ -280,8 +280,8 @@ public class IdaithalamExecutor {
         for(int i=0; i< items.size(); i++){
             MustacheFactory mf = new DefaultMustacheFactory();
             Mustache mustache = mf.compile("virtualan-contract.mustache");
-            //FileOutputStream outputStream = new FileOutputStream(path+"/feature/virtualan-contract."+i+".feature");
-            FileOutputStream outputStream = new FileOutputStream(path+"/feature/" + removeFileName(items.get(i).getJsonFileName())+".feature");
+            FileOutputStream outputStream = new FileOutputStream(path+"/feature/virtualan-contract."+i+".feature");
+//            FileOutputStream outputStream = new FileOutputStream(path+"/feature/" + removeFileName(items.get(i).getJsonFileName())+".feature");
             StringWriter writer = new StringWriter();
             mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i).getWorkflowItems())).flush();
             PrettyFormatter formatter = new PrettyFormatter();
