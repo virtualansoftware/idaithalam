@@ -128,11 +128,9 @@ public class FeatureFileGenerator {
     /** Author: Oliver Glas (inss.ch) 
      * Adding custom API header as defined in the yaml file. */
     private static void addCustomApiHeader(ApiExecutorParam apiExecutorParam, List<Item> result) {
+        if (apiExecutorParam.getApiHeader() == null || apiExecutorParam.getApiHeader().getHeaderList() == null || apiExecutorParam.getApiHeader().getHeaderList().isEmpty()) return;
         List<Map<String, Object>> apiHeaderList = apiExecutorParam.getApiHeader().getHeaderList();
-        boolean overwrite = true;  // Default value shall be true. 
-        if (apiExecutorParam.getApiHeader().getOverwrite() != null) {
-            overwrite = Boolean.valueOf(apiExecutorParam.getApiHeader().getOverwrite());
-        }
+        boolean overwrite = Boolean.valueOf(apiExecutorParam.getApiHeader().getOverwrite());
         for (Item item : result) {
             List<AvailableParam> availableParamList = new ArrayList<>();
             if (item.getAvailableParams() == null) {
@@ -147,23 +145,25 @@ public class FeatureFileGenerator {
                     if (!item.getAvailableParams().contains(newAvailableParam)) {
                         item.getAvailableParams().add(newAvailableParam);
                         item.getHeaderParams().add(newAvailableParam);
-                    } else if (overwrite) { //if it exists already, overwrite it
+                        item.setHasHeaderParams(true);
+                    } else { //if it exists already, add value as a value list or overwrite it depending on configuration.
                         for (AvailableParam availableParam1 : item.getAvailableParams()) {
                             if (availableParam1.getKey().equals(newAvailableParam.getKey())) {
+                                if (overwrite) {
                                 availableParam1.setKey(newAvailableParam.getKey());
                                 availableParam1.setValue(newAvailableParam.getValue());
                                 availableParam1.setParameterType(newAvailableParam.getParameterType());
                                 log.warn("Due to issue #121 API header " + key + " is overwritten with value from configuration. To avoid this behavior add 'overwrite: false' (default: true) to the 'apiHeader' section.");
+                    } else {
+                            availableParam1.setValue(availableParam1.getValue().concat(",").concat(newAvailableParam.getValue()));
                             }
                         }
-                    } else {
-                        log.warn("Due to issue #121 adding duplicate api header can cause errors.");
-                        //TODO Due to issue #121 there cannot be added a duplicate api header..
                     }
                 }
             }
         }
     }
+}
 
 
     /**

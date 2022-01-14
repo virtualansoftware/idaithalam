@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Callable;
-
 import io.virtualan.idaithalam.exception.IdaithalamException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,8 +37,8 @@ public class ParallelExecutor implements Callable<Integer> {
         if (!f.exists()) {
           f.mkdirs();
         }
-        if ((System.getenv("IDAITHALAM") == null
-            || !"PROD".equalsIgnoreCase(System.getenv("IDAITHALAM"))
+        if (((System.getenv("IDAITHALAM") == null
+            || !"PROD".equalsIgnoreCase(System.getenv("IDAITHALAM")))
             && apiExecutorParam.getInputExcel() != null)
             && !Execution.EXECUTE.name().equalsIgnoreCase(apiExecutorParam.getExecution().name()))
          {
