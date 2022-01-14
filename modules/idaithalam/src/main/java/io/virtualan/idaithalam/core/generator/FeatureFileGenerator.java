@@ -107,7 +107,7 @@ public class FeatureFileGenerator {
         for(int i=0; i < fileNames.length; i++) {
           if (ConversionType.POSTMAN.name().equalsIgnoreCase(contractFileType)) {
             jsonArray = FeatureGenerationHelper
-                .createPostManToVirtualan(getJSONObject(classLoader, fileNames[i]));
+                .createPostManToVirtualan(getJSONObject(apiExecutorParam, fileNames[i]));
           } else if (ConversionType.OPENAPI.name().equalsIgnoreCase(contractFileType)) {
             jsonArray = OpenApiFeatureFileGenerator
                 .generateOpenApiContractForVirtualan(fileNames[i] , apiExecutorParam);
@@ -213,6 +213,29 @@ public class FeatureFileGenerator {
         into.close();
         return new String(into.toByteArray(), StandardCharsets.UTF_8);
     }
+
+
+    /**
+     * Gets json array.
+     *
+     * @param apiExecutorParam the api executor param
+     * @param contractFileName the contract file name
+     * @return the json array
+     * @throws UnableToProcessException the unable to process exception
+     */
+    public static JSONObject getJSONObject(ApiExecutorParam apiExecutorParam, String contractFileName)
+            throws UnableToProcessException {
+        JSONObject jsonArray = null;
+        try {
+            String jsonArrayStr = getFileAsString(apiExecutorParam, contractFileName);
+            jsonArray = new JSONObject(jsonArrayStr);
+        } catch (IOException e) {
+            log.warn("Unable to process the input file(" + contractFileName + ")" + e.getMessage());
+            throw new UnableToProcessException("Unable to process the input file(" + contractFileName + ")" + e.getMessage());
+        }
+        return jsonArray;
+    }
+
 
     /**
      * Gets json array.
