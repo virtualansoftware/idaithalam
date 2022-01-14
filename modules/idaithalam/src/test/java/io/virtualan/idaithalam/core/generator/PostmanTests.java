@@ -11,6 +11,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.File;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
@@ -50,8 +51,8 @@ public class PostmanTests {
         File file2 = new File("target/POSTMANTESTREPORTSAPIHEADER/feature/basic_postman.feature");
         Assert.assertTrue(file1.isFile());
         Assert.assertTrue(file1.isFile());
-        assertTrue("There is a breaking change in the Feature file!",
-                FileUtils.readFileToString(file1, "utf-8").equalsIgnoreCase(FileUtils.readFileToString(file2, "utf-8").trim()));
+        assertEquals("There is a breaking change in the Feature file!",
+                FileUtils.readFileToString(file1, Charset.forName("UTF-8")), FileUtils.readFileToString(file2, Charset.forName("UTF-8")));
 
     }
 
