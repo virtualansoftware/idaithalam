@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class PostmanTests {
 
@@ -45,13 +46,12 @@ public class PostmanTests {
     public void duplicateApikey() throws Exception {
         final String WORKFLOWYAML = "postman/duplicateheader/duplicateheader.yaml"; 
         VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
-        File file1 = new File("src/test/resources/postman/duplicateheader/apiheaderreference.feature");
-        File file2 = new File("target/POSTMANTESTREPORTSAPIHEADER/feature/postman/duplicateheader/basic_postman.feature");
+        File file1 = new File("src/test/resources/postman/duplicateheader/basic_postman.feature");
+        File file2 = new File("target/POSTMANTESTREPORTSAPIHEADER/feature/basic_postman.feature");
         Assert.assertTrue(file1.isFile());
         Assert.assertTrue(file1.isFile());
-        assertEquals("There is a breaking change in the Feature file!",
-                FileUtils.readFileToString(file1, "utf-8"),
-                FileUtils.readFileToString(file2, "utf-8"));
+        assertTrue("There is a breaking change in the Feature file!",
+                FileUtils.readFileToString(file1, "utf-8").equalsIgnoreCase(FileUtils.readFileToString(file2, "utf-8").trim()));
 
     }
 

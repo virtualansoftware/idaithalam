@@ -280,18 +280,7 @@ public class IdaithalamExecutor {
         for(int i=0; i< items.size(); i++){
             MustacheFactory mf = new DefaultMustacheFactory();
             Mustache mustache = mf.compile("virtualan-contract.mustache");
-            
-            /** Fix for issue with feature file path (Oliver Glas). */
-            String featureFile = path+"/feature/" + removeFileName(items.get(i).getJsonFileName())+".feature";
-            int pos = featureFile.lastIndexOf("/");
-            if (pos > 1) {
-                File folder = new File(featureFile.substring(0,pos));
-                folder.mkdirs();
-            }
-            FileOutputStream outputStream = new FileOutputStream(featureFile);
-            
-//            FileOutputStream outputStream = new FileOutputStream(path+"/feature/virtualan-contract."+i+".feature");
-//            FileOutputStream outputStream = new FileOutputStream(path+"/feature/" + removeFileName(items.get(i).getJsonFileName())+".feature");
+            FileOutputStream outputStream = new FileOutputStream(path+"/feature/" + removeFileName(items.get(i).getJsonFileName())+".feature");
             StringWriter writer = new StringWriter();
             mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i).getWorkflowItems())).flush();
             PrettyFormatter formatter = new PrettyFormatter();
