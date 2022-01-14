@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Callable;
-
 import io.virtualan.idaithalam.exception.IdaithalamException;
 import lombok.extern.slf4j.Slf4j;
 
