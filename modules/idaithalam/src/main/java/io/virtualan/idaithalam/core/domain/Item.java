@@ -559,9 +559,15 @@ public class Item {
    */
   boolean hasPathParams;
   /**
-   * The Has path params.
+   * The Has form params.
    */
   boolean hasFormParams;
+
+  /**
+   * The Has multi part params.
+   */
+  boolean hasMPartParams;
+
   /**
    * The Has query params.
    */
@@ -1481,7 +1487,11 @@ public class Item {
     Map<String, List<AvailableParam>> stringListMap = availableParams.stream()
         .collect(Collectors.groupingBy(AvailableParam::getParameterType));
     if (!stringListMap.isEmpty()) {
-      formParams = stringListMap.get("FORM_PARAM");
+      formParams = stringListMap.get("MULTI_FORM_PARAM");
+      hasMPartParams = formParams != null && !formParams.isEmpty();
+      if(formParams == null) {
+        formParams = stringListMap.get("FORM_PARAM");
+      }
       hasFormParams = formParams != null && !formParams.isEmpty();
       pathParams = stringListMap.get("PATH_PARAM");
       hasPathParams = pathParams != null && !pathParams.isEmpty();

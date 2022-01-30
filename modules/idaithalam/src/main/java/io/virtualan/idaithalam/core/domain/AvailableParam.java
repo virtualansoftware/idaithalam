@@ -44,6 +44,8 @@ public class AvailableParam {
 
     boolean isCondition;
 
+    boolean isMultiPart;
+
     /**
      * Instantiates a new Available param.
      *
@@ -149,6 +151,14 @@ public class AvailableParam {
 
     public void setCondition(boolean condition) {
         isCondition = condition;
+    }
+
+    public boolean isMultiPart() {
+        return isMultiPart;
+    }
+
+    public void setMultiPart(boolean multiPart) {
+        isMultiPart = multiPart;
     }
 
     /**

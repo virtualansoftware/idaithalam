@@ -28,7 +28,6 @@ import io.virtualan.idaithalam.core.domain.Execution;
 import io.virtualan.idaithalam.core.domain.FeatureFileMapper;
 import io.virtualan.idaithalam.core.generator.FeatureFileGenerator;
 import lombok.extern.slf4j.Slf4j;
-import io.virtualan.idaithalam.core.domain.Item;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -134,7 +133,6 @@ public class IdaithalamExecutor {
                 }
             }
         } catch (IOException | UnableToProcessException e) {
-            log.warn("Provide appropriate input data? : " + e.getMessage());
             throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
         }
         return exitStatus;

@@ -1,0 +1,9 @@
+parallelExecution: 1
+timeout:  30000
+idaithalamProperties:
+  workflow: Enabled
+apiExecutor:
+  - reportTitle: "Input file is missing"
+    env: dev
+    outputDir: target/excel/testExcelFileNotFound
+    inputExcel: testExcelFileNotFound.xlsx
