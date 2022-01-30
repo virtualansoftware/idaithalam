@@ -9,7 +9,7 @@ Feature: {{feature}}
       And basic authentication with [okta_user_id.{{{resource}}}] and [okta_user_password.{{{resource}}}]
       When a user post application/json in api_token resource on okta_token.{{{resource}}}
       Then the status code is 200
-      And Store the access_token value of the key as AccessToken.{{{resource}}}
+      And Store AccessToken.{{{resource}}} as key and api's access_token as value
   {{/okta}}
 {{/items}}
 {{#items}}
@@ -34,7 +34,7 @@ Feature: {{feature}}
       Given As a user perform message {{scenario}} action
       {{#hasCreateParams}}
       {{#createParams}}
-      And create variable {{{key}}} as key and {{{value}}} as value
+      And Add the {{{value}}} value of the key as {{{key}}}
       {{/createParams}}
       {{/hasCreateParams}}
       {{#skipScenario}}
@@ -66,7 +66,7 @@ Feature: {{feature}}
       Given As a user perform sql {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}query{{/nextStepInfo}} action
       {{#hasCreateParams}}
       {{#createParams}}
-      And create variable {{{value}}} value of the key as {{{key}}}
+      And create variable {{{key}}} as key and {{{value}}} as value
       {{/createParams}}
       {{/hasCreateParams}}
       {{#skipScenario}}
@@ -76,7 +76,7 @@ Feature: {{feature}}
       When read {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details on the{{/nextStepInfo}} given {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}query{{/nextStepInfo}} on {{resource}}
       {{/isSelect}}
       {{^isSelect}}
-      When Execute {{method}} for the given sql {{stepInfo1}} on {{resource}}
+      When Execute {{method}} for the given sql {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details on the{{/nextStepInfo}} on {{resource}}
       {{/isSelect}}
       {{#inputInline}}
         | {{{.}}} |
@@ -249,7 +249,7 @@ Feature: {{feature}}
       {{/noSkipOutput}}
       {{#hasStorageParams}}
       {{#storageParams}}
-      And Store api's {{{key}}} as key and {{{value}}} as value
+      And Store {{{key}}} as key and api's {{{value}}} as value
       {{/storageParams}}
       {{/hasStorageParams}}
       {{#hasEvaluateParams}}
@@ -299,7 +299,7 @@ Feature: {{feature}}
       {{/kafkaOutput}}
       {{#hasStorageParams}}
       {{#storageParams}}
-      And Store message's {{{key}}} as key and {{{value}}} as value
+      And Store {{{key}}} as key and message's {{{value}}} as value
       {{/storageParams}}
       {{/hasStorageParams}}
       {{/isKafka}}
@@ -319,7 +319,7 @@ Feature: {{feature}}
       {{/dbOutput}}
       {{#hasStorageParams}}
       {{#storageParams}}
-      And Store query's {{{key}}} as key and {{{value}}} as value
+      And Store {{{key}}} as key and query's {{{value}}} as value
       {{/storageParams}}
       {{/hasStorageParams}}
       {{/isDatabase}}
@@ -339,7 +339,7 @@ Feature: {{feature}}
       {{/amqOutput}}
       {{#hasStorageParams}}
       {{#storageParams}}
-      And Store-message's {{{value}}} value of the key as {{{key}}}
+      And Store {{{key}}} as key and message's {{{value}}} as value
       {{/storageParams}}
       {{/hasStorageParams}}
       {{/isAMQ}}

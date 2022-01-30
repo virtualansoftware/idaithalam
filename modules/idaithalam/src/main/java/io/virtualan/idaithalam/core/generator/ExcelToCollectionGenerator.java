@@ -720,7 +720,7 @@ public class ExcelToCollectionGenerator {
           path + File.separator + fileName)) {
         //Storing the properties file
         props.store(outputStrem, "This is a " + fileName + " properties file");
-        log.info(fileName + " Properties file created......");
+        log.debug(fileName + " Properties file created......");
       }
 
     } catch (IOException e) {
@@ -747,7 +747,7 @@ public class ExcelToCollectionGenerator {
           path + File.separator + fileName)) {
         //Storing the properties file
         props.store(outputStrem, "This is a " + fileName + " properties file");
-        log.info(fileName + " Properties file created......");
+        log.debug(fileName + " Properties file created......");
       }
 
     } catch (IOException e) {

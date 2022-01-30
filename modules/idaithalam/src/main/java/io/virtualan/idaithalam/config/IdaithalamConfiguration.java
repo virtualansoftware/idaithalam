@@ -83,4 +83,12 @@ public class IdaithalamConfiguration {
     public static boolean isReportEnabled() {
         return properties.getProperty("generateReport") == null || !properties.getProperty("generateReport").equalsIgnoreCase("Disabled");
     }
+
+    public static String gherkinSpecific() {
+         if(properties.getProperty("gherkinVersion") == null) {
+            return "";
+        }else {
+             return properties.getProperty("gherkinVersion");
+         }
+    }
 }
