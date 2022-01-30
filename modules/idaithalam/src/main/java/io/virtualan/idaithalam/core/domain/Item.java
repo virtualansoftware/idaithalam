@@ -1561,7 +1561,7 @@ public class Item {
                     !getStepInfos()[counter].isEmpty()) {
                 nextStepInfo = getStepInfos()[counter];
                 return true;
-            } else {
+            } else  {
                 nextStepInfo = null;
                 return getStepInfos().length == counter;
             }
