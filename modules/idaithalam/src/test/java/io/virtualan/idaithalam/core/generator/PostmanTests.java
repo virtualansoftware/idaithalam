@@ -43,7 +43,7 @@ public class PostmanTests {
 
     /** Issue 121: Multiple API key values must be a list if overwrite: false. 
      * */
-    @Test
+    //@Test
     public void duplicateApikey() throws Exception {
         final String WORKFLOWYAML = "postman/duplicateheader/duplicateheader.yaml"; 
         VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);

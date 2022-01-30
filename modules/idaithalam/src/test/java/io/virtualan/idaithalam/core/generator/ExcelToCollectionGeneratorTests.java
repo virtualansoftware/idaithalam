@@ -71,12 +71,10 @@ public class ExcelToCollectionGeneratorTests {
 
     @Before
     public void before(){
-        log.info("*****************************************************************************");
     }
 
     @After
     public void after(){
-        log.info("*****************************************************************************");
     }
 
     @Test
