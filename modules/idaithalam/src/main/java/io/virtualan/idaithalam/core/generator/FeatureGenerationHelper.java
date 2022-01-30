@@ -214,12 +214,21 @@ public class FeatureGenerationHelper {
     private static Item getItem(Map<String, String> excludeConfiguration, JSONObject object,
                                 String path) throws IOException {
         Item item = new Item();
-        item.setMessageType(getValueMapping("messageType", object, item));
-        item.setIdentifier(getValueMapping("identifier", object, item));
-        item.setEvent(getValueMapping("event", object, item));
-        item.setStepInfo(getValueMapping("stepInfo", object, item));
+        item.setMessageType(getValueMapping("messageType", object));
+        item.setIdentifier(getValueMapping("identifier", object));
+        item.setEvent(getValueMapping("event", object));
+        if(object.optJSONArray("stepInfo") != null  & object.optJSONArray("stepInfo").length() ==1) {
+            item.setStepInfo(object.optJSONArray("stepInfo").getString(0));
+        } else if(object.optJSONArray("stepInfo") != null  & object.optJSONArray("stepInfo").length() > 1) {
+            JSONArray parametersJSONArray = object.optJSONArray("stepInfo");
+            String[] stringsArray = new String[parametersJSONArray.length()];
+            for (int i = 0; i < parametersJSONArray.length(); i++) {
+                stringsArray[i] = parametersJSONArray.getString(i);
+            }
+            item.setStepInfos(stringsArray);
+        }
         extractedInput(object, item, path);
-        item.setSkipScenario(getValueMapping("skipScenario", object, item));
+        item.setSkipScenario(getValueMapping("skipScenario", object));
         extractedMultiRun(object, item);
         item.setTags(object.optString("tags"));
         item.setHttpStatusCode(object.optString("httpStatusCode"));
@@ -292,7 +301,7 @@ public class FeatureGenerationHelper {
         return buffer.toString();
     }
 
-    private static String getValueMapping(String mapping, JSONObject object, Item item) {
+    private static String getValueMapping(String mapping, JSONObject object) {
         if (object.optString(mapping) != null && !object.optString(mapping).isEmpty()) {
             return object.optString(mapping);
         }

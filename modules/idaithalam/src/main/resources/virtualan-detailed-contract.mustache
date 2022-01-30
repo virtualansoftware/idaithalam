@@ -1,0 +1,352 @@
+Feature: {{feature}}
+    Scenario: Load initial set of data
+      Given Provided all the feature level parameters from file
+{{#items}}
+  {{#okta}}
+    @{{{resource}}}
+    Scenario: Read the API token for {{{resource}}}
+      Given a user perform a api action
+      And basic authentication with [okta_user_id.{{{resource}}}] and [okta_user_password.{{{resource}}}]
+      When a user post application/json in api_token resource on okta_token.{{{resource}}}
+      Then the status code is 200
+      And Store the access_token value of the key as AccessToken.{{{resource}}}
+  {{/okta}}
+{{/items}}
+{{#items}}
+    {{#isRest}}
+    {{#tags}}
+    {{{tags}}} @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
+    {{/tags}}
+    {{^tags}}
+    @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
+    {{/tags}}
+    Scenario: {{scenario}} - api call
+    {{/isRest}}
+    {{#isKafka}}
+    {{#kafkaInput}}
+    {{#tags}}
+    {{{tags}}} @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
+    {{/tags}}
+    {{^tags}}
+    @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
+    {{/tags}}
+    Scenario: {{scenario}} - {{method}} kafka message
+      Given As a user perform message {{scenario}} action
+      {{#hasCreateParams}}
+      {{#createParams}}
+      And create variable {{{key}}} as key and {{{value}}} as value
+      {{/createParams}}
+      {{/hasCreateParams}}
+      {{#skipScenario}}
+      And perform-message the {{{skipScenario}}} condition to skip scenario
+      {{/skipScenario}}
+      {{#hasInputJsonMap}}
+      When Send mapson message {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
+      {{#inputJsonMap}}
+        | {{{key}}}                   |  {{{value}}}                        |
+      {{/inputJsonMap}}
+      {{/hasInputJsonMap}}
+      {{#hasInputInline}}
+      When Send inline message {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
+      {{#inputInline}}
+        | {{{.}}} |
+      {{/inputInline}}
+      {{/hasInputInline}}
+    {{/kafkaInput}}
+    {{/isKafka}}
+    {{#isDatabase}}
+    {{#dbInput}}
+    {{#tags}}
+    {{{tags}}} @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
+    {{/tags}}
+    {{^tags}}
+    @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
+    {{/tags}}
+    Scenario: {{scenario}} - database action
+      Given As a user perform sql {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}query{{/nextStepInfo}} action
+      {{#hasCreateParams}}
+      {{#createParams}}
+      And create variable {{{value}}} value of the key as {{{key}}}
+      {{/createParams}}
+      {{/hasCreateParams}}
+      {{#skipScenario}}
+      And perform-db the {{{skipScenario}}} condition to skip scenario
+      {{/skipScenario}}
+      {{#isSelect}}
+      When read {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details on the{{/nextStepInfo}} given {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}query{{/nextStepInfo}} on {{resource}}
+      {{/isSelect}}
+      {{^isSelect}}
+      When Execute {{method}} for the given sql {{stepInfo1}} on {{resource}}
+      {{/isSelect}}
+      {{#inputInline}}
+        | {{{.}}} |
+      {{/inputInline}}
+    {{/dbInput}}
+    {{/isDatabase}}
+    {{#isAMQ}}
+    {{#amqInput}}
+    {{#tags}}
+    {{{tags}}} @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
+    {{/tags}}
+    {{^tags}}
+    @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
+    {{/tags}}
+    Scenario: {{scenario}} - amq action
+      Given As a user post message {{stepInfo}} action
+      {{#hasCreateParams}}
+      {{#createParams}}
+      And Add the {{{value}}} value of the key as {{{key}}}
+      {{/createParams}}
+      {{/hasCreateParams}}
+      {{#skipScenario}}
+      And perform-message the {{{skipScenario}}} condition to skip scenario
+      {{/skipScenario}}
+      When Send inline message {{stepInfo}} for messageQ {{event}} on {{resource}} with type AMQ
+      {{#inputInline}}
+        | {{{.}}} |
+       {{/inputInline}}
+    {{/amqInput}}
+    {{/isAMQ}}
+    {{#isRest}}
+      Given {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}a user{{/nextStepInfo}} perform {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}a{{/nextStepInfo}} api action
+      {{#hasCreateParams}}
+      {{#createParams}}
+      And Add the {{{value}}} value of the key as {{{key}}}
+      {{/createParams}}
+      {{/hasCreateParams}}
+      {{#skipScenario}}
+      And perform the {{{skipScenario}}} condition to skip scenario
+      {{/skipScenario}}
+      {{#okta}}
+      And Bearer auth with [AccessToken.{{{resource}}}] token
+      {{/okta}}
+      {{#basicAuth}}
+      And basic authentication with [basic_auth_user_id.{{{resource}}}] and [basic_auth_password.{{{resource}}}]
+      {{/basicAuth}}
+      {{#hasPathParams}}
+      And add {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}request{{/nextStepInfo}} with given path params
+      {{#pathParams}}
+        | {{{key}}}                   | {{{value}}}                         |
+       {{/pathParams}}
+      {{/hasPathParams}}
+      {{#hasQueryParams}}
+      And add {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}request{{/nextStepInfo}} with given query params
+      {{#queryParams}}
+        | {{{key}}}                   | {{{value}}}                         |
+      {{/queryParams}}
+      {{/hasQueryParams}}
+      {{#hasHeaderParams}}
+      And add {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}request{{/nextStepInfo}} with given header params
+      {{#headerParams}}
+        | {{{key}}}                   | {{{value}}}                         |
+      {{/headerParams}}
+      {{/hasHeaderParams}}
+      {{#hasFormParams}}
+      {{#hasMPartParams}}
+      And add {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}request{{/nextStepInfo}} with {{contentType}} given multipart-form params
+      {{/hasMPartParams}}
+      {{^hasMPartParams}}
+      And add {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}request{{/nextStepInfo}} with {{contentType}} given form params
+      {{/hasMPartParams}}
+      {{#formParams}}
+        | {{{key}}}                   | {{{value}}}                         |
+      {{/formParams}}
+      {{/hasFormParams}}
+      {{#hasCookieParams}}
+      And add {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}request{{/nextStepInfo}}  with given cookie params
+      {{#cookieParams}}
+        | {{{key}}}                   | {{{value}}}                         |
+      {{/cookieParams}}
+      {{/hasCookieParams}}
+      {{#inputFile}}
+      And add {{{inputFile}}} data file with {{contentType}} given input
+      {{/inputFile}}
+      {{#hasInputInline}}
+      And add {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}request{{/nextStepInfo}} data inline with {{contentType}} given input
+      {{#inputInline}}
+        | {{{.}}} |
+      {{/inputInline}}
+      {{/hasInputInline}}
+      {{#stdInput}}
+      And add {{stdInput}} data with {{contentType}} given input
+      {{/stdInput}}
+      {{#hasInputJsonMap}}
+      {{#isPost}}
+      And Create {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} with given input
+      {{/isPost}}
+      {{#isPut}}
+      And Update {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} with given input
+      {{/isPut}}
+      {{#isPatch}}
+      And Update {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} with given input
+      {{/isPatch}}
+      {{#isDelete}}
+      And Delete {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} with given input
+      {{/isDelete}}
+      {{#inputJsonMap}}
+        | {{{key}}}                   |  {{{value}}}                        |
+      {{/inputJsonMap}}
+      {{/hasInputJsonMap}}
+      When {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}a user{{/nextStepInfo}} {{action}} {{contentType}} in {{url}} resource on {{resource}}
+      Then the status code is {{httpStatusCode}}
+      {{#noSkipOutput}}
+      {{#hasCsvson}}
+      {{#matchPattern}}
+      And Verify {{csvsonPath}} response csvson includes {{matchPattern}} in the response
+      {{/matchPattern}}
+      {{^matchPattern}}
+      And Verify {{csvsonPath}} response csvson includes in the response
+      {{/matchPattern}}
+      {{#csvson}}
+        | {{{.}}} |
+      {{/csvson}}
+      {{/hasCsvson}}
+      {{#stdType}}
+      {{#outputFile}}
+      And Verify-standard {{stdType}} all {{{outputFile}}} file {{url}} api includes following in the response
+      {{/outputFile}}
+      {{#hasOutputInline}}
+      And Verify-standard {{stdType}} all inline {{url}} api includes following in the response
+      {{#outputInline}}
+        | {{{.}}} |
+      {{/outputInline}}
+      {{/hasOutputInline}}
+      {{/stdType}}
+      {{^stdType}}
+      {{#hasResponseByField}}
+      And Verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}across response{{/nextStepInfo}} includes following in the response
+      {{#responseByField}}
+        | {{{key}}}                 |  {{{value}}}                          |
+      {{/responseByField}}
+      {{/hasResponseByField}}
+      {{#hasOutputFileByPath}}
+      And Verify {{resource}} response {{contentType}} include byPath {{{outputFile}}} includes in the response
+      {{#outputFileByPath}}
+        | {{{.}}} |
+      {{/outputFileByPath}}
+      {{/hasOutputFileByPath}}
+      {{^hasOutputFileByPath}}
+      {{#outputFile}}
+      And Verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} response XML File {{{outputFile}}} includes in the response
+      {{/outputFile}}
+      {{/hasOutputFileByPath}}
+      {{#hasOutputInline}}
+      And Verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} response inline includes in the response
+      {{#outputInline}}
+        | {{{.}}} |
+      {{/outputInline}}
+      {{/hasOutputInline}}
+      {{#stdOutput}}
+      And Verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} response with {{stdOutput}} includes in the response
+      {{/stdOutput}}
+      {{#hasOutputJsonMap}}
+      And Verify-all {{url}} {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} includes following in the response
+      {{#outputJsonMap}}
+        | {{{key}}}                 |  {{{value}}}                          |
+      {{/outputJsonMap}}
+      {{/hasOutputJsonMap}}
+      {{/stdType}}
+      {{/noSkipOutput}}
+      {{#hasStorageParams}}
+      {{#storageParams}}
+      And Store api's {{{key}}} as key and {{{value}}} as value
+      {{/storageParams}}
+      {{/hasStorageParams}}
+      {{#hasEvaluateParams}}
+      {{#evaluateParams}}
+      {{#isString}}
+      And evaluate key as {{{key}}} and {{{value}}} as function value
+      {{/isString}}
+      {{#isInteger}}
+      And evaluate key as {{{key}}} and {{{value}}} as integer value
+      {{/isInteger}}
+      {{#isDecimal}}
+      And evaluate key as {{{key}}} and {{{value}}} as decimal value
+      {{/isDecimal}}
+      {{#isBoolean}}
+      And evaluate key as {{{key}}} and {{{value}}} as boolean value
+      {{/isBoolean}}
+      {{#isCondition}}
+      And evaluate the {{{value}}} condition {{{key}}}
+      {{/isCondition}}
+      {{/evaluateParams}}
+      {{/hasEvaluateParams}}
+      {{/isRest}}
+      {{#isKafka}}
+      {{#kafkaOutput}}
+      {{#hasResponseByField}}
+      {{#kafkaInput}}
+      Then Verify-by-elements {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}{{stepInfo}}{{/nextStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      {{/kafkaInput}}
+      {{^kafkaInput}}
+      And Verify-by-elements {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}{{stepInfo}}{{/nextStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      {{/kafkaInput}}
+      {{#responseByField}}
+        | {{{key}}}                 |  {{{value}}}                          |
+      {{/responseByField}}
+      {{/hasResponseByField}}
+      {{#hasCsvson}}
+      {{#kafkaInput}}
+      Then Verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      {{/kafkaInput}}
+      {{^kafkaInput}}
+      And Verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      {{/kafkaInput}}
+      {{#csvson}}
+        | {{{.}}} |
+      {{/csvson}}
+      {{/hasCsvson}}
+      {{/kafkaOutput}}
+      {{#hasStorageParams}}
+      {{#storageParams}}
+      And Store message's {{{key}}} as key and {{{value}}} as value
+      {{/storageParams}}
+      {{/hasStorageParams}}
+      {{/isKafka}}
+      {{#isDatabase}}
+      {{#dbOutput}}
+      {{#hasCsvson}}
+      {{#dbInput}}
+      Then validate {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}information on the{{/nextStepInfo}} given {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} on {{resource}}
+      {{/dbInput}}
+      {{^dbInput}}
+      And validate {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}information on the{{/nextStepInfo}} given {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} on {{resource}}
+      {{/dbInput}}
+      {{#csvson}}
+        | {{{.}}} |
+      {{/csvson}}
+      {{/hasCsvson}}
+      {{/dbOutput}}
+      {{#hasStorageParams}}
+      {{#storageParams}}
+      And Store query's {{{key}}} as key and {{{value}}} as value
+      {{/storageParams}}
+      {{/hasStorageParams}}
+      {{/isDatabase}}
+      {{#isAMQ}}
+      {{#amqOutput}}
+      {{#hasCsvson}}
+      {{#amqInput}}
+      Then Verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}information{{/nextStepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
+      {{/amqInput}}
+      {{^amqInput}}
+      And Verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}information{{/nextStepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
+      {{/amqInput}}
+      {{#csvson}}
+        | {{{.}}} |
+      {{/csvson}}
+      {{/hasCsvson}}
+      {{/amqOutput}}
+      {{#hasStorageParams}}
+      {{#storageParams}}
+      And Store-message's {{{value}}} value of the key as {{{key}}}
+      {{/storageParams}}
+      {{/hasStorageParams}}
+      {{/isAMQ}}
+      {{#hasMultiRun}}
+  Examples:
+      {{#multiRun}}
+        | {{{.}}} |
+      {{/multiRun}}
+    {{/hasMultiRun}}
+{{/items}}

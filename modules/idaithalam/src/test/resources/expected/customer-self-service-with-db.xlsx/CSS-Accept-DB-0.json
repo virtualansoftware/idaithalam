@@ -199,7 +199,7 @@
             "value": "[0].policy_limit_amount",
             "key": "policy_limit_amount"
         }],
-        "stepInfo": "verify record",
+        "stepInfo": ["verify record"],
         "scenarioId": "InsuranceQuoteByDB"
     }
 ]

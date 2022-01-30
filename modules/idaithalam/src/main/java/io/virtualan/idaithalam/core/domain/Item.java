@@ -262,6 +262,15 @@ public class Item {
      */
     boolean hasCookieParams;
 
+    /**
+     * The Step info.
+     */
+    String[] stepInfos;
+
+    /**
+     * The Step info.
+     */
+    int counter;
 
     /**
      * The Step info.
@@ -1534,4 +1543,24 @@ public class Item {
     public void setTags(String tags) {
         this.tags = tags;
     }
+
+
+    public String[] getStepInfos() {
+        return stepInfos;
+    }
+
+    public void setStepInfos(String[] stepInfos) {
+        this.stepInfos = stepInfos;
+    }
+
+
+    public String nextStepInfo() {
+        if(getStepInfos() != null && getStepInfos().length > counter){
+            return  getStepInfos()[counter++];
+        } else {
+            return null;
+        }
+    }
+
+
 }
