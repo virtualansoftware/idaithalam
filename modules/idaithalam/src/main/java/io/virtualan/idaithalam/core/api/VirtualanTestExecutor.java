@@ -1,6 +1,7 @@
 package io.virtualan.idaithalam.core.api;
 
 import io.virtualan.idaithalam.contract.IdaithalamExecutor;
+import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.domain.Execution;
 import io.virtualan.idaithalam.core.generator.ExcelToCollectionGenerator;
@@ -61,7 +62,7 @@ public class VirtualanTestExecutor {
     return status;
   }
 
-  private void buildProperties(String fileName, Map<String, String> existingProperties) throws IOException {
+  private void buildProperties(String fileName, Map<String, String> existingProperties) throws IOException, UnableToProcessException {
     if(existingProperties != null && !existingProperties.isEmpty()) {
       File file = new File(apiExecutorParam.getOutputDir() +File.separator+fileName);
       boolean isFileCreated = file.exists();

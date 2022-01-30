@@ -1,0 +1,9 @@
+parallelExecution: 1
+timeout:  30000
+idaithalamProperties:
+  workflow: Enabled
+apiExecutor:
+  - reportTitle: "Empty excel sheet"
+    env: dev
+    outputDir: target/excel/testEmptySheet
+    inputExcel: testEmptySheet.xlsx

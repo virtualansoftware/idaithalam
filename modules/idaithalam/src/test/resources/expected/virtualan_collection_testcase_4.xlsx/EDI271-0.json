@@ -4,7 +4,7 @@
     "requestType": "REST",
     "method": "POST",
     "scenario": "EDI-271 API test",
-    "resource": "bin",
+    "resource": "edi",
     "availableParams": [
         {
             "parameterType": "HEADER_PARAM",
