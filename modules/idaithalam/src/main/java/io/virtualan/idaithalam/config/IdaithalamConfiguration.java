@@ -86,7 +86,7 @@ public class IdaithalamConfiguration {
 
     public static String gherkinSpecific() {
          if(properties.getProperty("gherkinVersion") == null) {
-            return "";
+            return null;
         }else {
              return properties.getProperty("gherkinVersion");
          }
