@@ -1,7 +1,7 @@
 [{
     "requestType": "REST",
     "method": "POST",
-    "resource": "bin",
+    "resource": "edi",
     "availableParams": [
         {
             "parameterType": "HEADER_PARAM",

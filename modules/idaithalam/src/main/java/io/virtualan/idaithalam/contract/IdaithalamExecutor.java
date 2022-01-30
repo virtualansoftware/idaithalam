@@ -28,7 +28,6 @@ import io.virtualan.idaithalam.core.domain.Execution;
 import io.virtualan.idaithalam.core.domain.FeatureFileMapper;
 import io.virtualan.idaithalam.core.generator.FeatureFileGenerator;
 import lombok.extern.slf4j.Slf4j;
-import io.virtualan.idaithalam.core.domain.Item;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -134,7 +133,6 @@ public class IdaithalamExecutor {
                 }
             }
         } catch (IOException | UnableToProcessException e) {
-            log.warn("Provide appropriate input data? : " + e.getMessage());
             throw new UnableToProcessException("Provide appropriate input data? : " + e.getMessage());
         }
         return exitStatus;
@@ -154,22 +152,24 @@ public class IdaithalamExecutor {
                 "-p", "io.virtualan.cucumblan.props.hook.FeatureScope",
                 "-p", path == null ? "json:target/cucumber-"+build+".json" : "json:"+jsonPath+"/cucumber-"+build+".json",
                 "-p", path == null ? "html:target/cucumber-html-report.html" : "html:"+jsonPath+"/cucumber-html-report.html",
-                "--glue", "io.virtualan.cucumblan.core", "", path == null ? "conf/feature/" : path+"/feature/",
+                "--glue", "io.virtualan.cucumblan.core",  path == null ? "conf/feature/" : path+"/feature/",
         };
         String external =  null;
         try {
-            Path pluginPath = Paths.get(IdaithalamExecutor.class.getClass().getResource("virtualan-cucumber-plugin.txt").toURI());
-            if(Files.exists(pluginPath)) {
-                List<String> pluginExternalOptionList = Files.readAllLines(pluginPath, Charset.defaultCharset());
-                if (pluginExternalOptionList != null && pluginExternalOptionList.size() == 1) {
-                    external = pluginExternalOptionList.get(0);
-                    String[] pluginExternalOptions = external.split(",");
-                    String[] result = new String[pluginOptions.length + pluginExternalOptions.length];
-                    System.arraycopy(pluginOptions, 0, result, 0, pluginOptions.length);
-                    System.arraycopy(pluginExternalOptions, 0, result, pluginOptions.length, pluginExternalOptions.length);
-                    return result;
-                } else {
-                    log.warn("Unable to add the given external plugin option for cucumber " + external);
+            if(IdaithalamExecutor.class.getResource("/virtualan-cucumber-plugin.txt") != null) {
+                Path pluginPath = Paths.get(IdaithalamExecutor.class.getResource("/virtualan-cucumber-plugin.txt").toURI());
+                if (Files.exists(pluginPath)) {
+                    List<String> pluginExternalOptionList = Files.readAllLines(pluginPath, Charset.defaultCharset());
+                    if (pluginExternalOptionList != null && pluginExternalOptionList.size() == 1) {
+                        external = pluginExternalOptionList.get(0);
+                        String[] pluginExternalOptions = external.split(",");
+                        String[] result = new String[pluginOptions.length + pluginExternalOptions.length];
+                        System.arraycopy(pluginOptions, 0, result, 0, pluginOptions.length);
+                        System.arraycopy(pluginExternalOptions, 0, result, pluginOptions.length, pluginExternalOptions.length);
+                        return result;
+                    } else {
+                        log.warn("Unable to add the given external plugin option for cucumber " + external);
+                    }
                 }
             }
         }catch (Exception e){
@@ -215,7 +215,7 @@ public class IdaithalamExecutor {
         return new String[]{
             "-p", path == null ? "json:target/cucumber.json" : "json:"+path+"/cucumber.json",
             "-p", path == null ? "html:target/cucumber-html-report.html" : "html:"+path+"/cucumber-html-report.html",
-            "--glue", "io.virtualan.cucumblan.core", "", path == null ? "conf/feature/" : path+"/feature/",
+            "--glue", "io.virtualan.cucumblan.core",  path == null ? "conf/feature/" : path+"/feature/",
         };
     }
 

@@ -2,7 +2,7 @@
     {
         "requestType": "REST",
         "method": "POST",
-        "resource": "bin",
+        "resource": "pet",
         "availableParams": [
             {
                 "parameterType": "HEADER_PARAM",
@@ -36,7 +36,7 @@
         "requestType": "REST",
         "method": "GET",
         "scenario": "get API testing",
-        "resource": "api",
+        "resource": "pet",
         "availableParams": [
             {
                 "parameterType": "HEADER_PARAM",
@@ -76,7 +76,7 @@
         "requestType": "REST",
         "method": "POST",
         "scenario": "post API Testing",
-        "resource": "api",
+        "resource": "pet",
         "availableParams": [
             {
                 "parameterType": "HEADER_PARAM",

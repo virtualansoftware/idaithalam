@@ -1,5 +1,4 @@
 Feature: {{feature}}
-Feature: {{feature}}
     Scenario: Load initial set of data
       Given Provided all the feature level parameters from file
 {{#items}}
@@ -124,12 +123,6 @@ Feature: {{feature}}
       {{#basicAuth}}
       And basic authentication with [basic_auth_user_id.{{{resource}}}] and [basic_auth_password.{{{resource}}}]
       {{/basicAuth}}
-      {{#hasFormParams}}
-      And add request with {{contentType}} given form params
-      {{#formParams}}
-        | {{{key}}}                   | {{{value}}}                         |
-      {{/formParams}}
-      {{/hasFormParams}}
       {{#hasPathParams}}
       And add request with given path params
       {{#pathParams}}
@@ -148,6 +141,17 @@ Feature: {{feature}}
         | {{{key}}}                   | {{{value}}}                         |
       {{/headerParams}}
       {{/hasHeaderParams}}
+      {{#hasFormParams}}
+      {{#hasMPartParams}}
+      And add request with {{contentType}} given multipart-form params
+      {{/hasMPartParams}}
+      {{^hasMPartParams}}
+      And add request with {{contentType}} given form params
+      {{/hasMPartParams}}
+      {{#formParams}}
+        | {{{key}}}                   | {{{value}}}                         |
+      {{/formParams}}
+      {{/hasFormParams}}
       {{#hasCookieParams}}
       And add request  with given cookie params
       {{#cookieParams}}

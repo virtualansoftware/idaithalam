@@ -5,7 +5,7 @@
         "requestType": "REST",
         "method": "POST",
         "scenario": "RiskCalculator",
-        "resource": "api",
+        "resource": "pet",
         "availableParams": [{
             "parameterType": "HEADER_PARAM",
             "value": "application/json",
@@ -19,7 +19,7 @@
     {
         "requestType": "REST",
         "method": "POST",
-        "resource": "api",
+        "resource": "pet",
         "rule": [
             {
                 "petName": "Test1",
