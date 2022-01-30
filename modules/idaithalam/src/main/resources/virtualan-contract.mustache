@@ -1,6 +1,6 @@
 Feature: {{feature}}
     Scenario: Load initial set of data
-      Given Provided all the feature level parameters from file
+      Given provided all the feature level parameters from file
 {{#items}}
   {{#okta}}
     @{{{resource}}}
@@ -9,7 +9,7 @@ Feature: {{feature}}
       And basic authentication with [okta_user_id.{{{resource}}}] and [okta_user_password.{{{resource}}}]
       When a user post application/json in api_token resource on okta_token.{{{resource}}}
       Then the status code is 200
-      And Store the access_token value of the key as AccessToken.{{{resource}}}
+      And store the access_token value of the key as AccessToken.{{{resource}}}
   {{/okta}}
 {{/items}}
 {{#items}}
@@ -31,23 +31,23 @@ Feature: {{feature}}
     @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
     {{/tags}}
     Scenario: {{scenario}} - {{method}} kafka message
-      Given As a user perform message {{scenario}} action
+      Given as a user perform message {{scenario}} action
       {{#hasCreateParams}}
       {{#createParams}}
-      And Add the {{{value}}} value of the key as {{{key}}}
+      And add the {{{value}}} value of the key as {{{key}}}
       {{/createParams}}
       {{/hasCreateParams}}
       {{#skipScenario}}
       And perform-message the {{{skipScenario}}} condition to skip scenario
       {{/skipScenario}}
       {{#hasInputJsonMap}}
-      When Send mapson message {{stepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
+      When send mapson message {{stepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
       {{#inputJsonMap}}
         | {{{key}}}                   |  {{{value}}}                        |
       {{/inputJsonMap}}
       {{/hasInputJsonMap}}
       {{#hasInputInline}}
-      When Send inline message {{stepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
+      When send inline message {{stepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
       {{#inputInline}}
         | {{{.}}} |
       {{/inputInline}}
@@ -63,7 +63,7 @@ Feature: {{feature}}
     @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
     {{/tags}}
     Scenario: {{scenario}} - database action
-      Given As a user perform sql {{stepInfo}} action
+      Given as a user perform sql {{stepInfo}} action
       {{#hasCreateParams}}
       {{#createParams}}
       And Add the {{{value}}} value of the key as {{{key}}}
@@ -73,10 +73,10 @@ Feature: {{feature}}
       And perform-db the {{{skipScenario}}} condition to skip scenario
       {{/skipScenario}}
       {{#isSelect}}
-      When Select details with the given sql {{stepInfo}} on {{resource}}
+      When select details with the given sql {{stepInfo}} on {{resource}}
       {{/isSelect}}
       {{^isSelect}}
-      When Execute {{method}} for the given sql {{stepInfo}} on {{resource}}
+      When execute {{method}} for the given sql {{stepInfo}} on {{resource}}
       {{/isSelect}}
       {{#inputInline}}
         | {{{.}}} |
@@ -92,16 +92,16 @@ Feature: {{feature}}
     @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
     {{/tags}}
     Scenario: {{scenario}} - amq action
-      Given As a user post message {{stepInfo}} action
+      Given as a user post message {{stepInfo}} action
       {{#hasCreateParams}}
       {{#createParams}}
-      And Add the {{{value}}} value of the key as {{{key}}}
+      And add the {{{value}}} value of the key as {{{key}}}
       {{/createParams}}
       {{/hasCreateParams}}
       {{#skipScenario}}
       And perform-message the {{{skipScenario}}} condition to skip scenario
       {{/skipScenario}}
-      When Send inline message {{stepInfo}} for messageQ {{event}} on {{resource}} with type AMQ
+      When send inline message {{stepInfo}} for messageQ {{event}} on {{resource}} with type AMQ
       {{#inputInline}}
         | {{{.}}} |
        {{/inputInline}}
@@ -111,14 +111,14 @@ Feature: {{feature}}
       Given a user perform a api action
       {{#hasCreateParams}}
       {{#createParams}}
-      And Add the {{{value}}} value of the key as {{{key}}}
+      And add the {{{value}}} value of the key as {{{key}}}
       {{/createParams}}
       {{/hasCreateParams}}
       {{#skipScenario}}
       And perform the {{{skipScenario}}} condition to skip scenario
       {{/skipScenario}}
       {{#okta}}
-      And Bearer auth with [AccessToken.{{{resource}}}] token
+      And bearer auth with [AccessToken.{{{resource}}}] token
       {{/okta}}
       {{#basicAuth}}
       And basic authentication with [basic_auth_user_id.{{{resource}}}] and [basic_auth_password.{{{resource}}}]
@@ -175,13 +175,13 @@ Feature: {{feature}}
       And Create api with given input
       {{/isPost}}
       {{#isPut}}
-      And Update api with given input
+      And update api with given input
       {{/isPut}}
       {{#isPatch}}
-      And Update api with given input
+      And update api with given input
       {{/isPatch}}
       {{#isDelete}}
-      And Delete api with given input
+      And delete api with given input
       {{/isDelete}}
       {{#inputJsonMap}}
         | {{{key}}}                   |  {{{value}}}                        |
@@ -192,10 +192,10 @@ Feature: {{feature}}
       {{#noSkipOutput}}
       {{#hasCsvson}}
       {{#matchPattern}}
-      And Verify {{csvsonPath}} response csvson includes {{matchPattern}} in the response
+      And verify {{csvsonPath}} response csvson includes {{matchPattern}} in the response
       {{/matchPattern}}
       {{^matchPattern}}
-      And Verify {{csvsonPath}} response csvson includes in the response
+      And verify {{csvsonPath}} response csvson includes in the response
       {{/matchPattern}}
       {{#csvson}}
         | {{{.}}} |
@@ -203,10 +203,10 @@ Feature: {{feature}}
       {{/hasCsvson}}
       {{#stdType}}
       {{#outputFile}}
-      And Verify-standard {{stdType}} all {{{outputFile}}} file {{url}} api includes following in the response
+      And verify-standard {{stdType}} all {{{outputFile}}} file {{url}} api includes following in the response
       {{/outputFile}}
       {{#hasOutputInline}}
-      And Verify-standard {{stdType}} all inline {{url}} api includes following in the response
+      And verify-standard {{stdType}} all inline {{url}} api includes following in the response
       {{#outputInline}}
         | {{{.}}} |
       {{/outputInline}}
@@ -214,33 +214,33 @@ Feature: {{feature}}
       {{/stdType}}
       {{^stdType}}
       {{#hasResponseByField}}
-      And Verify across response includes following in the response
+      And verify across response includes following in the response
       {{#responseByField}}
         | {{{key}}}                 |  {{{value}}}                          |
       {{/responseByField}}
       {{/hasResponseByField}}
       {{#hasOutputFileByPath}}
-      And Verify {{resource}} response {{contentType}} include byPath {{{outputFile}}} includes in the response
+      And verify {{resource}} response {{contentType}} include byPath {{{outputFile}}} includes in the response
       {{#outputFileByPath}}
         | {{{.}}} |
       {{/outputFileByPath}}
       {{/hasOutputFileByPath}}
       {{^hasOutputFileByPath}}
       {{#outputFile}}
-      And Verify api response XML File {{{outputFile}}} includes in the response
+      And verify api response XML File {{{outputFile}}} includes in the response
       {{/outputFile}}
       {{/hasOutputFileByPath}}
       {{#hasOutputInline}}
-      And Verify api response inline includes in the response
+      And verify api response inline includes in the response
       {{#outputInline}}
         | {{{.}}} |
       {{/outputInline}}
       {{/hasOutputInline}}
       {{#stdOutput}}
-      And Verify api response with {{stdOutput}} includes in the response
+      And verify api response with {{stdOutput}} includes in the response
       {{/stdOutput}}
       {{#hasOutputJsonMap}}
-      And Verify-all {{url}} api includes following in the response
+      And verify-all {{url}} api includes following in the response
       {{#outputJsonMap}}
         | {{{key}}}                 |  {{{value}}}                          |
       {{/outputJsonMap}}
@@ -249,7 +249,7 @@ Feature: {{feature}}
       {{/noSkipOutput}}
       {{#hasStorageParams}}
       {{#storageParams}}
-      And Store the {{{value}}} value of the key as {{{key}}}
+      And store the {{{value}}} value of the key as {{{key}}}
       {{/storageParams}}
       {{/hasStorageParams}}
       {{#hasEvaluateParams}}
@@ -276,7 +276,7 @@ Feature: {{feature}}
       {{#kafkaOutput}}
       {{#hasResponseByField}}
       {{#kafkaInput}}
-      Then Verify-by-elements {{stepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      Then verify-by-elements {{stepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{^kafkaInput}}
       And Verify-by-elements {{stepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
@@ -287,10 +287,10 @@ Feature: {{feature}}
       {{/hasResponseByField}}
       {{#hasCsvson}}
       {{#kafkaInput}}
-      Then Verify {{stepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      Then verify {{stepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{^kafkaInput}}
-      And Verify {{stepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      And verify {{stepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{#csvson}}
         | {{{.}}} |
@@ -299,7 +299,7 @@ Feature: {{feature}}
       {{/kafkaOutput}}
       {{#hasStorageParams}}
       {{#storageParams}}
-      And Store-message's {{{value}}} value of the key as {{{key}}}
+      And store-message's {{{value}}} value of the key as {{{key}}}
       {{/storageParams}}
       {{/hasStorageParams}}
       {{/isKafka}}
@@ -307,10 +307,10 @@ Feature: {{feature}}
       {{#dbOutput}}
       {{#hasCsvson}}
       {{#dbInput}}
-      Then Verify details with the given sql {{stepInfo}} on {{resource}}
+      Then verify details with the given sql {{stepInfo}} on {{resource}}
       {{/dbInput}}
       {{^dbInput}}
-      And Verify details with the given sql {{stepInfo}} on {{resource}}
+      And verify details with the given sql {{stepInfo}} on {{resource}}
       {{/dbInput}}
       {{#csvson}}
         | {{{.}}} |
@@ -319,7 +319,7 @@ Feature: {{feature}}
       {{/dbOutput}}
       {{#hasStorageParams}}
       {{#storageParams}}
-      And Store-sql's {{{value}}} value of the key as {{{key}}}
+      And store-sql's {{{value}}} value of the key as {{{key}}}
       {{/storageParams}}
       {{/hasStorageParams}}
       {{/isDatabase}}
@@ -327,7 +327,7 @@ Feature: {{feature}}
       {{#amqOutput}}
       {{#hasCsvson}}
       {{#amqInput}}
-      Then Verify {{stepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
+      Then verify {{stepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
       {{/amqInput}}
       {{^amqInput}}
       And Verify {{stepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
@@ -339,7 +339,7 @@ Feature: {{feature}}
       {{/amqOutput}}
       {{#hasStorageParams}}
       {{#storageParams}}
-      And Store-message's {{{value}}} value of the key as {{{key}}}
+      And store-message's {{{value}}} value of the key as {{{key}}}
       {{/storageParams}}
       {{/hasStorageParams}}
       {{/isAMQ}}
