@@ -4,4 +4,4 @@ public enum Execution {
     EXECUTE,
     GENERATE,
     ALL
-  }
+}

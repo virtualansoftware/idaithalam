@@ -2,10 +2,6 @@ package io.virtualan.idaithalam.core;
 
 public class IdaithalamConstants {
 
-    private IdaithalamConstants(){
-
-    }
-
     public static final String TESTCASE_NAME_HEADER = "TestCaseName";
     public static final String TESTCASE_NAME_DESC_HEADER = "TestCaseNameDesc";
     public static final String URL_HEADER = "URL";
@@ -22,4 +18,7 @@ public class IdaithalamConstants {
     public static final String STEP_INFO_HEADER = "StepInfo";
     public static final String STORE_RESPONSE_VARIABLES_HEADER = "StoreResponseVariables";
     public static final String CSVSON_HEADER = "Csvson";
+    private IdaithalamConstants() {
+
+    }
 }

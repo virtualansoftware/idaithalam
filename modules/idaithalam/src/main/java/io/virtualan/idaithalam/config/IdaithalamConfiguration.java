@@ -10,78 +10,77 @@ import java.util.Properties;
  * @author Elan Thangamani
  */
 public class IdaithalamConfiguration {
-  private static Properties properties = new Properties();
-  static {
-    reload();
-  }
+    private static final Properties properties = new Properties();
 
-  /**
-   * Reload.
-   */
-  public static  void reload(){
-    try {
-      InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("idaithalam.properties");
-      if(stream == null) {
-        stream = IdaithalamConfiguration.class.getClassLoader().getResourceAsStream("idaithalam.properties");
-      }
-      if(stream != null) {
-        properties.load(stream);
-      }
-    } catch (Exception e) {
-
+    static {
+        reload();
     }
-  }
 
-  /**
-   * Gets properties.
-   *
-   * @return the properties
-   */
-  public static Map<String, String> getProperties() {
-    return (Map)properties;
-  }
+    /**
+     * Reload.
+     */
+    public static void reload() {
+        try {
+            InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("idaithalam.properties");
+            if (stream == null) {
+                stream = IdaithalamConfiguration.class.getClassLoader().getResourceAsStream("idaithalam.properties");
+            }
+            if (stream != null) {
+                properties.load(stream);
+            }
+        } catch (Exception e) {
 
+        }
+    }
 
-  /**
-   * Gets properties.
-   *
-   * @param key   the key
-   * @param value the value
-   */
-  public static void setProperty(String key, String value) {
-    properties.put(key, value);
-  }
+    /**
+     * Gets properties.
+     *
+     * @return the properties
+     */
+    public static Map<String, String> getProperties() {
+        return (Map) properties;
+    }
 
+    /**
+     * Sets property.
+     *
+     * @param idaithalamProperies the idaithalam properies
+     */
+    public static void setProperties(Map<String, String> idaithalamProperies) {
+        properties.putAll(idaithalamProperies);
+    }
 
-  /**
-   * Gets property.
-   *
-   * @param keyName the key name
-   * @return the property
-   */
-  public static String getProperty(String keyName) {
-    return properties.getProperty(keyName);
-  }
+    /**
+     * Gets properties.
+     *
+     * @param key   the key
+     * @param value the value
+     */
+    public static void setProperty(String key, String value) {
+        properties.put(key, value);
+    }
 
-  /**
-   * Is work flow boolean.
-   *
-   * @return the boolean
-   */
-  public static boolean isWorkFlow() {
-    return  properties.getProperty("workflow") != null ?   !properties.getProperty("workflow").equalsIgnoreCase("Enabled") : true;
-  }
+    /**
+     * Gets property.
+     *
+     * @param keyName the key name
+     * @return the property
+     */
+    public static String getProperty(String keyName) {
+        return properties.getProperty(keyName);
+    }
 
-  /**
-   * Sets property.
-   *
-   * @param idaithalamProperies the idaithalam properies
-   */
-  public static void setProperties(Map<String, String> idaithalamProperies) {
-    properties.putAll(idaithalamProperies);
-  }
+    /**
+     * Is work flow boolean.
+     *
+     * @return the boolean
+     */
+    public static boolean isWorkFlow() {
+        return properties.getProperty("workflow") == null || !properties.getProperty("workflow").equalsIgnoreCase("Enabled");
+    }
 
-  public static boolean isReportEnabled() {
-    return  properties.getProperty("generateReport") != null ?   !properties.getProperty("generateReport").equalsIgnoreCase("Disabled") : true;
-  }
+    public static boolean isReportEnabled() {
+        return properties.getProperty("generateReport") == null || !properties.getProperty("generateReport").equalsIgnoreCase("Disabled");
+    }
 }

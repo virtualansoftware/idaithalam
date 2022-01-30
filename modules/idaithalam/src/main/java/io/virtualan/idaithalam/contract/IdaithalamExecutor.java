@@ -28,25 +28,21 @@ import io.virtualan.idaithalam.core.domain.Execution;
 import io.virtualan.idaithalam.core.domain.FeatureFileMapper;
 import io.virtualan.idaithalam.core.generator.FeatureFileGenerator;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
-
 import me.jvt.cucumber.gherkinformatter.PrettyFormatter;
 import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
 import net.masterthought.cucumber.json.support.Status;
 import net.masterthought.cucumber.presentation.PresentationMode;
+
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 
 /**
@@ -57,7 +53,7 @@ import net.masterthought.cucumber.presentation.PresentationMode;
  * <p>
  * - Used for API testing. - Used for Contract testing. - Used for Production Checkout. - Used for
  * Agile sprint end regression testing.
- * 
+ * <p>
  * boolean isSuccess = VirtualanTestPlanExecutor.invoke("apiexecution.yaml");
  */
 @Slf4j
@@ -99,7 +95,7 @@ public class IdaithalamExecutor {
      * @throws UnableToProcessException the unable to process exception
      */
     public static int validateContract(String featureHeading)
-        throws UnableToProcessException {
+            throws UnableToProcessException {
         return validateContract(featureHeading, null);
     }
 
@@ -112,20 +108,20 @@ public class IdaithalamExecutor {
      * @throws UnableToProcessException the unable to process exception
      */
     public static int validateContract(String featureHeading, ApiExecutorParam apiExecutorParam)
-        throws UnableToProcessException {
-        byte exitStatus  = 0 ;
+            throws UnableToProcessException {
+        byte exitStatus = 0;
         try {
             String fileIndex = UUID.randomUUID().toString();
             VirtualanClassLoader classLoaderParent = new VirtualanClassLoader(IdaithalamExecutor.class.getClassLoader());
             ExecutionClassloader classLoader = addConfToClasspath(classLoaderParent, apiExecutorParam.getOutputDir());
-            if((apiExecutorParam.getExecution() == null) ||
+            if ((apiExecutorParam.getExecution() == null) ||
                     (Execution.ALL.name().equalsIgnoreCase(apiExecutorParam.getExecution().name())
-                    || Execution.GENERATE.name().equalsIgnoreCase(apiExecutorParam.getExecution().name()))) {
+                            || Execution.GENERATE.name().equalsIgnoreCase(apiExecutorParam.getExecution().name()))) {
                 generateFeatureFile(classLoader, apiExecutorParam);
             }
-            if((apiExecutorParam.getExecution() == null) ||
+            if ((apiExecutorParam.getExecution() == null) ||
                     (Execution.ALL.name().equalsIgnoreCase(apiExecutorParam.getExecution().name())
-                    || Execution.EXECUTE.name().equalsIgnoreCase(apiExecutorParam.getExecution().name()))) {
+                            || Execution.EXECUTE.name().equalsIgnoreCase(apiExecutorParam.getExecution().name()))) {
                 String[] argv = getCucumberOptions(apiExecutorParam, fileIndex);
                 exitStatus = Main.run(argv, classLoader);
                 if (IdaithalamConfiguration.isReportEnabled()) {
@@ -141,22 +137,22 @@ public class IdaithalamExecutor {
     private static String[] getCucumberOptions(ApiExecutorParam apiExecutorParam, String build) {
         String path = apiExecutorParam.getOutputDir();
         String jsonPath = path;
-        if(apiExecutorParam.getOutputJsonDir() != null){
-            if(new File(apiExecutorParam.getOutputJsonDir()).exists()){
+        if (apiExecutorParam.getOutputJsonDir() != null) {
+            if (new File(apiExecutorParam.getOutputJsonDir()).exists()) {
                 new File(apiExecutorParam.getOutputJsonDir()).mkdirs();
             }
             jsonPath = apiExecutorParam.getOutputJsonDir();
         }
-        String[] pluginOptions  = new String[]{
+        String[] pluginOptions = new String[]{
                 "-p", "pretty",
                 "-p", "io.virtualan.cucumblan.props.hook.FeatureScope",
-                "-p", path == null ? "json:target/cucumber-"+build+".json" : "json:"+jsonPath+"/cucumber-"+build+".json",
-                "-p", path == null ? "html:target/cucumber-html-report.html" : "html:"+jsonPath+"/cucumber-html-report.html",
-                "--glue", "io.virtualan.cucumblan.core",  path == null ? "conf/feature/" : path+"/feature/",
+                "-p", path == null ? "json:target/cucumber-" + build + ".json" : "json:" + jsonPath + "/cucumber-" + build + ".json",
+                "-p", path == null ? "html:target/cucumber-html-report.html" : "html:" + jsonPath + "/cucumber-html-report.html",
+                "--glue", "io.virtualan.cucumblan.core", path == null ? "conf/feature/" : path + "/feature/",
         };
-        String external =  null;
+        String external = null;
         try {
-            if(IdaithalamExecutor.class.getResource("/virtualan-cucumber-plugin.txt") != null) {
+            if (IdaithalamExecutor.class.getResource("/virtualan-cucumber-plugin.txt") != null) {
                 Path pluginPath = Paths.get(IdaithalamExecutor.class.getResource("/virtualan-cucumber-plugin.txt").toURI());
                 if (Files.exists(pluginPath)) {
                     List<String> pluginExternalOptionList = Files.readAllLines(pluginPath, Charset.defaultCharset());
@@ -172,27 +168,26 @@ public class IdaithalamExecutor {
                     }
                 }
             }
-        }catch (Exception e){
-            log.warn("Unable to add the given external plugin option for cucumber("+e.getMessage()+") " + external);
+        } catch (Exception e) {
+            log.warn("Unable to add the given external plugin option for cucumber(" + e.getMessage() + ") " + external);
         }
         return pluginOptions;
     }
 
 
-
     /**
-     *  generate cucumber report
+     * generate cucumber report
      */
 
     private static void generateReport(String featureHeading, ApiExecutorParam apiExecutorParam, String index) {
         String path = apiExecutorParam.getOutputDir();
-        if(apiExecutorParam.getOutputJsonDir() != null){
+        if (apiExecutorParam.getOutputJsonDir() != null) {
             path = apiExecutorParam.getOutputJsonDir();
         }
         path = path == null ? "target" : path;
         File reportOutputDirectory = new File(path);
         List<String> jsonFiles = new ArrayList<>();
-        jsonFiles.add(path+"/cucumber-"+index+".json");
+        jsonFiles.add(path + "/cucumber-" + index + ".json");
         String buildNumber = index;
         String projectName = featureHeading;
         Configuration configuration = new Configuration(reportOutputDirectory, projectName);
@@ -213,9 +208,9 @@ public class IdaithalamExecutor {
 
     private static String[] getCucumberOptions(String path) {
         return new String[]{
-            "-p", path == null ? "json:target/cucumber.json" : "json:"+path+"/cucumber.json",
-            "-p", path == null ? "html:target/cucumber-html-report.html" : "html:"+path+"/cucumber-html-report.html",
-            "--glue", "io.virtualan.cucumblan.core",  path == null ? "conf/feature/" : path+"/feature/",
+                "-p", path == null ? "json:target/cucumber.json" : "json:" + path + "/cucumber.json",
+                "-p", path == null ? "html:target/cucumber-html-report.html" : "html:" + path + "/cucumber-html-report.html",
+                "--glue", "io.virtualan.cucumblan.core", path == null ? "conf/feature/" : path + "/feature/",
         };
     }
 
@@ -227,7 +222,7 @@ public class IdaithalamExecutor {
 
     private static ExecutionClassloader addConfToClasspath(VirtualanClassLoader classLoader, String path) throws MalformedURLException {
         path = path == null ? "conf" : path;
-        ExecutionClassloader cl = new ExecutionClassloader(new URL[] {new File(path).toURI().toURL()}, classLoader);
+        ExecutionClassloader cl = new ExecutionClassloader(new URL[]{new File(path).toURI().toURL()}, classLoader);
         Thread.currentThread().setContextClassLoader(cl);
         return cl;
     }
@@ -263,44 +258,44 @@ public class IdaithalamExecutor {
 
     private static void generateFeatureFile(ExecutionClassloader classloader, ApiExecutorParam apiExecutorParam) throws IOException, UnableToProcessException {
         String path = apiExecutorParam.getOutputDir();
-        if(path == null || !new File(path).exists()) {
+        if (path == null || !new File(path).exists()) {
             if (!new File("conf").exists()) {
                 new File("conf").mkdir();
             }
             path = "conf";
         }
-        if (!new File(path+"/feature").exists()) {
-            new File(path+"/feature").mkdir();
+        if (!new File(path + "/feature").exists()) {
+            new File(path + "/feature").mkdir();
         }
         Properties properties = readCucumblan(classloader);
         List<FeatureFileMapper> items = FeatureFileGenerator.generateFeatureFile(properties, apiExecutorParam);
 
         String featureTitle = properties.getProperty("virtualan.data.heading");
 
-        for(int i=0; i< items.size(); i++){
+        for (int i = 0; i < items.size(); i++) {
             MustacheFactory mf = new DefaultMustacheFactory();
             Mustache mustache = mf.compile("virtualan-contract.mustache");
-            FileOutputStream outputStream = new FileOutputStream(path+"/feature/" + removeFileName(items.get(i).getJsonFileName())+".feature");
+            FileOutputStream outputStream = new FileOutputStream(path + "/feature/" + removeFileName(items.get(i).getJsonFileName()) + ".feature");
             StringWriter writer = new StringWriter();
             mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i).getWorkflowItems())).flush();
             PrettyFormatter formatter = new PrettyFormatter();
             String formattedFeature = formatter.format(writer.toString());
             writer.close();
-            outputStream.write(formattedFeature.getBytes(Charset.forName("UTF-8")));
+            outputStream.write(formattedFeature.getBytes(StandardCharsets.UTF_8));
             outputStream.close();
         }
     }
 
-    private static String getTitle(String arrayTitle, int index , String defaultString){
-        try{
+    private static String getTitle(String arrayTitle, int index, String defaultString) {
+        try {
             return arrayTitle.split(";")[index];
-        }catch (Exception e){
+        } catch (Exception e) {
             String featureTitle = ApplicationConfiguration.getProperty("virtualan.data.load");
             return removeFileName(featureTitle.split(";")[index]);
         }
     }
 
     private static String removeFileName(String featureTitle) {
-        return featureTitle != null? featureTitle.replace(".json", "").replace(".yaml", "") :  featureTitle;
+        return featureTitle != null ? featureTitle.replace(".json", "").replace(".yaml", "") : featureTitle;
     }
 }
