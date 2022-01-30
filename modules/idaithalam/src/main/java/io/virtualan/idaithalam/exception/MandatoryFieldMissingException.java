@@ -1,7 +1,7 @@
 package io.virtualan.idaithalam.exception;
 
-public class MandatoryFieldMissingException extends IdaithalamException{
-    public MandatoryFieldMissingException(){
+public class MandatoryFieldMissingException extends IdaithalamException {
+    public MandatoryFieldMissingException() {
         super();
     }
 

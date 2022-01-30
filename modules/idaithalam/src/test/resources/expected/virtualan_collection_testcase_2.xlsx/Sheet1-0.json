@@ -1,64 +1,64 @@
 [
-    {
-        "output": "{\n  \"category\": {\n    \"id\": 200,\n    \"name\": \"Bulldog\"\n  },\n  \"id\": 201,\n  \"name\": \"Butch\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 201,\n      \"name\": \"grey\"\n    }\n  ]\n}",
-        "requestType": "REST",
-        "method": "GET",
-        "scenario": "get API testing",
-        "resource": "pet",
-        "availableParams": [
-            {
-                "parameterType": "HEADER_PARAM",
-                "value": "application/json",
-                "key": "contentType"
-            },
-            {
-                "parameterType": "STORAGE_PARAM",
-                "value": "id",
-                "key": "petId"
-            },
-            {
-                "parameterType": "STORAGE_PARAM",
-                "value": "name",
-                "key": "petName"
-            },
-            {
-                "parameterType": "QUERY_PARAM",
-                "value": "[tag]",
-                "key": "tags"
-            }
-        ],
-        "contentType": "application/json",
-        "scenarioId": "PetGet",
-        "url": "/api/pets/findByTags",
-        "httpStatusCode": "200"
-    },
-    {
-        "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
-        "input": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"[petName]\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
-        "requestType": "REST",
-        "method": "POST",
-        "scenario": "post API Testing",
-        "resource": "pet",
-        "availableParams": [
-            {
-                "parameterType": "HEADER_PARAM",
-                "value": "application/json",
-                "key": "contentType"
-            },
-            {
-                "parameterType": "ADDIFY_PARAM",
-                "value": "[petId]",
-                "key": "Id"
-            },
-            {
-                "parameterType": "ADDIFY_PARAM",
-                "value": "doggie",
-                "key": "petName"
-            }
-        ],
-        "contentType": "application/json",
-        "scenarioId": "PetPost",
-        "url": "/api/pets",
-        "httpStatusCode": "200"
-    }
+  {
+    "output": "{\n  \"category\": {\n    \"id\": 200,\n    \"name\": \"Bulldog\"\n  },\n  \"id\": 201,\n  \"name\": \"Butch\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 201,\n      \"name\": \"grey\"\n    }\n  ]\n}",
+    "requestType": "REST",
+    "method": "GET",
+    "scenario": "get API testing",
+    "resource": "pet",
+    "availableParams": [
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/json",
+        "key": "contentType"
+      },
+      {
+        "parameterType": "STORAGE_PARAM",
+        "value": "id",
+        "key": "petId"
+      },
+      {
+        "parameterType": "STORAGE_PARAM",
+        "value": "name",
+        "key": "petName"
+      },
+      {
+        "parameterType": "QUERY_PARAM",
+        "value": "[tag]",
+        "key": "tags"
+      }
+    ],
+    "contentType": "application/json",
+    "scenarioId": "PetGet",
+    "url": "/api/pets/findByTags",
+    "httpStatusCode": "200"
+  },
+  {
+    "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+    "input": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"[petName]\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+    "requestType": "REST",
+    "method": "POST",
+    "scenario": "post API Testing",
+    "resource": "pet",
+    "availableParams": [
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/json",
+        "key": "contentType"
+      },
+      {
+        "parameterType": "ADDIFY_PARAM",
+        "value": "[petId]",
+        "key": "Id"
+      },
+      {
+        "parameterType": "ADDIFY_PARAM",
+        "value": "doggie",
+        "key": "petName"
+      }
+    ],
+    "contentType": "application/json",
+    "scenarioId": "PetPost",
+    "url": "/api/pets",
+    "httpStatusCode": "200"
+  }
 ]

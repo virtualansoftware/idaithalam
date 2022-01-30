@@ -22,7 +22,6 @@ import io.virtualan.idaithalam.contract.VirtualanClassLoader;
 import io.virtualan.idaithalam.core.UnableToProcessException;
 import io.virtualan.idaithalam.core.domain.*;
 import lombok.extern.slf4j.Slf4j;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -49,7 +48,7 @@ public class FeatureFileGenerator {
 
     private static ExecutionClassloader addConfToClasspath(VirtualanClassLoader classLoader, String path) throws MalformedURLException {
         path = path == null ? "conf" : path;
-        ExecutionClassloader cl = new ExecutionClassloader(new URL[] {new File(path).toURI().toURL()}, classLoader);
+        ExecutionClassloader cl = new ExecutionClassloader(new URL[]{new File(path).toURI().toURL()}, classLoader);
         Thread.currentThread().setContextClassLoader(cl);
         return cl;
     }
@@ -69,10 +68,10 @@ public class FeatureFileGenerator {
             if (stream != null) {
                 propertiesForInstance.load(stream);
             } else {
-                log.warn("unable to load "+ fileName);
+                log.warn("unable to load " + fileName);
             }
         } catch (Exception var3) {
-            log.warn(fileName +" not found");
+            log.warn(fileName + " not found");
         }
 
         return propertiesForInstance;
@@ -89,12 +88,12 @@ public class FeatureFileGenerator {
      * @throws IOException              the io exception
      */
     public static List<FeatureFileMapper> generateFeatureFile(Properties properties, ApiExecutorParam apiExecutorParam)
-        throws UnableToProcessException, IOException {
+            throws UnableToProcessException, IOException {
         List<FeatureFileMapper> items = new ArrayList<>();
         VirtualanClassLoader classLoaderParnet = new VirtualanClassLoader(
-            IdaithalamExecutor.class.getClassLoader());
+                IdaithalamExecutor.class.getClassLoader());
         ExecutionClassloader classLoader = addConfToClasspath(classLoaderParnet, apiExecutorParam.getOutputDir());
-        Map<String, String> excludeConfiguration = (Map)readPropsFromClasspath(classLoader, "exclude-response.properties");
+        Map<String, String> excludeConfiguration = (Map) readPropsFromClasspath(classLoader, "exclude-response.properties");
         String contractFileName = properties.getProperty("virtualan.data.load");
         String contractFileType = properties.getProperty("virtualan.data.type");
         JSONArray jsonArray = null;
@@ -104,31 +103,34 @@ public class FeatureFileGenerator {
         }
         String[] fileNames = contractFileName.split(";");
 
-        for(int i=0; i < fileNames.length; i++) {
-          if (ConversionType.POSTMAN.name().equalsIgnoreCase(contractFileType)) {
-            jsonArray = FeatureGenerationHelper
-                .createPostManToVirtualan(getJSONObject(apiExecutorParam, fileNames[i]));
-          } else if (ConversionType.OPENAPI.name().equalsIgnoreCase(contractFileType)) {
-            jsonArray = OpenApiFeatureFileGenerator
-                .generateOpenApiContractForVirtualan(fileNames[i] , apiExecutorParam);
-          } else {
-            jsonArray = getJSONArray(apiExecutorParam, fileNames[i]);
-          }
-          List<Item> result = FeatureGenerationHelper.createFeatureFile(excludeConfiguration, jsonArray, apiExecutorParam.getOutputDir());
-          /** Author: oglas  Add custom API header from configuration yaml. */
-          if (apiExecutorParam.getApiHeader() != null && apiExecutorParam.getApiHeader().getHeaderList().size() > 0) {
-              addCustomApiHeader(apiExecutorParam, result);
-          }
-          FeatureFileMapper featureFileMapper = new  FeatureFileMapper(fileNames[i], result);
-          items.add(featureFileMapper);
+        for (int i = 0; i < fileNames.length; i++) {
+            if (ConversionType.POSTMAN.name().equalsIgnoreCase(contractFileType)) {
+                jsonArray = FeatureGenerationHelper
+                        .createPostManToVirtualan(getJSONObject(apiExecutorParam, fileNames[i]));
+            } else if (ConversionType.OPENAPI.name().equalsIgnoreCase(contractFileType)) {
+                jsonArray = OpenApiFeatureFileGenerator
+                        .generateOpenApiContractForVirtualan(fileNames[i], apiExecutorParam);
+            } else {
+                jsonArray = getJSONArray(apiExecutorParam, fileNames[i]);
+            }
+            List<Item> result = FeatureGenerationHelper.createFeatureFile(excludeConfiguration, jsonArray, apiExecutorParam.getOutputDir());
+            /** Author: oglas  Add custom API header from configuration yaml. */
+            if (apiExecutorParam.getApiHeader() != null && apiExecutorParam.getApiHeader().getHeaderList().size() > 0) {
+                addCustomApiHeader(apiExecutorParam, result);
+            }
+            FeatureFileMapper featureFileMapper = new FeatureFileMapper(fileNames[i], result);
+            items.add(featureFileMapper);
         }
         return items;
     }
 
-    /** Author: Oliver Glas (inss.ch) 
-     * Adding custom API header as defined in the yaml file. */
+    /**
+     * Author: Oliver Glas (inss.ch)
+     * Adding custom API header as defined in the yaml file.
+     */
     private static void addCustomApiHeader(ApiExecutorParam apiExecutorParam, List<Item> result) {
-        if (apiExecutorParam.getApiHeader() == null || apiExecutorParam.getApiHeader().getHeaderList() == null || apiExecutorParam.getApiHeader().getHeaderList().isEmpty()) return;
+        if (apiExecutorParam.getApiHeader() == null || apiExecutorParam.getApiHeader().getHeaderList() == null || apiExecutorParam.getApiHeader().getHeaderList().isEmpty())
+            return;
         List<Map<String, Object>> apiHeaderList = apiExecutorParam.getApiHeader().getHeaderList();
         boolean overwrite = Boolean.valueOf(apiExecutorParam.getApiHeader().getOverwrite());
         for (Item item : result) {
@@ -150,12 +152,13 @@ public class FeatureFileGenerator {
                         for (AvailableParam availableParam1 : item.getAvailableParams()) {
                             if (availableParam1.getKey().equals(newAvailableParam.getKey())) {
                                 if (overwrite) {
-                                availableParam1.setKey(newAvailableParam.getKey());
-                                availableParam1.setValue(newAvailableParam.getValue());
-                                availableParam1.setParameterType(newAvailableParam.getParameterType());
-                                log.warn("Due to issue #121 API header " + key + " is overwritten with value from configuration. To avoid this behavior add 'overwrite: false' (default: true) to the 'apiHeader' section.");
-                    } else {
-                            availableParam1.setValue(availableParam1.getValue().concat(",").concat(newAvailableParam.getValue()));
+                                    availableParam1.setKey(newAvailableParam.getKey());
+                                    availableParam1.setValue(newAvailableParam.getValue());
+                                    availableParam1.setParameterType(newAvailableParam.getParameterType());
+                                    log.warn("Due to issue #121 API header " + key + " is overwritten with value from configuration. To avoid this behavior add 'overwrite: false' (default: true) to the 'apiHeader' section.");
+                                } else {
+                                    availableParam1.setValue(availableParam1.getValue().concat(",").concat(newAvailableParam.getValue()));
+                                }
                             }
                         }
                     }
@@ -163,7 +166,6 @@ public class FeatureFileGenerator {
             }
         }
     }
-}
 
 
     /**
@@ -175,19 +177,19 @@ public class FeatureFileGenerator {
      * @throws UnableToProcessException the unable to process exception
      */
     public static JSONObject getJSONObject(ClassLoader classLoader, String contractFileName)
-        throws UnableToProcessException {
+            throws UnableToProcessException {
         JSONObject jsonObject = null;
         try {
             InputStream stream = classLoader.getResourceAsStream(contractFileName);
-            if(stream != null){
+            if (stream != null) {
                 String objectStr = readString(stream);
                 jsonObject = new JSONObject(objectStr);
-            } else if(FeatureFileGenerator.class.getClassLoader().getResourceAsStream(contractFileName) != null) {
+            } else if (FeatureFileGenerator.class.getClassLoader().getResourceAsStream(contractFileName) != null) {
                 String objectStr = readString(FeatureFileGenerator.class.getClassLoader()
-                    .getResourceAsStream(contractFileName));
+                        .getResourceAsStream(contractFileName));
                 jsonObject = new JSONObject(objectStr);
             } else {
-                throw new UnableToProcessException("Unable to find/process the input file(" + contractFileName + ") :" );
+                throw new UnableToProcessException("Unable to find/process the input file(" + contractFileName + ") :");
             }
         } catch (IOException e) {
             log.warn("Unable to process the input file(" + contractFileName + ")" + e.getMessage());
@@ -207,7 +209,7 @@ public class FeatureFileGenerator {
 
         ByteArrayOutputStream into = new ByteArrayOutputStream();
         byte[] buf = new byte[4096];
-        for (int n; 0 < (n = inputStream.read(buf));) {
+        for (int n; 0 < (n = inputStream.read(buf)); ) {
             into.write(buf, 0, n);
         }
         into.close();
@@ -246,7 +248,7 @@ public class FeatureFileGenerator {
      * @throws UnableToProcessException the unable to process exception
      */
     public static JSONArray getJSONArray(ApiExecutorParam apiExecutorParam, String contractFileName)
-        throws UnableToProcessException {
+            throws UnableToProcessException {
         JSONArray jsonArray = null;
         try {
             String jsonArrayStr = getFileAsString(apiExecutorParam, contractFileName);
@@ -259,13 +261,13 @@ public class FeatureFileGenerator {
     }
 
     private static String getFileAsString(ApiExecutorParam apiExecutorParam, String filePath)
-        throws IOException {
-        InputStream stream  = null;
+            throws IOException {
+        InputStream stream = null;
         File file = new File(filePath);
         if (apiExecutorParam.getVirtualanSpecPath() != null) {
-            stream = new FileInputStream(apiExecutorParam.getVirtualanSpecPath() +File.separator+ filePath);
+            stream = new FileInputStream(apiExecutorParam.getVirtualanSpecPath() + File.separator + filePath);
         }
-        if(stream == null && file.exists()){
+        if (stream == null && file.exists()) {
             stream = new FileInputStream(file);
         }
         if (stream == null) {
@@ -286,8 +288,8 @@ public class FeatureFileGenerator {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 
                 String line;
-                while((line = reader.readLine()) != null) {
-                    if(!line.trim().equalsIgnoreCase("")) {
+                while ((line = reader.readLine()) != null) {
+                    if (!line.trim().equalsIgnoreCase("")) {
                         sb.append(line).append("\n");
                     }
                 }

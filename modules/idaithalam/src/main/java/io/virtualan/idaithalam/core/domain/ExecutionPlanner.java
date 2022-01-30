@@ -8,20 +8,18 @@ import java.util.Map;
  */
 public class ExecutionPlanner {
 
-    @Override
-    public String toString() {
-        return "ExecutionPlanner{" +
-            "parallelExecution=" + parallelExecution +
-            ", apiExecutor=" + apiExecutor +
-            '}';
-    }
-
     private int parallelExecution;
     private List<ApiExecutorParam> apiExecutor;
     private int timeout;
+    private Map<String, String> idaithalamProperties;
 
-    private Map<String,String> idaithalamProperties;
-
+    @Override
+    public String toString() {
+        return "ExecutionPlanner{" +
+                "parallelExecution=" + parallelExecution +
+                ", apiExecutor=" + apiExecutor +
+                '}';
+    }
 
     /**
      * Gets idaithalam properies.
@@ -92,7 +90,7 @@ public class ExecutionPlanner {
      * @param apiExecutor the api executor
      */
     public void setApiExecutor(
-        List<ApiExecutorParam> apiExecutor) {
+            List<ApiExecutorParam> apiExecutor) {
         this.apiExecutor = apiExecutor;
     }
 }

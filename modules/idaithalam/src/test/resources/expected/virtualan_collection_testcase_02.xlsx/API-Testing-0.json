@@ -1,60 +1,62 @@
 [
-    {
-        "output": "65",
-        "input": "{\n  \"birthday\" : \"1918-10-24\",\n  \"postalCode\" : \"60563\"\n}",
-        "requestType": "REST",
-        "method": "POST",
-        "scenario": "RiskCalculator",
-        "resource": "pet",
-        "availableParams": [{
-            "parameterType": "HEADER_PARAM",
-            "value": "application/json",
-            "key": "contentType"
-        }],
-        "contentType": "application/json",
-        "scenarioId": "RiskCalculator",
-        "url": "/api/riskfactor/compute",
-        "httpStatusCode": "200"
-    },
-    {
-        "requestType": "REST",
-        "method": "POST",
-        "resource": "pet",
-        "rule": [
-            {
-                "petName": "Test1",
-                "petId": "i~1000"
-            },
-            {
-                "petName": "Test2",
-                "petId": "i~2000"
-            }
-        ],
-        "availableParams": [
-            {
-                "parameterType": "ADDIFY_PARAM",
-                "value": "<petId>",
-                "key": "petId"
-            },
-            {
-                "parameterType": "ADDIFY_PARAM",
-                "value": "<petName>",
-                "key": "petName"
-            },
-            {
-                "parameterType": "HEADER_PARAM",
-                "value": "application/json",
-                "key": "contentType"
-            }
-        ],
-        "type": "PARAMS",
-        "url": "/api/pets",
-        "output": "{\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"id\": <petId>,\n  \"name\": \"<petName>\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ],\n  \"type\": \"DOGS\"\n}",
-        "input": "{\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"id\": <petId>,\n  \"name\": \"<petName>\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ],\n  \"type\": \"DOGS\"\n}",
-        "scenario": "post API Testing",
-        "skipScenario": "[STATUS_CODE]=200",
-        "contentType": "application/json",
-        "scenarioId": "PetPost",
-        "httpStatusCode": "201"
-    }
+  {
+    "output": "65",
+    "input": "{\n  \"birthday\" : \"1918-10-24\",\n  \"postalCode\" : \"60563\"\n}",
+    "requestType": "REST",
+    "method": "POST",
+    "scenario": "RiskCalculator",
+    "resource": "pet",
+    "availableParams": [
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/json",
+        "key": "contentType"
+      }
+    ],
+    "contentType": "application/json",
+    "scenarioId": "RiskCalculator",
+    "url": "/api/riskfactor/compute",
+    "httpStatusCode": "200"
+  },
+  {
+    "requestType": "REST",
+    "method": "POST",
+    "resource": "pet",
+    "rule": [
+      {
+        "petName": "Test1",
+        "petId": "i~1000"
+      },
+      {
+        "petName": "Test2",
+        "petId": "i~2000"
+      }
+    ],
+    "availableParams": [
+      {
+        "parameterType": "ADDIFY_PARAM",
+        "value": "<petId>",
+        "key": "petId"
+      },
+      {
+        "parameterType": "ADDIFY_PARAM",
+        "value": "<petName>",
+        "key": "petName"
+      },
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/json",
+        "key": "contentType"
+      }
+    ],
+    "type": "PARAMS",
+    "url": "/api/pets",
+    "output": "{\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"id\": <petId>,\n  \"name\": \"<petName>\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ],\n  \"type\": \"DOGS\"\n}",
+    "input": "{\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"string\"\n  },\n  \"id\": <petId>,\n  \"name\": \"<petName>\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ],\n  \"type\": \"DOGS\"\n}",
+    "scenario": "post API Testing",
+    "skipScenario": "[STATUS_CODE]=200",
+    "contentType": "application/json",
+    "scenarioId": "PetPost",
+    "httpStatusCode": "201"
+  }
 ]

@@ -1,5 +1,5 @@
 parallelExecution: 4
-timeout:  30000
+timeout: 30000
 apiExecutor:
   - reportTitle: "Kafka DB API Testing live"
     env: dev

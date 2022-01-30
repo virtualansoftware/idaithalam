@@ -1,5 +1,5 @@
 parallelExecution: 1
-timeout:  30000
+timeout: 30000
 apiExecutor:
   - reportTitle: "API Testing POSTMAN Collection Idaiserver."
     env: dev

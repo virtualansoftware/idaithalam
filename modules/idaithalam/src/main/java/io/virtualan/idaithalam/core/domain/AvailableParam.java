@@ -38,7 +38,7 @@ public class AvailableParam {
 
     boolean isInteger;
 
-    boolean  isDecimal;
+    boolean isDecimal;
 
     boolean isString;
 

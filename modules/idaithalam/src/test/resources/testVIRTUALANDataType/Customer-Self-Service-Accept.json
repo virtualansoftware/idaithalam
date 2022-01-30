@@ -1,6 +1,8 @@
 [
   {
-    "outputFields": {"email": "[email]"},
+    "outputFields": {
+      "email": "[email]"
+    },
     "input": "{\"email\":\"[email]\",\"password\":\"[password]\"}",
     "requestType": "REST",
     "method": "POST",
@@ -24,7 +26,9 @@
     "httpStatusCode": "200"
   },
   {
-    "outputFields": {"email": "[email]"},
+    "outputFields": {
+      "email": "[email]"
+    },
     "requestType": "REST",
     "method": "GET",
     "scenario": "GetCustomerByLogin",
@@ -62,7 +66,9 @@
     "httpStatusCode": "200"
   },
   {
-    "outputFields": {"firstname": "Max"},
+    "outputFields": {
+      "firstname": "Max"
+    },
     "requestType": "REST",
     "method": "GET",
     "scenario": "GetCustomerInfoByCustomerId",
@@ -153,7 +159,9 @@
     "httpStatusCode": "200"
   },
   {
-    "outputFields": {"id": "[quoteId]"},
+    "outputFields": {
+      "id": "[quoteId]"
+    },
     "input": "{\n    \"status\": \"QUOTE_RECEIVED\",\n    \"expirationDate\": \"[expiryDate].000Z\",\n    \"insurancePremium\": {\n        \"amount\": 500,\n        \"currency\": \"CHF\"\n    },\n    \"policyLimit\": {\n        \"amount\": 50000,\n        \"currency\": \"CHF\"\n    }\n}",
     "requestType": "REST",
     "method": "PATCH",
@@ -177,7 +185,9 @@
     "httpStatusCode": "200"
   },
   {
-    "outputFields": {"id": "[quoteId]"},
+    "outputFields": {
+      "id": "[quoteId]"
+    },
     "input": "{\n    \"status\": \"QUOTE_ACCEPTED\" \n}",
     "requestType": "REST",
     "method": "PATCH",

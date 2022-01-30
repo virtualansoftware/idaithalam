@@ -1,8 +1,8 @@
 package io.virtualan.idaithalam.exception;
 
-public class IdaithalamException extends Exception  {
+public class IdaithalamException extends Exception {
 
-    public IdaithalamException(){
+    public IdaithalamException() {
         super();
     }
 

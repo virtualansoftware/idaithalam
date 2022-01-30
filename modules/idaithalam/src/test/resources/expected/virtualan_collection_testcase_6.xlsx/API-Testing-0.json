@@ -1,43 +1,45 @@
-[{
+[
+  {
     "requestType": "REST",
     "method": "POST",
     "scenario": "post API Testing",
     "resource": "pet",
     "availableParams": [
-        {
-            "parameterType": "HEADER_PARAM",
-            "value": "application/x-www-form-urlencoded",
-            "key": "contentType"
-        },
-        {
-            "parameterType": "FORM_PARAM",
-            "value": "100",
-            "key": "id"
-        },
-        {
-            "parameterType": "FORM_PARAM",
-            "value": "doggie",
-            "key": "name"
-        },
-        {
-            "parameterType": "HEADER_PARAM",
-            "value": "application/json",
-            "key": "Accept"
-        },
-        {
-            "parameterType": "ADDIFY_PARAM",
-            "value": "[petId]",
-            "key": "Id"
-        },
-        {
-            "parameterType": "ADDIFY_PARAM",
-            "value": "doggie",
-            "key": "petName"
-        }
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/x-www-form-urlencoded",
+        "key": "contentType"
+      },
+      {
+        "parameterType": "FORM_PARAM",
+        "value": "100",
+        "key": "id"
+      },
+      {
+        "parameterType": "FORM_PARAM",
+        "value": "doggie",
+        "key": "name"
+      },
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/json",
+        "key": "Accept"
+      },
+      {
+        "parameterType": "ADDIFY_PARAM",
+        "value": "[petId]",
+        "key": "Id"
+      },
+      {
+        "parameterType": "ADDIFY_PARAM",
+        "value": "doggie",
+        "key": "petName"
+      }
     ],
     "contentType": "application/x-www-form-urlencoded",
     "scenarioId": "PetPost",
     "url": "/api/pets",
     "tags": "@pet @test",
     "httpStatusCode": "415"
-}]
+  }
+]

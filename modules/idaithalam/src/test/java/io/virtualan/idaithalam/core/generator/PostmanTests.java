@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class PostmanTests {
 
@@ -41,11 +40,12 @@ public class PostmanTests {
         Assert.assertTrue(checkApikey);
     }
 
-    /** Issue 121: Multiple API key values must be a list if overwrite: false. 
-     * */
+    /**
+     * Issue 121: Multiple API key values must be a list if overwrite: false.
+     */
     @Test
     public void duplicateApikey() throws Exception {
-        final String WORKFLOWYAML = "postman/duplicateheader/duplicateheader.yaml"; 
+        final String WORKFLOWYAML = "postman/duplicateheader/duplicateheader.yaml";
         VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
         File file1 = new File("src/test/resources/postman/duplicateheader/basic_postman.feature");
         File file2 = new File("target/POSTMANTESTREPORTSAPIHEADER/feature/basic_postman.feature");

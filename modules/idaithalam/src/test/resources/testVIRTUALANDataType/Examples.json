@@ -9,11 +9,13 @@
       "dateOfBirth,firstName,lastName,lastTimeOnline,spokenLanguages/additionalProp1:additionalProp3:additionalProp2,username",
       "1955-10-28,Bill,Gates,2020-08-30T20:28:36.267Z,Tamil:Spanish:English,bgates"
     ],
-    "availableParams": [{
-      "parameterType": "HEADER_PARAM",
-      "value": "application/json",
-      "key": "contentType"
-    }],
+    "availableParams": [
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/json",
+        "key": "contentType"
+      }
+    ],
     "contentType": "application/json",
     "scenarioId": "ReadCustomers",
     "url": "/api/persons/bgates",
@@ -29,11 +31,13 @@
       "dateOfBirth,lastName,firstName,lastTimeOnline,spokenLanguages/additionalProp1:additionalProp3:additionalProp2",
       "1955-10-28,Gates,Bill,2020-08-30T20:28:36.267Z,Tamil:Spanish:English"
     ],
-    "availableParams": [{
-      "parameterType": "HEADER_PARAM",
-      "value": "application/json",
-      "key": "contentType"
-    }],
+    "availableParams": [
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/json",
+        "key": "contentType"
+      }
+    ],
     "contentType": "application/json",
     "scenarioId": "ReadCustomers-EOM",
     "url": "/api/persons/bgates",
@@ -48,11 +52,13 @@
       "dateOfBirth,firstName,lastName,lastTimeOnline,spokenLanguages/additionalProp1:additionalProp2:additionalProp3,username",
       "1955-10-28,Bill,Gates,2020-08-30T20:28:36.267Z,Tamil:English:Spanish,bgates"
     ],
-    "availableParams": [{
-      "parameterType": "HEADER_PARAM",
-      "value": "application/json",
-      "key": "contentType"
-    }],
+    "availableParams": [
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/json",
+        "key": "contentType"
+      }
+    ],
     "contentType": "application/json",
     "scenarioId": "ReadCustomers-Simple",
     "url": "/api/persons/bgates",
@@ -73,11 +79,13 @@
       "customerId,firstname,lastname,postalCode,streetAddress",
       "bunlo9vk5f,Ado,Kinnett,6500,2 Autumn Leaf Lane"
     ],
-    "availableParams": [{
-      "parameterType": "HEADER_PARAM",
-      "value": "application/json",
-      "key": "contentType"
-    }],
+    "availableParams": [
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/json",
+        "key": "contentType"
+      }
+    ],
     "contentType": "application/json",
     "scenarioId": "ReadCustomers-EOM",
     "url": "/customers",

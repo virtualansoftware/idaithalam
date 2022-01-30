@@ -1,23 +1,24 @@
-[{
+[
+  {
     "requestType": "REST",
     "method": "POST",
     "resource": "edi",
     "availableParams": [
-        {
-            "parameterType": "HEADER_PARAM",
-            "value": "application/xml",
-            "key": "contentType"
-        },
-        {
-            "parameterType": "HEADER_PARAM",
-            "value": "EDI-271",
-            "key": "VirtualanStdType"
-        },
-        {
-            "parameterType": "ADDIFY_PARAM",
-            "value": "grey",
-            "key": "tag"
-        }
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/xml",
+        "key": "contentType"
+      },
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "EDI-271",
+        "key": "VirtualanStdType"
+      },
+      {
+        "parameterType": "ADDIFY_PARAM",
+        "value": "grey",
+        "key": "tag"
+      }
     ],
     "url": "/bin/3f64e65d-c657-42d5-bcc9-5b13e71ca493",
     "tags": "@elan @test",
@@ -28,4 +29,5 @@
     "contentType": "application/xml",
     "scenarioId": "EDI271",
     "httpStatusCode": "200"
-}]
+  }
+]

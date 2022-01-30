@@ -1,42 +1,44 @@
 [
-    {
-        "output": "{\n  \"category\": {\n    \"id\": 200,\n    \"name\": \"Bulldog\"\n  },\n  \"id\": 201,\n  \"name\": \"Butch\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 201,\n      \"name\": \"grey\"\n    }\n  ]\n}",
-        "requestType": "REST",
-        "method": "GET",
-        "scenario": "get API testing",
-        "resource": "get",
-        "availableParams": [
-            {
-                "parameterType": "HEADER_PARAM",
-                "value": "application/json",
-                "key": "contentType"
-            },
-            {
-                "parameterType": "QUERY_PARAM",
-                "value": "grey",
-                "key": "tags"
-            }
-        ],
-        "contentType": "application/json",
-        "scenarioId": "PetGet",
-        "url": "/api/pets/findByTags",
-        "httpStatusCode": "200"
-    },
-    {
-        "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
-        "input": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
-        "requestType": "REST",
-        "method": "POST",
-        "scenario": "post API Testing",
-        "resource": "post",
-        "availableParams": [{
-            "parameterType": "HEADER_PARAM",
-            "value": "application/json",
-            "key": "contentType"
-        }],
-        "contentType": "application/json",
-        "scenarioId": "PetPost",
-        "url": "/api/pets",
-        "httpStatusCode": "200"
-    }
+  {
+    "output": "{\n  \"category\": {\n    \"id\": 200,\n    \"name\": \"Bulldog\"\n  },\n  \"id\": 201,\n  \"name\": \"Butch\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 201,\n      \"name\": \"grey\"\n    }\n  ]\n}",
+    "requestType": "REST",
+    "method": "GET",
+    "scenario": "get API testing",
+    "resource": "get",
+    "availableParams": [
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/json",
+        "key": "contentType"
+      },
+      {
+        "parameterType": "QUERY_PARAM",
+        "value": "grey",
+        "key": "tags"
+      }
+    ],
+    "contentType": "application/json",
+    "scenarioId": "PetGet",
+    "url": "/api/pets/findByTags",
+    "httpStatusCode": "200"
+  },
+  {
+    "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+    "input": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
+    "requestType": "REST",
+    "method": "POST",
+    "scenario": "post API Testing",
+    "resource": "post",
+    "availableParams": [
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/json",
+        "key": "contentType"
+      }
+    ],
+    "contentType": "application/json",
+    "scenarioId": "PetPost",
+    "url": "/api/pets",
+    "httpStatusCode": "200"
+  }
 ]

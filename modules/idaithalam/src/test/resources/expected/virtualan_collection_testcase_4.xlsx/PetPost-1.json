@@ -1,4 +1,5 @@
-[{
+[
+  {
     "output": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"doggie\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
     "input": "{\n  \"category\": {\n    \"id\": 100,\n    \"name\": \"string\"\n  },\n  \"id\": 100,\n  \"name\": \"[petName]\",\n  \"photoUrls\": [\n    \"string\"\n  ],\n  \"status\": \"available\",\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\"\n    }\n  ]\n}",
     "requestType": "REST",
@@ -6,25 +7,26 @@
     "scenario": "post API Testing",
     "resource": "post",
     "availableParams": [
-        {
-            "parameterType": "HEADER_PARAM",
-            "value": "application/json",
-            "key": "contentType"
-        },
-        {
-            "parameterType": "ADDIFY_PARAM",
-            "value": "[petId]",
-            "key": "Id"
-        },
-        {
-            "parameterType": "ADDIFY_PARAM",
-            "value": "doggie",
-            "key": "petName"
-        }
+      {
+        "parameterType": "HEADER_PARAM",
+        "value": "application/json",
+        "key": "contentType"
+      },
+      {
+        "parameterType": "ADDIFY_PARAM",
+        "value": "[petId]",
+        "key": "Id"
+      },
+      {
+        "parameterType": "ADDIFY_PARAM",
+        "value": "doggie",
+        "key": "petName"
+      }
     ],
     "contentType": "application/json",
     "scenarioId": "PetPost",
     "url": "/api/pets",
     "tags": "@pet @test",
     "httpStatusCode": "200"
-}]
+  }
+]
