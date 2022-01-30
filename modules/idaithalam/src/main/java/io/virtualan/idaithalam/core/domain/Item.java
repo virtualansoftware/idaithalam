@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
  */
 public class Item {
 
+    String nextStepInfo;
 
     /**
      * The Event.
@@ -1553,8 +1554,6 @@ public class Item {
         this.stepInfos = stepInfos;
     }
 
-    String nextStepInfo;
-
     public boolean hasStepInfo() {
         if (getStepInfos() != null && getStepInfos().length > 0) {
             if (getStepInfos().length > counter &&
@@ -1562,12 +1561,9 @@ public class Item {
                     !getStepInfos()[counter].isEmpty()) {
                 nextStepInfo = getStepInfos()[counter];
                 return true;
-            } else if (getStepInfos().length == counter + 1) {
-                nextStepInfo = null;
-                return true;
             } else {
                 nextStepInfo = null;
-                return false;
+                return getStepInfos().length == counter;
             }
         } else {
             return false;
