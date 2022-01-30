@@ -41,13 +41,13 @@ Feature: {{feature}}
       And perform-message the {{{skipScenario}}} condition to skip scenario
       {{/skipScenario}}
       {{#hasInputJsonMap}}
-      When send mapson message {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
+      When send mapson message {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
       {{#inputJsonMap}}
         | {{{key}}}                   |  {{{value}}}                        |
       {{/inputJsonMap}}
       {{/hasInputJsonMap}}
       {{#hasInputInline}}
-      When send inline message {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
+      When send inline message {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
       {{#inputInline}}
         | {{{.}}} |
       {{/inputInline}}
@@ -63,7 +63,7 @@ Feature: {{feature}}
     @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
     {{/tags}}
     Scenario: {{scenario}} - database action
-      Given as a user perform sql {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}query{{/nextStepInfo}} action
+      Given as a user perform sql {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}query{{/hasStepInfo}} action
       {{#hasCreateParams}}
       {{#createParams}}
       And create variable {{{key}}} as key and {{{value}}} as value
@@ -73,10 +73,10 @@ Feature: {{feature}}
       And perform-db the {{{skipScenario}}} condition to skip scenario
       {{/skipScenario}}
       {{#isSelect}}
-      When read {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details on the{{/nextStepInfo}} given {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}query{{/nextStepInfo}} on {{resource}}
+      When read {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details on the{{/hasStepInfo}} given {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}query{{/hasStepInfo}} on {{resource}}
       {{/isSelect}}
       {{^isSelect}}
-      When execute {{method}} for the given sql {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details on the{{/nextStepInfo}} on {{resource}}
+      When execute {{method}} for the given sql {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details on the{{/hasStepInfo}} on {{resource}}
       {{/isSelect}}
       {{#inputInline}}
         | {{{.}}} |
@@ -108,7 +108,7 @@ Feature: {{feature}}
     {{/amqInput}}
     {{/isAMQ}}
     {{#isRest}}
-      Given {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}a user{{/nextStepInfo}} perform {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}a{{/nextStepInfo}} api action
+      Given {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}a user{{/hasStepInfo}} perform {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}a{{/hasStepInfo}} api action
       {{#hasCreateParams}}
       {{#createParams}}
       And add the {{{value}}} value of the key as {{{key}}}
@@ -124,36 +124,36 @@ Feature: {{feature}}
       And basic authentication with [basic_auth_user_id.{{{resource}}}] and [basic_auth_password.{{{resource}}}]
       {{/basicAuth}}
       {{#hasPathParams}}
-      And add {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}request{{/nextStepInfo}} with given path params
+      And add {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}request{{/hasStepInfo}} with given path params
       {{#pathParams}}
         | {{{key}}}                   | {{{value}}}                         |
        {{/pathParams}}
       {{/hasPathParams}}
       {{#hasQueryParams}}
-      And add {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}request{{/nextStepInfo}} with given query params
+      And add {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}request{{/hasStepInfo}} with given query params
       {{#queryParams}}
         | {{{key}}}                   | {{{value}}}                         |
       {{/queryParams}}
       {{/hasQueryParams}}
       {{#hasHeaderParams}}
-      And add {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}request{{/nextStepInfo}} with given header params
+      And add {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}request{{/hasStepInfo}} with given header params
       {{#headerParams}}
         | {{{key}}}                   | {{{value}}}                         |
       {{/headerParams}}
       {{/hasHeaderParams}}
       {{#hasFormParams}}
       {{#hasMPartParams}}
-      And add {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}request{{/nextStepInfo}} with {{contentType}} given multipart-form params
+      And add {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}request{{/hasStepInfo}} with {{contentType}} given multipart-form params
       {{/hasMPartParams}}
       {{^hasMPartParams}}
-      And add {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}request{{/nextStepInfo}} with {{contentType}} given form params
+      And add {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}request{{/hasStepInfo}} with {{contentType}} given form params
       {{/hasMPartParams}}
       {{#formParams}}
         | {{{key}}}                   | {{{value}}}                         |
       {{/formParams}}
       {{/hasFormParams}}
       {{#hasCookieParams}}
-      And add {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}request{{/nextStepInfo}}  with given cookie params
+      And add {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}request{{/hasStepInfo}}  with given cookie params
       {{#cookieParams}}
         | {{{key}}}                   | {{{value}}}                         |
       {{/cookieParams}}
@@ -162,7 +162,7 @@ Feature: {{feature}}
       And add {{{inputFile}}} data file with {{contentType}} given input
       {{/inputFile}}
       {{#hasInputInline}}
-      And add {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}request{{/nextStepInfo}} data inline with {{contentType}} given input
+      And add {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}request{{/hasStepInfo}} data inline with {{contentType}} given input
       {{#inputInline}}
         | {{{.}}} |
       {{/inputInline}}
@@ -172,22 +172,22 @@ Feature: {{feature}}
       {{/stdInput}}
       {{#hasInputJsonMap}}
       {{#isPost}}
-      And create {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} with given input
+      And create {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}api{{/hasStepInfo}} with given input
       {{/isPost}}
       {{#isPut}}
-      And update {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} with given input
+      And update {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}api{{/hasStepInfo}} with given input
       {{/isPut}}
       {{#isPatch}}
-      And update {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} with given input
+      And update {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}api{{/hasStepInfo}} with given input
       {{/isPatch}}
       {{#isDelete}}
-      And delete {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} with given input
+      And delete {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}api{{/hasStepInfo}} with given input
       {{/isDelete}}
       {{#inputJsonMap}}
         | {{{key}}}                   |  {{{value}}}                        |
       {{/inputJsonMap}}
       {{/hasInputJsonMap}}
-      When {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}a user{{/nextStepInfo}} {{action}} {{contentType}} in {{url}} resource on {{resource}}
+      When {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}a user{{/hasStepInfo}} {{action}} {{contentType}} in {{url}} resource on {{resource}}
       Then the status code is {{httpStatusCode}}
       {{#noSkipOutput}}
       {{#hasCsvson}}
@@ -214,7 +214,7 @@ Feature: {{feature}}
       {{/stdType}}
       {{^stdType}}
       {{#hasResponseByField}}
-      And verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}across response{{/nextStepInfo}} includes following in the response
+      And verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}across response{{/hasStepInfo}} includes following in the response
       {{#responseByField}}
         | {{{key}}}                 |  {{{value}}}                          |
       {{/responseByField}}
@@ -227,20 +227,20 @@ Feature: {{feature}}
       {{/hasOutputFileByPath}}
       {{^hasOutputFileByPath}}
       {{#outputFile}}
-      And verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} response XML File {{{outputFile}}} includes in the response
+      And verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}api{{/hasStepInfo}} response XML File {{{outputFile}}} includes in the response
       {{/outputFile}}
       {{/hasOutputFileByPath}}
       {{#hasOutputInline}}
-      And verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} response inline includes in the response
+      And verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}api{{/hasStepInfo}} response inline includes in the response
       {{#outputInline}}
         | {{{.}}} |
       {{/outputInline}}
       {{/hasOutputInline}}
       {{#stdOutput}}
-      And verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} response with {{stdOutput}} includes in the response
+      And verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}api{{/hasStepInfo}} response with {{stdOutput}} includes in the response
       {{/stdOutput}}
       {{#hasOutputJsonMap}}
-      And verify-all {{url}} {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} includes following in the response
+      And verify-all {{url}} {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}api{{/hasStepInfo}} includes following in the response
       {{#outputJsonMap}}
         | {{{key}}}                 |  {{{value}}}                          |
       {{/outputJsonMap}}
@@ -276,10 +276,10 @@ Feature: {{feature}}
       {{#kafkaOutput}}
       {{#hasResponseByField}}
       {{#kafkaInput}}
-      Then verify-by-elements {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}{{stepInfo}}{{/nextStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      Then verify-by-elements {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}{{stepInfo}}{{/hasStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{^kafkaInput}}
-      And verify-by-elements {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}{{stepInfo}}{{/nextStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      And verify-by-elements {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}{{stepInfo}}{{/hasStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{#responseByField}}
         | {{{key}}}                 |  {{{value}}}                          |
@@ -287,10 +287,10 @@ Feature: {{feature}}
       {{/hasResponseByField}}
       {{#hasCsvson}}
       {{#kafkaInput}}
-      Then verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      Then verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{^kafkaInput}}
-      And verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      And verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{#csvson}}
         | {{{.}}} |
@@ -307,10 +307,10 @@ Feature: {{feature}}
       {{#dbOutput}}
       {{#hasCsvson}}
       {{#dbInput}}
-      Then validate {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}information on the{{/nextStepInfo}} given {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} on {{resource}}
+      Then validate {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}information on the{{/hasStepInfo}} given {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} on {{resource}}
       {{/dbInput}}
       {{^dbInput}}
-      And validate {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}information on the{{/nextStepInfo}} given {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} on {{resource}}
+      And validate {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}information on the{{/hasStepInfo}} given {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} on {{resource}}
       {{/dbInput}}
       {{#csvson}}
         | {{{.}}} |
@@ -327,10 +327,10 @@ Feature: {{feature}}
       {{#amqOutput}}
       {{#hasCsvson}}
       {{#amqInput}}
-      Then verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}information{{/nextStepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
+      Then verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}information{{/hasStepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
       {{/amqInput}}
       {{^amqInput}}
-      And verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}information{{/nextStepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
+      And verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}information{{/hasStepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
       {{/amqInput}}
       {{#csvson}}
         | {{{.}}} |

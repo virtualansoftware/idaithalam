@@ -277,18 +277,23 @@ public class IdaithalamExecutor {
             log.info("Gherkin Specific version is :" +idaiVersion);
             featureFileName = "virtualan-contract-"+IdaithalamConfiguration.gherkinSpecific()+".mustache";
         }
-        for (int i = 0; i < items.size(); i++) {
-            MustacheFactory mf = new DefaultMustacheFactory();
-            Mustache mustache = mf.compile(featureFileName);
+        MustacheFactory mf = new DefaultMustacheFactory();
+        Mustache mustache = mf.compile(featureFileName);
 
+        for (int i = 0; i < items.size(); i++) {
             FileOutputStream outputStream = new FileOutputStream(path + "/feature/" + removeFileName(items.get(i).getJsonFileName()) + ".feature");
             StringWriter writer = new StringWriter();
-            mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i).getWorkflowItems())).flush();
-            PrettyFormatter formatter = new PrettyFormatter();
-            String formattedFeature = formatter.format(writer.toString());
-            writer.close();
-            outputStream.write(formattedFeature.getBytes(StandardCharsets.UTF_8));
-            outputStream.close();
+            try {
+                mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i).getWorkflowItems())).flush();
+                PrettyFormatter formatter = new PrettyFormatter();
+                String formattedFeature = formatter.format(writer.toString());
+                outputStream.write(formattedFeature.getBytes(StandardCharsets.UTF_8));
+            } catch (Exception e){
+               log.warn("Feature file generation error :" + e.getMessage());
+            } finally {
+                writer.close();
+                outputStream.close();
+            }
         }
     }
 
