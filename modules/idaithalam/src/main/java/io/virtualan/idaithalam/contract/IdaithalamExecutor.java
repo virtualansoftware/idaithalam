@@ -271,10 +271,16 @@ public class IdaithalamExecutor {
         List<FeatureFileMapper> items = FeatureFileGenerator.generateFeatureFile(properties, apiExecutorParam);
 
         String featureTitle = properties.getProperty("virtualan.data.heading");
-
+        String idaiVersion= IdaithalamConfiguration.gherkinSpecific();
+        String featureFileName= "virtualan-contract.mustache";
+        if(idaiVersion != null){
+            log.info("Gherkin Specific version is :" +idaiVersion);
+            featureFileName = "virtualan-contract-"+IdaithalamConfiguration.gherkinSpecific()+".mustache";
+        }
         for (int i = 0; i < items.size(); i++) {
             MustacheFactory mf = new DefaultMustacheFactory();
-            Mustache mustache = mf.compile("virtualan-contract.mustache");
+            Mustache mustache = mf.compile(featureFileName);
+
             FileOutputStream outputStream = new FileOutputStream(path + "/feature/" + removeFileName(items.get(i).getJsonFileName()) + ".feature");
             StringWriter writer = new StringWriter();
             mustache.execute(writer, new FeatureFileMapping(getTitle(featureTitle, i, feature), items.get(i).getWorkflowItems())).flush();

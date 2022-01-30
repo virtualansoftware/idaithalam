@@ -217,9 +217,9 @@ public class FeatureGenerationHelper {
         item.setMessageType(getValueMapping("messageType", object));
         item.setIdentifier(getValueMapping("identifier", object));
         item.setEvent(getValueMapping("event", object));
-        if(object.optJSONArray("stepInfo") != null  & object.optJSONArray("stepInfo").length() ==1) {
+        if(object.optJSONArray("stepInfo") != null  && object.optJSONArray("stepInfo").length() ==1) {
             item.setStepInfo(object.optJSONArray("stepInfo").getString(0));
-        } else if(object.optJSONArray("stepInfo") != null  & object.optJSONArray("stepInfo").length() > 1) {
+        } else if(object.optJSONArray("stepInfo") != null  && object.optJSONArray("stepInfo").length() > 1) {
             JSONArray parametersJSONArray = object.optJSONArray("stepInfo");
             String[] stringsArray = new String[parametersJSONArray.length()];
             for (int i = 0; i < parametersJSONArray.length(); i++) {
