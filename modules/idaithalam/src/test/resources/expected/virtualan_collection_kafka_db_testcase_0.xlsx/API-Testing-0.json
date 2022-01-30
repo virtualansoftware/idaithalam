@@ -19,7 +19,7 @@
             "id,name, category/id:name,status",
             "i~100,doggie,i~100:string,available"
         ],
-        "stepInfo": "contains pet information",
+        "stepInfo": ["contains pet information"],
         "event": "TEST",
         "scenarioId": "Pet-Kafka"
     },
@@ -110,7 +110,7 @@
             "id,name, category/id:name,status",
             "i~100,doggie,i~100:string,available"
         ],
-        "stepInfo": "contains pet information",
+        "stepInfo": ["contains pet information"],
         "event": "TEST",
         "scenarioId": "PetPost-kafka-response",
         "outputPaths": [
@@ -124,7 +124,7 @@
         "method": "DDL",
         "scenario": "Create employee Table",
         "resource": "pet",
-        "stepInfo": "to define employee table",
+        "stepInfo": ["to define employee table"],
         "scenarioId": "Pet-DB-1"
     },
     {
@@ -133,7 +133,7 @@
         "method": "INSERT",
         "scenario": "Insert Employee info",
         "resource": "pet",
-        "stepInfo": "to insert employee record",
+        "stepInfo": ["to insert employee record"],
         "scenarioId": "Pet-DB-21"
     },
     {
@@ -146,7 +146,7 @@
             "EMP_NO,BIRTH_DATE,FIRST_NAME,LAST_NAME,GENDER,HIRE_DATE",
             "i~1,l~253087200000,ELan,Thangamani,Male,l~1191992400000"
         ],
-        "stepInfo": "verify record",
+        "stepInfo": ["verify record"],
         "scenarioId": "Pet-DB-22"
     }
 ]
