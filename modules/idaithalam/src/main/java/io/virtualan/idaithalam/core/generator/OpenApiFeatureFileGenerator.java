@@ -13,21 +13,19 @@ import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.media.*;
+import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.parser.OpenAPIV3Parser;
-
-import java.io.*;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import io.swagger.v3.oas.models.parameters.Parameter;
 import io.virtualan.idaithalam.core.domain.ApiExecutorParam;
 import io.virtualan.idaithalam.core.domain.OperationBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The type Open api feature file generator.
@@ -41,17 +39,17 @@ public class OpenApiFeatureFileGenerator {
      * @param contractFileName the contract file name
      * @return the json array
      */
-    public static JSONArray generateOpenApiContractForVirtualan(String contractFileName, ApiExecutorParam apiExecutorParam)  {
+    public static JSONArray generateOpenApiContractForVirtualan(String contractFileName, ApiExecutorParam apiExecutorParam) {
         JSONArray openApiContractArray = new JSONArray();
         OpenAPI swagger = new OpenAPIV3Parser().read(contractFileName);
         if (swagger == null) {
             try {
-                Swagger swagger2 = (new Swagger20Parser()).read(contractFileName, (List) null);
+                Swagger swagger2 = (new Swagger20Parser()).read(contractFileName, null);
                 Map<String, Path> path2s = swagger2.getPaths();
-                if(path2s != null && path2s.size() > 0){
+                if (path2s != null && path2s.size() > 0) {
                     log.warn("Swagger 2 not supported");
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
             }
         }
         if (swagger != null) {
@@ -86,12 +84,12 @@ public class OpenApiFeatureFileGenerator {
                 }
             }
         }
-        generateProviderJson(openApiContractArray , contractFileName.substring(0, contractFileName.lastIndexOf(".")), apiExecutorParam);
+        generateProviderJson(openApiContractArray, contractFileName.substring(0, contractFileName.lastIndexOf(".")), apiExecutorParam);
         return openApiContractArray;
     }
 
     private static void generateProviderJson(JSONArray openApiContractArray, String contractFileName, ApiExecutorParam apiExecutorParam) {
-        try (FileOutputStream outputStream = new FileOutputStream(apiExecutorParam.getOutputDir() + File.separator + contractFileName +".json" )) {
+        try (FileOutputStream outputStream = new FileOutputStream(apiExecutorParam.getOutputDir() + File.separator + contractFileName + ".json")) {
             Writer writer = new OutputStreamWriter(outputStream);
             CharSequence cs = openApiContractArray.toString(2);
             writer.append(cs);
@@ -130,8 +128,8 @@ public class OpenApiFeatureFileGenerator {
                 paramsArray.put(buildParam("contentType", contentType, "HEADER_PARAM"));
                 if ("application/x-www-form-urlencoded".equalsIgnoreCase(contentType)) {
                     Map.Entry<String, MediaType> entryMedia = operationBuilder.getOperation().getRequestBody().getContent().entrySet().iterator().next();
-                    if ("object".equalsIgnoreCase(((MediaType) entryMedia.getValue()).getSchema().getType())) {
-                        Map<String, Schema> properties = ((MediaType) entryMedia.getValue()).getSchema().getProperties();
+                    if ("object".equalsIgnoreCase(entryMedia.getValue().getSchema().getType())) {
+                        Map<String, Schema> properties = entryMedia.getValue().getSchema().getProperties();
                         properties.forEach((x, y) ->
                                 paramsArray.put(buildParam(x, y.getExample() != null ? y.getExample().toString() : "MISSING", "FORM_PARAM")));
                     }
@@ -218,7 +216,7 @@ public class OpenApiFeatureFileGenerator {
             return buildJson(operationBuilder.getDefinitions(), model);
         }
         return null;
-}
+    }
 
     /**
      * Gets operation delete.
@@ -294,9 +292,9 @@ public class OpenApiFeatureFileGenerator {
 
     private static void buildWithDataType(Parameter parameter, JSONObject virtualanParamObj) {
         String value = "MISSING";
-        if(parameter.getExample() != null) {
+        if (parameter.getExample() != null) {
             value = parameter.getExample().toString();
-        } else if(parameter.getSchema() instanceof IntegerSchema){
+        } else if (parameter.getSchema() instanceof IntegerSchema) {
             value = "9991";
         } else if (parameter.getSchema() instanceof NumberSchema) {
             value = "9991.1";
