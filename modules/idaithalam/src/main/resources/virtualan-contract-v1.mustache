@@ -1,6 +1,6 @@
 Feature: {{feature}}
     Scenario: Load initial set of data
-      Given Provided all the feature level parameters from file
+      Given provided all the feature level parameters from file
 {{#items}}
   {{#okta}}
     @{{{resource}}}
@@ -9,7 +9,7 @@ Feature: {{feature}}
       And basic authentication with [okta_user_id.{{{resource}}}] and [okta_user_password.{{{resource}}}]
       When a user post application/json in api_token resource on okta_token.{{{resource}}}
       Then the status code is 200
-      And Store AccessToken.{{{resource}}} as key and api's access_token as value
+      And store AccessToken.{{{resource}}} as key and api's access_token as value
   {{/okta}}
 {{/items}}
 {{#items}}
@@ -31,23 +31,23 @@ Feature: {{feature}}
     @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
     {{/tags}}
     Scenario: {{scenario}} - {{method}} kafka message
-      Given As a user perform message {{scenario}} action
+      Given as a user perform message {{scenario}} action
       {{#hasCreateParams}}
       {{#createParams}}
-      And Add the {{{value}}} value of the key as {{{key}}}
+      And add the {{{value}}} value of the key as {{{key}}}
       {{/createParams}}
       {{/hasCreateParams}}
       {{#skipScenario}}
       And perform-message the {{{skipScenario}}} condition to skip scenario
       {{/skipScenario}}
       {{#hasInputJsonMap}}
-      When Send mapson message {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
+      When send mapson message {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
       {{#inputJsonMap}}
         | {{{key}}}                   |  {{{value}}}                        |
       {{/inputJsonMap}}
       {{/hasInputJsonMap}}
       {{#hasInputInline}}
-      When Send inline message {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
+      When send inline message {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} for event {{event}} on {{resource}} with type {{messageType}}
       {{#inputInline}}
         | {{{.}}} |
       {{/inputInline}}
@@ -63,7 +63,7 @@ Feature: {{feature}}
     @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
     {{/tags}}
     Scenario: {{scenario}} - database action
-      Given As a user perform sql {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}query{{/nextStepInfo}} action
+      Given as a user perform sql {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}query{{/nextStepInfo}} action
       {{#hasCreateParams}}
       {{#createParams}}
       And create variable {{{key}}} as key and {{{value}}} as value
@@ -76,7 +76,7 @@ Feature: {{feature}}
       When read {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details on the{{/nextStepInfo}} given {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}query{{/nextStepInfo}} on {{resource}}
       {{/isSelect}}
       {{^isSelect}}
-      When Execute {{method}} for the given sql {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details on the{{/nextStepInfo}} on {{resource}}
+      When execute {{method}} for the given sql {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details on the{{/nextStepInfo}} on {{resource}}
       {{/isSelect}}
       {{#inputInline}}
         | {{{.}}} |
@@ -92,16 +92,16 @@ Feature: {{feature}}
     @{{{resource}}}{{#skipScenario}} @skip{{/skipScenario}}
     {{/tags}}
     Scenario: {{scenario}} - amq action
-      Given As a user post message {{stepInfo}} action
+      Given as a user post message {{stepInfo}} action
       {{#hasCreateParams}}
       {{#createParams}}
-      And Add the {{{value}}} value of the key as {{{key}}}
+      And add the {{{value}}} value of the key as {{{key}}}
       {{/createParams}}
       {{/hasCreateParams}}
       {{#skipScenario}}
       And perform-message the {{{skipScenario}}} condition to skip scenario
       {{/skipScenario}}
-      When Send inline message {{stepInfo}} for messageQ {{event}} on {{resource}} with type AMQ
+      When send inline message {{stepInfo}} for messageQ {{event}} on {{resource}} with type AMQ
       {{#inputInline}}
         | {{{.}}} |
        {{/inputInline}}
@@ -111,14 +111,14 @@ Feature: {{feature}}
       Given {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}a user{{/nextStepInfo}} perform {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}a{{/nextStepInfo}} api action
       {{#hasCreateParams}}
       {{#createParams}}
-      And Add the {{{value}}} value of the key as {{{key}}}
+      And add the {{{value}}} value of the key as {{{key}}}
       {{/createParams}}
       {{/hasCreateParams}}
       {{#skipScenario}}
       And perform the {{{skipScenario}}} condition to skip scenario
       {{/skipScenario}}
       {{#okta}}
-      And Bearer auth with [AccessToken.{{{resource}}}] token
+      And bearer auth with [AccessToken.{{{resource}}}] token
       {{/okta}}
       {{#basicAuth}}
       And basic authentication with [basic_auth_user_id.{{{resource}}}] and [basic_auth_password.{{{resource}}}]
@@ -172,16 +172,16 @@ Feature: {{feature}}
       {{/stdInput}}
       {{#hasInputJsonMap}}
       {{#isPost}}
-      And Create {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} with given input
+      And create {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} with given input
       {{/isPost}}
       {{#isPut}}
-      And Update {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} with given input
+      And update {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} with given input
       {{/isPut}}
       {{#isPatch}}
-      And Update {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} with given input
+      And update {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} with given input
       {{/isPatch}}
       {{#isDelete}}
-      And Delete {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} with given input
+      And delete {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} with given input
       {{/isDelete}}
       {{#inputJsonMap}}
         | {{{key}}}                   |  {{{value}}}                        |
@@ -192,10 +192,10 @@ Feature: {{feature}}
       {{#noSkipOutput}}
       {{#hasCsvson}}
       {{#matchPattern}}
-      And Verify {{csvsonPath}} response csvson includes {{matchPattern}} in the response
+      And verify {{csvsonPath}} response csvson includes {{matchPattern}} in the response
       {{/matchPattern}}
       {{^matchPattern}}
-      And Verify {{csvsonPath}} response csvson includes in the response
+      And verify {{csvsonPath}} response csvson includes in the response
       {{/matchPattern}}
       {{#csvson}}
         | {{{.}}} |
@@ -203,10 +203,10 @@ Feature: {{feature}}
       {{/hasCsvson}}
       {{#stdType}}
       {{#outputFile}}
-      And Verify-standard {{stdType}} all {{{outputFile}}} file {{url}} api includes following in the response
+      And verify-standard {{stdType}} all {{{outputFile}}} file {{url}} api includes following in the response
       {{/outputFile}}
       {{#hasOutputInline}}
-      And Verify-standard {{stdType}} all inline {{url}} api includes following in the response
+      And verify-standard {{stdType}} all inline {{url}} api includes following in the response
       {{#outputInline}}
         | {{{.}}} |
       {{/outputInline}}
@@ -214,33 +214,33 @@ Feature: {{feature}}
       {{/stdType}}
       {{^stdType}}
       {{#hasResponseByField}}
-      And Verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}across response{{/nextStepInfo}} includes following in the response
+      And verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}across response{{/nextStepInfo}} includes following in the response
       {{#responseByField}}
         | {{{key}}}                 |  {{{value}}}                          |
       {{/responseByField}}
       {{/hasResponseByField}}
       {{#hasOutputFileByPath}}
-      And Verify {{resource}} response {{contentType}} include byPath {{{outputFile}}} includes in the response
+      And verify {{resource}} response {{contentType}} include byPath {{{outputFile}}} includes in the response
       {{#outputFileByPath}}
         | {{{.}}} |
       {{/outputFileByPath}}
       {{/hasOutputFileByPath}}
       {{^hasOutputFileByPath}}
       {{#outputFile}}
-      And Verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} response XML File {{{outputFile}}} includes in the response
+      And verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} response XML File {{{outputFile}}} includes in the response
       {{/outputFile}}
       {{/hasOutputFileByPath}}
       {{#hasOutputInline}}
-      And Verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} response inline includes in the response
+      And verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} response inline includes in the response
       {{#outputInline}}
         | {{{.}}} |
       {{/outputInline}}
       {{/hasOutputInline}}
       {{#stdOutput}}
-      And Verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} response with {{stdOutput}} includes in the response
+      And verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} response with {{stdOutput}} includes in the response
       {{/stdOutput}}
       {{#hasOutputJsonMap}}
-      And Verify-all {{url}} {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} includes following in the response
+      And verify-all {{url}} {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}api{{/nextStepInfo}} includes following in the response
       {{#outputJsonMap}}
         | {{{key}}}                 |  {{{value}}}                          |
       {{/outputJsonMap}}
@@ -249,7 +249,7 @@ Feature: {{feature}}
       {{/noSkipOutput}}
       {{#hasStorageParams}}
       {{#storageParams}}
-      And Store {{{key}}} as key and api's {{{value}}} as value
+      And store {{{key}}} as key and api's {{{value}}} as value
       {{/storageParams}}
       {{/hasStorageParams}}
       {{#hasEvaluateParams}}
@@ -276,10 +276,10 @@ Feature: {{feature}}
       {{#kafkaOutput}}
       {{#hasResponseByField}}
       {{#kafkaInput}}
-      Then Verify-by-elements {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}{{stepInfo}}{{/nextStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      Then verify-by-elements {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}{{stepInfo}}{{/nextStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{^kafkaInput}}
-      And Verify-by-elements {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}{{stepInfo}}{{/nextStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      And verify-by-elements {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}{{stepInfo}}{{/nextStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{#responseByField}}
         | {{{key}}}                 |  {{{value}}}                          |
@@ -287,10 +287,10 @@ Feature: {{feature}}
       {{/hasResponseByField}}
       {{#hasCsvson}}
       {{#kafkaInput}}
-      Then Verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      Then verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{^kafkaInput}}
-      And Verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      And verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}details{{/nextStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{#csvson}}
         | {{{.}}} |
@@ -299,7 +299,7 @@ Feature: {{feature}}
       {{/kafkaOutput}}
       {{#hasStorageParams}}
       {{#storageParams}}
-      And Store {{{key}}} as key and message's {{{value}}} as value
+      And store {{{key}}} as key and message's {{{value}}} as value
       {{/storageParams}}
       {{/hasStorageParams}}
       {{/isKafka}}
@@ -319,7 +319,7 @@ Feature: {{feature}}
       {{/dbOutput}}
       {{#hasStorageParams}}
       {{#storageParams}}
-      And Store {{{key}}} as key and query's {{{value}}} as value
+      And store {{{key}}} as key and query's {{{value}}} as value
       {{/storageParams}}
       {{/hasStorageParams}}
       {{/isDatabase}}
@@ -327,10 +327,10 @@ Feature: {{feature}}
       {{#amqOutput}}
       {{#hasCsvson}}
       {{#amqInput}}
-      Then Verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}information{{/nextStepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
+      Then verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}information{{/nextStepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
       {{/amqInput}}
       {{^amqInput}}
-      And Verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}information{{/nextStepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
+      And verify {{#nextStepInfo}}{{{nextStepInfo}}}{{/nextStepInfo}}{{^nextStepInfo}}information{{/nextStepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
       {{/amqInput}}
       {{#csvson}}
         | {{{.}}} |
@@ -339,7 +339,7 @@ Feature: {{feature}}
       {{/amqOutput}}
       {{#hasStorageParams}}
       {{#storageParams}}
-      And Store {{{key}}} as key and message's {{{value}}} as value
+      And store {{{key}}} as key and message's {{{value}}} as value
       {{/storageParams}}
       {{/hasStorageParams}}
       {{/isAMQ}}

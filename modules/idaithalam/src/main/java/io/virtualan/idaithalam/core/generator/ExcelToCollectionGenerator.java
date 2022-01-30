@@ -906,7 +906,7 @@ public class ExcelToCollectionGenerator {
             throws MalformedURLException, UnableToProcessException {
       JSONArray virtualanArray = getObjectSheet(sheet, apiExecutorParam.getGeneratedTestList(),
           sheetObject, missingFieldsLogMessages);
-      log.info("Sheet no " + sheet + " build out" + virtualanArray.toString());
+        log.debug("Sheet no " + sheet + " build out >>" + virtualanArray.toString());
         if (IdaithalamConfiguration.isWorkFlow()) {
           CreateFileInfo createFileInfo = new CreateFileInfo();
           createFileInfo.setGeneratedPath(apiExecutorParam);
