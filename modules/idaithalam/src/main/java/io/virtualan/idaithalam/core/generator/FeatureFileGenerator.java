@@ -212,8 +212,9 @@ public class FeatureFileGenerator {
         for (int n; 0 < (n = inputStream.read(buf)); ) {
             into.write(buf, 0, n);
         }
+        String response = into.toString(StandardCharsets.UTF_8.name());
         into.close();
-        return into.toString(StandardCharsets.UTF_8.name());
+        return response;
     }
 
 
