@@ -279,7 +279,7 @@ Feature: {{feature}}
       Then verify-by-elements {{stepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{^kafkaInput}}
-      And Verify-by-elements {{stepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
+      And verify-by-elements {{stepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{#responseByField}}
         | {{{key}}}                 |  {{{value}}}                          |
@@ -330,7 +330,7 @@ Feature: {{feature}}
       Then verify {{stepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
       {{/amqInput}}
       {{^amqInput}}
-      And Verify {{stepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
+      And verify {{stepInfo}} for receiveQ {{event}} contains {{identifier}} on {{resource}} with type AMQ
       {{/amqInput}}
       {{#csvson}}
         | {{{.}}} |
