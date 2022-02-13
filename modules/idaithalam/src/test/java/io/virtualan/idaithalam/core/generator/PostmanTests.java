@@ -48,7 +48,7 @@ public class PostmanTests {
         Assert.assertTrue(success);
 
         File file1 = new File("src/test/resources/postman/duplicateheader/apiheaderreference.feature");
-        File file2 = new File("target/POSTMANTESTREPORTSAPIHEADER/feature/virtualan-contract.0.feature");
+        File file2 = new File("target/duplicateheader/feature/basic_postman.feature");
         Assert.assertTrue(file1.isFile());
         Assert.assertTrue(file1.isFile());
         assertEquals("There is a breaking change in the Feature file fpr multiple API header keys!",
@@ -65,7 +65,7 @@ public class PostmanTests {
         final String WORKFLOWYAML = "postman/folders/folders.yaml"; //Only generate
         VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
         File file1 = new File("src/test/resources/postman/folders/foldersreference.feature");
-        File file2 = new File("target/POSTMANTESTFOLDERS/feature/virtualan-contract.0.feature");
+        File file2 = new File("target/folders/feature/folders_postman.feature");
         Assert.assertTrue(file1.isFile());
         Assert.assertTrue(file1.isFile());
         assertEquals("There is a breaking change in the Feature file for the Postman folder structure!",
@@ -80,7 +80,7 @@ public class PostmanTests {
         final String WORKFLOWYAML = "postman/folders/authorizationheader.yaml"; //Only generate, uses also folders_postman.json
         VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
         File file1 = new File("src/test/resources/postman/folders/authorizationheader_reference.feature");
-        File file2 = new File("target/POSTMANTESTAUTHORIZATIONHEADER/feature/virtualan-contract.0.feature");
+        File file2 = new File("target/folders/feature/virtualan-contract.0.feature");
         Assert.assertTrue(file1.isFile());
         Assert.assertTrue(file1.isFile());
         assertEquals("There is a breaking change in the Feature file for the Postman folder structure!",

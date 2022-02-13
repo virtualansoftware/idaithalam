@@ -4,7 +4,7 @@ apiExecutor:
   - reportTitle: "API Testing POSTMAN Collection with variables."
     env: dev
     virtualanSpecPath: src/test/resources/postman/variables
-    outputDir: target/POSTMANTESTVARIABLES
+    outputDir: target/variables
     cucumblanProperties:
       service.api: https://live.virtualandemo.com/api
       virtualan.data.load: variables_postman.json;
