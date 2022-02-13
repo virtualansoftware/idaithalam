@@ -4,7 +4,7 @@ apiExecutor:
   - reportTitle: "API Testing POSTMAN Collection folder structure."
     env: dev
     virtualanSpecPath: src/test/resources/postman/folders
-    outputDir: target/folders
+    outputDir: target/folders_auth
     cucumblanProperties:
       service.api: https://live.virtualandemo.com/api
       virtualan.data.load: folders_postman.json;
