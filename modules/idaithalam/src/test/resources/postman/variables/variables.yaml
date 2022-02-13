@@ -3,10 +3,11 @@ timeout:  30000
 apiExecutor:
   - reportTitle: "API Testing POSTMAN Collection with variables."
     env: dev
+    virtualanSpecPath: src/test/resources/postman/variables
     outputDir: target/POSTMANTESTVARIABLES
     cucumblanProperties:
       service.api: https://live.virtualandemo.com/api
-      virtualan.data.load: postman/variables/variables_postman.json;
+      virtualan.data.load: variables_postman.json;
       virtualan.data.type: POSTMAN
       virtualan.data.heading: Test processing variables in Postman collection.
     execution: ALL
