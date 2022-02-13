@@ -92,10 +92,8 @@ public class FeatureGenerationHelper {
         JSONArray virtualanArry = new JSONArray();
         if (object != null) {
             JSONArray arr = checkIfItemsOfItem(object.getJSONArray("item"));
-            JSONArray arrVariable = null;
-            JSONObject authCollection = null;
-            arrVariable = object.optJSONArray("variable");
-            authCollection = object.optJSONObject("auth");
+            JSONArray arrVariable = object.optJSONArray("variable");
+            JSONObject authCollection = object.optJSONObject("auth");
             if (arr != null && arr.length() > 0) {
                 for (int i = 0; i < arr.length(); i++) {
                     buildVirtualanFromPostMan(virtualanArry, arr, i, arrVariable, authCollection);
