@@ -80,7 +80,7 @@ public class PostmanTests {
         final String WORKFLOWYAML = "postman/folders/authorizationheader.yaml"; //Only generate, uses also folders_postman.json
         VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
         File file1 = new File("src/test/resources/postman/folders/authorizationheader_reference.feature");
-        File file2 = new File("target/folders/feature/virtualan-contract.0.feature");
+        File file2 = new File("target/folders_auth/feature/folders_postman.feature");
         Assert.assertTrue(file1.isFile());
         Assert.assertTrue(file1.isFile());
         assertEquals("There is a breaking change in the Feature file for the Postman folder structure!",
