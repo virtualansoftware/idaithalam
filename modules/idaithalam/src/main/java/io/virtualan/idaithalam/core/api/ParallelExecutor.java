@@ -21,8 +21,8 @@ public class ParallelExecutor implements Callable<Integer> {
 
     private final ApiExecutorParam apiExecutorParam;
 
-    ParallelExecutor(ApiExecutorParam apiExecutorPrarm) {
-        this.apiExecutorParam = apiExecutorPrarm;
+    ParallelExecutor(ApiExecutorParam apiExecutorParam) {
+        this.apiExecutorParam = apiExecutorParam;
     }
 
 
