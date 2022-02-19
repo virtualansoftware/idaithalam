@@ -155,7 +155,6 @@ public class FeatureFileGenerator {
                                     availableParam1.setKey(newAvailableParam.getKey());
                                     availableParam1.setValue(newAvailableParam.getValue());
                                     availableParam1.setParameterType(newAvailableParam.getParameterType());
-                                    log.warn("Due to issue #121 API header " + key + " is overwritten with value from configuration. To avoid this behavior add 'overwrite: false' (default: true) to the 'apiHeader' section.");
                                 } else {
                                     availableParam1.setValue(availableParam1.getValue().concat(",").concat(newAvailableParam.getValue()));
                                 }

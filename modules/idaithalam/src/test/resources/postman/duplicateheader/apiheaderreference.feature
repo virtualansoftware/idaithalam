@@ -1,7 +1,7 @@
 Feature: Test processing multiple headers.
 
   Scenario: Load initial set of data
-    Given Provided all the feature level parameters from file
+    Given provided all the feature level parameters from file
 
   @persons
   Scenario: Gets some persons - api call
@@ -15,7 +15,7 @@ Feature: Test processing multiple headers.
       | X-API-Test2 | test2         |
     When a user get application/json in /persons resource on persons
     Then the status code is 200
-    And Verify-all /persons api includes following in the response
+    And verify-all /persons api includes following in the response
       | items[0].firstName                       | Max                      |
       | items[0].lastName                        | Mustermann               |
       | items[0].lastTimeOnline                  | 2021-12-10T01:46:26.189Z |
