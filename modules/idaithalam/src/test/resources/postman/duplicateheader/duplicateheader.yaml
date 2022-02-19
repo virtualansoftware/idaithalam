@@ -4,7 +4,7 @@ apiExecutor:
   - reportTitle: "API Testing POSTMAN Collection duplicate header."
     env: dev
     virtualanSpecPath: src/test/resources/postman/duplicateheader
-    outputDir: target/POSTMANTESTREPORTSAPIHEADER
+    outputDir: target/duplicateheader
     cucumblanProperties:
       service.api: https://live.virtualandemo.com/api
       virtualan.data.load: basic_postman.json;
@@ -17,4 +17,4 @@ apiExecutor:
         - X-API-Test1: 123
         - X-API-Test2: test2
       overwrite: false
-    execution: GENERATE
+    execution: ALL

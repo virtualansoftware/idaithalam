@@ -1,0 +1,594 @@
+{
+  "info": {
+    "_postman_id": "b0789096-9e30-4d84-94d9-81d217ae37c6",
+    "name": "OpenAPIVirtualanPetstoreFolders#124",
+    "description": "This is a sample server Petstore server. For this sample, you can use the api key `special-key` to test the authorization filters.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "persons",
+      "item": [
+        {
+          "name": "{username}",
+          "item": [
+            {
+              "name": "Gets a person",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/persons/:username",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "persons",
+                    ":username"
+                  ],
+                  "variable": [
+                    {
+                      "key": "username",
+                      "value": "mmustermann",
+                      "description": "(Required) The person's username"
+                    }
+                  ]
+                },
+                "description": "Returns a single person for its username."
+              },
+              "response": [
+                {
+                  "name": "Gets a person",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/persons/:username",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "persons",
+                        ":username"
+                      ],
+                      "variable": [
+                        {
+                          "key": "username",
+                          "value": "mmustermann",
+                          "description": "(Required) The person's username"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "content-type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "X-Cloud-Trace-Context",
+                      "value": "f83f57f396aed741fcac160bfc275697"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sun, 09 Jan 2022 05:26:14 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "Google Frontend"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "278"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"dateOfBirth\": \"1955-10-28\",\n    \"firstName\": \"Bill\",\n    \"lastName\": \"Gates\",\n    \"lastTimeOnline\": \"2020-08-30T20:28:36.267Z\",\n    \"spokenLanguages\": {\n        \"additionalProp1\": \"Tamil\",\n        \"additionalProp2\": \"English\",\n        \"additionalProp3\": \"Spanish\"\n    },\n    \"username\": \"bgates\"\n}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Gets some persons",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/persons?pageNumber=1&pageSize=50",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "persons"
+              ],
+              "query": [
+                {
+                  "key": "pageNumber",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "50",
+                  "description": "Number of persons returned"
+                }
+              ]
+            },
+            "description": "Returns a list containing all persons. The list supports paging."
+          },
+          "response": [
+            {
+              "name": "Gets some persons",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/persons?pageNumber=1&pageSize=50",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "persons"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageNumber",
+                      "value": "1",
+                      "description": "Page number"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "50",
+                      "description": "Number of persons returned"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "content-type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "X-Cloud-Trace-Context",
+                  "value": "1ace5f52110a93afcd86e64acb215a8f;o=1"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 09 Jan 2022 05:26:40 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "Google Frontend"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "433"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"items\": [\n        {\n            \"dateOfBirth\": \"2021-11-10\",\n            \"firstName\": \"Max\",\n            \"lastName\": \"Mustermann\",\n            \"lastTimeOnline\": \"2021-12-10T01:46:26.189Z\",\n            \"spokenLanguages\": {\n                \"additionalProp1\": \"English\",\n                \"additionalProp2\": \"French\",\n                \"additionalProp3\": \"Spain\"\n            },\n            \"username\": \"mmustermann\"\n        }\n    ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pets",
+      "item": [
+        {
+          "name": "{pet Id}",
+          "item": [
+            {
+              "name": "Find pet by ID",
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "key",
+                      "value": "api_key",
+                      "type": "string"
+                    },
+                    {
+                      "key": "value",
+                      "value": "<API Key>",
+                      "type": "string"
+                    },
+                    {
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/pets/:petId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pets",
+                    ":petId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "petId",
+                      "value": "101",
+                      "description": "(Required) ID of pet to return"
+                    }
+                  ]
+                },
+                "description": "Returns a single pet"
+              },
+              "response": [
+                {
+                  "name": "Find pet by ID",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/pets/:petId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "pets",
+                        ":petId"
+                      ],
+                      "variable": [
+                        {
+                          "key": "petId",
+                          "value": "101",
+                          "description": "(Required) ID of pet to return"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "content-type",
+                      "value": "application/json"
+                    },
+                    {
+                      "key": "X-Cloud-Trace-Context",
+                      "value": "7820d255145eca6e53f5e517837b4fb2;o=1"
+                    },
+                    {
+                      "key": "Date",
+                      "value": "Sun, 09 Jan 2022 05:30:40 GMT"
+                    },
+                    {
+                      "key": "Server",
+                      "value": "Google Frontend"
+                    },
+                    {
+                      "key": "Content-Length",
+                      "value": "217"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n    \"category\": {\n        \"id\": 0,\n        \"name\": \"string\"\n    },\n    \"id\": 101,\n    \"name\": \"doggie\",\n    \"photoUrls\": [\n        \"string\"\n    ],\n    \"status\": \"available\",\n    \"tags\": [\n        {\n            \"id\": 0,\n            \"name\": \"string\"\n        }\n    ]\n}"
+                }
+              ]
+            },
+            {
+              "name": "Update an existing pet",
+              "request": {
+                "auth": {
+                  "type": "oauth2"
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"doggie\",\n    \"photoUrls\": [\n        \"dolor pariatur nulla veniam nostrud\",\n        \"et laborum do\"\n    ],\n    \"category\": {\n        \"id\": 2136748,\n        \"name\": \"ut et commodo\"\n    },\n    \"id\": -18062149,\n    \"status\": \"sold\",\n    \"tags\": [\n        {\n            \"id\": 76359859,\n            \"name\": \"commodo ex ipsum Duis\"\n        },\n        {\n            \"id\": -26304793,\n            \"name\": \"ut velit qui\"\n        }\n    ],\n    \"type\": \"DOGS\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/pets/:petId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pets",
+                    ":petId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "petId",
+                      "value": "86680415",
+                      "description": "(Required) ID of pet to return"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Deletes a pet",
+              "request": {
+                "auth": {
+                  "type": "oauth2"
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "description": "api_key",
+                    "key": "api_key",
+                    "value": "aliquip qui"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/pets/:petId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pets",
+                    ":petId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "petId",
+                      "value": "101",
+                      "description": "(Required) Pet id to delete"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "patch an existing pet",
+              "request": {
+                "auth": {
+                  "type": "oauth2"
+                },
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"doggie\",\n    \"photoUrls\": [\n        \"dolor pariatur nulla veniam nostrud\",\n        \"et laborum do\"\n    ],\n    \"category\": {\n        \"id\": 2136748,\n        \"name\": \"ut et commodo\"\n    },\n    \"id\": -18062149,\n    \"status\": \"sold\",\n    \"tags\": [\n        {\n            \"id\": 76359859,\n            \"name\": \"commodo ex ipsum Duis\"\n        },\n        {\n            \"id\": -26304793,\n            \"name\": \"ut velit qui\"\n        }\n    ],\n    \"type\": \"DOGS\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/pets/:petId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pets",
+                    ":petId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "petId",
+                      "value": "86680415",
+                      "description": "(Required) ID of pet to return"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Add a new pet to the store",
+          "request": {
+            "auth": {
+              "type": "oauth2"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"doggie\",\n    \"photoUrls\": [\n        \"ut Excepteur\",\n        \"et exercitation\"\n    ],\n    \"category\": {\n        \"id\": -81107287,\n        \"name\": \"enim deserunt in aliquip\"\n    },\n    \"id\": -36689857,\n    \"status\": \"pending\",\n    \"tags\": [\n        {\n            \"id\": -76048750,\n            \"name\": \"in do\"\n        },\n        {\n            \"id\": 85762073,\n            \"name\": \"incididunt occaecat \"\n        }\n    ],\n    \"type\": \"DOGS\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/pets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pets"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Finds Pets by status",
+          "request": {
+            "auth": {
+              "type": "oauth2"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pets/findByStatus?status=available",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pets",
+                "findByStatus"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "available",
+                  "description": "(Required) Status values that need to be considered for filter"
+                }
+              ]
+            },
+            "description": "Multiple status values can be provided with comma separated strings"
+          },
+          "response": []
+        },
+        {
+          "name": "Finds Pets by tags",
+          "request": {
+            "auth": {
+              "type": "oauth2"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pets/findByTags?tags=id fugiat&tags=proident dolore Lorem et",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pets",
+                "findByTags"
+              ],
+              "query": [
+                {
+                  "key": "tags",
+                  "value": "id fugiat",
+                  "description": "(Required) Tags to filter by"
+                },
+                {
+                  "key": "tags",
+                  "value": "proident dolore Lorem et",
+                  "description": "(Required) Tags to filter by"
+                }
+              ]
+            },
+            "description": "Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Virtualservices",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{rootUrl}}/virtualservices",
+          "host": [
+            "{{rootUrl}}"
+          ],
+          "path": [
+            "virtualservices"
+          ]
+        },
+        "description": "Returns a list containing all persons. The list supports paging."
+      },
+      "response": []
+    },
+    {
+      "name": "Virtualservices",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "default"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"id\": 31,\n    \"operationId\": \"personsGet\",\n    \"httpStatusCode\": \"200\",\n    \"url\": \"/persons\",\n    \"type\": \"Response\",\n    \"requestType\": \"REST\",\n    \"usageCount\": 2,\n    \"priority\": 0,\n    \"method\": \"GET\",\n    \"output\": \"{\\n    \\\"items\\\": [\\n        {\\n            \\\"dateOfBirth\\\": \\\"2021-11-10\\\",\\n            \\\"firstName\\\": \\\"Max\\\",\\n            \\\"lastName\\\": \\\"Mustermann\\\",\\n            \\\"lastTimeOnline\\\": \\\"2021-12-10T01:46:26.189Z\\\",\\n            \\\"spokenLanguages\\\": {\\n                \\\"additionalProp1\\\": \\\"English\\\",\\n                \\\"additionalProp2\\\": \\\"French\\\",\\n                \\\"additionalProp3\\\": \\\"Spain\\\"\\n            },\\n            \\\"username\\\": \\\"mmustermann\\\"\\n        }\\n    ]\\n}\",\n    \"availableParams\": [\n      {\n        \"key\": \"pageSize\",\n        \"value\": \"50\",\n        \"type\": null,\n        \"serviceType\": null,\n        \"parameterType\": null\n      },\n      {\n        \"key\": \"pageNumber\",\n        \"value\": \"1\",\n        \"type\": null,\n        \"serviceType\": null,\n        \"parameterType\": null\n      }\n    ],\n    \"headerParams\": [],\n    \"resource\": \"persons\",\n    \"lastUsedDateTime\": \"2022-01-05T17:25:44.193+00:00\"\n  }"
+        },
+        "url": {
+          "raw": "{{rootUrl}}/virtualservices",
+          "host": [
+            "{{rootUrl}}"
+          ],
+          "path": [
+            "virtualservices"
+          ]
+        },
+        "description": "Returns a list containing all persons. The list supports paging."
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "value",
+        "value": "abc456",
+        "type": "string"
+      },
+      {
+        "key": "key",
+        "value": "X-API-KEY",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://live.virtualandemo.com/api"
+    },
+    {
+      "key": "rootUrl",
+      "value": "https://live.virtualandemo.com/",
+      "type": "default"
+    },
+    {
+      "key": "X-API-KEY",
+      "value": "abc789",
+      "type": "default"
+    }
+  ]
+}

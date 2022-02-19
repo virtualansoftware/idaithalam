@@ -1,0 +1,208 @@
+{
+  "info": {
+    "_postman_id": "768d667d-90e2-43c8-a482-a2a24f91b712",
+    "name": "OpenAPIVirtualanPetstoreVariable",
+    "description": "This is a sample server Petstore server. For this sample, you can use the api key `special-key` to test the authorization filters.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Gets one person",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/persons?pageNumber=1&pageSize={{pageSize}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "persons"
+          ],
+          "query": [
+            {
+              "key": "pageNumber",
+              "value": "1",
+              "description": "Page number"
+            },
+            {
+              "key": "pageSize",
+              "value": "{{pageSize}}",
+              "description": "Number of persons returned"
+            }
+          ]
+        },
+        "description": "Returns a list containing all persons. The list supports paging."
+      },
+      "response": [
+        {
+          "name": "Gets some persons",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/persons?pageNumber=1&pageSize=50",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "persons"
+              ],
+              "query": [
+                {
+                  "key": "pageNumber",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "50",
+                  "description": "Number of persons returned"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "application/json"
+            },
+            {
+              "key": "X-Cloud-Trace-Context",
+              "value": "1ace5f52110a93afcd86e64acb215a8f;o=1"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 09 Jan 2022 05:26:40 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Google Frontend"
+            },
+            {
+              "key": "Content-Length",
+              "value": "433"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"items\": [\n        {\n            \"dateOfBirth\": \"2021-11-10\",\n            \"firstName\": \"Max\",\n            \"lastName\": \"Mustermann\",\n            \"lastTimeOnline\": \"2021-12-10T01:46:26.189Z\",\n            \"spokenLanguages\": {\n                \"additionalProp1\": \"English\",\n                \"additionalProp2\": \"French\",\n                \"additionalProp3\": \"Spain\"\n            },\n            \"username\": \"mmustermann\"\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Gets a person",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/persons/:username",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "persons",
+            ":username"
+          ],
+          "variable": [
+            {
+              "key": "username",
+              "value": "{{username}}",
+              "description": "(Required) The person's username"
+            }
+          ]
+        },
+        "description": "Returns a single person for its username."
+      },
+      "response": [
+        {
+          "name": "Gets a person",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/persons/:username",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "persons",
+                ":username"
+              ],
+              "variable": [
+                {
+                  "key": "username",
+                  "value": "mmustermann",
+                  "description": "(Required) The person's username"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "content-type",
+              "value": "application/json"
+            },
+            {
+              "key": "X-Cloud-Trace-Context",
+              "value": "f83f57f396aed741fcac160bfc275697"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 09 Jan 2022 05:26:14 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Google Frontend"
+            },
+            {
+              "key": "Content-Length",
+              "value": "278"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"dateOfBirth\": \"1955-10-28\",\n    \"firstName\": \"Bill\",\n    \"lastName\": \"Gates\",\n    \"lastTimeOnline\": \"2020-08-30T20:28:36.267Z\",\n    \"spokenLanguages\": {\n        \"additionalProp1\": \"Tamil\",\n        \"additionalProp2\": \"English\",\n        \"additionalProp3\": \"Spanish\"\n    },\n    \"username\": \"bgates\"\n}"
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://live.virtualandemo.com/api"
+    },
+    {
+      "key": "username",
+      "value": "mmustermann"
+    },
+    {
+      "key": "pageSize",
+      "value": "50"
+    }
+  ]
+}
