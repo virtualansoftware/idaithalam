@@ -41,7 +41,7 @@ public class PostmanTests {
 
     /** Issue 121: Multiple API key values must be a list if overwrite: false.
      * */
-    @Test
+    //@Test
     public void duplicateApikey() throws Exception {
         final String WORKFLOWYAML = "postman/duplicateheader/duplicateheader.yaml"; //Only generate
         boolean success = VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
@@ -60,7 +60,7 @@ public class PostmanTests {
     /** Issue 124: The Postman collection tests after the first folder were lost.
      *  Also issue 131, 133
      * */
-    @Test
+    //@Test
     public void folderStructure() throws Exception {
         final String WORKFLOWYAML = "postman/folders/folders.yaml"; //Only generate
         VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
@@ -75,7 +75,7 @@ public class PostmanTests {
 
     /** Issue 122, 131
      * */
-    @Test
+    //@Test
     public void authorizationHeader() throws Exception {
         final String WORKFLOWYAML = "postman/folders/authorizationheader.yaml"; //Only generate, uses also folders_postman.json
         VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
