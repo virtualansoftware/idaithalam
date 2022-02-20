@@ -6,7 +6,7 @@
 	<name>idaithalam-batch-apitesting</name>
 	<version>1.0.1-SNAPSHOT</version>
 	<properties>
-		<slf4j.version>1.7.33</slf4j.version>
+		<slf4j.version>1.7.35</slf4j.version>
 		<idaithalam.version>1.5.1-SNAPSHOT</idaithalam.version>
  		<java.version>1.8</java.version>
 		<testng.ver>7.5</testng.ver>
