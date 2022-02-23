@@ -184,7 +184,7 @@ public class FeatureGenerationHelper {
                 }
             }
         }
-        return "application/json";
+        return ""; //issue #145: if not defined, leave empty as default. Any other default value like application/json would cause 406 status in case that application/json is wrong.
     }
 
     private static JSONObject buildVirtualanObject(JSONArray responseArray, int j) {
