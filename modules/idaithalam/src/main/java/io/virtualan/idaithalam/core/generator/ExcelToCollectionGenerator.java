@@ -399,6 +399,8 @@ public class ExcelToCollectionGenerator {
       if (dataMap.get("Csvson") != null) {
         buildCSVSON(dataMap, virtualanObj);
       }
+
+
       if (dataMap.get("ResponseFile") != null || dataMap.get("ResponseContent") != null) {
         if (dataMap.get("IncludesByPath") != null) {
           virtualanObj
@@ -469,7 +471,9 @@ public class ExcelToCollectionGenerator {
       }
 
       if(dataMap.get("ResponseProcessingType") != null && dataMap.get("ResponseProcessingType").split("=").length ==2 ){
-        virtualanObj.put("virtualanStdType", dataMap.get("ResponseProcessingType").split("=")[1]);
+        if("aggregatedStdType".equalsIgnoreCase(dataMap.get("ResponseProcessingType").split("=")[0])) {
+          virtualanObj.put("aggregatedStdType", dataMap.get("ResponseProcessingType").split("=")[1]);
+        }
       }
 
       //getSecurityValue(dataMap, virtualanObj);
@@ -572,6 +576,11 @@ public class ExcelToCollectionGenerator {
               .put("outputPaths", Arrays.asList(dataMap.get("IncludesByPath").split("(?<!\\\\);")));
         }
         virtualanObj.put("output", buildObjectResponse(basePath, dataMap));
+      }
+      if(dataMap.get("ResponseProcessingType") != null && dataMap.get("ResponseProcessingType").split("=").length ==2 ){
+        if("aggregatedStdType".equalsIgnoreCase(dataMap.get("ResponseProcessingType").split("=")[0])) {
+          virtualanObj.put("aggregatedStdType", dataMap.get("ResponseProcessingType").split("=")[1]);
+        }
       }
       builHttpStausCode(dataMap, virtualanObj);
       if (paramsArray.length() > 0) {

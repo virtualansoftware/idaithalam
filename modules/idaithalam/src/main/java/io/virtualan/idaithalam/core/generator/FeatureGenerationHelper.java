@@ -293,8 +293,9 @@ public class FeatureGenerationHelper {
         item.setUrl(object.optString("url"));
         extractedOutput(excludeConfiguration, object, item, path);
         item.setStdType(getStandardType(availableParams));
-        if(object.optString("virtualanStdType") != null && !object.optString("virtualanStdType").isEmpty()){
-            item.setStdType(object.optString("virtualanStdType"));
+        String aggregatedStdType = object.optString("aggregatedStdType");
+        if(aggregatedStdType != null && !aggregatedStdType.isEmpty()){
+            item.setAStdType(aggregatedStdType);
         }
 
         if(object.optJSONObject("schemaValidation") != null && !object.optJSONObject("schemaValidation").isEmpty()){

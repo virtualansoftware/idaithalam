@@ -195,12 +195,17 @@ Feature: {{feature}}
       {{/schemaValidator}}
       {{#noSkipOutput}}
       {{#hasCsvson}}
+      {{#aStdType}}
+      And verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}api response aggregation{{/hasStepInfo}} for api-aggregated-std-type {{aStdType}} on {{resource}}
+      {{/aStdType}}
+      {{^aStdType}}
       {{#matchPattern}}
       And verify {{csvsonPath}} response csvson includes {{matchPattern}} in the response
       {{/matchPattern}}
       {{^matchPattern}}
       And verify {{csvsonPath}} response csvson includes in the response
       {{/matchPattern}}
+      {{/aStdType}}
       {{#csvson}}
         | {{{.}}} |
       {{/csvson}}
@@ -290,22 +295,22 @@ Feature: {{feature}}
       {{/responseByField}}
       {{/hasResponseByField}}
       {{#hasCsvson}}
-      {{#stdType}}
+      {{#aStdType}}
       {{#kafkaInput}}
-      Then verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} aggregated with std-type {{stdType}} on {{resource}} with type {{messageType}}
+      Then verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} message-aggregated-std-type {{stdType}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{^kafkaInput}}
-      And verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} aggregated with std-type {{stdType}} on {{resource}} with type {{messageType}}
+      And verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} message-aggregated-std-type {{stdType}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
-      {{/stdType}}
-      {{^stdType}}
+      {{/aStdType}}
+      {{^aStdType}}
       {{#kafkaInput}}
       Then verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{^kafkaInput}}
       And verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
-      {{/stdType}}
+      {{/aStdType}}
       {{#csvson}}
         | {{{.}}} |
       {{/csvson}}
