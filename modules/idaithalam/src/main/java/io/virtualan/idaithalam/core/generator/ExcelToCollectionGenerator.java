@@ -399,6 +399,8 @@ public class ExcelToCollectionGenerator {
       if (dataMap.get("Csvson") != null) {
         buildCSVSON(dataMap, virtualanObj);
       }
+
+
       if (dataMap.get("ResponseFile") != null || dataMap.get("ResponseContent") != null) {
         if (dataMap.get("IncludesByPath") != null) {
           virtualanObj
@@ -468,6 +470,12 @@ public class ExcelToCollectionGenerator {
         virtualanObj.put("tags", dataMap.get("Tags"));
       }
 
+      if(dataMap.get("ResponseProcessingType") != null && dataMap.get("ResponseProcessingType").split("=").length ==2 ){
+        if("aggregatedStdType".equalsIgnoreCase(dataMap.get("ResponseProcessingType").split("=")[0])) {
+          virtualanObj.put("aggregatedStdType", dataMap.get("ResponseProcessingType").split("=")[1]);
+        }
+      }
+
       //getSecurityValue(dataMap, virtualanObj);
       if (dataMap.get("RequestFile") != null || dataMap.get("RequestContent") != null) {
         virtualanObj.put("input", buildObjectRequest(basePath, dataMap));
@@ -514,6 +522,18 @@ public class ExcelToCollectionGenerator {
       createProcessingType(dataMap, paramsArray, "EvaluateFunctionVariables", "EVAL_PARAM");
       createProcessingType(dataMap, paramsArray, "AddifyVariables", "ADDIFY_PARAM");
       createProcessingType(dataMap, paramsArray, "CookieVariables", "COOKIE_PARAM");
+      String svFileName = dataMap.get(io.virtualan.idaithalam.core.IdaithalamConstants.SCHEMA_VALIDATION);
+      if (svFileName != null) {
+        String[] svFileNameAndCheck = svFileName.split("(?<!\\\\)=");
+        JSONObject schema = new org.json.JSONObject();
+        schema.put("schemaFile", svFileNameAndCheck[0]);
+        schema.put("validation", "true");
+        if(svFileNameAndCheck.length == 2) {
+          schema.put("validation",  svFileNameAndCheck[1]);
+        }
+        virtualanObj.put("schemaValidation", schema);
+      }
+
       if (dataMap.get("Tags") != null) {
         virtualanObj.put("tags", dataMap.get("Tags"));
       }
@@ -557,6 +577,11 @@ public class ExcelToCollectionGenerator {
         }
         virtualanObj.put("output", buildObjectResponse(basePath, dataMap));
       }
+      if(dataMap.get("ResponseProcessingType") != null && dataMap.get("ResponseProcessingType").split("=").length ==2 ){
+        if("aggregatedStdType".equalsIgnoreCase(dataMap.get("ResponseProcessingType").split("=")[0])) {
+          virtualanObj.put("aggregatedStdType", dataMap.get("ResponseProcessingType").split("=")[1]);
+        }
+      }
       builHttpStausCode(dataMap, virtualanObj);
       if (paramsArray.length() > 0) {
         virtualanObj.put("availableParams", paramsArray);
@@ -591,7 +616,7 @@ public class ExcelToCollectionGenerator {
 
   private static void getSecurityValue(Map<String, String> dataMap, JSONObject virtualanObj) {
     String security = dataMap.get("Security");
-    if (security != null && !security.isEmpty() && security.split("=").length == 2) {
+    if (security != null && !security.isEmpty() && security.split("(?<!\\\\)=").length == 2) {
       virtualanObj.put("security", "okta");
     } else if (dataMap.get("Security") != null) {
       virtualanObj.put("security", security);
