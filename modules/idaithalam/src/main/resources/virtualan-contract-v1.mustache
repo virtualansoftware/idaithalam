@@ -189,6 +189,10 @@ Feature: {{feature}}
       {{/hasInputJsonMap}}
       When {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}a user{{/hasStepInfo}} {{action}} {{contentType}} in {{url}} resource on {{resource}}
       Then the status code is {{httpStatusCode}}
+      {{#schemaValidator}}
+      And verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}object{{/hasStepInfo}} schema validation for resource on {{resource}}
+        | {{{key}}} | {{{value}}}|
+      {{/schemaValidator}}
       {{#noSkipOutput}}
       {{#hasCsvson}}
       {{#matchPattern}}
@@ -286,12 +290,22 @@ Feature: {{feature}}
       {{/responseByField}}
       {{/hasResponseByField}}
       {{#hasCsvson}}
+      {{#stdType}}
+      {{#kafkaInput}}
+      Then verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} aggregated with std-type {{stdType}} on {{resource}} with type {{messageType}}
+      {{/kafkaInput}}
+      {{^kafkaInput}}
+      And verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} aggregated with std-type {{stdType}} on {{resource}} with type {{messageType}}
+      {{/kafkaInput}}
+      {{/stdType}}
+      {{^stdType}}
       {{#kafkaInput}}
       Then verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{^kafkaInput}}
       And verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} contains {{identifier}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
+      {{/stdType}}
       {{#csvson}}
         | {{{.}}} |
       {{/csvson}}

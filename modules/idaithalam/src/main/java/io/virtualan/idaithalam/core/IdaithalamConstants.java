@@ -18,6 +18,8 @@ public class IdaithalamConstants {
     public static final String STEP_INFO_HEADER = "StepInfo";
     public static final String STORE_RESPONSE_VARIABLES_HEADER = "StoreResponseVariables";
     public static final String CSVSON_HEADER = "Csvson";
+    public static final String SCHEMA_VALIDATION = "SchemaValidation";
+
     private IdaithalamConstants() {
 
     }

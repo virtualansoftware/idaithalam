@@ -1,0 +1,62 @@
+{
+  "$id": "https://virtualan.io/pets_json.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pet",
+  "description": "Pet",
+  "required": [
+    "id",
+    "name"
+  ],
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "status": {
+      "type": "string"
+    },
+    "category": {
+      "type": "object",
+      "$ref": "#/$defs/category"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/tag"
+      }
+    },
+    "photoUrls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "tag": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -248,6 +248,8 @@ public class Item {
     List<AvailableParam> evaluateParams;
 
 
+    KeyValueParam schemaValidator;
+
     /**
      * The Path params.
      */
@@ -373,6 +375,14 @@ public class Item {
      * The Input file xml.
      */
     String inputFile;
+
+    public io.virtualan.idaithalam.core.domain.KeyValueParam getSchemaValidator() {
+        return schemaValidator;
+    }
+
+    public void setSchemaValidator(io.virtualan.idaithalam.core.domain.KeyValueParam schemaValidator) {
+        this.schemaValidator = schemaValidator;
+    }
 
     public boolean isAmqOutput() {
         return amqOutput;
