@@ -297,10 +297,10 @@ Feature: {{feature}}
       {{#hasCsvson}}
       {{#aStdType}}
       {{#kafkaInput}}
-      Then verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} message-aggregated-std-type {{stdType}} on {{resource}} with type {{messageType}}
+      Then verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} message-aggregated-std-type {{aStdType}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{^kafkaInput}}
-      And verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} message-aggregated-std-type {{stdType}} on {{resource}} with type {{messageType}}
+      And verify {{#hasStepInfo}}{{{nextStepInfo}}}{{/hasStepInfo}}{{^hasStepInfo}}details{{/hasStepInfo}} for event {{event}} message-aggregated-std-type {{aStdType}} on {{resource}} with type {{messageType}}
       {{/kafkaInput}}
       {{/aStdType}}
       {{^aStdType}}
