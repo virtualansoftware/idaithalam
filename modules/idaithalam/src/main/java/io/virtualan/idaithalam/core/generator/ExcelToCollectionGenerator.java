@@ -819,7 +819,7 @@ public class ExcelToCollectionGenerator {
       String[] querys = queryString.split("&");
       for (String query : querys) {
         JSONObject virtualanObjParam = new JSONObject();
-        String[] queryPart = query.split("(?<!\\\\)=");
+        String[] queryPart = query.split("=");
         virtualanObjParam.put("key", queryPart[0]);
         if (queryPart.length == 2) {
           virtualanObjParam.put("value", queryPart[1]);
