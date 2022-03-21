@@ -184,7 +184,7 @@ public class FeatureGenerationHelper {
                 }
             }
         }
-        return "application/json";
+        return ""; //Oliver Glas: must be empty by default. If set to a value, requests will fail for all mediatypes except the one defined here. 
     }
 
     private static JSONObject buildVirtualanObject(JSONArray responseArray, int j) {
