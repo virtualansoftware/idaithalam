@@ -35,7 +35,7 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
+import io.virtualan.idaithalam.core.domain.KeyValueParam;
 /**
  * The type Feature generation helper.
  */
@@ -293,6 +293,16 @@ public class FeatureGenerationHelper {
         item.setUrl(object.optString("url"));
         extractedOutput(excludeConfiguration, object, item, path);
         item.setStdType(getStandardType(availableParams));
+        String aggregatedStdType = object.optString("aggregatedStdType");
+        if(aggregatedStdType != null && !aggregatedStdType.isEmpty()){
+            item.setAStdType(aggregatedStdType);
+        }
+
+        if(object.optJSONObject("schemaValidation") != null && !object.optJSONObject("schemaValidation").isEmpty()){
+            JSONObject keyValueParam = object.optJSONObject("schemaValidation");
+            item.setSchemaValidator(new KeyValueParam(keyValueParam.getString("schemaFile"), keyValueParam.getString("validation")));
+        }
+
         if ("KAFKA".equalsIgnoreCase(object.optString("requestType"))) {
             item.setKafka(true);
             item.setKafkaInput(item.getInput() != null && !item.getInput().isEmpty());

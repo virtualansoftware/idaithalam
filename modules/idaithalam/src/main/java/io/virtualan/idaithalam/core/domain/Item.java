@@ -139,6 +139,10 @@ public class Item {
      * The Is Database.
      */
     boolean isDatabase;
+    /**
+     * The aggregated Std type.
+     */
+    String aStdType;
 
     /**
      * The Std type.
@@ -247,6 +251,8 @@ public class Item {
      */
     List<AvailableParam> evaluateParams;
 
+
+    KeyValueParam schemaValidator;
 
     /**
      * The Path params.
@@ -373,6 +379,22 @@ public class Item {
      * The Input file xml.
      */
     String inputFile;
+
+    public String getAStdType() {
+        return aStdType;
+    }
+
+    public void setAStdType(String aStdType) {
+        this.aStdType = aStdType;
+    }
+
+    public io.virtualan.idaithalam.core.domain.KeyValueParam getSchemaValidator() {
+        return schemaValidator;
+    }
+
+    public void setSchemaValidator(io.virtualan.idaithalam.core.domain.KeyValueParam schemaValidator) {
+        this.schemaValidator = schemaValidator;
+    }
 
     public boolean isAmqOutput() {
         return amqOutput;
