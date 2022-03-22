@@ -90,10 +90,10 @@ public class PostmanTests {
 
     /** Issue 131, 133, 138
      * */
-    @Test
-    public void variables() throws Exception {
-        final String WORKFLOWYAML = "postman/variables/variables.yaml"; //Online test with variables.
-        boolean success = VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
-        Assert.assertTrue(success);
-    }
+//    @Test
+//    public void variables() throws Exception {
+//        final String WORKFLOWYAML = "postman/variables/variables.yaml"; //Online test with variables.
+//        boolean success = VirtualanTestPlanExecutor.invoke(WORKFLOWYAML);
+//        Assert.assertTrue(success);
+//    }
 }
