@@ -35,7 +35,7 @@ public class DemoApiTest {
         //log.info("Start - virtualan_collection_testcase_5");
         try {
             boolean isSuccess = VirtualanTestPlanExecutor
-                    .invoke("openapi.yml");
+                    .invoke("openapi.yaml");
             // We are expecting date comparison should be failed. that's why we are asserting as false.
             //need to check
             Assert.assertTrue(isSuccess);
