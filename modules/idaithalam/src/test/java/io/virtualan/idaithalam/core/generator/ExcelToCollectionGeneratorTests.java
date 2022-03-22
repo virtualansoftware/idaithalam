@@ -143,9 +143,6 @@ public class ExcelToCollectionGeneratorTests {
         File inputFile = new File("src/test/resources/virtualan_collection_testcase_4.xlsx");
         createCollection(inputFile, basePath);
     }
-
-
-    
     
     @Test
     public void testvirtualan_bdd_testcase_run_manager() throws UnableToProcessException {

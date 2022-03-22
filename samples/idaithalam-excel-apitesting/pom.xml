@@ -7,9 +7,9 @@
 	<version>1.0.1-SNAPSHOT</version>
 	<properties>
 		<slf4j.version>1.7.33</slf4j.version>
-		<idaithalam.version>1.5.1-SNAPSHOT</idaithalam.version>
-    <testng.ver>7.5</testng.ver>
-    <java.version>1.8</java.version>
+		<idaithalam.version>1.6.1-SNAPSHOT</idaithalam.version>
+		<testng.ver>7.5</testng.ver>
+		<java.version>1.8</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
   </properties>
