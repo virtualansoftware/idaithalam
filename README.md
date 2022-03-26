@@ -16,7 +16,7 @@
 
 **Example:**  https://github.com/virtualansoftware/microservices-lowcode-testautomation  
 
-**Video:**  https://www.youtube.com/watch?v=6cz85yyVv58 
+**Video:**  https://www.youtube.com/watch?v=qsxlRAML5-0&list=PLhvhuoHp3JW-tiOf8TdFOaQcUYcuuvVf2 
 
 **Third party Video List:** https://www.youtube.com/watch?v=6cz85yyVv58&list=PLXbcghgSZDrr2loEsuHEHNy_0iEj6zeso
 
