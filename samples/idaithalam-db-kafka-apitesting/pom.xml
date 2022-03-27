@@ -6,7 +6,7 @@
 	<name>idaithalam-db-kafka-apitesting</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<properties>
-		<slf4j.version>1.7.33</slf4j.version>
+		<slf4j.version>1.7.36</slf4j.version>
 		<idaithalam.version>1.6.3-SNAPSHOT</idaithalam.version>
   		<testng.ver>7.5</testng.ver>
 		<java.version>1.8</java.version>
