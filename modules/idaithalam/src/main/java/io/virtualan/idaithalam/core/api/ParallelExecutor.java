@@ -86,7 +86,7 @@ public class ParallelExecutor implements Callable<Integer> {
                             properties.setProperty(x.getKey(), x.getValue());
                         }
                 );
-                ExcelToCollectionGenerator.createPrpos(apiExecutorParam.getOutputDir(),
+                ExcelToCollectionGenerator.createProps(apiExecutorParam.getOutputDir(),
                         (Map) properties,
                         fileName);
             }

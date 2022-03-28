@@ -143,14 +143,14 @@ public class ExcelToCollectionGenerator {
           .createCollection(apiExecutorParam);
       Map<String, String> excludeResponseMap = buildCollections.get("exclude");
       Map<String, String> cucumblanMap = buildCollections.get("cucumblan");
-      createPrpos(apiExecutorParam.getOutputDir(), cucumblanMap, "cucumblan.properties");
+      createProps(apiExecutorParam.getOutputDir(), cucumblanMap, "cucumblan.properties");
       InputStream streamEnv = Thread.currentThread().getContextClassLoader()
           .getResourceAsStream("cucumblan-env.properties");
       if (streamEnv != null) {
         createPrpos(apiExecutorParam.getOutputDir(), streamEnv, "cucumblan-env.properties");
       }
       if (!excludeResponseMap.isEmpty()) {
-        createPrpos(apiExecutorParam.getOutputDir(), excludeResponseMap,
+        createProps(apiExecutorParam.getOutputDir(), excludeResponseMap,
             "exclude-response.properties");
       }
     return true;
@@ -762,7 +762,7 @@ public class ExcelToCollectionGenerator {
    * @param propsMap the props map
    * @param fileName the file name
    */
-  public static void createPrpos(String path, Map<String, String> propsMap, String fileName) throws UnableToProcessException {
+  public static void createProps(String path, Map<String, String> propsMap, String fileName) throws UnableToProcessException {
     try {
       Properties props = new Properties();
       //Populating the properties file
@@ -772,12 +772,14 @@ public class ExcelToCollectionGenerator {
           path + File.separator + fileName)) {
         //Storing the properties file
         props.store(outputStrem, "This is a " + fileName + " properties file");
-        log.debug(fileName + " Properties file created......");
+        log.debug(fileName + " file created");
       }
 
     } catch (IOException e) {
-      log.warn(" Unable to generate " + fileName + " properties  " + e.getMessage());
-      throw new UnableToProcessException(" Unable to generate " + fileName + " properties  " + e.getMessage());
+      if(!"exclude-response.properties".equalsIgnoreCase(fileName)) {
+        log.warn(" Unable to generate " + fileName + " properties  " + e.getMessage());
+        throw new UnableToProcessException(" Unable to generate " + fileName + " properties  " + e.getMessage());
+      }
     }
   }
 
