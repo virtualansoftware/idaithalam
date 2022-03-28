@@ -158,7 +158,10 @@ public class IdaithalamExecutor {
                     List<String> pluginExternalOptionList = Files.readAllLines(pluginPath, Charset.defaultCharset());
                     if (pluginExternalOptionList != null && pluginExternalOptionList.size() == 1) {
                         external = pluginExternalOptionList.get(0);
-                        String[] pluginExternalOptions = external.split(",");
+                        String[] pluginExternalOptions = external.split("(?<!\\\\),");
+                        for (int i = 0; i < pluginExternalOptions.length; i++) {
+                            pluginExternalOptions[i]= pluginExternalOptions[i].replace("\\\\,", ",");
+                        }
                         String[] result = new String[pluginOptions.length + pluginExternalOptions.length];
                         System.arraycopy(pluginOptions, 0, result, 0, pluginOptions.length);
                         System.arraycopy(pluginExternalOptions, 0, result, pluginOptions.length, pluginExternalOptions.length);
