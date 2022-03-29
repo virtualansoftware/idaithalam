@@ -68,7 +68,9 @@ public class FeatureFileGenerator {
             if (stream != null) {
                 propertiesForInstance.load(stream);
             } else {
-                log.warn("unable to load " + fileName);
+                if(!"exclude-response.properties".equalsIgnoreCase(fileName)) {
+                    log.warn("unable to load " + fileName);
+                }
             }
         } catch (Exception var3) {
             log.warn(fileName + " not found");
