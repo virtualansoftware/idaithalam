@@ -291,8 +291,8 @@ public class FeatureGenerationHelper {
         List<AvailableParam> availableParams = getAvailableParamList(object);
         item.setAvailableParams(availableParams);
         item.setUrl(object.optString("url"));
-        extractedOutput(excludeConfiguration, object, item, path);
         item.setStdType(getStandardType(availableParams));
+        extractedOutput(excludeConfiguration, object, item, path);
         String aggregatedStdType = object.optString("aggregatedStdType");
         if(aggregatedStdType != null && !aggregatedStdType.isEmpty()){
             item.setAStdType(aggregatedStdType);
@@ -455,7 +455,7 @@ public class FeatureGenerationHelper {
                 createFile(item.getOutput(), path + "/" + fileName);
                 item.setOutputFile(fileName);
             } else if (item.getOutput() != null && !object.optString("output").isEmpty()
-                    && object.optString("contentType").toLowerCase().contains("xml")) {
+                    && item.getStdType() != null) {
                 if (!ApplicationConfiguration.getInline() && item.getOutput().length() > 700) {
                     String fileName =
                             object.optString("scenario").replaceAll("[^a-zA-Z0-9.-]", "-") + "_response.xml";
