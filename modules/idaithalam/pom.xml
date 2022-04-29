@@ -14,13 +14,22 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
     <description>
+        Idaithalam is a low code Test automation Framework, developed using Java and Cucumber. It leverages Behavior Driven Development (BDD). Tester can create test cases/scripts in simple Excel with API Spec. Excel is a simplified way to create Json based test scripts in Idaithalam. Test cases can be created quickly and tested in minutes.
+        As a tester, you need to create Excel and pass it to Idaithalam Framework.
+        First, generate the Json based test scripts(Virtualan Collection) from Excel. During test execution, this test script collection can be directly utilized.
+        Then it generates Feature files from the Virtualan Collection and its executed.
+        Lastly, It generates test report in BDD/Cucumber style.
+        This provide complete testing support for REST APIs, GraphQL, RDBMS DB and Kafka Event messages
+
+        #idaithalam #apitesting #testautomation #restapitesting #insprintautomation #rdbmstesting #graphqltesting #kafkamessagetesting #eventvalidation #messagevalidation #cucumber #bdd
+
+        Virtualan Collection is a JSON based TestScripts generated from Excel
+
         API testing can be automated using Excel, POSTMAN collection and VIRTUALAN
-        can be utilized for API NoCode testing.
         - Utilized for API testing.
         - Utilized Contract testing.
         - Utilized Production Checkout.
-        - Agile Testing - Progressive Regression can be done for each sprint. Reduce lot of manual
-        effects.
+        - Agile Testing - Progressive Regression can be done for each sprint. Reduce lot of manual effects.
     </description>
     <url>https://www.virtualan.io</url>
     <scm>
@@ -28,7 +37,6 @@
         <developerConnection>scm:git:ssh://git@github.com/virtualansoftware/idaithalam.git
         </developerConnection>
         <url>https://github.com/virtualansoftware/idaithalam.git</url>
-        <tag>V1.0.13.1</tag>
     </scm>
     <developers>
         <!-- original author of the project -->
@@ -37,7 +45,7 @@
             <name>Elan Thangamani</name>
             <email>elan.thangamani@virtualan.io</email>
             <organization>Virtualan Software</organization>
-            <organizationUrl>http://virtualan.io</organizationUrl>
+            <organizationUrl>https://www.virtualansoftware.com</organizationUrl>
         </developer>
     </developers>
     <distributionManagement>
@@ -58,7 +66,7 @@
         </license>
     </licenses>
     <build>
-        <finalName>idaithalan</finalName>
+        <finalName>idaithalam</finalName>
         <resources>
             <resource>
                 <directory>src/main/java</directory>
