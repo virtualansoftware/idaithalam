@@ -26,6 +26,9 @@ public class ApiExecutorParam {
     private Map<String, String> excludeProperties;
     private ApiHeader apiHeader;
     private Execution execution = Execution.ALL;
+    private Map<String, Map<String, String>> producers;
+    private Map<String, Map<String, String>> consumers;
+    private Map<String, String> topicProperties;
 
     /**
      * Instantiates a new Api executor param.
@@ -65,6 +68,14 @@ public class ApiExecutorParam {
      */
     public void setExcludeProperties(Map<String, String> excludeProperties) {
         this.excludeProperties = excludeProperties;
+    }
+
+    public Map<String, String> getTopicProperties() {
+        return topicProperties;
+    }
+
+    public void setTopicProperties(Map<String, String> topicProperties) {
+        this.topicProperties = topicProperties;
     }
 
     public String getVirtualanSpecPath() {
@@ -244,6 +255,23 @@ public class ApiExecutorParam {
      */
     public void setInputExcel(String inputExcel) {
         this.inputExcel = inputExcel;
+    }
+
+
+    public Map<String, Map<String, String>> getProducers() {
+        return producers;
+    }
+
+    public void setProducers(Map<String, Map<String, String>> producers) {
+        this.producers = producers;
+    }
+
+    public Map<String, Map<String, String>> getConsumers() {
+        return consumers;
+    }
+
+    public void setConsumers(Map<String, Map<String, String>> consumers) {
+        this.consumers = consumers;
     }
 
     @Override
