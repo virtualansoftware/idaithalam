@@ -47,7 +47,23 @@ public class ParallelExecutor implements Callable<Integer> {
                 buildProperties("cucumblan.properties", apiExecutorParam.getCucumblanProperties());
                 buildProperties("cucumblan-env.properties", apiExecutorParam.getCucumblanEnvProperties());
                 buildProperties("exclude-response.properties", apiExecutorParam.getExcludeProperties());
-
+                buildProperties("topic.properties", apiExecutorParam.getTopicProperties());
+                if(apiExecutorParam.getConsumers() != null && !apiExecutorParam.getConsumers().isEmpty()) {
+                    apiExecutorParam.getConsumers().forEach( (x,y) -> {
+                        try {
+                            buildProperties("consumer-"+x+".properties", y);
+                        } catch (Exception e) {
+                        }
+                    });
+                }
+                if(apiExecutorParam.getProducers() != null && !apiExecutorParam.getProducers().isEmpty()) {
+                    apiExecutorParam.getProducers().forEach( (x,y) -> {
+                        try {
+                            buildProperties("producer-"+x+".properties", y);
+                        } catch (Exception e) {
+                        }
+                    });
+                }
                 //Generate feature and summary page html report for the selected testcase from the excel
                 String title = apiExecutorParam.getEnv() != null ? apiExecutorParam.getReportTitle() + "("
                         + apiExecutorParam.getEnv() + ")" : apiExecutorParam.getReportTitle();
@@ -83,7 +99,7 @@ public class ParallelExecutor implements Callable<Integer> {
                 }
                 existingProperties.entrySet().stream().forEach(
                         x -> {
-                            properties.setProperty(x.getKey(), x.getValue());
+                            properties.setProperty(String.valueOf(x.getKey()), String.valueOf(x.getValue()));
                         }
                 );
                 ExcelToCollectionGenerator.createProps(apiExecutorParam.getOutputDir(),

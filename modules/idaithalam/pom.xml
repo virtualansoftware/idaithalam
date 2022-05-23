@@ -4,12 +4,12 @@
     <artifactId>idaithalam</artifactId>
     <packaging>jar</packaging>
     <name>idaithalam-platform-testing</name>
-    <version>1.6.5-SNAPSHOT</version>
+    <version>1.7.1-SNAPSHOT</version>
     <properties>
-        <cucumblan-api.version>1.5.0</cucumblan-api.version>
-        <cucumblan-db.version>1.4.0</cucumblan-db.version>
-        <cucumblan-message.version>1.4.0</cucumblan-message.version>
-        <java.version>1.8</java.version>
+        <cucumblan-api.version>1.5.1</cucumblan-api.version>
+        <cucumblan-db.version>1.4.1</cucumblan-db.version>
+        <cucumblan-message.version>1.4.1</cucumblan-message.version>
+        <java.version>11</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
