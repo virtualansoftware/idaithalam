@@ -242,7 +242,7 @@
         <dependency>
             <groupId>net.masterthought</groupId>
             <artifactId>cucumber-reporting</artifactId>
-            <version>5.7.0</version>
+            <version>5.7.4</version>
         </dependency>
         <dependency>
             <groupId>com.github.spullara.mustache.java</groupId>
