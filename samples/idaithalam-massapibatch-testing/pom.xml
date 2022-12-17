@@ -9,7 +9,7 @@
 		<slf4j.version>1.7.36</slf4j.version>
 		<idaithalam.version>1.6.4-SNAPSHOT</idaithalam.version>
  		<java.version>1.8</java.version>
-		<testng.ver>7.5</testng.ver>
+		<testng.ver>7.7.0</testng.ver>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
   </properties>
